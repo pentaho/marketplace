@@ -1,0 +1,12 @@
+html, body {
+  font-family: Tahoma,Helvetica,Arial,sans-serif;
+  background-color: #D4D6DB;
+}
+
+.marketplacePanel {
+	background-color: #D4D6DB;
+}
+.marketplaceMessage {
+	font-size: 0.8em;
+}
+table {}

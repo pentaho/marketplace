@@ -1,0 +1,209 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns:pho="http:/www.pentaho.com">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Pentaho Marketplace</title>
+    <script type="text/javascript" src="webcontext.js?content=marketplace"></script>
+    <script type="text/javascript" src="../../common-ui/resources/web/repo/pentaho-ajax.js"></script>
+    <script type="text/javascript" src="marketplace.js"></script>
+    <link href="marketplace.css" type="text/css" rel="stylesheet"/>
+  </head>
+  <body>
+	<div id="marketplacePanel" class="marketplacePanel">
+		<table style="margin: 10px;">
+			<tr>
+				<td>
+					<div class="marketplaceMessagex">
+						<h3>Pentaho Marketplace</h3>
+						Discover and install new functionality available in the Pentaho BI Server through the Pentaho Marketplace.
+						<br>
+						<ul>
+							<li>Learn more about the Stories and Ideas for the Marketplace <a href="http://wiki.pentaho.com/display/PMOPEN/Pentaho+BI+Server+Marketplace+Plugin">Here</a>.</li>
+							<li>TODO: Include release number for plugin request</li>
+							<li>TODO: Determine which plugins are already installed, update their installed version, etc</li>
+							<li>TODO: Guarantee no other files other than system/PLUGIN_ID are written to (No .. in id name)</li>
+							<li>TODO: Store xml doc in session cache, provide a refresh button</li>
+							<li>TODO: Cleanse all strings from the server, avoiding html/js injection</li>
+							<li>TODO: Figure out why some images aren't showing up, relative path, couldn't tell why it works <a href="http://localhost:8080/pentaho/content/common-ui/resources/web/test/style-samples.html"> here </a> but not in this html page.</li>
+							<li>TODO: Use pretty dialogs for messages, show progress dialog?</li>
+							<li style="text-decoration: line-through;">DONE: Finish styling, default HTML rendering</li>
+							<li style="text-decoration: line-through;">DONE: Create webservice providing input to page</li>
+							<li style="text-decoration: line-through;">DONE: Update page to call webservice on load, or show error message if permissions</li>
+							<li style="text-decoration: line-through;">DONE: Have webservice call a remote XML file on the wiki?</li>
+							<li style="text-decoration: line-through;">DONE:  Create Kettle Job for downloading, unzipping, and installing</li>
+							</ul>
+						<br>
+						<br>
+						<br>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td>
+
+                       <table cellspacing="0" cellpadding="0" class="pentaho-disclosure-panel pentaho-disclosure-panel-open">
+                            <tbody>
+                                <tr>
+                                    <td align="left" style="vertical-align: top;" class="header" onclick="toggleDisclosurePanel('disclosure-panel','disclosure-panel-icon')">
+                                        <table>
+                                            <tbody>
+                                                <tr>
+                                                    <td align="center" style="width: 16px;">
+                                                        <img src="../../common-ui/web/test/images/spacer.gif" id="disclosure-panel-icon" class="pentaho-disclosure-panel-openicon"/>
+                                                    </td>
+                                                    <td><span style="font-size:14px;">Available Plugins</span></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="left" style="vertical-align: top;">
+                                        <div id="disclosure-panel" class="pentaho-disclosure-panel-dropdown pentaho-shadow-padding">
+                                            <div class="pentaho-rounded-panel-bottom-lr panel-content pentaho-shadow pentaho-padding-sm">
+                                               <table style="width: 100%;" class="pentaho-table" id="availablePlugins">
+			                            <tbody>
+                        			        <tr>
+			                                    <td class="pentaho-table-header-cell">
+                        			                <div class="label">&nbsp;</div>
+			                                    </td>
+                        			        </tr>
+			                                <tr>
+                        			            <td class="pentaho-table-cell" id="availableFirstRow">No Available Plugins</td>
+			                                </tr>
+			                            </tbody>
+			                        </table>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+
+                       <table cellspacing="0" cellpadding="0" class="pentaho-disclosure-panel pentaho-disclosure-panel-open">
+                            <tbody>
+                                <tr>
+                                    <td align="left" style="vertical-align: top;" class="header" onclick="toggleDisclosurePanel('disclosure-panel-2','disclosure-panel-icon-2')">
+                                        <table>
+                                            <tbody>
+                                                <tr>
+                                                    <td align="center" style="width: 16px;">
+                                                        <img src="../../common-ui/web/test/images/spacer.gif" id="disclosure-panel-icon-2" class="pentaho-disclosure-panel-openicon"/>
+                                                    </td>
+                                                    <td><span style="font-size:14px;">Installed Plugins</span></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="left" style="vertical-align: top;">
+                                        <div id="disclosure-panel-2" class="pentaho-disclosure-panel-dropdown pentaho-shadow-padding">
+                                            <div class="pentaho-rounded-panel-bottom-lr panel-content pentaho-shadow pentaho-padding-sm">
+
+                        <table style="width: 100%;" class="pentaho-table" id="installedPlugins">
+                            <tbody>
+                                <tr>
+                                    <td class="pentaho-table-header-cell">
+                                        <div class="label">&nbsp;</div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="pentaho-table-cell" id="installedFirstRow">
+					No Installed Plugins.
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                                            </div>
+                                        </div>
+                                    </td>
+					
+                                </tr>
+                            </tbody>
+                        </table>
+
+
+
+                        <script type="text/javascript">
+                        
+                            function toggleDisclosurePanel(panelId, iconId) {
+                                if( document.getElementById(iconId).className == 'pentaho-disclosure-panel-openicon' ) {
+                                    document.getElementById(panelId).style.display = 'none';
+                                    document.getElementById(iconId).className = 'pentaho-disclosure-panel-closeicon';
+                                } else {
+                                    document.getElementById(panelId).style.display = 'block';
+                                    document.getElementById(iconId).className = 'pentaho-disclosure-panel-openicon';
+                                }
+                                return false;
+                            }
+                        
+                        </script>
+
+
+				</td>
+			</tr>
+		</table>
+	</div>
+  </body>
+  <script>
+    $(document).ready(function(){
+	var plugins = eval( '(' + pentahoMarketplace.getPlugins() + ')');
+	if (!plugins || plugins.class == 'org.pentaho.marketplace.StatusMessage') {
+		// wipe out entire page
+		document.getElementById('marketplacePanel').innerHTML='Access Denied';
+		return;
+	} 
+
+	var availablePluginCount = 0;
+	for (var i = 0; i < plugins.length; i++) {
+		var html = renderPlugin(plugins[i]);
+		var tblName = 'available';
+		if (plugins[i].installed) {
+		  tblName = 'installed';
+		}
+		var cell;
+		if (availablePluginCount == 0) {
+			cell = document.getElementById(tblName + 'FirstRow');
+		} else {
+			var tbl = document.getElementById(tblName + 'Plugins');
+			var lastRow = tbl.rows.length;
+			var row = tbl.insertRow(lastRow);
+			cell = row.insertCell(0);
+   			cell.setAttribute('class', 'pentaho-table-cell');
+		}
+		cell.innerHTML=html;
+		availablePluginCount++;
+	}
+    });
+
+    function renderPlugin(plugin) {
+		var html = "<table width=\"100%\"><tr><td rowspan=\"3\"><img src=\"" + plugin.img + "\" width=\"50\" height=\"50\" style=\"width:45px;height:45px\"></td>";
+            html += "<td width=\"400\"><span style=\"font-size: 20px; font-weight: bold;\">" + plugin.name + "</span> <span style=\"font-size: 14px;\">version ";
+		if (!plugin.installed) {        
+       		html += plugin.availableVersion + "</span></td>";
+			html += "<td rowspan=\"3\" valign=\"top\" align=\"right\"><a href=\"javascript:installNow('" + plugin.id + "')\" style=\"font-size:20px;text-decoration: none;\">Install Now</a></td></tr>";
+		} else {
+			html += plugin.installedVersion + "</span></td>";
+			if (plugin.installedVersion == plugin.availableVersion) {
+				html += "<br><br><br>";
+			} else {
+				html += "<td rowspan=\"3\" valign=\"top\" align=\"right\"><a href=\"javascript:alert('" + plugin.id + "')\" style=\"font-size:20px;text-decoration: none;\">Upgrade to</a><br>" + plugin.availableVersion;
+			}
+			html += "<br><br><a href=\"javascript:alert('" + plugin.id + "')\" style=\"font-size:20px;text-decoration: none;\">Uninstall</a></td></tr>";
+		}
+		html += "<tr><td>" + plugin.description + " <a href=\"" + plugin.learnMoreUrl + "\">Learn More...</a></td></tr><tr><td>by <a href=\"" + plugin.companyUrl + "\">" + plugin.company + "</a></td></tr>";
+		html += "</table>";
+		return html;
+    }
+    
+    function installNow(pluginId) {
+    	// first show an alert box to confirm the user wants to install this plugin
+    	alert('Are you sure you want to install this plugin?');
+    	var response = pentahoMarketplace.installNow(pluginId);
+    	alert(response);
+    }
+
+  </script>
+</html>

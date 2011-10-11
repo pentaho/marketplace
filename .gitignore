@@ -1,0 +1,7 @@
+# Subfloor Folders #
+####################
+bin
+dist
+lib
+test-lib
+dev-lib

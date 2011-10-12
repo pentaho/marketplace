@@ -30,6 +30,17 @@ function PentahoMarketplace() {
 	    return jsonObject;
   }
   
+  this.uninstall = function(pluginId) {
+	  var time = new Date().getTime();
+	    var resultStr = pentahoGet( CONTEXT_PATH + 'content/ws-run/MarketplaceService/uninstallPluginJson?pluginId=' + pluginId+ '&time=' + time, '', null, 'text/text' );
+	    // pull the state, status, and message out
+	    if( !resultStr ) {
+	        return null;
+	    }
+	    var jsonObject = this.getResultMessage(resultStr);
+	    return jsonObject;
+  }
+  
   this.parseXML = function(sText) {
     if( !sText ) {
         return null;

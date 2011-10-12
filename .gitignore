@@ -5,3 +5,4 @@ dist
 lib
 test-lib
 dev-lib
+override.properties

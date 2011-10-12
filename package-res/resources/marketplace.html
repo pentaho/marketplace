@@ -20,7 +20,7 @@
 						<ul>
 							<li>Learn more about the Stories and Ideas for the Marketplace <a href="http://wiki.pentaho.com/display/PMOPEN/Pentaho+BI+Server+Marketplace+Plugin">Here</a>.</li>
 							<li>TODO: Include release number for plugin request</li>
-							<li>TODO: Determine which plugins are already installed, update their installed version, etc</li>
+							<li>TODO: Determine the version number of installed plugins.</li>
 							<li>TODO: Guarantee no other files other than system/PLUGIN_ID are written to (No .. in id name)</li>
 							<li>TODO: Store xml doc in session cache, provide a refresh button</li>
 							<li>TODO: Cleanse all strings from the server, avoiding html/js injection</li>
@@ -30,7 +30,10 @@
 							<li style="text-decoration: line-through;">DONE: Create webservice providing input to page</li>
 							<li style="text-decoration: line-through;">DONE: Update page to call webservice on load, or show error message if permissions</li>
 							<li style="text-decoration: line-through;">DONE: Have webservice call a remote XML file on the wiki?</li>
-							<li style="text-decoration: line-through;">DONE:  Create Kettle Job for downloading, unzipping, and installing</li>
+							<li style="text-decoration: line-through;">DONE: Create Kettle Job for downloading, unzipping, and installing</li>
+							<li style="text-decoration: line-through;">DONE: Create Kettle Job for uninstalling</li>
+							<li style="text-decoration: line-through;">DONE: Determine which plugins are already installed, display in installed section</li>
+
 							</ul>
 						<br>
 						<br>
@@ -149,35 +152,34 @@
   </body>
   <script>
     $(document).ready(function(){
-	var plugins = eval( '(' + pentahoMarketplace.getPlugins() + ')');
-	if (!plugins || plugins.class == 'org.pentaho.marketplace.StatusMessage') {
-		// wipe out entire page
-		document.getElementById('marketplacePanel').innerHTML='Access Denied';
-		return;
-	} 
-
-	var availablePluginCount = 0;
-	for (var i = 0; i < plugins.length; i++) {
-		var html = renderPlugin(plugins[i]);
-		var tblName = 'available';
-		if (plugins[i].installed) {
-		  tblName = 'installed';
+		var plugins = eval( '(' + pentahoMarketplace.getPlugins() + ')');
+		if (!plugins || plugins.class == 'org.pentaho.marketplace.StatusMessage') {
+			// wipe out entire page
+			document.getElementById('marketplacePanel').innerHTML='Access Denied';
+			return;
+		} 
+	
+		for (var i = 0; i < plugins.length; i++) {
+			var html = renderPlugin(plugins[i]);
+			var tblName = 'available';
+			if (plugins[i].installed) {
+			  tblName = 'installed';
+			}
+			var cell = document.getElementById(tblName + 'FirstRow');
+			if (cell == null) {
+				var tbl = document.getElementById(tblName + 'Plugins');
+				var lastRow = tbl.rows.length;
+				var row = tbl.insertRow(lastRow);
+				cell = row.insertCell(0);
+	   			cell.setAttribute('class', 'pentaho-table-cell');
+			} else {
+				cell.id = tblName + 'FirstRowPopulated';
+			}
+			cell.innerHTML=html;
 		}
-		var cell;
-		if (availablePluginCount == 0) {
-			cell = document.getElementById(tblName + 'FirstRow');
-		} else {
-			var tbl = document.getElementById(tblName + 'Plugins');
-			var lastRow = tbl.rows.length;
-			var row = tbl.insertRow(lastRow);
-			cell = row.insertCell(0);
-   			cell.setAttribute('class', 'pentaho-table-cell');
-		}
-		cell.innerHTML=html;
-		availablePluginCount++;
-	}
     });
 
+    
     function renderPlugin(plugin) {
 		var html = "<table width=\"100%\"><tr><td rowspan=\"3\"><img src=\"" + plugin.img + "\" width=\"50\" height=\"50\" style=\"width:45px;height:45px\"></td>";
             html += "<td width=\"400\"><span style=\"font-size: 20px; font-weight: bold;\">" + plugin.name + "</span> <span style=\"font-size: 14px;\">version ";
@@ -189,9 +191,9 @@
 			if (plugin.installedVersion == plugin.availableVersion) {
 				html += "<br><br><br>";
 			} else {
-				html += "<td rowspan=\"3\" valign=\"top\" align=\"right\"><a href=\"javascript:alert('" + plugin.id + "')\" style=\"font-size:20px;text-decoration: none;\">Upgrade to</a><br>" + plugin.availableVersion;
+				html += "<td rowspan=\"3\" valign=\"top\" align=\"right\"><a href=\"javascript:installNow('" + plugin.id + "')\" style=\"font-size:20px;text-decoration: none;\">Upgrade to</a><br>" + plugin.availableVersion;
 			}
-			html += "<br><br><a href=\"javascript:alert('" + plugin.id + "')\" style=\"font-size:20px;text-decoration: none;\">Uninstall</a></td></tr>";
+			html += "<br><br><a href=\"javascript:uninstall('" + plugin.id + "')\" style=\"font-size:20px;text-decoration: none;\">Uninstall</a></td></tr>";
 		}
 		html += "<tr><td>" + plugin.description + " <a href=\"" + plugin.learnMoreUrl + "\">Learn More...</a></td></tr><tr><td>by <a href=\"" + plugin.companyUrl + "\">" + plugin.company + "</a></td></tr>";
 		html += "</table>";
@@ -201,8 +203,18 @@
     function installNow(pluginId) {
     	// first show an alert box to confirm the user wants to install this plugin
     	alert('Are you sure you want to install this plugin?');
-    	var response = pentahoMarketplace.installNow(pluginId);
-    	alert(response);
+    	var response = eval ('(' + pentahoMarketplace.installNow(pluginId) + ')');
+    	alert(response.message);
+    }
+    
+    function uninstall(pluginId) {
+    	alert('Are you sure you want to uninstall this plugin?');
+    	try {
+    		var response = eval ('(' + pentahoMarketplace.uninstall(pluginId) + ')');
+    	   	alert(response.message);
+    	} catch (e) {
+    		alert(e);
+    	}
     }
 
   </script>

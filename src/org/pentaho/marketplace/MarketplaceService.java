@@ -22,6 +22,9 @@ package org.pentaho.marketplace;
 import java.io.File;
 import java.io.StringReader;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -34,6 +37,7 @@ import org.pentaho.di.core.variables.VariableSpace;
 import org.pentaho.di.core.variables.Variables;
 import org.pentaho.di.job.Job;
 import org.pentaho.di.job.JobMeta;
+import org.pentaho.platform.api.engine.IPluginManager;
 import org.pentaho.platform.api.engine.IPluginResourceLoader;
 import org.pentaho.platform.engine.core.system.PentahoSessionHolder;
 import org.pentaho.platform.engine.core.system.PentahoSystem;
@@ -67,8 +71,70 @@ public class MarketplaceService {
     Plugin plugins[] = loadPluginsFromSite();
 
     // TODO: determine if any of the plugins are installed and what version they are
-
+    IPluginManager pluginManager = PentahoSystem.get(IPluginManager.class, PentahoSessionHolder.getSession());
+    List<String> installedPlugins = pluginManager.getRegisteredPlugins();
+    if (installedPlugins.size() > 0) {
+      Map<String, Plugin> marketplacePlugins = new HashMap<String, Plugin>();
+      for (Plugin plugin : plugins) {
+        marketplacePlugins.put(plugin.getId(), plugin);
+      }
+      
+      for (String installedPlugin : installedPlugins) {
+        Plugin plugin = marketplacePlugins.get(installedPlugin);
+        if(plugin != null) {
+          plugin.setInstalled(true);
+          
+          // TODO: Figure out what the installed version # is of this plugin
+          plugin.setInstalledVersion("Unknown");
+        }
+      }
+    
+    
+    }
+    
     return plugins;
+  }
+  
+  public StatusMessage uninstallPlugin(String id) throws MarketplaceSecurityException {
+    Plugin plugins[] = getPlugins();
+    Plugin toUninstall = null;
+    for (Plugin plugin : plugins) {
+      if (plugin.getId().equals(id)) {
+        toUninstall = plugin;
+      }
+    }
+    if (toUninstall == null) {
+      return new StatusMessage("NO_PLUGIN","Plugin Not Found");
+    }
+    
+    // get plugin path
+    
+    String jobPath = PentahoSystem.getApplicationContext().getSolutionPath("system/" + PLUGIN_NAME + "/processes/uninstall_plugin.kjb");
+    try {
+      JobMeta jobMeta = new JobMeta(jobPath, null);
+      Job job = new Job(null, jobMeta);
+      
+      File file = new File(PentahoSystem.getApplicationContext().getSolutionPath("system/plugin-cache/backups"));
+      file.mkdirs();
+      
+      job.getJobMeta().setParameterValue("uninstallLocation",PentahoSystem.getApplicationContext().getSolutionPath("system/"+ toUninstall.getId()));
+      job.getJobMeta().setParameterValue("uninstallBackup",PentahoSystem.getApplicationContext().getSolutionPath("system/plugin-cache/backups/" + toUninstall.getId() + "_" + new Date().getTime()));
+      
+      job.copyParametersFrom(job.getJobMeta());
+      job.activateParameters();
+      job.start();
+      job.waitUntilFinished();
+      Result result = job.getResult(); // Execute the selected job.
+      
+      if (result == null || result.getNrErrors() > 0) {
+        return new StatusMessage("FAIL", "Failed to execute uninstall, see log for details.");
+      }
+    } catch (KettleException e) {
+      logger.error(e.getMessage(), e);
+    }
+    
+    return new StatusMessage("PLUGIN_UNINSTALLED", toUninstall.getName() + " was successfully uninstalled.  Please restart your BI Server.");
+
   }
   
   public StatusMessage installPlugin(String id) throws MarketplaceSecurityException {
@@ -123,6 +189,18 @@ public class MarketplaceService {
   public String installPluginJson(String pluginId) {
     try {
       StatusMessage msg = installPlugin(pluginId);
+      JSONSerializer serializer = new JSONSerializer(); 
+      String json = serializer.deepSerialize( msg );
+      return json;
+    } catch (MarketplaceSecurityException e) {
+      logger.debug(e.getMessage(), e);
+      return createJsonMessage("Unauthorized Access", "ERROR_0002_UNAUTHORIZED_ACCESS");
+    }
+  }
+  
+  public String uninstallPluginJson(String pluginId) {
+    try {
+      StatusMessage msg = uninstallPlugin(pluginId);
       JSONSerializer serializer = new JSONSerializer(); 
       String json = serializer.deepSerialize( msg );
       return json;

@@ -7,7 +7,7 @@
 
   See build-res/subfloor-pkg.xml for more details
 ============================================================================-->
-<project name="Pentaho Marketplace" basedir="." default="jar" xmlns:ivy="antlib:org.apache.ivy.ant">
+<project name="Pentaho Marketplace" basedir="." default="resolve-and-dist" xmlns:ivy="antlib:org.apache.ivy.ant">
 
   <description>
       This build file is used to create the Pentaho Marketplace Plugin
@@ -25,5 +25,12 @@
     <copy todir="${approot.stage.dir}/lib">
       <fileset file="${lib.dir}/flexjson-*.jar" />
     </copy>
+  </target>
+	
+  <target name="resolve-and-dist" depends="resolve, dist"/>
+	
+  <target name="install" depends="resolve-and-dist">
+	<delete dir="${biserver.dir}/pentaho-solutions/system/${ivy.artifact.id}"/>
+  	<unzip src="dist/${package.id}-${project.revision}.zip" dest="${biserver.dir}/pentaho-solutions/system"/>
   </target>
 </project>

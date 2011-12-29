@@ -20,6 +20,7 @@
 package org.pentaho.marketplace;
 
 import java.io.File;
+import java.io.FileReader;
 import java.io.StringReader;
 import java.util.Date;
 import java.util.HashMap;
@@ -70,7 +71,7 @@ public class MarketplaceService {
     // load plugins from url
     Plugin plugins[] = loadPluginsFromSite();
 
-    // TODO: determine if any of the plugins are installed and what version they are
+    // determine if any of the plugins are installed and what version they are
     IPluginManager pluginManager = PentahoSystem.get(IPluginManager.class, PentahoSessionHolder.getSession());
     List<String> installedPlugins = pluginManager.getRegisteredPlugins();
     if (installedPlugins.size() > 0) {
@@ -83,15 +84,10 @@ public class MarketplaceService {
         Plugin plugin = marketplacePlugins.get(installedPlugin);
         if(plugin != null) {
           plugin.setInstalled(true);
-          
-          // TODO: Figure out what the installed version # is of this plugin
-          plugin.setInstalledVersion("Unknown");
+          plugin.setInstalledVersion(getInstalledVersion(plugin.getId()));
         }
       }
-    
-    
     }
-    
     return plugins;
   }
   
@@ -137,6 +133,13 @@ public class MarketplaceService {
 
   }
   
+
+  /**
+   * this method installs a specified plugin based on id.  
+   * 
+   * @param id the plugin to install
+   * @return a status mesasge to display the user
+   */
   public StatusMessage installPlugin(String id) throws MarketplaceSecurityException {
     Plugin plugins[] = getPlugins();
     Plugin toInstall = null;
@@ -147,6 +150,12 @@ public class MarketplaceService {
     }
     if (toInstall == null) {
       return new StatusMessage("NO_PLUGIN","Plugin Not Found");
+    }
+
+    // this checks to make sure the plugin metadata isn't attempting to overwrite a folder on the system.
+    // TODO: Test a .. encoded in UTF8, etc to see if there is a way to thwart this check
+    if (toInstall.getId().indexOf(".") >= 0) { 
+      return new StatusMessage("NO_PLUGIN","Plugin ID contains an illegal character");
     }
     
     // get plugin path
@@ -186,6 +195,10 @@ public class MarketplaceService {
     return new StatusMessage("PLUGIN_INSTALLED", toInstall.getName() + " was successfully installed.  Please restart your BI Server.");
   }
   
+
+  /**
+   *  This method wraps the installPlugin method, returning JSON instead of XML.
+   */
   public String installPluginJson(String pluginId) {
     try {
       StatusMessage msg = installPlugin(pluginId);
@@ -291,6 +304,40 @@ public class MarketplaceService {
     }
     return HttpUtil.getURLContent(site);
   }
+
+  /**
+   * This method determines the installed version of a plugin.  If the plugin doesn't define a version correctly, it returns "Unknown".
+   * This method makes the assumption that the plugin id also equals the plugin folder name.
+   *
+   * @param pluginId the plugin id related to the version.
+   */
+  protected String getInstalledVersion(String pluginId) {
+    String versionPath = PentahoSystem.getApplicationContext().getSolutionPath("system/" + pluginId + "/version.xml");
+    DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+    FileReader reader = null;
+    try {
+      File file = new File(versionPath);
+      if (!file.exists()) return "Unknown";
+      DocumentBuilder db = dbf.newDocumentBuilder();
+      reader =  new FileReader(versionPath);
+      Document dom = db.parse(new InputSource(reader));
+      NodeList versionElements = dom.getElementsByTagName("version");
+      if (versionElements.getLength() >= 1) {
+        Element versionElement = (Element)versionElements.item(0);
+        return versionElement.getTextContent();
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+    } finally {
+      try {
+        if (reader != null) {
+          reader.close();
+        }
+      } catch (Exception e) {}
+    }
+    return "Unknown";    
+  }
+
 
   protected Plugin[] loadPluginsFromSite() {
     String content = getMarketplaceSiteContent();

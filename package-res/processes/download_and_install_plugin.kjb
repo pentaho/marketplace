@@ -9,7 +9,7 @@
   <created_user>-</created_user>
   <created_date>2011&#47;10&#47;09 16:08:24.678</created_date>
   <modified_user>-</modified_user>
-  <modified_date>2011&#47;10&#47;09 16:08:24.678</modified_date>
+  <modified_date>2011&#47;12&#47;29 11:38:29.843</modified_date>
     <parameters>
         <parameter>
             <name>downloadDestination</name>
@@ -19,6 +19,26 @@
         <parameter>
             <name>downloadUrl</name>
             <default_value>http:&#47;&#47;localhost:8080&#47;cda-2.0.zip</default_value>
+            <description/>
+        </parameter>
+        <parameter>
+            <name>samplesDownloadDestination</name>
+            <default_value>&#47;home&#47;gorman&#47;4.0.0&#47;finalGA&#47;biserver-ee&#47;pentaho-solutions&#47;system&#47;plugin-cache&#47;downloads&#47;cda-samples-1.0.zip</default_value>
+            <description/>
+        </parameter>
+        <parameter>
+            <name>samplesDownloadUrl</name>
+            <default_value>none</default_value>
+            <description/>
+        </parameter>
+        <parameter>
+            <name>samplesTargetBackup</name>
+            <default_value>&#47;home&#47;gorman&#47;4.0.0&#47;finalGA&#47;biserver-ee&#47;pentaho-solutions&#47;system&#47;plugin-cache&#47;backups&#47;cda_Samples_TIMESTAMP</default_value>
+            <description/>
+        </parameter>
+        <parameter>
+            <name>samplesTargetDestination</name>
+            <default_value>&#47;home&#47;gorman&#47;4.0.0&#47;finalGA&#47;biserver-ee&#47;pentaho-solutions&#47;bi-developers&#47;cda</default_value>
             <description/>
         </parameter>
         <parameter>
@@ -148,8 +168,8 @@
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>1032</xloc>
-      <yloc>156</yloc>
+      <xloc>1157</xloc>
+      <yloc>147</yloc>
       </entry>
     <entry>
       <name>Does Plugin Already Exist?</name>
@@ -288,6 +308,211 @@
       <xloc>549</xloc>
       <yloc>365</yloc>
       </entry>
+    <entry>
+      <name>Samples url exists?</name>
+      <description/>
+      <type>SIMPLE_EVAL</type>
+      <valuetype>variable</valuetype>
+      <fieldname/>
+      <variablename>${samplesDownloadUrl}</variablename>
+      <fieldtype>string</fieldtype>
+      <mask/>
+      <comparevalue>none</comparevalue>
+      <minvalue/>
+      <maxvalue/>
+      <successcondition>different</successcondition>
+      <successnumbercondition>equal</successnumbercondition>
+      <successbooleancondition>false</successbooleancondition>
+      <successwhenvarset>N</successwhenvarset>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>909</xloc>
+      <yloc>265</yloc>
+      </entry>
+    <entry>
+      <name>Samples Plugin Download</name>
+      <description/>
+      <type>HTTP</type>
+      <url>${samplesDownloadUrl}</url>
+      <targetfilename>${samplesDownloadDestination}</targetfilename>
+      <file_appended>N</file_appended>
+      <date_time_added>N</date_time_added>
+      <targetfilename_extention/>
+      <uploadfilename/>
+      <url_fieldname/>
+      <run_every_row>N</run_every_row>
+      <username/>
+      <password>Encrypted </password>
+      <proxy_host/>
+      <proxy_port/>
+      <non_proxy_hosts/>
+      <addfilenameresult>Y</addfilenameresult>
+      <headers>
+      </headers>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>856</xloc>
+      <yloc>353</yloc>
+      </entry>
+    <entry>
+      <name>Unzip Samples to Staging</name>
+      <description/>
+      <type>UNZIP</type>
+      <zipfilename>${samplesDownloadDestination}</zipfilename>
+      <wildcard/>
+      <wildcardexclude/>
+      <targetdirectory>${stagingDestination}</targetdirectory>
+      <movetodirectory/>
+      <afterunzip>0</afterunzip>
+      <addfiletoresult>N</addfiletoresult>
+      <isfromprevious>N</isfromprevious>
+      <adddate>N</adddate>
+      <addtime>N</addtime>
+      <addOriginalTimestamp>N</addOriginalTimestamp>
+      <SpecifyFormat>N</SpecifyFormat>
+      <date_time_format/>
+      <rootzip>N</rootzip>
+      <createfolder>Y</createfolder>
+      <nr_limit>10</nr_limit>
+      <wildcardSource/>
+      <success_condition>success_if_no_errors</success_condition>
+      <iffileexists>SKIP</iffileexists>
+      <create_move_to_directory>N</create_move_to_directory>
+      <setOriginalModificationDate>N</setOriginalModificationDate>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>857</xloc>
+      <yloc>433</yloc>
+      </entry>
+    <entry>
+      <name>Unzipped Sample Exists</name>
+      <description/>
+      <type>FILE_EXISTS</type>
+      <filename>${stagingDestinationAndDir}</filename>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>1001</xloc>
+      <yloc>436</yloc>
+      </entry>
+    <entry>
+      <name>Cleanup Staging After Samples</name>
+      <description/>
+      <type>DELETE_FOLDERS</type>
+      <arg_from_previous>N</arg_from_previous>
+      <success_condition>success_if_no_errors</success_condition>
+      <limit_folders>10</limit_folders>
+      <fields>
+        <field>
+          <name>${stagingDestination}</name>
+        </field>
+      </fields>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>762</xloc>
+      <yloc>561</yloc>
+      </entry>
+    <entry>
+      <name>Does Samples Already Exist?</name>
+      <description/>
+      <type>FILE_EXISTS</type>
+      <filename>${samplesTargetDestination}</filename>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>1168</xloc>
+      <yloc>436</yloc>
+      </entry>
+    <entry>
+      <name>Copy Samples to Destination</name>
+      <description/>
+      <type>COPY_FILES</type>
+      <copy_empty_folders>Y</copy_empty_folders>
+      <arg_from_previous>N</arg_from_previous>
+      <overwrite_files>N</overwrite_files>
+      <include_subfolders>Y</include_subfolders>
+      <remove_source_files>N</remove_source_files>
+      <add_result_filesname>N</add_result_filesname>
+      <destination_is_a_file>N</destination_is_a_file>
+      <create_destination_folder>Y</create_destination_folder>
+      <fields>
+        <field>
+          <source_filefolder>${stagingDestinationAndDir}</source_filefolder>
+          <destination_filefolder>${samplesTargetDestination}</destination_filefolder>
+          <wildcard/>
+        </field>
+      </fields>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>1390</xloc>
+      <yloc>436</yloc>
+      </entry>
+    <entry>
+      <name>Delete Staging After Samples</name>
+      <description/>
+      <type>DELETE_FOLDERS</type>
+      <arg_from_previous>N</arg_from_previous>
+      <success_condition>success_if_no_errors</success_condition>
+      <limit_folders>10</limit_folders>
+      <fields>
+        <field>
+          <name>${stagingDestination}</name>
+        </field>
+      </fields>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>1377</xloc>
+      <yloc>262</yloc>
+      </entry>
+    <entry>
+      <name>Create Samples Backup</name>
+      <description/>
+      <type>COPY_FILES</type>
+      <copy_empty_folders>Y</copy_empty_folders>
+      <arg_from_previous>N</arg_from_previous>
+      <overwrite_files>N</overwrite_files>
+      <include_subfolders>Y</include_subfolders>
+      <remove_source_files>N</remove_source_files>
+      <add_result_filesname>N</add_result_filesname>
+      <destination_is_a_file>N</destination_is_a_file>
+      <create_destination_folder>Y</create_destination_folder>
+      <fields>
+        <field>
+          <source_filefolder>${samplesTargetDestination}</source_filefolder>
+          <destination_filefolder>${samplesTargetBackup}</destination_filefolder>
+          <wildcard/>
+        </field>
+      </fields>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>1230</xloc>
+      <yloc>550</yloc>
+      </entry>
+    <entry>
+      <name>Delete Original Samples</name>
+      <description/>
+      <type>DELETE_FOLDERS</type>
+      <arg_from_previous>N</arg_from_previous>
+      <success_condition>success_if_no_errors</success_condition>
+      <limit_folders>10</limit_folders>
+      <fields>
+        <field>
+          <name>${samplesTargetDestination}</name>
+        </field>
+      </fields>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>1343</xloc>
+      <yloc>556</yloc>
+      </entry>
   </entries>
   <hops>
     <hop>
@@ -313,8 +538,8 @@
       <to>Success</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
-      <enabled>Y</enabled>
-      <evaluation>Y</evaluation>
+      <enabled>N</enabled>
+      <evaluation>N</evaluation>
       <unconditional>N</unconditional>
     </hop>
     <hop>
@@ -392,6 +617,132 @@
     <hop>
       <from>Cleanup Staging</from>
       <to>Abort job</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>Delete Staging</from>
+      <to>Samples url exists?</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>Samples url exists?</from>
+      <to>Success</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>N</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>Samples url exists?</from>
+      <to>Samples Plugin Download</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>Samples Plugin Download</from>
+      <to>Unzip Samples to Staging</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>Unzip Samples to Staging</from>
+      <to>Unzipped Sample Exists</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>N</evaluation>
+      <unconditional>Y</unconditional>
+    </hop>
+    <hop>
+      <from>Unzipped Sample Exists</from>
+      <to>Cleanup Staging After Samples</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>N</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>Cleanup Staging After Samples</from>
+      <to>Abort job</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>Unzipped Sample Exists</from>
+      <to>Does Samples Already Exist?</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>N</evaluation>
+      <unconditional>Y</unconditional>
+    </hop>
+    <hop>
+      <from>Does Samples Already Exist?</from>
+      <to>Create Samples Backup</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>Create Samples Backup</from>
+      <to>Delete Original Samples</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>Delete Original Samples</from>
+      <to>Copy Samples to Destination</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>Does Samples Already Exist?</from>
+      <to>Copy Samples to Destination</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>N</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>Copy Samples to Destination</from>
+      <to>Delete Staging After Samples</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>Delete Staging After Samples</from>
+      <to>Success</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
       <enabled>Y</enabled>

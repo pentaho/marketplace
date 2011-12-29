@@ -27,6 +27,11 @@
     </copy>
   </target>
 	
+  <target name="assemble" depends="subfloor-pkg.assemble">
+    <!-- Update the version.xml with the current version of this plugin -->
+    <replace file="${approot.stage.dir}/version.xml" token="TRUNK" value="${project.revision}"/>
+  </target>
+	
   <target name="resolve-and-dist" depends="resolve, dist"/>
 	
   <target name="install" depends="resolve-and-dist">

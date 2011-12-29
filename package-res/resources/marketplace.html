@@ -19,13 +19,13 @@
 						<br>
 						<ul>
 							<li>Learn more about the Stories and Ideas for the Marketplace <a href="http://wiki.pentaho.com/display/PMOPEN/Pentaho+BI+Server+Marketplace+Plugin">Here</a>.</li>
-							<li>TODO: Include release number for plugin request</li>
-							<li>TODO: Determine the version number of installed plugins.</li>
-							<li>TODO: Guarantee no other files other than system/PLUGIN_ID are written to (No .. in id name)</li>
-							<li>TODO: Store xml doc in session cache, provide a refresh button</li>
+							<li>TODO: Guarantee no other files other than system/PLUGIN_ID are written to (No .. in id name) [needs tested]</li>
+							<li>TODO: Include bi server release number for plugin request</li>
+							<li>TODO: Store xml doc in session cache, provide a refresh button [v1?]</li>
 							<li>TODO: Cleanse all strings from the server, avoiding html/js injection</li>
 							<li>TODO: Figure out why some images aren't showing up, relative path, couldn't tell why it works <a href="http://localhost:8080/pentaho/content/common-ui/resources/web/test/style-samples.html"> here </a> but not in this html page.</li>
 							<li>TODO: Use pretty dialogs for messages, show progress dialog?</li>
+							<li style="text-decoration: line-through;">DONE: Determine the version number of installed plugins. [started]</li>
 							<li style="text-decoration: line-through;">DONE: Finish styling, default HTML rendering</li>
 							<li style="text-decoration: line-through;">DONE: Create webservice providing input to page</li>
 							<li style="text-decoration: line-through;">DONE: Update page to call webservice on load, or show error message if permissions</li>
@@ -188,10 +188,11 @@
 			html += "<td rowspan=\"3\" valign=\"top\" align=\"right\"><a href=\"javascript:installNow('" + plugin.id + "')\" style=\"font-size:20px;text-decoration: none;\">Install Now</a></td></tr>";
 		} else {
 			html += plugin.installedVersion + "</span></td>";
+			html += "<td rowspan=\"3\" valign=\"top\" align=\"right\">";
 			if (plugin.installedVersion == plugin.availableVersion) {
 				html += "<br><br><br>";
 			} else {
-				html += "<td rowspan=\"3\" valign=\"top\" align=\"right\"><a href=\"javascript:installNow('" + plugin.id + "')\" style=\"font-size:20px;text-decoration: none;\">Upgrade to</a><br>" + plugin.availableVersion;
+				html += "<a href=\"javascript:installNow('" + plugin.id + "')\" style=\"font-size:20px;text-decoration: none;\">Upgrade to</a><br>" + plugin.availableVersion;
 			}
 			html += "<br><br><a href=\"javascript:uninstall('" + plugin.id + "')\" style=\"font-size:20px;text-decoration: none;\">Uninstall</a></td></tr>";
 		}

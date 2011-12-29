@@ -176,9 +176,12 @@ public class MarketplaceService {
       job.getJobMeta().setParameterValue("downloadUrl", toInstall.getDownloadUrl());
       if (toInstall.getSamplesDownloadUrl() != null){
           job.getJobMeta().setParameterValue("samplesDownloadUrl", toInstall.getSamplesDownloadUrl());
+          job.getJobMeta().setParameterValue("samplesDir", PentahoSystem.getApplicationContext().getSolutionPath("bi-developers"));
           job.getJobMeta().setParameterValue("samplesTargetDestination", PentahoSystem.getApplicationContext().getSolutionPath("bi-developers/"+ toInstall.getId()));
           job.getJobMeta().setParameterValue("samplesTargetBackup", PentahoSystem.getApplicationContext().getSolutionPath("system/plugin-cache/backups/" + toInstall.getId() + "_samples_" + new Date().getTime()));
           job.getJobMeta().setParameterValue("samplesDownloadDestination",PentahoSystem.getApplicationContext().getSolutionPath("system/plugin-cache/downloads/" + toInstall.getId() + "-samples-" + toInstall.getAvailableVersion() + ".zip"));          
+          job.getJobMeta().setParameterValue("samplesStagingDestination",PentahoSystem.getApplicationContext().getSolutionPath("system/plugin-cache/staging_samples"));
+          job.getJobMeta().setParameterValue("samplesStagingDestinationAndDir",PentahoSystem.getApplicationContext().getSolutionPath("system/plugin-cache/staging_samples/" + toInstall.getId()));          
       }
       job.getJobMeta().setParameterValue("downloadDestination",PentahoSystem.getApplicationContext().getSolutionPath("system/plugin-cache/downloads/" + toInstall.getId() + "-" + toInstall.getAvailableVersion() + ".zip"));
       job.getJobMeta().setParameterValue("stagingDestination",PentahoSystem.getApplicationContext().getSolutionPath("system/plugin-cache/staging"));

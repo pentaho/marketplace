@@ -41,6 +41,10 @@ public class MarketplaceServiceTest {
       public Plugin[] loadPluginsFromSite() {
         return super.loadPluginsFromSite();
       }
+      
+      public String resolveVersion(String url) {
+        return super.resolveVersion(url);
+      }
     };
     
     Plugin plugins[] = service.loadPluginsFromSite();
@@ -55,5 +59,16 @@ public class MarketplaceServiceTest {
     Assert.assertEquals("The Community Dashboard Editor (CDE) is the outcome of real-world needs: It was born to greatly simplify the creation, edition and rendering of dashboards.\n\nCDE and the technology underneath (CDF, CDA and CCC) allows to develop and deploy dashboards in the Pentaho platform in a fast and effective way.", plugins[0].getDescription().trim());
     Assert.assertEquals("WebDetails", plugins[0].getCompany());
     Assert.assertEquals("http://webdetails.pt", plugins[0].getCompanyUrl());
+  }
+  
+  @Test
+  public void testResolveVersion() {
+    MarketplaceService service = new MarketplaceService() {
+      public String resolveVersion(String url) {
+        return super.resolveVersion(url);
+      }
+    };
+    Assert.assertEquals("http://plugins", service.resolveVersion("http://plugins"));
+    Assert.assertTrue(service.resolveVersion("http://plugins_[VERSION]").indexOf("[VERSION]") < 0);
   }
 }

@@ -12,6 +12,16 @@
   <modified_date>2011&#47;10&#47;09 16:08:24.678</modified_date>
     <parameters>
         <parameter>
+            <name>samplesUninstallBackup</name>
+            <default_value>&#47;home&#47;gorman&#47;4.0.0&#47;finalGA&#47;bi-server-ee&#47;pentaho-solutions&#47;system&#47;plugin-cache&#47;backups&#47;cda_samples_TIMESTAMP</default_value>
+            <description/>
+        </parameter>
+        <parameter>
+            <name>samplesUninstallLocation</name>
+            <default_value>none</default_value>
+            <description/>
+        </parameter>
+        <parameter>
             <name>uninstallBackup</name>
             <default_value>&#47;home&#47;gorman&#47;4.0.0&#47;finalGA&#47;biserver-ee&#47;pentaho-solutions&#47;system&#47;plugin-cache&#47;backups&#47;cda_TIMESTAMP</default_value>
             <description/>
@@ -71,8 +81,8 @@
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>609</xloc>
-      <yloc>158</yloc>
+      <xloc>886</xloc>
+      <yloc>168</yloc>
       </entry>
     <entry>
       <name>Does Plugin Exist?</name>
@@ -139,6 +149,60 @@
       <xloc>241</xloc>
       <yloc>277</yloc>
       </entry>
+    <entry>
+      <name>Does Sample Location Exist</name>
+      <description/>
+      <type>FILE_EXISTS</type>
+      <filename>${samplesUninstallLocation}</filename>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>526</xloc>
+      <yloc>305</yloc>
+      </entry>
+    <entry>
+      <name>Create Samples Backup</name>
+      <description/>
+      <type>COPY_FILES</type>
+      <copy_empty_folders>Y</copy_empty_folders>
+      <arg_from_previous>N</arg_from_previous>
+      <overwrite_files>N</overwrite_files>
+      <include_subfolders>Y</include_subfolders>
+      <remove_source_files>N</remove_source_files>
+      <add_result_filesname>N</add_result_filesname>
+      <destination_is_a_file>N</destination_is_a_file>
+      <create_destination_folder>Y</create_destination_folder>
+      <fields>
+        <field>
+          <source_filefolder>${samplesUninstallLocation}</source_filefolder>
+          <destination_filefolder>${samplesUninstallBackup}</destination_filefolder>
+          <wildcard/>
+        </field>
+      </fields>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>663</xloc>
+      <yloc>305</yloc>
+      </entry>
+    <entry>
+      <name>Delete Samples</name>
+      <description/>
+      <type>DELETE_FOLDERS</type>
+      <arg_from_previous>N</arg_from_previous>
+      <success_condition>success_if_no_errors</success_condition>
+      <limit_folders>10</limit_folders>
+      <fields>
+        <field>
+          <name>${samplesUninstallLocation}</name>
+        </field>
+      </fields>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>814</xloc>
+      <yloc>304</yloc>
+      </entry>
   </entries>
   <hops>
     <hop>
@@ -179,6 +243,51 @@
     </hop>
     <hop>
       <from>Delete Plugin</from>
+      <to>Success</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>N</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>Does Sample Location Exist</from>
+      <to>Success</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>N</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>Delete Plugin</from>
+      <to>Does Sample Location Exist</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>Does Sample Location Exist</from>
+      <to>Create Samples Backup</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>Create Samples Backup</from>
+      <to>Delete Samples</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>Delete Samples</from>
       <to>Success</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>

@@ -28,6 +28,7 @@ public class Plugin implements Serializable {
   private String img;
   private String learnMoreUrl;
   private String downloadUrl;
+  private String samplesDownloadUrl;
   private String availableVersion;
   private String description;
   private String company;
@@ -87,6 +88,16 @@ public class Plugin implements Serializable {
     this.downloadUrl = downloadUrl;
   }
 
+  public String getSamplesDownloadUrl() {
+    return samplesDownloadUrl;
+  }
+
+  public void setSamplesDownloadUrl(String samplesDownloadUrl) {
+    this.samplesDownloadUrl = samplesDownloadUrl;
+  }
+  
+  
+  
   public String getAvailableVersion() {
     return availableVersion;
   }

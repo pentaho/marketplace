@@ -41,6 +41,8 @@ import org.pentaho.platform.api.engine.IPluginResourceLoader;
 import org.pentaho.platform.engine.core.system.PentahoSessionHolder;
 import org.pentaho.platform.engine.core.system.PentahoSystem;
 import org.pentaho.platform.engine.security.SecurityHelper;
+import org.pentaho.platform.util.VersionHelper;
+import org.pentaho.platform.util.VersionInfo;
 import org.pentaho.platform.util.web.HttpUtil;
 import org.springframework.security.Authentication;
 import org.springframework.security.GrantedAuthority;
@@ -300,6 +302,13 @@ public class MarketplaceService {
     return json;
   }
 
+  protected String resolveVersion(String url) {
+    // replace the version of the xml url path with the current release version:
+    VersionInfo versionInfo = VersionHelper.getVersionInfo(PentahoSystem.class);
+    String v = versionInfo.getVersionNumber();
+    return url.replaceAll("\\[VERSION\\]", v);
+  }
+  
   protected String getMarketplaceSiteContent() {
     IPluginResourceLoader resLoader = PentahoSystem.get(IPluginResourceLoader.class, null);
     String site = null;
@@ -312,6 +321,9 @@ public class MarketplaceService {
     if (site == null) {
       site = "http://wiki.pentaho.com/download/attachments/23528994/availableplugins.xml";
     }
+    
+    site = resolveVersion(site);
+    
     return HttpUtil.getURLContent(site);
   }
 

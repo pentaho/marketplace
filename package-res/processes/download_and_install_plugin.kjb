@@ -9,7 +9,7 @@
   <created_user>-</created_user>
   <created_date>2011&#47;10&#47;09 16:08:24.678</created_date>
   <modified_user>-</modified_user>
-  <modified_date>2011&#47;12&#47;29 21:52:55.450</modified_date>
+  <modified_date>2012&#47;01&#47;03 09:57:07.528</modified_date>
     <parameters>
         <parameter>
             <name>downloadDestination</name>
@@ -540,7 +540,7 @@
       <yloc>283</yloc>
       </entry>
     <entry>
-      <name>bi-developers exist?</name>
+      <name>plugin-samples exist?</name>
       <description/>
       <type>FILES_EXIST</type>
       <filename/>
@@ -556,7 +556,7 @@
       <yloc>262</yloc>
       </entry>
     <entry>
-      <name>Create bi-developers</name>
+      <name>Create plugin-samples</name>
       <description/>
       <type>CREATE_FOLDER</type>
       <foldername>${samplesDir}</foldername>
@@ -564,8 +564,8 @@
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>1276</xloc>
-      <yloc>258</yloc>
+      <xloc>1258</xloc>
+      <yloc>261</yloc>
       </entry>
     <entry>
       <name>Create index.xml</name>
@@ -588,8 +588,8 @@
       <createParentFolder>N</createParentFolder>
       <appendFile>N</appendFile>
       <content>&lt;index&gt;
-	&lt;name&gt;%name&lt;&#47;name&gt;
-	&lt;description&gt;%description&lt;&#47;description&gt;
+	&lt;name&gt;Plugins Samples&lt;&#47;name&gt;
+	&lt;description&gt;Plugins Samples&lt;&#47;description&gt;
 	&lt;icon&gt;samples.png&lt;&#47;icon&gt;
 	&lt;visible&gt;true&lt;&#47;visible&gt;
 	&lt;display-type&gt;icons&lt;&#47;display-type&gt;	
@@ -600,32 +600,6 @@
       <nr>0</nr>
       <xloc>1468</xloc>
       <yloc>264</yloc>
-      </entry>
-    <entry>
-      <name>Make Sure visible is true on index.xml</name>
-      <description/>
-      <type>SHELL</type>
-      <filename/>
-      <work_directory>${samplesDir}</work_directory>
-      <arg_from_previous>N</arg_from_previous>
-      <exec_per_row>N</exec_per_row>
-      <set_logfile>Y</set_logfile>
-      <logfile>testLog.log</logfile>
-      <set_append_logfile>N</set_append_logfile>
-      <logext/>
-      <add_date>N</add_date>
-      <add_time>N</add_time>
-      <insertScript>Y</insertScript>
-      <script>cat index.xml | sed &apos;s#\(&lt;visible&gt;\)false\(&lt;&#47;visible&gt;\)#\1&apos;true&apos;\2#g&apos; &gt; a.xml
-mv a.xml index.xml
-echo &quot;0&quot;
-</script>
-      <loglevel>Basic</loglevel>
-      <parallel>N</parallel>
-      <draw>Y</draw>
-      <nr>0</nr>
-      <xloc>1145</xloc>
-      <yloc>355</yloc>
       </entry>
     <entry>
       <name>Samples url exists? 2</name>
@@ -868,8 +842,8 @@ echo &quot;0&quot;
       <unconditional>N</unconditional>
     </hop>
     <hop>
-      <from>bi-developers exist?</from>
-      <to>Create bi-developers</to>
+      <from>plugin-samples exist?</from>
+      <to>Create plugin-samples</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
       <enabled>Y</enabled>
@@ -877,7 +851,7 @@ echo &quot;0&quot;
       <unconditional>N</unconditional>
     </hop>
     <hop>
-      <from>Create bi-developers</from>
+      <from>Create plugin-samples</from>
       <to>Create index.xml</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
@@ -895,33 +869,6 @@ echo &quot;0&quot;
       <unconditional>N</unconditional>
     </hop>
     <hop>
-      <from>bi-developers exist?</from>
-      <to>Make Sure visible is true on index.xml</to>
-      <from_nr>0</from_nr>
-      <to_nr>0</to_nr>
-      <enabled>Y</enabled>
-      <evaluation>Y</evaluation>
-      <unconditional>N</unconditional>
-    </hop>
-    <hop>
-      <from>Write to index.xml</from>
-      <to>Make Sure visible is true on index.xml</to>
-      <from_nr>0</from_nr>
-      <to_nr>0</to_nr>
-      <enabled>Y</enabled>
-      <evaluation>N</evaluation>
-      <unconditional>Y</unconditional>
-    </hop>
-    <hop>
-      <from>Make Sure visible is true on index.xml</from>
-      <to>Does Samples Already Exist?</to>
-      <from_nr>0</from_nr>
-      <to_nr>0</to_nr>
-      <enabled>Y</enabled>
-      <evaluation>Y</evaluation>
-      <unconditional>N</unconditional>
-    </hop>
-    <hop>
       <from>Copy to Destination</from>
       <to>Samples url exists? 2</to>
       <from_nr>0</from_nr>
@@ -932,7 +879,7 @@ echo &quot;0&quot;
     </hop>
     <hop>
       <from>Samples url exists? 2</from>
-      <to>bi-developers exist?</to>
+      <to>plugin-samples exist?</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
       <enabled>Y</enabled>
@@ -946,6 +893,24 @@ echo &quot;0&quot;
       <to_nr>0</to_nr>
       <enabled>Y</enabled>
       <evaluation>N</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>Write to index.xml</from>
+      <to>Does Samples Already Exist?</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>N</evaluation>
+      <unconditional>Y</unconditional>
+    </hop>
+    <hop>
+      <from>plugin-samples exist?</from>
+      <to>Does Samples Already Exist?</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>Y</evaluation>
       <unconditional>N</unconditional>
     </hop>
   </hops>

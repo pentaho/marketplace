@@ -181,14 +181,14 @@
 
     
     function renderPlugin(plugin) {
-		var html = "<table width=\"100%\"><tr><td rowspan=\"3\"><img src=\"" + plugin.img + "\" width=\"50\" height=\"50\" style=\"width:45px;height:45px\"></td>";
+		var html = "<table width=\"100%\"><tr><td rowspan=\"4\"><img src=\"" + plugin.img + "\" width=\"50\" height=\"50\" style=\"width:45px;height:45px\"></td>";
             html += "<td width=\"400\"><span style=\"font-size: 20px; font-weight: bold;\">" + plugin.name + "</span> <span style=\"font-size: 14px;\">version ";
 		if (!plugin.installed) {        
        		html += plugin.availableVersion + "</span></td>";
-			html += "<td rowspan=\"3\" valign=\"top\" align=\"right\"><a href=\"javascript:installNow('" + plugin.id + "')\" style=\"font-size:20px;text-decoration: none;\">Install Now</a></td></tr>";
+			html += "<td rowspan=\"4\" valign=\"top\" align=\"right\"><a href=\"javascript:installNow('" + plugin.id + "')\" style=\"font-size:20px;text-decoration: none;\">Install Now</a></td></tr>";
 		} else {
 			html += plugin.installedVersion + "</span></td>";
-			html += "<td rowspan=\"3\" valign=\"top\" align=\"right\">";
+			html += "<td rowspan=\"4\" valign=\"top\" align=\"right\">";
 			if (plugin.installedVersion == plugin.availableVersion) {
 				html += "<br><br><br>";
 			} else {
@@ -196,7 +196,10 @@
 			}
 			html += "<br><br><a href=\"javascript:uninstall('" + plugin.id + "')\" style=\"font-size:20px;text-decoration: none;\">Uninstall</a></td></tr>";
 		}
-		html += "<tr><td>" + plugin.description + " <a href=\"" + plugin.learnMoreUrl + "\">Learn More...</a></td></tr><tr><td>by <a href=\"" + plugin.companyUrl + "\">" + plugin.company + "</a></td></tr>";
+		html += "<tr><td>" + plugin.description + " <a href=\"" + plugin.learnMoreUrl + "\">Learn More...</a></td></tr>";
+                if (plugin.changelog && plugin.changelog != "")
+                    html += "<tr><td><span style='font-weight:bold;'> Changelog for version " +plugin.availableVersion + ": </span><br/>" + plugin.changelog.replace(/\n/g, '<br/>') + "</td></tr>";
+                html += "<tr><td>by <a href=\"" + plugin.companyUrl + "\">" + plugin.company + "</a></td></tr>";
 		html += "</table>";
 		return html;
     }

@@ -204,7 +204,7 @@ public class MarketplaceService {
       logger.error(e.getMessage(), e);
     }
     
-    return new StatusMessage("PLUGIN_INSTALLED", toInstall.getName() + " was successfully installed.  Please restart your BI Server.");
+    return new StatusMessage("PLUGIN_INSTALLED", toInstall.getName() + " was successfully installed.  Please restart your BI Server. \n" + toInstall.getInstallationNotes());
   }
   
 
@@ -383,6 +383,7 @@ public class MarketplaceService {
           plugin.setLearnMoreUrl(getElementChildValue(element, "learnMoreUrl"));
           plugin.setName(getElementChildValue(element, "name"));
           plugin.setChangelog(getElementChildValue(element, "changelog"));
+          plugin.setInstallationNotes(getElementChildValue(element, "installationNotes"));
           pluginArr[i] = plugin;
         }
         return pluginArr;

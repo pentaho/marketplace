@@ -35,6 +35,7 @@ public class Plugin implements Serializable {
   private String companyUrl;
   private String installedVersion;
   private String changelog;
+  private String installationNotes;
   private boolean installed;
   
   public Plugin() {}
@@ -49,6 +50,16 @@ public class Plugin implements Serializable {
     this.setCompanyUrl(companyUrl);
   }
 
+  
+  public String getInstallationNotes() {
+      return installationNotes;
+  }
+  
+  
+  public void setInstallationNotes(String installationNotes) {
+      this.installationNotes = installationNotes;
+  }
+  
   public String getImg() {
     return img;
   }

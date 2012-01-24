@@ -143,7 +143,7 @@ public class MarketplaceService {
    * @param id the plugin to install
    * @return a status mesasge to display the user
    */
-  public StatusMessage installPlugin(String id) throws MarketplaceSecurityException {
+  public StatusMessage installPlugin(String id, String versionId) throws MarketplaceSecurityException {
     Plugin plugins[] = getPlugins();
     Plugin toInstall = null;
     for (Plugin plugin : plugins) {
@@ -161,6 +161,22 @@ public class MarketplaceService {
       return new StatusMessage("NO_PLUGIN","Plugin ID contains an illegal character");
     }
     
+    
+    String downloadUrl, samplesDownloadUrl, availableVersion;
+    
+    if (versionId != null && versionId.length() > 0) {
+        PluginVersion v = toInstall.getVersionById(versionId);
+        if (v == null)
+            return new StatusMessage("NO_PLUGIN", "Plugin version not found");
+        downloadUrl = v.getDownloadUrl();
+        samplesDownloadUrl = v.getSamplesDownloadUrl();                
+        availableVersion = v.getId();
+    } else {
+        downloadUrl = toInstall.getDownloadUrl();
+        samplesDownloadUrl = toInstall.getSamplesDownloadUrl();
+        availableVersion = toInstall.getAvailableVersion();
+    }
+    
     // get plugin path
     
     String jobPath = PentahoSystem.getApplicationContext().getSolutionPath("system/" + PLUGIN_NAME + "/processes/download_and_install_plugin.kjb");
@@ -175,17 +191,17 @@ public class MarketplaceService {
       file = new File(PentahoSystem.getApplicationContext().getSolutionPath("system/plugin-cache/staging"));
       file.mkdirs();
       
-      job.getJobMeta().setParameterValue("downloadUrl", toInstall.getDownloadUrl());
+      job.getJobMeta().setParameterValue("downloadUrl", downloadUrl);
       if (toInstall.getSamplesDownloadUrl() != null){
-          job.getJobMeta().setParameterValue("samplesDownloadUrl", toInstall.getSamplesDownloadUrl());
+          job.getJobMeta().setParameterValue("samplesDownloadUrl", samplesDownloadUrl);
           job.getJobMeta().setParameterValue("samplesDir", PentahoSystem.getApplicationContext().getSolutionPath("plugin-samples"));
           job.getJobMeta().setParameterValue("samplesTargetDestination", PentahoSystem.getApplicationContext().getSolutionPath("plugin-samples/"+ toInstall.getId()));
           job.getJobMeta().setParameterValue("samplesTargetBackup", PentahoSystem.getApplicationContext().getSolutionPath("system/plugin-cache/backups/" + toInstall.getId() + "_samples_" + new Date().getTime()));
-          job.getJobMeta().setParameterValue("samplesDownloadDestination",PentahoSystem.getApplicationContext().getSolutionPath("system/plugin-cache/downloads/" + toInstall.getId() + "-samples-" + toInstall.getAvailableVersion() + ".zip"));          
+          job.getJobMeta().setParameterValue("samplesDownloadDestination",PentahoSystem.getApplicationContext().getSolutionPath("system/plugin-cache/downloads/" + toInstall.getId() + "-samples-" + availableVersion + ".zip"));          
           job.getJobMeta().setParameterValue("samplesStagingDestination",PentahoSystem.getApplicationContext().getSolutionPath("system/plugin-cache/staging_samples"));
           job.getJobMeta().setParameterValue("samplesStagingDestinationAndDir",PentahoSystem.getApplicationContext().getSolutionPath("system/plugin-cache/staging_samples/" + toInstall.getId()));          
       }
-      job.getJobMeta().setParameterValue("downloadDestination",PentahoSystem.getApplicationContext().getSolutionPath("system/plugin-cache/downloads/" + toInstall.getId() + "-" + toInstall.getAvailableVersion() + ".zip"));
+      job.getJobMeta().setParameterValue("downloadDestination",PentahoSystem.getApplicationContext().getSolutionPath("system/plugin-cache/downloads/" + toInstall.getId() + "-" + availableVersion + ".zip"));
       job.getJobMeta().setParameterValue("stagingDestination",PentahoSystem.getApplicationContext().getSolutionPath("system/plugin-cache/staging"));
       job.getJobMeta().setParameterValue("stagingDestinationAndDir",PentahoSystem.getApplicationContext().getSolutionPath("system/plugin-cache/staging/" + toInstall.getId()));
       job.getJobMeta().setParameterValue("targetDestination",PentahoSystem.getApplicationContext().getSolutionPath("system/"+ toInstall.getId()));
@@ -204,16 +220,16 @@ public class MarketplaceService {
       logger.error(e.getMessage(), e);
     }
     
-    return new StatusMessage("PLUGIN_INSTALLED", toInstall.getName() + " was successfully installed.  Please restart your BI Server.");
+    return new StatusMessage("PLUGIN_INSTALLED", toInstall.getName() + " was successfully installed.  Please restart your BI Server. \n" + toInstall.getInstallationNotes());
   }
   
 
   /**
    *  This method wraps the installPlugin method, returning JSON instead of XML.
    */
-  public String installPluginJson(String pluginId) {
+  public String installPluginJson(String pluginId, String versionId) {
     try {
-      StatusMessage msg = installPlugin(pluginId);
+      StatusMessage msg = installPlugin(pluginId, versionId);
       JSONSerializer serializer = new JSONSerializer(); 
       String json = serializer.deepSerialize( msg );
       return json;
@@ -383,6 +399,22 @@ public class MarketplaceService {
           plugin.setLearnMoreUrl(getElementChildValue(element, "learnMoreUrl"));
           plugin.setName(getElementChildValue(element, "name"));
           plugin.setChangelog(getElementChildValue(element, "changelog"));
+          plugin.setInstallationNotes(getElementChildValue(element, "installationNotes"));
+          
+          NodeList availableVersions = element.getElementsByTagName("alternativeVersion");
+          if (availableVersions.getLength() > 0) {
+              PluginVersion[] versions = new PluginVersion[availableVersions.getLength()];
+              for (int j=0; j < availableVersions.getLength(); j++) {
+                  Element versionElement = (Element)availableVersions.item(j);
+                  versions[j] = new PluginVersion(versionElement.getAttribute("id"),
+                          getElementChildValue(versionElement, "name"),                         
+                          getElementChildValue(versionElement, "downloadUrl"),
+                          getElementChildValue(versionElement, "samplesDownloadUrl"),
+                          getElementChildValue(versionElement, "description"));                  
+              }
+              plugin.setAlternativeVersions(versions);
+          }
+          
           pluginArr[i] = plugin;
         }
         return pluginArr;

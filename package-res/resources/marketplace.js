@@ -19,9 +19,10 @@ function PentahoMarketplace() {
     return null;
   }
 
-  this.installNow = function(pluginId) {
+  this.installNow = function(pluginId, versionId) {
 	  var time = new Date().getTime();
-	    var resultStr = pentahoGet( CONTEXT_PATH + 'content/ws-run/MarketplaceService/installPluginJson?pluginId=' + pluginId+ '&time=' + time, '', null, 'text/text' );
+          
+	    var resultStr = pentahoGet( CONTEXT_PATH + 'content/ws-run/MarketplaceService/installPluginJson?pluginId=' + pluginId+ (versionId !== undefined? '&versionId=' +versionId:"") + '&time=' + time, '', null, 'text/text' );
 	    // pull the state, status, and message out
 	    if( !resultStr ) {
 	        return null;

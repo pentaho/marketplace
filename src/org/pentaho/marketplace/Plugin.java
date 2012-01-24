@@ -37,6 +37,7 @@ public class Plugin implements Serializable {
   private String changelog;
   private String installationNotes;
   private boolean installed;
+  private PluginVersion[] alternativeVersions;
   
   public Plugin() {}
   
@@ -109,7 +110,6 @@ public class Plugin implements Serializable {
   }
   
   
-  
   public String getAvailableVersion() {
     return availableVersion;
   }
@@ -166,6 +166,28 @@ public class Plugin implements Serializable {
   public void setChangelog(String changelog) {
     this.changelog = changelog;
   }
+
+    /**
+     * @return the alternativeVersions
+     */
+    public PluginVersion[] getAlternativeVersions() {
+        return alternativeVersions;
+    }
+
+    /**
+     * @param alternativeVersions the alternativeVersions to set
+     */
+    public void setAlternativeVersions(PluginVersion[] alternativeVersions) {
+        this.alternativeVersions = alternativeVersions;
+    }
   
-  
+ 
+    public PluginVersion getVersionById(String id) {
+        for (int i=0; i < this.alternativeVersions.length; i++) {
+            if (id != null && id.equals(this.alternativeVersions[i].getId()))
+                return this.alternativeVersions[i];
+        }
+        return null;
+    }
+    
 }

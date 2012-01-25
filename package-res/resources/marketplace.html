@@ -179,13 +179,26 @@
 		}
     });
 
+
+
+    function renderAlternativeVersions(plugin) {
+        if (!plugin.alternativeVersions)
+            return "";
+        var html = "";
+        for (var i=0; i < plugin.alternativeVersions.length; i++) {
+            var version = plugin.alternativeVersions[i];
+            
+            html += "<br/><a href=\"javascript:installNow('" + plugin.id + "', '" + version.id + "')\" style=\"font-size:20px;text-decoration: none;\">" + version.name+ "</a>";
+        }
+        return html;
+    }
     
     function renderPlugin(plugin) {
 		var html = "<table width=\"100%\"><tr><td rowspan=\"4\"><img src=\"" + plugin.img + "\" width=\"50\" height=\"50\" style=\"width:45px;height:45px\"></td>";
             html += "<td width=\"400\"><span style=\"font-size: 20px; font-weight: bold;\">" + plugin.name + "</span> <span style=\"font-size: 14px;\">version ";
 		if (!plugin.installed) {        
        		html += plugin.availableVersion + "</span></td>";
-			html += "<td rowspan=\"4\" valign=\"top\" align=\"right\"><a href=\"javascript:installNow('" + plugin.id + "')\" style=\"font-size:20px;text-decoration: none;\">Install Now</a></td></tr>";
+			html += "<td rowspan=\"4\" valign=\"top\" align=\"right\"><a href=\"javascript:installNow('" + plugin.id + "')\" style=\"font-size:20px;text-decoration: none;\">Install Now</a>" + renderAlternativeVersions(plugin) +"</td></tr>";
 		} else {
 			html += plugin.installedVersion + "</span></td>";
 			html += "<td rowspan=\"4\" valign=\"top\" align=\"right\">";
@@ -194,7 +207,7 @@
 			} else {
 				html += "<a href=\"javascript:installNow('" + plugin.id + "')\" style=\"font-size:20px;text-decoration: none;\">Upgrade to</a><br>" + plugin.availableVersion;
 			}
-			html += "<br><br><a href=\"javascript:uninstall('" + plugin.id + "')\" style=\"font-size:20px;text-decoration: none;\">Uninstall</a></td></tr>";
+			html += "<br><br><a href=\"javascript:uninstall('" + plugin.id + "')\" style=\"font-size:20px;text-decoration: none;\">Uninstall</a>" + renderAlternativeVersions(plugin) + "</td></tr>";
 		}
 		html += "<tr><td>" + plugin.description + " <a href=\"" + plugin.learnMoreUrl + "\">Learn More...</a></td></tr>";
                 if (plugin.changelog && plugin.changelog != "")
@@ -204,10 +217,10 @@
 		return html;
     }
     
-    function installNow(pluginId) {
+    function installNow(pluginId, versionId) {
     	// first show an alert box to confirm the user wants to install this plugin
     	alert('Are you sure you want to install this plugin?');
-    	var response = eval ('(' + pentahoMarketplace.installNow(pluginId) + ')');
+    	var response = eval ('(' + pentahoMarketplace.installNow(pluginId, versionId) + ')');
     	alert(response.message);
     }
     

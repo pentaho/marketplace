@@ -49,7 +49,7 @@ public class MarketplaceServiceTest {
     
     Plugin plugins[] = service.loadPluginsFromSite();
     
-    Assert.assertEquals(2, plugins.length);
+    Assert.assertEquals(3, plugins.length);
     Assert.assertEquals("cde", plugins[0].getId());
     Assert.assertEquals("wt_transparent.png", plugins[0].getImg());
     Assert.assertEquals("Community Dashboard Editor", plugins[0].getName());
@@ -59,6 +59,12 @@ public class MarketplaceServiceTest {
     Assert.assertEquals("The Community Dashboard Editor (CDE) is the outcome of real-world needs: It was born to greatly simplify the creation, edition and rendering of dashboards.\n\nCDE and the technology underneath (CDF, CDA and CCC) allows to develop and deploy dashboards in the Pentaho platform in a fast and effective way.", plugins[0].getDescription().trim());
     Assert.assertEquals("WebDetails", plugins[0].getCompany());
     Assert.assertEquals("http://webdetails.pt", plugins[0].getCompanyUrl());
+    Assert.assertNull(plugins[0].getInstallationNotes());
+    Assert.assertNull(plugins[1].getChangelog());
+    
+    Assert.assertEquals("Changelog", plugins[2].getChangelog());
+    Assert.assertEquals("http://localhost:8080/cdf-1.0.samples.zip", plugins[2].getSamplesDownloadUrl());
+    Assert.assertEquals("Notes after install", plugins[2].getInstallationNotes());
   }
   
   @Test
@@ -71,4 +77,49 @@ public class MarketplaceServiceTest {
     Assert.assertEquals("http://plugins", service.resolveVersion("http://plugins"));
     Assert.assertTrue(service.resolveVersion("http://plugins_[VERSION]").indexOf("[VERSION]") < 0);
   }
+  
+  
+  @Test
+  public void testParseXmlWithAlternativeVersions() {
+    MarketplaceService service = new MarketplaceService() {
+      protected String getMarketplaceSiteContent() {
+        try {
+          return IOUtils.toString(new FileInputStream("test-res/availableplugins_differentversions.xml"));
+        } catch (Exception e) {
+          e.printStackTrace();
+        }
+        return null;
+      }
+      public Plugin[] loadPluginsFromSite() {
+        return super.loadPluginsFromSite();
+      }
+      
+      public String resolveVersion(String url) {
+        return super.resolveVersion(url);
+      }
+    };
+    
+    Plugin plugins[] = service.loadPluginsFromSite();
+    
+    Assert.assertEquals(1, plugins.length);
+    PluginVersion[] alternativeVersions = plugins[0].getAlternativeVersions();
+    Assert.assertEquals(2, alternativeVersions.length);
+
+    Assert.assertEquals("RC", alternativeVersions[0].getId());
+    Assert.assertEquals("Release Candidate", alternativeVersions[0].getName());
+    Assert.assertEquals("This is RC1 - pretty cool version but still not quite there", alternativeVersions[0].getDescription());
+    Assert.assertEquals("http://www.webdetails.pt/RC/ficheiros/CDE-bundle-1.0-RC3.tar.bz2",  alternativeVersions[0].getDownloadUrl());
+    Assert.assertEquals("http://www.webdetails.pt/RC/ficheiros/CDE-bundle-1.0-RC3-samples.tar.bz2",  alternativeVersions[0].getSamplesDownloadUrl());    
+
+    
+    PluginVersion desiredVersion = plugins[0].getVersionById("TRUNK");
+    
+    Assert.assertNotNull(desiredVersion);
+    Assert.assertEquals("TRUNK", desiredVersion.getId());
+    Assert.assertEquals("Trunk", desiredVersion.getName());
+    
+  }
+  
+  
+  
 }

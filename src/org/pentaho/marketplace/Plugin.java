@@ -35,7 +35,9 @@ public class Plugin implements Serializable {
   private String companyUrl;
   private String installedVersion;
   private String changelog;
+  private String installationNotes;
   private boolean installed;
+  private PluginVersion[] alternativeVersions;
   
   public Plugin() {}
   
@@ -49,6 +51,16 @@ public class Plugin implements Serializable {
     this.setCompanyUrl(companyUrl);
   }
 
+  
+  public String getInstallationNotes() {
+      return installationNotes;
+  }
+  
+  
+  public void setInstallationNotes(String installationNotes) {
+      this.installationNotes = installationNotes;
+  }
+  
   public String getImg() {
     return img;
   }
@@ -96,7 +108,6 @@ public class Plugin implements Serializable {
   public void setSamplesDownloadUrl(String samplesDownloadUrl) {
     this.samplesDownloadUrl = samplesDownloadUrl;
   }
-  
   
   
   public String getAvailableVersion() {
@@ -155,6 +166,28 @@ public class Plugin implements Serializable {
   public void setChangelog(String changelog) {
     this.changelog = changelog;
   }
+
+    /**
+     * @return the alternativeVersions
+     */
+    public PluginVersion[] getAlternativeVersions() {
+        return alternativeVersions;
+    }
+
+    /**
+     * @param alternativeVersions the alternativeVersions to set
+     */
+    public void setAlternativeVersions(PluginVersion[] alternativeVersions) {
+        this.alternativeVersions = alternativeVersions;
+    }
   
-  
+ 
+    public PluginVersion getVersionById(String id) {
+        for (int i=0; i < this.alternativeVersions.length; i++) {
+            if (id != null && id.equals(this.alternativeVersions[i].getId()))
+                return this.alternativeVersions[i];
+        }
+        return null;
+    }
+    
 }

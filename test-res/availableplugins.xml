@@ -24,4 +24,21 @@ CDE and the technology underneath (CDF, CDA and CCC) allows to develop and deplo
     <company>WebDetails</company>
     <companyUrl>http://webdetails.pt</companyUrl>
   </plugin>
+  
+  <plugin id="cdf">
+    <img>wt_transparent.png</img>
+    <name>Community Dashboards Framework</name>
+    <learnMoreUrl>http://cdf.webdetails.org</learnMoreUrl>
+    <downloadUrl>http://localhost:8080/cdf-1.0.zip</downloadUrl>
+    <downloadUrl2>http://www.webdetails.pt/ficheiros/cdf-installer-v1.0.jar</downloadUrl2>
+    <samplesDownloadUrl>http://localhost:8080/cdf-1.0.samples.zip</samplesDownloadUrl>
+    <availableVersion>1.0</availableVersion>
+    <changelog>Changelog</changelog>
+    <installationNotes>Notes after install</installationNotes>
+    <description>Community Dashboards Framework (CDF) is a Pentaho plugin designed for drawing dashboards.</description>
+    <company>WebDetails</company>
+    <companyUrl>http://webdetails.pt</companyUrl>
+  </plugin>
+  
+  
 </availablePlugins>

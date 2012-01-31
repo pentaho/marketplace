@@ -183,6 +183,8 @@ public class Plugin implements Serializable {
   
  
     public PluginVersion getVersionById(String id) {
+        if (this.alternativeVersions == null)
+            return null;
         for (int i=0; i < this.alternativeVersions.length; i++) {
             if (id != null && id.equals(this.alternativeVersions[i].getId()))
                 return this.alternativeVersions[i];

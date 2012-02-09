@@ -10,10 +10,17 @@
   </head>
   <body>
 	<div id="marketplacePanel" class="marketplacePanel">
-		<table style="margin: 10px;">
+          <div class="marketplaceHeader">
+                                        <div class="marketplaceTitle">Marketplace</div>
+                                    </div>   
+            
+            <div class="groupTitle" id='available'>Available Plugins</div>
+            
+            <div class="groupTitle" id='installed'>Installed Plugins</div>
+<!--			<table style="margin: 10px;">
 			<tr>
 				<td>
-					<div class="marketplaceMessagex">
+				<div class="marketplaceMessagex">
 						<h3>Pentaho Marketplace</h3>
 						Discover and install new functionality available in the Pentaho BI Server through the Pentaho Marketplace.
 						<br>
@@ -38,7 +45,8 @@
 						<br>
 						<br>
 						<br>
-					</div>
+					</div> 
+                          
 				</td>
 			</tr>
 			<tr>
@@ -126,7 +134,7 @@
                                 </tr>
                             </tbody>
                         </table>
-
+-->
 
 
                         <script type="text/javascript">
@@ -145,9 +153,9 @@
                         </script>
 
 
-				</td>
+		<!--		</td>
 			</tr>
-		</table>
+		</table>-->
 	</div>
   </body>
   <script>
@@ -160,22 +168,15 @@
 		} 
 	
 		for (var i = 0; i < plugins.length; i++) {
-			var html = renderPlugin(plugins[i]);
-			var tblName = 'available';
-			if (plugins[i].installed) {
-			  tblName = 'installed';
-			}
-			var cell = document.getElementById(tblName + 'FirstRow');
-			if (cell == null) {
-				var tbl = document.getElementById(tblName + 'Plugins');
-				var lastRow = tbl.rows.length;
-				var row = tbl.insertRow(lastRow);
-				cell = row.insertCell(0);
-	   			cell.setAttribute('class', 'pentaho-table-cell');
-			} else {
-				cell.id = tblName + 'FirstRowPopulated';
-			}
-			cell.innerHTML=html;
+                    var html = renderPlugin(plugins[i]);
+                    var divName = 'available';
+                    if (plugins[i].installed) {
+                        divName = 'installed';
+                    }
+                    var cell = document.createElement('div');
+                    var parentDiv = document.getElementById(divName);
+                    parentDiv.parentNode.insertBefore(cell,parentDiv.nextSibling);
+                    cell.innerHTML=html;
 		}
     });
 
@@ -194,27 +195,58 @@
     }
     
     function renderPlugin(plugin) {
-		var html = "<table width=\"100%\"><tr><td rowspan=\"4\"><img src=\"" + plugin.img + "\" width=\"50\" height=\"50\" style=\"width:45px;height:45px\"></td>";
-            html += "<td width=\"400\"><span style=\"font-size: 20px; font-weight: bold;\">" + plugin.name + "</span> <span style=\"font-size: 14px;\">version ";
-		if (!plugin.installed) {        
-       		html += plugin.availableVersion + "</span></td>";
-			html += "<td rowspan=\"4\" valign=\"top\" align=\"right\"><a href=\"javascript:installNow('" + plugin.id + "')\" style=\"font-size:20px;text-decoration: none;\">Install Now</a>" + renderAlternativeVersions(plugin) +"</td></tr>";
-		} else {
-			html += plugin.installedVersion + "</span></td>";
-			html += "<td rowspan=\"4\" valign=\"top\" align=\"right\">";
-			if (plugin.installedVersion == plugin.availableVersion) {
-				html += "<br><br><br>";
-			} else {
-				html += "<a href=\"javascript:installNow('" + plugin.id + "')\" style=\"font-size:20px;text-decoration: none;\">Upgrade to</a><br>" + plugin.availableVersion;
-			}
-			html += "<br><br><a href=\"javascript:uninstall('" + plugin.id + "')\" style=\"font-size:20px;text-decoration: none;\">Uninstall</a>" + renderAlternativeVersions(plugin) + "</td></tr>";
-		}
-		html += "<tr><td>" + plugin.description + " <a href=\"" + plugin.learnMoreUrl + "\">Learn More...</a></td></tr>";
-                if (plugin.changelog && plugin.changelog != "")
-                    html += "<tr><td><span style='font-weight:bold;'> Changelog for version " +plugin.availableVersion + ": </span><br/>" + plugin.changelog.replace(/\n/g, '<br/>') + "</td></tr>";
-                html += "<tr><td>by <a href=\"" + plugin.companyUrl + "\">" + plugin.company + "</a></td></tr>";
-		html += "</table>";
-		return html;
+            var html = "<div class='pluginDiv'>";
+            //Plugin image
+            html += "<div class='pluginImage'>" + 
+                    "<img src=\"" + plugin.img + "\" width=\"50\" height=\"50\" style=\"width:45px;height:45px\">" +
+                    "</div>";
+            //Plugin title
+            html += "<div class='pluginTitle'>" + plugin.name;
+            if (!plugin.installed)
+                html += "&nbsp;" + plugin.availableVersion;
+           else {
+               html += "&nbsp;" + plugin.installedVersion;
+           }
+            html += "</div>";
+            
+         //Plugin actions
+            html += "<div class='pluginActions'>"
+            if (!plugin.installed) {
+                html += "<a href=\"javascript:installNow('" + plugin.id + "')\" style=\"font-size:20px;text-decoration: none;\">Install Now</a>" + renderAlternativeVersions(plugin);
+            } else {
+                if (plugin.installedVersion == plugin.availableVersion) {
+                    html += "";
+                } else {
+                    html += "<a href=\"javascript:installNow('" + plugin.id + "')\" style=\"font-size:20px;text-decoration: none;\">Upgrade to</a><br>" + plugin.availableVersion;
+                }
+		html += "<a href=\"javascript:uninstall('" + plugin.id + "')\" style=\"font-size:20px;text-decoration: none;\">Uninstall</a>" + renderAlternativeVersions(plugin);
+                
+            }            
+            html+= "</div>";
+                        
+            
+            //Plugin description
+            html += "<div class='pluginDescription'>"
+            html += plugin.description;
+            html += " <a href=\"" + plugin.learnMoreUrl + "\">Learn More...</a>";
+            html += "</div>";
+            
+            //Plugin changelog
+            if (plugin.changelog && plugin.changelog != "") {
+                html += "<div class='pluginDescription'>"
+                html += plugin.changelog;
+                html += "</div>";
+            }
+            
+            //Plugin compay
+            html += "<div class='pluginDescription'>"
+            html += "by <a href=\"" + plugin.companyUrl + "\">" + plugin.company + "</a>"
+            html += "</div>";            
+            
+   
+            
+            html += '</div>';
+            return html;        
     }
     
     function installNow(pluginId, versionId) {

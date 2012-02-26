@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<availablePlugins>
+    <plugin id="cde">
+        <img>wt_transparent.png</img>
+        <name>Community Dashboard Editor</name>
+        <learnMoreUrl>http://cde.webdetails.org</learnMoreUrl>
+        <downloadUrl>http://www.webdetails.pt/ficheiros/CDE-bundle-1.0-RC3.tar.bz2</downloadUrl>
+        <availableVersion>1.0-RC3</availableVersion>
+        <description>The Community Dashboard Editor (CDE) is the outcome of real-world needs: It was born to greatly simplify the creation, edition and rendering of dashboards.
+
+CDE and the technology underneath (CDF, CDA and CCC) allows to develop and deploy dashboards in the Pentaho platform in a fast and effective way.
+        </description>
+        <company>WebDetails</company>
+        <companyUrl>http://webdetails.pt</companyUrl>
+    </plugin>
+    <plugin id="cda">
+        <img>wt_transparent.png</img>
+        <name>Community Data Access</name>
+        <learnMoreUrl>http://cda.webdetails.org</learnMoreUrl>
+        <downloadUrl>http://localhost:8080/cda-1.0.zip</downloadUrl>
+        <downloadUrl2>http://www.webdetails.pt/ficheiros/cda-installer-v1.0.jar</downloadUrl2>
+        <availableVersion>1.0</availableVersion>
+        <description>Community Data Access (CDA) is a Pentaho plugin designed for accessing data with great flexibility. Born for overcoming some cons of the older implementation, CDA allows you to access any of the various Pentaho data sources.   </description>
+        <company>WebDetails</company>
+        <companyUrl>http://webdetails.pt</companyUrl>
+    </plugin>
+  
+    <plugin id="cdf">
+        <img>wt_transparent.png</img>
+        <name>Community Dashboards Framework</name>
+        <learnMoreUrl>http://cdf.webdetails.org</learnMoreUrl>
+        <downloadUrl>http://localhost:8080/cdf-1.0.zip</downloadUrl>
+        <downloadUrl2>http://www.webdetails.pt/ficheiros/cdf-installer-v1.0.jar</downloadUrl2>
+        <samplesDownloadUrl>http://localhost:8080/cdf-1.0.samples.zip</samplesDownloadUrl>
+        <availableVersion>1.0</availableVersion>
+        <changelog>Changelog</changelog>
+        <installationNotes>Notes after install</installationNotes>
+        <description>Community Dashboards Framework (CDF) is a Pentaho plugin designed for drawing dashboards.</description>
+        <company>WebDetails</company>
+        <companyUrl>http://webdetails.pt</companyUrl>
+    </plugin>
+  
+  
+</availablePlugins>

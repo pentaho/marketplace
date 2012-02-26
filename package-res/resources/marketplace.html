@@ -1,14 +1,42 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns:pho="http:/www.pentaho.com">
+<!DOCTYPE html>
+<html>
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <title>Pentaho Marketplace</title>
     <script type="text/javascript" src="webcontext.js?content=marketplace"></script>
     <script type="text/javascript" src="../../common-ui/resources/web/repo/pentaho-ajax.js"></script>
+    
+    <!-- Resources -->
+    
+    
+
+    <!-- Blueprint CSS -->
+    <link rel="stylesheet" href="lib/blueprint/screen.css" type="text/css" media="screen, projection">
+    <link rel="stylesheet" href="lib/blueprint/print.css" type="text/css" media="print">
+    <!--[if lt IE 8]><link rel="stylesheet" href="lib/blueprint/ie.css" type="text/css" media="screen, projection"><![endif]-->
+
+
+    
+    <script type="text/javascript" src="lib/modernizr.js"></script>
+    <script type="text/javascript" src="lib/jquery.js"></script>
+    <script type="text/javascript" src="lib/jquery.hotkeys.js"></script>
+    <script type="text/javascript" src="lib/jquery.iframe-auto-height.js"></script>
+    <script type="text/javascript" src="lib/caf-TRUNK.SNAPSHOT.js"></script>
+    
+    <link href="lib/caf-TRUNK.SNAPSHOT.css" type="text/css" rel="stylesheet"/>
+    
+    
+    <link href="marketplace2.css" type="text/css" rel="stylesheet"/>
     <script type="text/javascript" src="marketplace.js"></script>
-    <link href="marketplace.css" type="text/css" rel="stylesheet"/>
+    
   </head>
   <body>
+      
+      <div id="marketplace">
+          
+      </div>
+      
+      
 	<div id="marketplacePanel" class="marketplacePanel">
           <div class="marketplaceHeader">
                                         <div class="marketplaceTitle">Marketplace</div>
@@ -17,7 +45,7 @@
             <div class="groupTitle" id='available'>Available Plugins</div>
             
             <div class="groupTitle" id='installed'>Installed Plugins</div>
-<!--			<table style="margin: 10px;">
+			<table style="margin: 10px;">
 			<tr>
 				<td>
 				<div class="marketplaceMessagex">
@@ -134,7 +162,7 @@
                                 </tr>
                             </tbody>
                         </table>
--->
+
 
 
                         <script type="text/javascript">
@@ -160,6 +188,11 @@
   </body>
   <script>
     $(document).ready(function(){
+        
+        
+        
+        
+        /*
 		var plugins = eval( '(' + pentahoMarketplace.getPlugins() + ')');
 		if (!plugins || plugins.class == 'org.pentaho.marketplace.StatusMessage') {
 			// wipe out entire page
@@ -178,6 +211,8 @@
                     parentDiv.parentNode.insertBefore(cell,parentDiv.nextSibling);
                     cell.innerHTML=html;
 		}
+                
+       */
     });
 
 

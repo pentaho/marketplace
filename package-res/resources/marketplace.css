@@ -27,6 +27,8 @@ html, body {
 
 .templateTitle{
     clear: both;
+    margin-left: 100px;
+    margin-bottom: 50px;
 }
 
 
@@ -69,4 +71,52 @@ html, body {
 
 .panelHidden{
     display: none;
+}
+
+
+.marketplacePanelTitle{
+    text-align: center;
+}
+
+/* Plugins */
+
+.pluginWrapper {
+    
+    margin-top:10px;
+    border: 1px solid #ccc;
+    background-color: white;
+    padding: 5px;
+        
+}
+
+
+.pluginWrapper.selected > .pluginHeader{
+    color: white;
+}
+
+
+.pluginHeader {
+    background-color: #242424;
+    overflow: hidden;
+    color: #d2d2d2;
+    height: 40px;
+}
+
+
+.pluginHeader > div{
+    display: inline-block;
+}
+
+.pluginHeaderLogo {
+    width: 50px;
+}
+
+.pluginHeaderUpdates{
+    float: right
+}
+
+.pluginHeaderVersionWrapper{
+    float: right;
+    background-color: #b3b3b3; /* TODO: GRADIENT */
+    
 }

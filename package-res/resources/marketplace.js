@@ -34,13 +34,16 @@ wd.marketplace.engine = function(myself,spec){
     
     impl.init = function(){
         
+        // Add pentaho style
+        $("body").addClass("pentaho-page-background");
+        
         wd.debug("intializing marketplace panel");
         
         installedPanel = myself.panelEngine.getPanel("installedPluginsPanel");
         allPanel = myself.panelEngine.getPanel("allPluginsPanel");
         
         
-        myself.notificationEngine.getNotification().debug("Starting engine");
+        //myself.notificationEngine.getNotification().debug("Starting engine");
         
         // Call refresh
         impl.refresh();
@@ -92,10 +95,10 @@ wd.marketplace.engine = function(myself,spec){
 
         json.map(function(plugin){
            
-           allPanel.addPlugin(plugin);
-           if(plugin.installed){
-               installedPanel.addPlugin(plugin);
-           }
+            allPanel.addPlugin(plugin);
+            if(plugin.installed){
+                installedPanel.addPlugin(plugin);
+            }
             
         });
 
@@ -151,7 +154,7 @@ wd.marketplace.template = function(spec){
         myself.$logo = $('<div class="templateLogo"></div>').appendTo(header);
         myself.$actions = $('<div class="templateActions"></div>').appendTo(header);
         myself.$panels = $('<div class="templatePanels"></div>').appendTo(header);
-        myself.$title = $('<div class="templateTitle">Pentaho Marketplace</div>').appendTo(header);
+        myself.$title = $('<div class="templateTitle contrast-color">Pentaho Marketplace</div>').appendTo(header);
   
         header.append($('<div class="templateHShadow"></div>'));
         
@@ -262,10 +265,13 @@ wd.marketplace.components.plugin = function(spec){
     
     
     spec = $.extend({},_spec,spec);
-    //var myself = wd.caf.panel(spec);
     var myself = wd.caf.component(spec);
 
-    var pluginInfo;
+    var pluginInfo, pluginHeader;
+    
+    // containers
+    var $wrapper,$currentVersion, $availableVersions, $logo, $description, $versionOps,
+    $footer;
     
     
     myself.setPluginInfo = function(_pluginInfo){
@@ -281,17 +287,91 @@ wd.marketplace.components.plugin = function(spec){
     
     myself.draw = function($ph){
         
-        var $c = $("<div/>").addClass(spec.cssClass)
-        .text(pluginInfo.name)
-        .data("plugin",myself) // store it for convenience;
+        // Wrapper
         
-        $c.appendTo($ph);
+        var $wrapper = $("<div/>").addClass(spec.cssClass + " pluginWrapper pentaho-rounded-panel2")
+        .data("plugin",myself) // store it for convenience;
+
+        // Plugin header
+        pluginHeader = wd.marketplace.components.pluginHeader();
+        pluginHeader.setPluginInfo(pluginInfo);
+        pluginHeader.draw($wrapper);
+
+        $wrapper.appendTo($ph);
         
     }
     
     return myself;
 };
 
+
+wd.marketplace.components.pluginHeader = function(spec){
+    
+    /**
+     * Specific specs
+     */
+    
+    var _spec = {
+        name: "pluginHeader",
+        description: "Plugin Header",
+        cssClass: "pluginHeader"
+    }; 
+    
+    
+    spec = $.extend({},_spec,spec);
+    var myself = wd.caf.component(spec);
+
+    var pluginInfo;
+
+    // Containers
+    var $wrapper, $versionWrapper;
+    
+    myself.setPluginInfo = function(_pluginInfo){
+        pluginInfo = _pluginInfo;
+    }
+    
+    
+    myself.getPluginInfo = function(){
+        return pluginInfo;
+    }
+    
+    myself.isUpdateAvailable = function(){
+        return pluginInfo.availableVersion == pluginInfo.installedVersion;
+    }
+    
+    myself.draw = function($ph){
+        
+        // Wrapper
+        
+        $wrapper = $("<div/>").addClass(spec.cssClass).appendTo($ph);
+        myself.update();
+
+        
+    }
+    
+    myself.update = function(){
+        
+        $wrapper.empty();
+        $("<div/>").addClass("pluginHeaderLogo").text(pluginInfo.id).appendTo($wrapper);
+        $("<div/>").addClass("pluginHeaderTitle").text(pluginInfo.name).appendTo($wrapper);
+        
+        var $versionWrapper = $("<div/>").addClass("pluginHeaderVersionWrapper " + 
+            (myself.isUpdateAvailable()?"pluginHeaderVersionAvailable":"pluginHeaderVersionUpdated"))
+        .appendTo($wrapper);
+        
+        $("<div/>").text("Version").appendTo($versionWrapper);
+        $("<div/>").text(pluginInfo.availableVersion+"").appendTo($versionWrapper);
+
+        $("<div/>").addClass("pluginHeaderUpdates")
+        .text(myself.isUpdateAvailable()?"Updates available":"Updated version").appendTo($wrapper);
+        
+
+        
+    }
+    
+    return myself;
+
+}
 
 
 /*
@@ -329,7 +409,7 @@ wd.marketplace.panels.marketplacePanel = function(spec){
     
     var title =  wd.marketplace.components.label({
         label: spec.description,
-        cssClass:"pentaho-titled-toolbar section-header-inner pentaho-padding-sm"
+        cssClass:"marketplacePanelTitle pentaho-titled-toolbar pentaho-padding-sm pentaho-rounded-panel2 pentaho-background contrast-color" 
     });
 
 

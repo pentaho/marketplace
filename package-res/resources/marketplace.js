@@ -57,10 +57,54 @@ wd.marketplace.engine = function(myself,spec){
         installedPanel.showConnectingComponent();
         allPanel.showConnectingComponent();
         
-    // 2. getPliginIn, passing callback
-    //impl.getPluginList
+        // 2. getPluginList, passing callback
+        impl.getPluginList();
+    
     }
     
+    impl.getPluginList = function(){
+        
+        // Replace this later with the real deal
+        wd.warn("Getting plugin list - Not done yet");
+        
+        
+        $.ajax({
+            url: "pluginList.json",
+            dataType: 'json',
+            data: [],
+            success: impl.processPluginListResponse,
+            error: impl.errorUpdating
+        });
+        
+        
+    }
+    
+    
+    impl.processPluginListResponse = function(json){
+        
+        wd.log("Response: " + json);
+        
+        // 1. Clean plugins
+        installedPanel.cleanPlugins();
+        allPanel.cleanPlugins();
+
+        // 2. Add plugins to panel
+
+        json.map(function(plugin){
+           
+           allPanel.addPlugin(plugin);
+           if(plugin.installed){
+               installedPanel.addPlugin(plugin);
+           }
+            
+        });
+
+    }
+    
+    impl.errorUpdating = function(jqXHR, textStatus, errorThrown){
+        
+        myself.notificationEngine.getNotification().error("Error updating - try again later: " + errorThrown);
+    }
     
 }
 
@@ -203,6 +247,52 @@ wd.marketplace.components.label = function(spec){
 };
 
 
+wd.marketplace.components.plugin = function(spec){
+    
+    /**
+     * Specific specs
+     */
+    
+    var _spec = {
+        name: "plugin",
+        description: "Plugin",
+        cssClass: "plugin",       
+        clickAction: undefined
+    }; 
+    
+    
+    spec = $.extend({},_spec,spec);
+    //var myself = wd.caf.panel(spec);
+    var myself = wd.caf.component(spec);
+
+    var pluginInfo;
+    
+    
+    myself.setPluginInfo = function(_pluginInfo){
+        pluginInfo = _pluginInfo;
+    }
+    
+    
+    myself.getPluginInfo = function(){
+        return pluginInfo;
+    }
+    
+    
+    
+    myself.draw = function($ph){
+        
+        var $c = $("<div/>").addClass(spec.cssClass)
+        .text(pluginInfo.name)
+        .data("plugin",myself) // store it for convenience;
+        
+        $c.appendTo($ph);
+        
+    }
+    
+    return myself;
+};
+
+
 
 /*
  *
@@ -278,9 +368,30 @@ wd.marketplace.panels.marketplacePanel = function(spec){
     }
 
 
+    myself.cleanPlugins = function(){
+        
+        // TODO: put some fade effects?
+        $mainContent.empty();
+    
+    }
+
+
     myself.showConnectingComponent = function(){
         
         connectingComponent.draw($mainContent.empty());
+        
+    }
+
+
+    myself.addPlugin = function(pluginInfo){
+        
+        var plugin = wd.marketplace.components.plugin();
+        plugin.setPluginInfo(pluginInfo);
+        
+        
+        // Add it
+        plugin.draw($mainContent);
+        
         
     }
 

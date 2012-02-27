@@ -1,6 +1,72 @@
+
+/* Migrate to CAF */
+
+.cafPointer:hover{
+    cursor: pointer;
+}
+
+
+
 html, body {
 }
 
 .marketplacePanel {
 
+}
+
+.templateHead > div.templatePanels{
+    margin-right: 20px;
+
+}
+
+.templateHead > div.templateActions{
+    float: right;
+
+}
+
+
+.templateTitle{
+    clear: both;
+}
+
+
+/* Transition basic */
+
+
+.templatePanelsContainer{
+    
+    /* Remove this later */
+    min-height: 600px;
+
+}
+
+.templatePanelsContainer {
+    position: relative;
+}
+
+.panelContainer{
+
+    position: absolute;
+    top: 0px;
+
+    width: 1150px;
+    min-height: 600px;
+    margin-left: auto;
+    margin-right: auto;
+
+
+    -webkit-transition: all 500ms ease-in;
+    -moz-transition: all 500ms ease-in;
+    -o-transition: all 500ms ease-in;
+    transition: all 500ms ease-in;
+
+}
+
+.basicTransitionHidden{
+    opacity:0;
+}
+
+
+.panelHidden{
+    display: none;
 }

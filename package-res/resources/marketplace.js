@@ -6,10 +6,17 @@ wd.marketplace.components = wd.marketplace.components || {};
 wd.marketplace.actions = wd.marketplace.actions || {};
 
             
+            
+/*
+ *
+ *  Main application and engine
+ *
+ */ 
+            
 var marketplace = wd.caf.application({
     name: 'Marketplace', 
     container:"#marketplace", 
-    template:'simple', 
+    template:'marketplaceTemplate', 
     transition: "basic"
 });
 
@@ -19,7 +26,7 @@ wd.marketplace.engine = function(myself,spec){
     /** @private*/
     var impl = myself.engine = {};
 
-    var marketplacePanel
+    var installedPanel,allPanel;
     
     // start
     
@@ -28,36 +35,131 @@ wd.marketplace.engine = function(myself,spec){
     impl.init = function(){
         
         wd.debug("intializing marketplace panel");
-        marketplacePanel = myself.panelEngine.getPanel("marketplacePanel");
+        
+        installedPanel = myself.panelEngine.getPanel("installedPluginsPanel");
+        allPanel = myself.panelEngine.getPanel("allPluginsPanel");
+        
         
         myself.notificationEngine.getNotification().debug("Starting engine");
         
-        // Call update
-        impl.update();
+        // Call refresh
+        impl.refresh();
         
         
     }
     
     
-    impl.update = function(){
+    impl.refresh = function(){
+       
+        wd.info("Refreshing");
+       
+        // 1. Notify panels to show connecting info
+        installedPanel.showConnectingComponent();
+        allPanel.showConnectingComponent();
         
-        // 1. Notify panel to show connecting info
-        marketplacePanel.showConnectingComponent();
-        
-    // 2. getPanelInfo, passing callback
-        
+    // 2. getPliginIn, passing callback
+    //impl.getPluginList
     }
     
     
 }
-
 
 // Apply mixin
 wd.marketplace.engine(marketplace);
 
 
 
-// Components
+/*
+ *
+ *  Template
+ *
+ */ 
+
+wd.marketplace.template = function(spec){
+    
+    /**
+     * Specific specs
+     */
+    
+    var _spec = {
+        name:"marketplaceTemplate",
+        cssFile: undefined
+    }
+
+    spec = $.extend({},_spec,spec);
+    var myself = wd.caf.template(spec);
+
+
+    // myself.addActions = function(){}; // nothing
+
+    /**
+     * Creates the main structure of the template
+     * @name createMainSections
+     * @memberof wd.caf.template
+     * 
+     */
+    myself.createMainSections = spec.createMainSections || function(){
+        
+        
+        var wrapper = $('<div class="templateWrapper"></div>');
+        var header  = $('<div class="templateHead"></div>').appendTo(wrapper);
+
+        myself.$logo = $('<div class="templateLogo"></div>').appendTo(header);
+        myself.$actions = $('<div class="templateActions"></div>').appendTo(header);
+        myself.$panels = $('<div class="templatePanels"></div>').appendTo(header);
+        myself.$title = $('<div class="templateTitle">Pentaho Marketplace</div>').appendTo(header);
+  
+        header.append($('<div class="templateHShadow"></div>'));
+        
+        myself.$panelsContainer = $('<div class="templatePanelsContainer"></div>')
+        .appendTo(wrapper);
+        
+        
+        return wrapper;
+        
+    }
+    
+
+
+    myself.drawPanelOnContainer = spec.drawPanelOnContainer || function(panel){
+    
+        var container = $('<div class="panelContainer"></div>').appendTo(myself.$panelsContainer);
+        myself.$panelsContainer.append(panel.draw(container));
+        panel.setPlaceholder(container);
+
+
+    }
+    
+
+    return myself;
+};
+
+marketplace.getRegistry().registerTemplate(wd.marketplace.template());
+
+
+/*
+ *
+ *  Actions
+ *
+ */ 
+
+marketplace.getRegistry().registerAction( wd.caf.action({
+    name: "refresh",
+    description: "Refresh",
+    order: 10,
+    executeAction: function(){
+        this.caf.engine.refresh();
+    }
+}) );
+
+
+
+/*
+ *
+ *  Components
+ *
+ */ 
+
 
 wd.marketplace.components.label = function(spec){
     
@@ -66,11 +168,10 @@ wd.marketplace.components.label = function(spec){
      */
     
     var _spec = {
-        name: "marketplaceTitle",
-        description: "Marketplace title",
-        cssClass: "",
-        order: 10,
-        color: "red"
+        name: "label",
+        description: "Label",
+        cssClass: "label",       
+        clickAction: undefined
     }; 
     
     
@@ -85,7 +186,17 @@ wd.marketplace.components.label = function(spec){
     }
     
     myself.draw = function($ph){
-        $("<div/>").addClass(spec.cssClass).text(typeof myself.label==="function"?myself.label():myself.label).appendTo($ph);
+        
+        var $c = $("<div/>").addClass(spec.cssClass)
+        .text(typeof myself.label==="function"?myself.label():myself.label)
+        
+        
+        if(typeof spec.clickAction === "function"){
+            $c.addClass("cafPointer").click(spec.clickAction);
+        }
+        
+        $c.appendTo($ph);
+        
     }
     
     return myself;
@@ -93,7 +204,11 @@ wd.marketplace.components.label = function(spec){
 
 
 
-// Add marketplacePanel
+/*
+ *
+ *  Panels
+ *
+ */ 
 
 wd.marketplace.panels.marketplacePanel = function(spec){
   
@@ -122,13 +237,15 @@ wd.marketplace.panels.marketplacePanel = function(spec){
 
     // Components
     
-    var title = wd.marketplace.components.label({
-        label: "Title",
-        cssClass:"marketplaceTitle"
+    var title =  wd.marketplace.components.label({
+        label: spec.description,
+        cssClass:"pentaho-titled-toolbar section-header-inner pentaho-padding-sm"
     });
 
+
     // Connecting componnet
-    var connectingComponent = wd.marketplace.components.connectingComponent(
+    
+    var connectingComponent = wd.caf.component(
     {
         name: "connectingComponent",
         description: "Connecting component info",
@@ -176,8 +293,29 @@ wd.marketplace.panels.marketplacePanel = function(spec){
 
 
 
-// Register it
-marketplace.getRegistry().registerPanel(wd.marketplace.panels.marketplacePanel());
+// Register the panels
+
+marketplace.getRegistry().registerPanel(wd.marketplace.panels.marketplacePanel({
+    name:"installedPluginsPanel",
+    description:"Installed plugins",
+    order: 10
+}));
+
+
+marketplace.getRegistry().registerPanel(wd.marketplace.panels.marketplacePanel({
+    name:"allPluginsPanel",
+    description:"Available plugins",
+    order: 20
+}));
+
+
+marketplace.getRegistry().registerPanel(wd.caf.impl.panels.underConstruction({
+    name:"about",
+    description:"About",
+    order: 90
+}));
+
+
 
 
 $(function(){

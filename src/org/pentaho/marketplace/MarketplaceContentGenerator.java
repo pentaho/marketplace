@@ -6,12 +6,14 @@ package org.pentaho.marketplace;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import javax.servlet.http.HttpServletResponse;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.pentaho.platform.api.engine.ServiceException;
 import org.pentaho.platform.engine.core.system.PentahoSystem;
 import pt.webdetails.cpf.SimpleContentGenerator;
 import pt.webdetails.cpf.annotations.AccessLevel;
 import pt.webdetails.cpf.annotations.Exposed;
+import pt.webdetails.cpf.annotations.OutputType;
 
 /**
  *
@@ -31,27 +33,12 @@ public class MarketplaceContentGenerator extends SimpleContentGenerator {
     }
 
     @Exposed(accessLevel = AccessLevel.PUBLIC)
+    @OutputType(MIME_JSON)
     public void test(OutputStream out) throws IOException {
-
-        out.write("{test:123}".getBytes(ENCODING));
-        setResponseHeaders(MIME_JSON, null);
-
-    }
-
-    private void setResponseHeaders(final String mimeType, final String attachmentName) {
-        // Make sure we have the correct mime type
-        final HttpServletResponse response = (HttpServletResponse) parameterProviders.get("path").getParameter("httpresponse");
-        if (response == null) {
-            return;
+        try {
+            out.write(getMarketplaceService().getPluginsJson().getBytes(ENCODING));
+        } catch (ServiceException ex) {
+            logger.error(ex);
         }
-
-        response.setHeader("Content-Type", mimeType);
-
-        if (attachmentName != null) {
-            response.setHeader("content-disposition", "attachment; filename=" + attachmentName);
-        }
-
-        // We can't cache this request
-        response.setHeader("Cache-Control", "max-age=0, no-store");
     }
 }

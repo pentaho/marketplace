@@ -65,6 +65,10 @@ wd.marketplace.engine = function(myself,spec){
     
     }
     
+    impl.getAllPanel = function(){
+        return allPanel;
+    }
+    
     impl.getPluginList = function(){
         
         // Replace this later with the real deal
@@ -176,7 +180,7 @@ wd.marketplace.template = function(spec){
 
 
     }
-    
+    // TODO: put some fade effects?
 
     return myself;
 };
@@ -237,7 +241,7 @@ wd.marketplace.components.label = function(spec){
         var $c = $("<div/>").addClass(spec.cssClass)
         .text(typeof myself.label==="function"?myself.label():myself.label)
         
-        
+       
         if(typeof spec.clickAction === "function"){
             $c.addClass("cafPointer").click(spec.clickAction);
         }
@@ -267,11 +271,10 @@ wd.marketplace.components.plugin = function(spec){
     spec = $.extend({},_spec,spec);
     var myself = wd.caf.component(spec);
 
-    var pluginInfo, pluginHeader;
+    var pluginInfo, panel, pluginHeader, pluginBody, isShown=false;
     
     // containers
-    var $wrapper,$currentVersion, $availableVersions, $logo, $description, $versionOps,
-    $footer;
+    var $wrapper;
     
     
     myself.setPluginInfo = function(_pluginInfo){
@@ -282,25 +285,80 @@ wd.marketplace.components.plugin = function(spec){
     myself.getPluginInfo = function(){
         return pluginInfo;
     }
-    
-    
+  
+    myself.setPanel = function(_panel){
+        panel = _panel;
+    }
+
+    myself.getPanel = function(){
+        return panel;
+    }
+
     
     myself.draw = function($ph){
         
         // Wrapper
         
-        var $wrapper = $("<div/>").addClass(spec.cssClass + " pluginWrapper pentaho-rounded-panel2")
+        $wrapper = $("<div/>").addClass(spec.cssClass + " pluginWrapper clearfix")
         .data("plugin",myself) // store it for convenience;
 
         // Plugin header
-        pluginHeader = wd.marketplace.components.pluginHeader();
+        pluginHeader = wd.marketplace.components.pluginHeader({
+            clickAction: function(){
+                panel.pluginHeaderClicked(myself);
+            }
+        });
+        pluginHeader.init(myself.caf);
+        
         pluginHeader.setPluginInfo(pluginInfo);
         pluginHeader.draw($wrapper);
+        
+        // pluginBody
+        pluginBody = wd.marketplace.components.pluginBody();
+        pluginBody.init(myself.caf);
+        pluginBody.setPluginInfo(pluginInfo);
+        pluginBody.draw($wrapper);
+        
 
         $wrapper.appendTo($ph);
         
     }
+
+
+    myself.isShown = function(){
+        return isShown;
+    }
+
+    myself.hide = function(){
+        
+        if(!myself.isShown()){
+            return; // already hidden
+        }
+        
+        pluginHeader.unselect();
+        pluginBody.hide()
+        isShown = false;
+    }
     
+    
+    myself.show = function(){
+
+        pluginHeader.select();
+        if(myself.isShown()){
+            return; // already shown
+        }
+
+        pluginBody.show()
+        isShown = true;
+    }
+
+    myself.toggleVisibility = function(){
+        
+        isShown?myself.hide():myself.show();
+        
+    }
+
+
     return myself;
 };
 
@@ -314,12 +372,16 @@ wd.marketplace.components.pluginHeader = function(spec){
     var _spec = {
         name: "pluginHeader",
         description: "Plugin Header",
-        cssClass: "pluginHeader"
+        cssClass: "pluginHeader",
+        clickAction: undefined
     }; 
     
     
     spec = $.extend({},_spec,spec);
     var myself = wd.caf.component(spec);
+
+    // BlueprintMixin
+    wd.caf.modules.blueprintPanelModule(myself);
 
     var pluginInfo;
 
@@ -343,35 +405,220 @@ wd.marketplace.components.pluginHeader = function(spec){
         
         // Wrapper
         
-        $wrapper = $("<div/>").addClass(spec.cssClass).appendTo($ph);
+        $wrapper = myself.generateBlueprintStructure().addClass(spec.cssClass).appendTo($ph);
         myself.update();
 
         
     }
     
+    
     myself.update = function(){
         
         $wrapper.empty();
-        $("<div/>").addClass("pluginHeaderLogo").text(pluginInfo.id).appendTo($wrapper);
-        $("<div/>").addClass("pluginHeaderTitle").text(pluginInfo.name).appendTo($wrapper);
+        $("<div/>").addClass("pluginHeaderLogo pluginGradient").text(pluginInfo.id).appendTo($wrapper);
         
+        $("<div/>").addClass("pluginHeaderTitleWrapper pentaho-titled-toolbar pentaho-padding-sm pentaho-background contrast-color").append(
+            $("<div/>").addClass("pluginHeaderTitle").text(pluginInfo.name).appendTo($wrapper))
+        .append(
+            $("<div/>").addClass("pluginHeaderUpdates " + ( myself.isUpdateAvailable()?"pluginHeaderUpdatesAvailable":"pluginHeaderUpdatesUpdated" ))
+            .text(myself.isUpdateAvailable()?"Updates available":"Updated version").appendTo($wrapper)    
+            ).appendTo($wrapper);
+            
+            
         var $versionWrapper = $("<div/>").addClass("pluginHeaderVersionWrapper " + 
-            (myself.isUpdateAvailable()?"pluginHeaderVersionAvailable":"pluginHeaderVersionUpdated"))
+            (myself.isUpdateAvailable()?"pluginHeaderVersionAvailable pluginGradientGreen":"pluginHeaderVersionUpdated pluginGradient"))
         .appendTo($wrapper);
         
-        $("<div/>").text("Version").appendTo($versionWrapper);
+        $("<div/>").addClass("pluginHeaderVersionLabel").text("Version").appendTo($versionWrapper);
         $("<div/>").text(pluginInfo.availableVersion+"").appendTo($versionWrapper);
 
-        $("<div/>").addClass("pluginHeaderUpdates")
-        .text(myself.isUpdateAvailable()?"Updates available":"Updated version").appendTo($wrapper);
-        
+
+        if(typeof spec.clickAction === "function"){
+            $wrapper.click(spec.clickAction);
+        }
 
         
+    }
+    
+    myself.select = function(){
+        $wrapper.addClass("pluginSelected");
+    }
+
+    myself.unselect = function(){
+        $wrapper.removeClass("pluginSelected");
     }
     
     return myself;
 
 }
+
+
+wd.marketplace.components.pluginBody = function(spec){
+    
+    /**
+     * Specific specs
+     */
+    
+    var _spec = {
+        name: "pluginBody",
+        description: "Plugin Body",
+        cssClass: "pluginBody"
+    }; 
+    
+    
+    spec = $.extend({},_spec,spec);
+    var myself = wd.caf.component(spec);
+
+    // BlueprintMixin
+    wd.caf.modules.blueprintPanelModule(myself);
+
+
+    var pluginInfo;
+
+    // Containers
+    var $element, $wrapper, $pluginBodyDescWrapper, $pluginBodyInstallWrapper, 
+    $installedVersion, $availableVersions;
+    
+    myself.setPluginInfo = function(_pluginInfo){
+        pluginInfo = _pluginInfo;
+    }
+    
+    
+    myself.getPluginInfo = function(){
+        return pluginInfo;
+    }
+    
+    myself.isUpdateAvailable = function(){
+        return pluginInfo.availableVersion == pluginInfo.installedVersion;
+    }
+    
+    myself.draw = function($ph){
+        
+        // Create a full wrapper and one for the animation
+        $element = myself.generateBlueprintStructure().addClass(spec.cssClass).appendTo($ph);
+        $wrapper = $("<div/>").addClass("pluginBodyVisibilityToggle").appendTo($element);
+        
+        // On draw, this will be collapsed
+        if(Modernizr.csstransitions){
+            
+            myself.hide();
+
+        }
+        else{
+            $element.addClass("marketplaceHidden");
+        }
+        
+        myself.update();
+
+        
+    }
+    
+    
+    myself.update = function(){
+        
+        $wrapper.empty();
+        
+        
+        // Wrapper for description
+        
+        $pluginBodyDescWrapper = $("<div/>").addClass("pluginBodyDescWrapper clearfix").appendTo($wrapper)
+        .append($("<div/>").addClass("pluginBodyDescLogo prepend-1 span-4 append-1").text("Logo"))
+        .append($("<div/>").addClass("pluginBodyDescDesc span-18 last")
+            .append($("<div/>").addClass("pluginBodyTitle").text("Information"))
+            .append($("<div/>").addClass("pluginBodyDescription").text(pluginInfo.description))
+            .append())
+        ;
+        
+        // Wrapper for pluginBodyInstall
+        $pluginBodyInstallWrapper = undefined; // todo
+        
+        
+        // Current version
+        $installedVersion = $("<div/>").addClass("installedVersion ");
+        
+        var $installedVersionWrapper = $("<div/>").addClass("currentVersion prepend-1 span-4 append-1").append(
+            $("<div/>").addClass("pluginBodyTitle").text("Installed Version")
+            )
+        .append($installedVersion)
+        .appendTo($wrapper);
+        
+        
+        // Available versions
+        $availableVersions = $("<div/>").addClass("installedVersion ");
+        
+        var $availableVersionsWrapper = $("<div/>").addClass("currentVersion span-18 last").append(
+            $("<div/>").addClass("pluginBodyTitle").text("Available Versions")
+            )
+        .append($availableVersions)
+        .appendTo($wrapper);
+
+
+        //debugger;
+
+        // Add footer
+        var footerContent = $("<div/>").addClass("pluginBodyFooterContent")
+        .appendTo($("<div/>").addClass("clearfix pluginBodyFooter span-22 prepend-1 append-1 last").appendTo($wrapper))
+        
+        // we'll put company logo or name, and a link if we have it
+        var content = pluginInfo.companyLogoUrl?'<img src="'+pluginInfo.companyLogoUrl+'" />':pluginInfo.company;
+        if(pluginInfo.companyUrl){
+            footerContent.append('<a href="'+pluginInfo.companyUrl+'" target="_blank">'+content+'</a>');
+        }
+        else{
+            footerContent.append(content);
+        }
+
+
+
+    /*
+        
+        var $versionWrapper = $("<div/>").addClass("pluginBodyVersionWrapper " + 
+            (myself.isUpdateAvailable()?"pluginBodyVersionAvailable":"pluginBodyVersionUpdated"))
+        .appendTo($wrapper);
+        
+        $("<div/>").text("Version").appendTo($versionWrapper);
+        $("<div/>").text(pluginInfo.availableVersion+"").appendTo($versionWrapper);
+
+        $("<div/>").addClass("pluginBodyUpdates")
+        .text(myself.isUpdateAvailable()?"Updates available":"Updated version").appendTo($wrapper);
+        */
+
+        
+    }
+    
+    
+    myself.hide = function(){
+        
+        if(Modernizr.csstransitions){
+            
+            $wrapper.css("margin-top","-400px").addClass("marketplaceTransparent");
+
+        }
+        else{
+            $element.hide();
+        }
+        
+    }
+    
+    
+    myself.show = function(){
+        
+        if(Modernizr.csstransitions){  
+        
+            $wrapper.css("margin-top","0px").removeClass("marketplaceTransparent");
+            
+        }
+        else{
+            $element.show();
+        }        
+        
+    }
+
+
+    return myself;
+
+}
+
 
 
 /*
@@ -399,7 +646,7 @@ wd.marketplace.panels.marketplacePanel = function(spec){
     
     
     // Vars
-    var $panel, $mainContent;
+    var $panel, $mainContent, plugins = [];
     
     // BlueprintMixin
     wd.caf.modules.blueprintPanelModule(myself);
@@ -434,7 +681,9 @@ wd.marketplace.panels.marketplacePanel = function(spec){
      */
     myself.draw = spec.draw || function($ph){
         
-        $panel = myself.generateBlueprintStructure().appendTo($ph);
+        
+        //$panel = myself.generateBlueprintStructure().appendTo($ph);
+        $panel = $("<div/>").appendTo($ph);
         
         // Title
         title.draw($panel);
@@ -450,9 +699,14 @@ wd.marketplace.panels.marketplacePanel = function(spec){
 
     myself.cleanPlugins = function(){
         
-        // TODO: put some fade effects?
+        plugins = [];
         $mainContent.empty();
     
+    }
+    
+    
+    myself.getPlugins = function(){
+        return plugins;
     }
 
 
@@ -466,12 +720,23 @@ wd.marketplace.panels.marketplacePanel = function(spec){
     myself.addPlugin = function(pluginInfo){
         
         var plugin = wd.marketplace.components.plugin();
+        plugin.init(myself.caf);
         plugin.setPluginInfo(pluginInfo);
-        
+        plugin.setPanel(myself);
         
         // Add it
         plugin.draw($mainContent);
+        plugins.push(plugin);
         
+    }
+    
+    
+    myself.pluginHeaderClicked = function(plugin){
+        
+        // Loop through all plugins. If shown, hide. On the specific plugin, toggle visibility
+        myself.getPlugins().map(function(p){
+            p==plugin?p.toggleVisibility():p.hide();
+        })
         
     }
 

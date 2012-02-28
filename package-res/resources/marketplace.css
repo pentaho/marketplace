@@ -14,6 +14,10 @@ html, body {
 
 }
 
+.templateHead{
+    width: 950px;
+}
+
 .templateHead > div.templatePanels{
     margin-right: 20px;
 
@@ -24,6 +28,11 @@ html, body {
 
 }
 
+.templatePanelsContainer{
+    margin-left: auto;
+    margin-right: auto;
+
+}
 
 .templateTitle{
     clear: both;
@@ -36,9 +45,11 @@ html, body {
 
 
 .templatePanelsContainer{
-    
+
     /* Remove this later */
     min-height: 600px;
+    width: 950px;
+    margin:0 auto;
 
 }
 
@@ -50,8 +61,8 @@ html, body {
 
     position: absolute;
     top: 0px;
-
-    width: 1150px;
+    width: inherit;
+    /*    width: 1150px;*/
     min-height: 600px;
     margin-left: auto;
     margin-right: auto;
@@ -76,17 +87,15 @@ html, body {
 
 .marketplacePanelTitle{
     text-align: center;
+    margin-bottom: 10px;
 }
 
 /* Plugins */
 
 .pluginWrapper {
-    
-    margin-top:10px;
-    border: 1px solid #ccc;
-    background-color: white;
-    padding: 5px;
-        
+
+/*    margin-top:5px;*/
+
 }
 
 
@@ -95,28 +104,181 @@ html, body {
 }
 
 
+/* Generic ones */
+body .marketplaceTransparent{
+    opacity: 0;
+}
+
+body .marketplaceHidden{
+    display: none;
+}
+
+
+body .marketplaceCollapsed{
+    height: 0px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    min-height: 0px;
+}
+
+
 .pluginHeader {
-    background-color: #242424;
+
     overflow: hidden;
-    color: #d2d2d2;
-    height: 40px;
+    /*    height: 52px;*/
+
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px; 
+
+    margin-bottom: 5px;
+
+    font-size: 17px;
+    cursor: pointer;
+
+}
+
+.pluginHeader:hover .pluginHeaderTitle{
+    font-size: 20px
+}
+
+.pluginHeader.pluginSelected{
+    font-size: 20px;
+}
+
+.pluginHeader:active .pluginHeaderTitle{
+    color: #aaa;
 }
 
 
 .pluginHeader > div{
-    display: inline-block;
+    float: left;
+    height: 50px;
+    vertical-align: middle;
+    padding: 5px;
+
 }
 
 .pluginHeaderLogo {
-    width: 50px;
+    width: 100px;
+
+}
+
+.pluginGradient{
+
+    background: #cfcfcf; /* Old browsers */
+    background: -moz-linear-gradient(top,  #cfcfcf 0%, #464646 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#cfcfcf), color-stop(100%,#464646)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top,  #cfcfcf 0%,#464646 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top,  #cfcfcf 0%,#464646 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top,  #cfcfcf 0%,#464646 100%); /* IE10+ */
+    background: linear-gradient(top,  #cfcfcf 0%,#464646 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#cfcfcf', endColorstr='#464646',GradientType=0 ); /* IE6-9 */
+
+}
+
+.pluginHeaderTitleWrapper{
+    width: 780px;
+    line-height: 38px;
+
+}
+
+
+.pluginHeaderTitle{
+    float: left;
 }
 
 .pluginHeaderUpdates{
-    float: right
+    float: right;
+    font-size: 12px;
+    padding-right: 40px;
+    margin-right: 10px;
+    background-repeat: no-repeat;
+    background-position: right;
 }
 
+.pluginHeaderUpdatesAvailable{
+    background-image: url('img/updateAvailable.png');
+}
+
+.pluginHeaderUpdatesUpdated{
+    background-image: url('img/updatedVersion.png');
+}
+
+
 .pluginHeaderVersionWrapper{
-    float: right;
-    background-color: #b3b3b3; /* TODO: GRADIENT */
+    width: 70px;
+    font-size: 14px;
+    text-align: center;
+}
+
+.pluginHeaderVersionLabel{
+    margin-top: 4px;
+    font-size: 7px;
+
+}
+
+
+.pluginBody{
+
+    overflow: hidden;
+    margin-bottom: 5px;
+
+    background-color: white;
+    
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px; 
+
+    -webkit-transition: all 500ms ease-in;
+    -moz-transition: all 500ms ease-in;
+    -o-transition: all 500ms ease-in;
+    transition: all 500ms ease-in;
+}
+
+.pluginBodyVisibilityToggle{
+
+    padding-top: 30px;
+
+    -webkit-transition: all 500ms ease-in-out;
+    -moz-transition: all 500ms ease-in-out;
+    -o-transition: all 500ms ease-in-out;
+    transition: all 500ms ease-in-out;
     
 }
+
+.pluginBodyTitle{
+
+    color: #808080;
+    height: 30px;
+    font-size: 8px;
+}
+
+
+.pluginBodyDescLogo{
+    margin-top: 30px;
+
+}
+
+.pluginBodyDescription{
+    height: 120px;
+    overflow-y: auto;
+}
+
+.pluginBodyFooterContent{
+    
+    margin-top: 10x;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+    
+    border-top: 1px solid #808080;
+    text-align: right;
+   
+}
+
+.pluginBodyFooterContent a{
+    color: black;
+    text-decoration: none;
+}
+

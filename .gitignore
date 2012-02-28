@@ -2,6 +2,7 @@
 ####################
 bin
 dist
+/build
 /lib
 test-lib
 dev-lib

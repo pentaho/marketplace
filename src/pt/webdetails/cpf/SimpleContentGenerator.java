@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
@@ -16,6 +17,7 @@ import org.pentaho.platform.api.repository.IContentItem;
 import org.pentaho.platform.engine.services.solution.BaseContentGenerator;
 import pt.webdetails.cpf.annotations.AccessLevel;
 import pt.webdetails.cpf.annotations.Exposed;
+import pt.webdetails.cpf.annotations.OutputType;
 
 /**
  *
@@ -44,8 +46,14 @@ public class SimpleContentGenerator extends BaseContentGenerator {
 
                 try {
                     final Method mthd = this.getClass().getMethod(method, params);
-                    boolean exposed = mthd.isAnnotationPresent(Exposed.class);
-                    boolean accessible = exposed && mthd.getAnnotation(Exposed.class).accessLevel() == AccessLevel.PUBLIC;
+                    boolean exposed = mthd.isAnnotationPresent(Exposed.class),
+                            accessible = exposed && mthd.getAnnotation(Exposed.class).accessLevel() == AccessLevel.PUBLIC,
+                            outputTypePresent = mthd.isAnnotationPresent(OutputType.class) ;
+
+                    String outputType = outputTypePresent? mthd.getAnnotation(OutputType.class).value() : "";
+                    if (outputTypePresent) {
+                        setResponseHeaders(outputType, null);
+                    }
                     if (accessible) {
                         mthd.invoke(this, out);
                     } else {
@@ -76,5 +84,22 @@ public class SimpleContentGenerator extends BaseContentGenerator {
     @Override
     public Log getLogger() {
         return logger;
+    }
+
+    private void setResponseHeaders(final String mimeType, final String attachmentName) {
+        // Make sure we have the correct mime type
+        final HttpServletResponse response = (HttpServletResponse) parameterProviders.get("path").getParameter("httpresponse");
+        if (response == null) {
+            return;
+        }
+
+        response.setHeader("Content-Type", mimeType);
+
+        if (attachmentName != null) {
+            response.setHeader("content-disposition", "attachment; filename=" + attachmentName);
+        }
+
+        // We can't cache this request
+        response.setHeader("Cache-Control", "max-age=0, no-store");
     }
 }

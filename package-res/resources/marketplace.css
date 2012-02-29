@@ -177,8 +177,14 @@ body .marketplaceCollapsed{
 
 }
 
+.pluginGradientGreen{
+
+    background: #cfcfcf; /* Old browsers */
+}
+
+
 .pluginHeaderTitleWrapper{
-    width: 780px;
+    width: 700px;
     line-height: 38px;
 
 }
@@ -207,8 +213,8 @@ body .marketplaceCollapsed{
 
 
 .pluginHeaderVersionWrapper{
-    width: 70px;
-    font-size: 14px;
+    width: 150px;
+    font-size: 10px;
     text-align: center;
 }
 
@@ -282,3 +288,18 @@ body .marketplaceCollapsed{
     text-decoration: none;
 }
 
+
+.pluginVersions{
+
+    margin-bottom: 20px;
+    
+}
+
+.pluginVersion {
+    float: left;
+    padding-right: 40px;
+}
+
+.pluginVersionNumber{
+    font-weight: bold;
+}

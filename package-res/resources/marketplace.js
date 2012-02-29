@@ -429,8 +429,8 @@ wd.marketplace.components.pluginHeader = function(spec){
             (myself.isUpdateAvailable()?"pluginHeaderVersionAvailable pluginGradientGreen":"pluginHeaderVersionUpdated pluginGradient"))
         .appendTo($wrapper);
         
-        $("<div/>").addClass("pluginHeaderVersionLabel").text("Version").appendTo($versionWrapper);
-        $("<div/>").text(pluginInfo.availableVersion+"").appendTo($versionWrapper);
+        $("<div/>").addClass("pluginHeaderVersionLabel").text(pluginInfo.installedBranch+"").appendTo($versionWrapper);
+        $("<div/>").text(pluginInfo.installedVersion+"").appendTo($versionWrapper);
 
 
         if(typeof spec.clickAction === "function"){
@@ -534,7 +534,7 @@ wd.marketplace.components.pluginBody = function(spec){
         
         
         // Current version
-        $installedVersion = $("<div/>").addClass("installedVersion ");
+        $installedVersion = $("<div/>").addClass("pluginVersions installedVersion clearfix");
         
         var $installedVersionWrapper = $("<div/>").addClass("currentVersion prepend-1 span-4 append-1").append(
             $("<div/>").addClass("pluginBodyTitle").text("Installed Version")
@@ -544,16 +544,36 @@ wd.marketplace.components.pluginBody = function(spec){
         
         
         // Available versions
-        $availableVersions = $("<div/>").addClass("installedVersion ");
+        $availableVersions = $("<div/>").addClass("pluginVersions availableVersions clearfix");
         
-        var $availableVersionsWrapper = $("<div/>").addClass("currentVersion span-18 last").append(
-            $("<div/>").addClass("pluginBodyTitle").text("Available Versions")
-            )
-        .append($availableVersions)
-        .appendTo($wrapper);
+        if(pluginInfo.versions){
+        
+            var $availableVersionsWrapper = $("<div/>").addClass("currentVersion span-18 last").append(
+                $("<div/>").addClass("pluginBodyTitle").text("Available Versions")
+                )
+            .append($availableVersions)
+            .appendTo($wrapper);
+
+        
+            pluginInfo.versions.map(function(v){
+                wd.marketplace.components.pluginVersion({
+                    cssClass: "pluginVersion",
+                    pluginVersion: v,
+                    clickAction: function(){
+                        myself.caf.notificationEngine.getNotification().info("Showing details");
+                    }
+                }).draw($availableVersions);
+            })
+        }
+        
+        
+        // Add version components
+        // wd.marketplace.components.pluginVersion({pluginVersion: })
+        
 
 
         //debugger;
+
 
         // Add footer
         var footerContent = $("<div/>").addClass("pluginBodyFooterContent")
@@ -619,6 +639,46 @@ wd.marketplace.components.pluginBody = function(spec){
 
 }
 
+
+wd.marketplace.components.pluginVersion = function(spec){
+    
+    /**
+     * Specific specs
+     */
+    
+    var _spec = {
+        name: "pluginVersion",
+        description: "Plugin Version",
+        cssClass: "pluginVersion",
+        pluginVersion: "",
+        clickAction: undefined
+    }; 
+    
+    
+    spec = $.extend({},_spec,spec);
+    var myself = wd.caf.component(spec);
+
+    var $wrapper;
+
+
+    myself.draw = function($ph){
+        
+        $wrapper = $("<div/>").addClass(spec.cssClass)
+        .append($("<span/>").addClass("pluginVersionNumber").text(spec.pluginVersion.version))
+        .append($("<span/>").addClass("pluginVersionBranch").text(" (" + spec.pluginVersion.name + ")"))
+        
+        if(typeof spec.clickAction === "function"){
+            $wrapper.addClass("cafPointer");
+            $wrapper.click(spec.clickAction);
+        }
+
+        $wrapper.appendTo($ph);
+
+        
+    }
+    
+    return myself;
+}
 
 
 /*

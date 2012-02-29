@@ -6,8 +6,7 @@ package org.pentaho.marketplace;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.pentaho.platform.api.engine.IParameterProvider;
 import org.pentaho.platform.api.engine.ServiceException;
 import org.pentaho.platform.engine.core.system.PentahoSystem;
 import pt.webdetails.cpf.SimpleContentGenerator;
@@ -34,11 +33,46 @@ public class MarketplaceContentGenerator extends SimpleContentGenerator {
 
     @Exposed(accessLevel = AccessLevel.PUBLIC)
     @OutputType(MIME_JSON)
-    public void test(OutputStream out) throws IOException {
+    public void getpluginsjson(OutputStream out) throws IOException {
+
+
+
         try {
             out.write(getMarketplaceService().getPluginsJson().getBytes(ENCODING));
         } catch (ServiceException ex) {
             logger.error(ex);
         }
+    }
+
+    @Exposed(accessLevel = AccessLevel.PUBLIC)
+    @OutputType(MIME_JSON)
+    public void installPluginJson(OutputStream out) throws IOException {
+
+        try {
+            IParameterProvider requestParams = parameterProviders.get("request");
+
+            String pluginId = requestParams.getStringParameter("pluginId", null);
+            String versionId = requestParams.getStringParameter("versionId", null);
+            out.write(getMarketplaceService().installPluginJson(pluginId, versionId).getBytes(ENCODING));
+
+        } catch (ServiceException ex) {
+            logger.error(ex);
+        }
+    }
+
+    @Exposed(accessLevel = AccessLevel.PUBLIC)
+    @OutputType(MIME_JSON)
+    public void uninstallPluginJson(OutputStream out) throws IOException {
+
+        try {
+            IParameterProvider requestParams = parameterProviders.get("request");
+            
+            String pluginId = requestParams.getStringParameter("pluginId", null);
+            out.write(getMarketplaceService().uninstallPluginJson(pluginId).getBytes(ENCODING));
+
+        } catch (ServiceException ex) {
+            logger.error(ex);
+        }
+
     }
 }

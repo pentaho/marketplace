@@ -175,7 +175,7 @@ public class Plugin implements Serializable {
             return null;
         }
         for (int i = 0; i < this.versions.length; i++) {
-            if (id != null && id.equals(this.versions[i].getBranch())) {
+            if (branch != null && branch.equals(this.versions[i].getBranch())) {
                 return this.versions[i];
             }
         }

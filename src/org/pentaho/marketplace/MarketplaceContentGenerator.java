@@ -46,7 +46,7 @@ public class MarketplaceContentGenerator extends SimpleContentGenerator {
 
     @Exposed(accessLevel = AccessLevel.PUBLIC)
     @OutputType(MIME_JSON)
-    public void installPluginJson(OutputStream out) throws IOException {
+    public void installpluginjson(OutputStream out) throws IOException {
 
         try {
             IParameterProvider requestParams = parameterProviders.get("request");
@@ -62,7 +62,7 @@ public class MarketplaceContentGenerator extends SimpleContentGenerator {
 
     @Exposed(accessLevel = AccessLevel.PUBLIC)
     @OutputType(MIME_JSON)
-    public void uninstallPluginJson(OutputStream out) throws IOException {
+    public void uninstallpluginjson(OutputStream out) throws IOException {
 
         try {
             IParameterProvider requestParams = parameterProviders.get("request");

@@ -134,7 +134,7 @@ public class MarketplaceService {
 
             job.getJobMeta().setParameterValue("uninstallLocation", PentahoSystem.getApplicationContext().getSolutionPath("system/" + toUninstall.getId()));
             job.getJobMeta().setParameterValue("uninstallBackup", PentahoSystem.getApplicationContext().getSolutionPath("system/plugin-cache/backups/" + toUninstall.getId() + "_" + new Date().getTime()));
-            if ( versionBranch != null && toUninstall.getVersionByBranch(versionBranch).getSamplesDownloadUrl() != null) {
+            if ( versionBranch != null && versionBranch.length() > 0 && toUninstall.getVersionByBranch(versionBranch).getSamplesDownloadUrl() != null) {
                 job.getJobMeta().setParameterValue("samplesUninstallLocation", PentahoSystem.getApplicationContext().getSolutionPath("plugin-samples/" + toUninstall.getId()));
                 job.getJobMeta().setParameterValue("samplesUninstallBackup", PentahoSystem.getApplicationContext().getSolutionPath("system/plugin-cache/backups/" + toUninstall.getId() + "_samples_" + new Date().getTime()));
             }

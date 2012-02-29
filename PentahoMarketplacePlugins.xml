@@ -38,14 +38,14 @@ CDE and the technology underneath (CDF, CDA and CCC) allows to develop and deplo
         <company>WebDetails</company>
         <companyUrl>http://webdetails.pt</companyUrl>
         
-		<alternativeVersions>
-			<alternativeVersion id='TRUNK'>
+		<versions>
+			<version branch='TRUNK'>
 				<name>Trunk</name>
 				<downloadUrl>http://ci.analytical-labs.com/job/Webdetails-CDA/lastSuccessfulBuild/artifact/dist/cda-TRUNK-20120228.zip</downloadUrl>
 				<samplesDownloadUrl>http://ci.analytical-labs.com/job/Webdetails-CDA/lastSuccessfulBuild/artifact/dist/cda-samples-TRUNK-20120228.zip</samplesDownloadUrl>
 				<description>Trunk Snapshot. Install at your own risk....</description>
-			</alternativeVersion>    	
-		</alternativeVersions>
+			</version>    	
+		</versions>
         
         
         

@@ -91,7 +91,8 @@ CDE and the technology underneath (CDF, CDA and CCC) allows to develop and deplo
         <learnMoreUrl>http://ctools.webdetails.org</learnMoreUrl>
         <description>Community Graphics Generator (CGG) is a Pentaho plugin designed for rendering CCC charts serverside, enabling you to embed them into Pentaho Reports.</description>
         <company>WebDetails</company>
-        <companyUrl>http://webdetails.pt</companyUrl>        
+        <companyUrl>http://webdetails.pt</companyUrl>       
+        <installationNotes>Please remember to replace the batik, xml-apis and xmlgraphics jars on WEB-INF/lib with the ones on system/CGG/lib.</installationNotes>
 	<versions>
 			<version branch='TRUNK'>
                                 <version>Trunk</version>

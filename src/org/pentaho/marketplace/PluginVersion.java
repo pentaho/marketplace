@@ -30,14 +30,16 @@ public class PluginVersion implements Serializable {
     private String downloadUrl;
     private String samplesDownloadUrl;
     private String description;
+    private String changelog;
 
-    public PluginVersion(String branch, String name, String version, String downloadUrl, String samplesDownloadUrl, String description) {
+    public PluginVersion(String branch, String name, String version, String downloadUrl, String samplesDownloadUrl, String description, String changelog) {
         this.branch = branch;
         this.name = name;
         this.version = version;
         this.downloadUrl = downloadUrl;
         this.samplesDownloadUrl = samplesDownloadUrl;
         this.description = description;
+        this.changelog = changelog;
     }
 
     public String getBranch() {
@@ -110,5 +112,12 @@ public class PluginVersion implements Serializable {
      */
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    /**
+     * @return the changelog
+     */
+    public String getChangelog() {
+        return changelog;
     }
 }

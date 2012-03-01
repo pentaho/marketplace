@@ -349,7 +349,7 @@ public class MarketplaceService {
         }
 
         if (site == null || "".equals(site)) {
-            site = "http://wiki.pentaho.com/download/attachments/23528994/availableplugins.xml";
+            site = "https://raw.github.com/webdetails/marketplace/caf/PentahoMarketplacePlugins.xml";
         }
 
         site = resolveVersion(site);

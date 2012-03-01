@@ -308,28 +308,19 @@ wd.caf.application = function(spec) {
 
 
      /**
-     * Removes an entity from the current registry or creates a shadow entity to
-     * mask parents'.
+     * Removes an entity from the current registry 
      * @memberof wd.caf.registry
      * @param {string} the module space to remove from 
      * @param {string} entity to remove
-     * @param {boolean} true: shadow, false: remove.
      */
     
-        myself.removeEntity = function(module,entityName,shadow){
-            shadow = shadow || false;
-            if (!_registry) {
-                _registry = {};
+        myself.removeEntity = function(module,entityName){
+            if (!_registry || !_registry[module] || !_registry[module].hasOwnProperty(entityName) ) {
+                return false;  
             }
-            if (!_registry[module]) {
-                _registry[module] = {};  
-            }
-            if (shadow){
-                _registry[module][entityName] = undefined;
-            } else {
-                 delete _registry[module][entityName] ;
-            }
-          
+            var c = _registry[module][entityName];
+            delete _registry[module][entityName] ;
+            return c;
         };
         
         
@@ -341,8 +332,13 @@ wd.caf.application = function(spec) {
      */
     
         myself.shadowEntity = function(module,entityName){
-            myself.removeEntity(module, entityName, true)
-          
+            if (!_registry ) {
+                    _registry = {};
+            }
+            if (!_registry[module]) {
+                    _registry[module] = {};  
+            }
+            _registry[module][entityName] = undefined;   
         };
 
 
@@ -2685,7 +2681,7 @@ wd.caf.template = function( spec) {
         
         myself.$panelsContainer = $('<div class="templatePanelsContainer"></div>')
         .appendTo(wrapper);
-        ;
+        
         
         
         return wrapper;
@@ -3264,6 +3260,10 @@ wd.caf.impl.transitions.basicTransition = function(spec){
      * @param Destination panel
      */
     myself.switchPanel = spec.switchPanel || function(fromPanel, toPanel){
+        
+        var lag = (Modernizr.csstransitions) ? 
+                  {transition:50, panel:500} : 
+                  {transition:0, panel:0};
 
 
         if(fromPanel){
@@ -3277,11 +3277,11 @@ wd.caf.impl.transitions.basicTransition = function(spec){
                 setTimeout( function(){
                     fromPanel.getPlaceholder().addClass("basicTransitionHidden");
                     toPanel.getPlaceholder().removeClass("basicTransitionHidden");
-                }, 10);
+                }, lag.transition);
 
                 setTimeout(function() {
                     fromPanel.getPlaceholder().addClass('panelHidden');
-                },500);
+                },lag.transition + lag.panel);
             }
         }
         else{
@@ -3289,7 +3289,7 @@ wd.caf.impl.transitions.basicTransition = function(spec){
             toPanel.getPlaceholder().removeClass('panelHidden');
             setTimeout( function(){
                 toPanel.getPlaceholder().removeClass("basicTransitionHidden");
-            }, 10);
+            }, lag.transition);
 
         }
         

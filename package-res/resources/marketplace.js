@@ -76,7 +76,7 @@ wd.marketplace.engine = function(myself,spec){
         
         
         $.ajax({
-            url: "pluginList.json",
+            url: "../getpluginsjson",
             dataType: 'json',
             data: [],
             success: impl.processPluginListResponse,
@@ -113,10 +113,13 @@ wd.marketplace.engine = function(myself,spec){
 
         wd.info("Marketplace engine: installing plugin: " + pluginId + " (" + branchId + ")");
         
-        setTimeout(function(){
-            wd.warn("Replace installPlugin test with real deal");
-            callback();
-        },2000);
+        $.ajax({
+            url: "../installpluginjson",
+            dataType: 'json',
+            data: {pluginId: pluginId, versionId: branchId},
+            success: callback,
+            error: impl.errorUpdating
+        });
         
     }
     
@@ -125,10 +128,15 @@ wd.marketplace.engine = function(myself,spec){
         
         wd.info("Marketplace engine: uninstalling plugin: " + pluginId);
         
-        setTimeout(function(){
-            wd.warn("Replace uninstallPlugin test with real deal");
-            callback();
-        },2000);
+        $.ajax({
+            url: "../uninstallpluginjson",
+            dataType: 'json',
+            data: {pluginId: pluginId},
+            success: callback,
+            error: impl.errorUpdating
+        });
+        
+
     }
 
 
@@ -474,9 +482,12 @@ wd.marketplace.components.pluginHeader = function(spec){
     myself.update = function(){
         
         $wrapper.empty();
-        $("<div/>").addClass("pluginHeaderLogo pluginGradient").text(plugin.getPluginInfo().id).appendTo($wrapper);
         
         $("<div/>").addClass("pluginHeaderTitleWrapper pentaho-titled-toolbar pentaho-padding-sm pentaho-background contrast-color").append(
+            $("<div/>").addClass("pluginHeaderLogo").text(plugin.getPluginInfo().id)
+                .append( $("<img/>").attr('src', plugin.getPluginInfo().img))
+                .appendTo($wrapper))
+        .append(
             $("<div/>").addClass("pluginHeaderTitle").text(plugin.getPluginInfo().name).appendTo($wrapper))
         .append(
             $("<div/>").addClass("pluginHeaderUpdates " + ( myself.isUpdateAvailable()?"pluginHeaderUpdatesAvailable":"pluginHeaderUpdatesUpdated" ))

@@ -160,7 +160,8 @@ body .marketplaceCollapsed{
 }
 
 .pluginHeaderLogo {
-    width: 100px;
+    width: 120px;
+    float:left;
 
 }
 
@@ -184,7 +185,7 @@ body .marketplaceCollapsed{
 
 
 .pluginHeaderTitleWrapper{
-    width: 700px;
+    width: 800px;
     line-height: 38px;
 
 }

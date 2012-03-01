@@ -71,9 +71,6 @@ wd.marketplace.engine = function(myself,spec){
     
     impl.getPluginList = function(){
         
-        // Replace this later with the real deal
-        wd.warn("Getting plugin list - Not done yet");
-        
         
         $.ajax({
             url: "../getpluginsjson",

@@ -50,17 +50,30 @@ html, body {
 }
 
 
-.aboutActionWrapper{
+
+.templateToggleActionContainer {
+    margin-left: auto;
+    margin-right: auto;
+    overflow:hidden;
     width:950px;
-    height:140px;
+}
+
+.toggleActionWrapper{
+
     margin-bottom:15px;
-    -moz-transition: all 500ms ease-in 0s;
+    height:140px;
+    
+    -webkit-transition: all 500ms ease-in-out;
+    -moz-transition: all 500ms ease-in-out;
+    -o-transition: all 500ms ease-in-out;
+    transition: all 500ms ease-in-out;
+    
     background-color: white;
     border-radius: 4px 4px 4px 4px;
     overflow: hidden;
     padding:10px;
 }
-.aboutActionLogo {
+.toggleActionLogo {
     background: url('http://www.webdetails.pt/ficheiros/marketplace_logo.png') repeat scroll 0 0 transparent;
     display: inline-block;
     float: left;
@@ -68,12 +81,15 @@ html, body {
     margin-left: 0px;
     width: 154px;
 }
-.aboutActionDesc{
+.toggleActionDesc{
     
 }
-.aboutActionDevBy{
+.toggleActionDevBy{
     
     
+}
+.marketplaceMoveOut {
+    margin-top:-600px;
 }
 
 

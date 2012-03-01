@@ -194,6 +194,9 @@ wd.marketplace.template = function(spec){
   
         header.append($('<div class="templateHShadow"></div>'));
         
+        myself.$toggleActionContainer = $('<div class="templateToggleActionContainer"></div>')
+        .appendTo(wrapper);
+        
         myself.$panelsContainer = $('<div class="templatePanelsContainer"></div>')
         .appendTo(wrapper);
         
@@ -242,7 +245,7 @@ marketplace.getRegistry().registerAction( wd.caf.action({
 
 
 
-wd.marketplace.actions.aboutAction = function(spec){
+wd.marketplace.actions.toggleAction = function(spec){
     
     /**
      * Specific specs
@@ -251,6 +254,7 @@ wd.marketplace.actions.aboutAction = function(spec){
     var _spec = {
         name: "about",
         description: "About action",
+        toggleText: "Information",
         order: 110
     };
 
@@ -258,8 +262,18 @@ wd.marketplace.actions.aboutAction = function(spec){
     spec = $.extend({},_spec,spec);    
     var myself = wd.caf.action(spec);
    
-    var templatePh, actionPh;
+    var actionPh;
    
+    
+    myself.init = function(caf){
+
+        myself.log("Generic entity init","debug");
+        myself.caf = caf;
+        
+        if (!actionPh){
+            myself.setupAction();
+        }   
+    }
     
     /**
      * File operations execute action
@@ -267,38 +281,42 @@ wd.marketplace.actions.aboutAction = function(spec){
      * @memberof wd.caf.impl.actions.alertAction
      * 
      */
+
     myself.executeAction = function(){
-        
-        if (!templatePh){
-            myself.setupAction();
+
+        if(Modernizr.csstransitions){          
+            actionPh.toggleClass("marketplaceTransparent marketplaceMoveOut");
+        }
+        else{
+            actionPh.toggle();
         }
         
-        actionPh.toggleClass('marketplaceHidden');
-    }
+    } 
     
      
     myself.setupAction = function(){
+          
+        var container = myself.caf.templateEngine.getTemplate().$toggleActionContainer;
         
-        templatePh = $('.templatePanelsContainer');
-        
-        actionPh = $('<div/>').addClass('aboutActionWrapper marketplaceHidden')
-            .append( $('<div/>').addClass('aboutActionLogo') )
-            .append( $('<div/>').addClass('aboutActionDesc')
-                .text('Pentaho Marketplace plugin allows you to browse through available plugins and customize your Pentaho installation. Enjoy!') )
-            .append( $('<div/>').addClass('aboutActionDevBy') );
-            
-       actionPh.prependTo(templatePh);
+        actionPh = $('<div/>').addClass('toggleActionWrapper marketplaceTransparent marketplaceMoveOut')
+            .append( $('<div/>').addClass('toggleActionLogo') )
+            .append( $('<div/>').addClass('toggleActionDesc')
+                .text( spec.toggleText ) )
+            .append( $('<div/>').addClass('toggleActionDevBy') );
+       
+       container.append(actionPh);
     }
         
     return myself;
         
 };
-/*
-marketplace.getRegistry().registerAction( wd.marketplace.actions.aboutAction({
+
+marketplace.getRegistry().registerAction( wd.marketplace.actions.toggleAction({
     name: "about",
     description: "About",
+    toggleText: 'Pentaho Marketplace plugin allows you to browse through available plugins and customize your Pentaho installation. Enjoy!',
     order: 10
-}) );*/
+}) );
 
 
 
@@ -798,7 +816,15 @@ wd.marketplace.components.pluginBody = function(spec){
                     cssClass: "pluginVersion",
                     pluginVersion: v,
                     clickAction: function(){
-                        spec.installAction(v.branch);                        
+                        myself.caf.popupEngine.getPopup("okcancel").show({
+                            header:"TODO: install",
+                            content:"Install",
+                            okCallback: function(){
+                                spec.installAction(v.branch);
+                                return true;
+                            },
+                            validateFunction: function () { return true }
+                        });
                     },
                     highlight: highlight
                 }).draw($availableVersions);
@@ -814,7 +840,18 @@ wd.marketplace.components.pluginBody = function(spec){
 
         if(typeof spec.uninstallAction === "function"){
             $uninstallWrapper.addClass("cafPointer");
-            $uninstallWrapper.click(spec.uninstallAction);
+            $uninstallWrapper.click( function(){
+                myself.caf.popupEngine.getPopup("okcancel").show({
+                    header:"TODO: uninstall",
+                    content:"Uninstall",
+                    okCallback: function(){
+                        spec.uninstallAction();
+                        return true;
+                    },
+                    validateFunction: function () { return true }
+                });
+                
+            });
         }
 
         
@@ -1224,12 +1261,12 @@ marketplace.getRegistry().registerPanel(wd.marketplace.panels.marketplacePanel({
     order: 20
 }));
 
-
+/*
 marketplace.getRegistry().registerPanel(wd.caf.impl.panels.underConstruction({
     name:"about",
     description:"About",
     order: 90
-}));
+}));*/
 
 
 

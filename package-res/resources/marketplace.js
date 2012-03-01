@@ -229,10 +229,75 @@ marketplace.getRegistry().registerTemplate(wd.marketplace.template());
 marketplace.getRegistry().registerAction( wd.caf.action({
     name: "refresh",
     description: "Refresh",
-    order: 10,
+    order: 20,
     executeAction: function(){
         this.caf.engine.refresh();
     }
+}) );
+
+
+
+
+
+
+
+
+wd.marketplace.actions.aboutAction = function(spec){
+    
+    /**
+     * Specific specs
+     */
+    
+    var _spec = {
+        name: "about",
+        description: "About action",
+        order: 110
+    };
+
+      
+    spec = $.extend({},_spec,spec);    
+    var myself = wd.caf.action(spec);
+   
+    var templatePh, actionPh;
+   
+    
+    /**
+     * File operations execute action
+     * @name executeAction
+     * @memberof wd.caf.impl.actions.alertAction
+     * 
+     */
+    myself.executeAction = function(){
+        
+        if (!templatePh){
+            myself.setupAction();
+        }
+        
+        actionPh.toggleClass('marketplaceHidden');
+    }
+    
+     
+    myself.setupAction = function(){
+        
+        templatePh = $('.templatePanelsContainer');
+        
+        actionPh = $('<div/>').addClass('aboutActionWrapper marketplaceHidden')
+            .append( $('<div/>').addClass('aboutActionLogo') )
+            .append( $('<div/>').addClass('aboutActionDesc')
+                .text('Pentaho Marketplace plugin allows you to browse through available plugins and customize your Pentaho installation. Enjoy!') )
+            .append( $('<div/>').addClass('aboutActionDevBy') );
+            
+       actionPh.prependTo(templatePh);
+    }
+        
+    return myself;
+        
+};
+
+marketplace.getRegistry().registerAction( wd.marketplace.actions.aboutAction({
+    name: "about",
+    description: "About",
+    order: 10
 }) );
 
 
@@ -546,6 +611,7 @@ wd.marketplace.components.pluginHeader = function(spec){
     
     
     myself.update = function(){
+        
 
         var installationStatus = plugin.getInstallationStatus();
 
@@ -562,8 +628,7 @@ wd.marketplace.components.pluginHeader = function(spec){
             ).appendTo($wrapper);
             
             
-        var $versionWrapper = $("<div/>").addClass("pentaho-rounded-panel2 pluginHeaderVersionWrapper " + 
-            (myself.isUpdateAvailable()?"pluginHeaderVersionAvailable pluginGradientGreen":"pluginHeaderVersionUpdated pluginGradient"))
+        var $versionWrapper = $("<div/>").addClass("pentaho-rounded-panel2 pluginHeaderVersionWrapper ")
         .appendTo($wrapper);
         
         $("<div/>").addClass("pluginHeaderVersionLabel").text(plugin.getPluginInfo().installedBranch+"").appendTo($versionWrapper);

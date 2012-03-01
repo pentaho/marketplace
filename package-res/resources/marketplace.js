@@ -298,6 +298,35 @@ wd.marketplace.components.plugin = function(spec){
 
     var pluginInfo, panel, pluginHeader, pluginBody, isShown=false;
     
+    var installationStatus = {
+        
+        UPTODATE:{
+            description: "Up to date",
+            cssClass: "pluginStatusUpToDate"
+        },
+        UPDATEAVAILABLE:{   
+            description: "Update available",
+            cssClass: "pluginStatusUpdateAvailable"
+        },
+        INSTALLED:{
+            description: "Installed",
+            cssClass: "pluginStatusInstalled"
+        },
+        NOTINSTALLED: {
+            description: "Not installed",
+            cssClass: "pluginStatusNotInstalled"
+        },
+        INSTALLING:{
+            description: "Installing",
+            cssClass: "pluginStatusInstalling"
+        },
+        UNINSTALLING:{
+            description: "Uninstalling",
+            cssClass: "pluginStatusUninstalling"
+        }
+    }
+    
+    
     // containers
     var $wrapper;
     
@@ -392,7 +421,11 @@ wd.marketplace.components.plugin = function(spec){
     
     
     myself.getInstalledVersion = function(){
-        
+
+        if(!pluginInfo.installed){
+            return null;
+        }
+
         // Directly return an object that shows the installed version, filling in the details
         var version = {
             branch: pluginInfo.installedBranch,
@@ -415,7 +448,39 @@ wd.marketplace.components.plugin = function(spec){
         return version;
         
     }
-
+    
+    
+    myself.getInstallationStatus = function(){
+        
+        // We'll compare the branch / version we have with the version in the same branch
+        var installedVersion = myself.getInstalledVersion();
+        
+        // If nothing is installed, I can mark it as available TODO: implement other state
+        if(!installedVersion){
+            return installationStatus["NOTINSTALLED"];
+        }
+        
+        
+        
+        // No versions available? 
+        if (!pluginInfo.versions || pluginInfo.versions.length == 0){
+            return installationStatus["INSTALLED"];
+        }
+        
+        // loop through the others
+        var isUpdateAvailable;
+        pluginInfo.versions.map(function(v){
+            if(v.branch == installedVersion.branch){
+                isUpdateAvailable = v.version != installedVersion.version;
+                return false;
+            }
+        })
+        
+        return installationStatus[isUpdateAvailable?"UPDATEAVAILABLE":"UPTODATE"];
+        
+        
+    };
+    
 
     return myself;
 };
@@ -455,9 +520,11 @@ wd.marketplace.components.pluginHeader = function(spec){
         return plugin;
     }
     
-    /* MOVE TO PLUGIN */
+    
     myself.isUpdateAvailable = function(){
-        return plugin.getPluginInfo().availableVersion == plugin.getPluginInfo().installedVersion;
+        
+        return plugin.isUpdateAvailable();
+        
     }
     
     myself.draw = function($ph){
@@ -472,20 +539,21 @@ wd.marketplace.components.pluginHeader = function(spec){
     
     
     myself.update = function(){
-        
+
+        var installationStatus = plugin.getInstallationStatus();
+
         $wrapper.empty();
-        $("<div/>").addClass("pluginHeaderLogo pluginGradient").text(plugin.getPluginInfo().id).appendTo($wrapper);
+        $("<div/>").addClass("pluginHeaderLogo").text(plugin.getPluginInfo().id).appendTo($wrapper);
         
         $("<div/>").addClass("pluginHeaderTitleWrapper pentaho-titled-toolbar pentaho-padding-sm pentaho-background contrast-color").append(
             $("<div/>").addClass("pluginHeaderTitle").text(plugin.getPluginInfo().name).appendTo($wrapper))
         .append(
-            $("<div/>").addClass("pluginHeaderUpdates " + ( myself.isUpdateAvailable()?"pluginHeaderUpdatesAvailable":"pluginHeaderUpdatesUpdated" ))
-            .text(myself.isUpdateAvailable()?"Updates available":"Updated version").appendTo($wrapper)    
+            $("<div/>").addClass("pluginHeaderUpdates " + installationStatus.cssClass)
+            .text(installationStatus.description).appendTo($wrapper)    
             ).appendTo($wrapper);
             
             
-        var $versionWrapper = $("<div/>").addClass("pluginHeaderVersionWrapper " + 
-            (myself.isUpdateAvailable()?"pluginHeaderVersionAvailable pluginGradientGreen":"pluginHeaderVersionUpdated pluginGradient"))
+        var $versionWrapper = $("<div/>").addClass("pluginHeaderVersionWrapper ")
         .appendTo($wrapper);
         
         $("<div/>").addClass("pluginHeaderVersionLabel").text(plugin.getPluginInfo().installedBranch+"").appendTo($versionWrapper);
@@ -631,12 +699,17 @@ wd.marketplace.components.pluginBody = function(spec){
             
         
             plugin.getPluginInfo().versions.map(function(v){
+                
+                // see if this matches the installed plugin
+                var highlight = !!plugin.getInstalledVersion() && v.branch == plugin.getInstalledVersion().branch;
+                
                 wd.marketplace.components.pluginVersion({
                     cssClass: "pluginVersion",
                     pluginVersion: v,
                     clickAction: function(){
                         spec.installAction(v.branch);                        
-                    }
+                    },
+                    highlight: highlight
                 }).draw($availableVersions);
             })
         }
@@ -659,9 +732,6 @@ wd.marketplace.components.pluginBody = function(spec){
         // Add version components
         // wd.marketplace.components.pluginVersion({pluginVersion: })
         
-
-
-        //debugger;
 
 
         // Add footer
@@ -740,6 +810,7 @@ wd.marketplace.components.pluginVersion = function(spec){
         description: "Plugin Version",
         cssClass: "pluginVersion",
         pluginVersion: "",
+        highlight: false,
         clickAction: undefined
     }; 
     
@@ -754,6 +825,10 @@ wd.marketplace.components.pluginVersion = function(spec){
         
         $wrapper = $("<div/>").addClass(spec.cssClass)
         .append($("<span/>").addClass("pluginVersionNumber").text(spec.pluginVersion.version))
+        
+        if(spec.highlight){
+            $wrapper.addClass("pluginVersionHighlight");
+        }
         
         if(spec.pluginVersion.name){
             $wrapper.append($("<span/>").addClass("pluginVersionBranch").text(" (" + spec.pluginVersion.name + ")"))

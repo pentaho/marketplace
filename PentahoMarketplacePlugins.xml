@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <availablePlugins>
     <plugin id="pentaho-cdf-dd">
-        <img>http://www.webdetails.pt/ficheiros/cde_plugin.png</img>
+        <img>http://www.webdetails.pt/ficheiros/cde.png</img>
         <name>Community Dashboard Editor</name>
         <learnMoreUrl>http://cde.webdetails.org</learnMoreUrl>
         <description>The Community Dashboard Editor (CDE) is the outcome of real-world needs: It was born to greatly simplify the creation, edition and rendering of dashboards.
@@ -28,7 +28,7 @@ CDE and the technology underneath (CDF, CDA and CCC) allows to develop and deplo
 		</versions>
     </plugin>
     <plugin id="cda">
-        <img>http://www.webdetails.pt/ficheiros/cda_plugin.png</img>
+        <img>http://www.webdetails.pt/ficheiros/cda.png</img>
         <name>Community Data Access</name>
         <learnMoreUrl>http://cda.webdetails.org</learnMoreUrl>
         <description>Community Data Access (CDA) is a Pentaho plugin designed for accessing data with great flexibility. Born for overcoming some cons of the older implementation, CDA allows you to access any of the various Pentaho data sources.   </description>
@@ -37,11 +37,11 @@ CDE and the technology underneath (CDF, CDA and CCC) allows to develop and deplo
         
 		<versions>
 			<version branch='STABLE'>
-                                <version>12.02.29</version>
+                                <version>12.03.01</version>
 				<name>Stable</name>
-				<downloadUrl>http://ci.analytical-labs.com/job/Webdetails-CDA-Release/44/artifact/dist/cda-12.02.29.zip</downloadUrl>
-				<samplesDownloadUrl>http://ci.analytical-labs.com/job/Webdetails-CDA-Release/44/artifact/dist/cda-samples-12.02.29.zip</samplesDownloadUrl>
-                                <description>12.02.29 Release</description>
+				<downloadUrl>http://ci.analytical-labs.com/job/Webdetails-CDA-Release/lastSuccessfulBuild/artifact/dist/cda-12.03.01.zip</downloadUrl>
+				<samplesDownloadUrl>http://ci.analytical-labs.com/job/Webdetails-CDA-Release/lastSuccessfulBuild/artifact/dist/cda-samples-12.03.01.zip</samplesDownloadUrl>
+                                <description>12.03.01 Release</description>
 			</version>    	                    
 			<version branch='TRUNK'>
                                 <version>Trunk</version>
@@ -57,7 +57,7 @@ CDE and the technology underneath (CDF, CDA and CCC) allows to develop and deplo
     </plugin>
   
     <plugin id="pentaho-cdf">
-        <img>http://www.webdetails.pt/ficheiros/cdf_plugin.png</img>
+        <img>http://www.webdetails.pt/ficheiros/cdf.png</img>
         <name>Community Dashboards Framework</name>
         <learnMoreUrl>http://cdf.webdetails.org</learnMoreUrl>
         <description>Community Dashboards Framework (CDF) is a Pentaho plugin designed for drawing dashboards.</description>
@@ -86,7 +86,7 @@ CDE and the technology underneath (CDF, CDA and CCC) allows to develop and deplo
   
 
     <plugin id="cgg">
-        <img>http://www.webdetails.pt/ficheiros/cgg_plugin.png</img>
+        <img>http://www.webdetails.pt/ficheiros/cgg.png</img>
         <name>Community Graphics Generator</name>
         <learnMoreUrl>http://ctools.webdetails.org</learnMoreUrl>
         <description>Community Graphics Generator (CGG) is a Pentaho plugin designed for rendering CCC charts serverside, enabling you to embed them into Pentaho Reports.</description>
@@ -100,10 +100,45 @@ CDE and the technology underneath (CDF, CDA and CCC) allows to develop and deplo
 				<downloadUrl>http://ci.analytical-labs.com/job/Webdetails-CGG/lastSuccessfulBuild/artifact/dist/cgg-TRUNK-SNAPSHOT.zip</downloadUrl>
 				<description>Trunk Snapshot. Install at your own risk....</description>
 			</version>    	
-		</versions>
-                
-        
+		</versions>                       
     </plugin>
+    
+    <plugin id='marketplace'>
+        <img>http://www.webdetails.pt/ficheiros/marketplace_logo.png</img>
+        <name>Pentaho Marketplace</name>
+        <learnMoreUrl>http://wiki.pentaho.com/display/PMOPEN/Pentaho+BI+Server+Marketplace+Plugin</learnMoreUrl>
+        <description>Provide Pentaho, Partners, and Community Developers a marketplace for plugins within the BI Server product.</description>
+        <company>Pentaho</company>
+        <companyUrl>http://pentaho.com</companyUrl>
+        <versions>
+            <version branch='TRUNK'>
+                <version>Trunk</version>
+                <name>Trunk</name>
+                <downloadUrl>http://ci.analytical-labs.com/job/Webdetails-Marketplace/lastSuccessfulBuild/artifact/dist/marketplace-plugin-TRUNK-SNAPSHOT.zip</downloadUrl>
+                <description>Trunk Snapshot. Install at your own risk...</description>
+            </version>
+        </versions>
+    </plugin>
+  
+
+    <plugin id='saiku'>
+        <img>http://www.webdetails.pt/ficheiros/saiku.png</img>
+        <name>Saiku Analytics</name>
+        <learnMoreUrl>http://analytical-labs.com/</learnMoreUrl>
+        <description>Saiku is a modular open-source analysis suite offering lightweight OLAP which remains easily embeddable, extendable and configurable.
+Our RESTful server connects to existing OLAP systems, which then powers user-friendly, intuitive analytics via our lightweight JQuery based frontend.</description>
+        <company>Analytical Labs</company>
+        <companyUrl>http://analytical-labs.com/</companyUrl>
+        <versions>
+            <version branch='TRUNK'>
+                <version>Trunk</version>
+                <name>Trunk</name>
+                <downloadUrl>http://ci.analytical-labs.com/job/saiku-plugin/lastSuccessfulBuild/artifact/saiku-bi-platform-plugin/target/saiku-plugin-2.3-SNAPSHOT.zip</downloadUrl>
+                <description>Trunk Snapshot. Install at your own risk...</description>
+            </version>
+        </versions>
+    </plugin>
+  
   
   
 </availablePlugins>

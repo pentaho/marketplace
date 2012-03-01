@@ -122,7 +122,7 @@ CDE and the technology underneath (CDF, CDA and CCC) allows to develop and deplo
   
 
     <plugin id='saiku'>
-        <img>http://dl.dropbox.com/u/13927708/saiku_120.png</img>
+        <img>http://www.webdetails.pt/ficheiros/saiku.png</img>
         <name>Saiku Analytics</name>
         <learnMoreUrl>http://analytical-labs.com/</learnMoreUrl>
         <description>Saiku is a modular open-source analysis suite offering lightweight OLAP which remains easily embeddable, extendable and configurable.

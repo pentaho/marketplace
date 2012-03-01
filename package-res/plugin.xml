@@ -16,6 +16,31 @@
     class="org.pentaho.marketplace.MarketplaceService"/>
 
 
+
+	<overlays>
+		<overlay id="launch" resourcebundle="content/marketplace/resources/lang/messages.properties">
+			<button 
+				id="launch_new_marketplace" 
+				label="${Launcher.NEW_MARKETPLACE}" 
+				image="content/marketplace/resources/img/marketplace_icon.png"
+				command="openURL('${Launcher.MARKETPLACE}', '${Launcher.MARKETPLACE_TOOLTIP}', 'content/marketplace/resources/marketplace.html')"/>
+		</overlay>
+                
+                
+		<overlay id="startup.marketplace"  resourcebundle="../content/marketplace/resources/lang/messages.properties">
+			<overlay id="startup.marketplace" resourcebundle="../content/marketplace/resources/lang/messages.properties">
+				<toolbar id="mainToolbar">
+					<toolbarbutton id="newMarketplace" 
+                                        image="../content/marketplace/resources/img/marketplace_icon.png" 
+                                        onclick="mainToolbarHandler.openUrl('${tabName}','${tabName}','content/marketplace/resources/marketplace.html')" 
+                                        tooltiptext="${openNewMarketplace}" 
+                                        insertafter="newAnalysisButton"/>
+				</toolbar>
+			</overlay>
+		</overlay>
+	</overlays>
+
+
     <content-generator scope="local" id="marketplace" type="MarketplaceContentGenerator" url="">
         <classname>org.pentaho.marketplace.MarketplaceContentGenerator</classname>
         <title>Marketplace</title>

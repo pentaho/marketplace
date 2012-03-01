@@ -56,6 +56,7 @@ import javax.xml.namespace.QName;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathFactory;
+import org.pentaho.di.core.logging.LogLevel;
 
 public class MarketplaceService {
 
@@ -200,7 +201,7 @@ public class MarketplaceService {
         try {
             JobMeta jobMeta = new JobMeta(jobPath, null);
             Job job = new Job(null, jobMeta);
-
+                    
             File file = new File(PentahoSystem.getApplicationContext().getSolutionPath("system/plugin-cache/downloads"));
             file.mkdirs();
             file = new File(PentahoSystem.getApplicationContext().getSolutionPath("system/plugin-cache/backups"));
@@ -417,7 +418,6 @@ public class MarketplaceService {
                 plugin.setImg(getElementChildValue(element, "img"));
                 plugin.setLearnMoreUrl(getElementChildValue(element, "learnMoreUrl"));
                 plugin.setName(getElementChildValue(element, "name"));
-                plugin.setChangelog(getElementChildValue(element, "changelog"));
                 plugin.setInstallationNotes(getElementChildValue(element, "installationNotes"));
 
                 //NodeList availableVersions = element.getElementsByTagName("version");
@@ -433,7 +433,8 @@ public class MarketplaceService {
                                 getElementChildValue(versionElement, "version"),
                                 getElementChildValue(versionElement, "downloadUrl"),
                                 getElementChildValue(versionElement, "samplesDownloadUrl"),
-                                getElementChildValue(versionElement, "description"));
+                                getElementChildValue(versionElement, "description"),
+                                getElementChildValue(versionElement, "changelog"));
                     }
                     plugin.setVersions(versions);
                 }

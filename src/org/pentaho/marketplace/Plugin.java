@@ -34,7 +34,6 @@ public class Plugin implements Serializable {
     private String companyLogo;
     private String installedBranch;
     private String installedVersion;
-    private String changelog;
     private String installationNotes;
     private boolean installed;
     private PluginVersion[] versions;
@@ -129,14 +128,6 @@ public class Plugin implements Serializable {
 
     public void setInstalled(boolean installed) {
         this.installed = installed;
-    }
-
-    public String getChangelog() {
-        return changelog;
-    }
-
-    public void setChangelog(String changelog) {
-        this.changelog = changelog;
     }
 
     

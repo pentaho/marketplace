@@ -60,9 +60,9 @@ public class MarketplaceServiceTest {
     Assert.assertEquals("WebDetails", plugins[0].getCompany());
     Assert.assertEquals("http://webdetails.pt", plugins[0].getCompanyUrl());
     Assert.assertNull(plugins[0].getInstallationNotes());
-    Assert.assertNull(plugins[1].getChangelog());
+//    Assert.assertNull(plugins[1].getChangelog());
     
-    Assert.assertEquals("Changelog", plugins[2].getChangelog());
+//    Assert.assertEquals("Changelog", plugins[2].getChangelog());
 //    Assert.assertEquals("http://localhost:8080/cdf-1.0.samples.zip", plugins[2].getSamplesDownloadUrl());
     Assert.assertEquals("Notes after install", plugins[2].getInstallationNotes());
   }
@@ -107,6 +107,7 @@ public class MarketplaceServiceTest {
 
     Assert.assertEquals("RC", alternativeVersions[0].getBranch());
     Assert.assertEquals("Release Candidate", alternativeVersions[0].getName());
+    Assert.assertEquals("ChangeLog for RC", alternativeVersions[0].getChangelog());
     Assert.assertEquals("This is RC1 - pretty cool version but still not quite there", alternativeVersions[0].getDescription());
     Assert.assertEquals("http://www.webdetails.pt/RC/ficheiros/CDE-bundle-1.0-RC3.tar.bz2",  alternativeVersions[0].getDownloadUrl());
     Assert.assertEquals("http://www.webdetails.pt/RC/ficheiros/CDE-bundle-1.0-RC3-samples.tar.bz2",  alternativeVersions[0].getSamplesDownloadUrl());    
@@ -117,6 +118,7 @@ public class MarketplaceServiceTest {
     Assert.assertNotNull(desiredVersion);
     Assert.assertEquals("TRUNK", desiredVersion.getBranch());
     Assert.assertEquals("Trunk", desiredVersion.getName());
+    Assert.assertEquals("Change Log for TRUNK", desiredVersion.getChangelog());
     
   }
   

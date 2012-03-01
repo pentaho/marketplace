@@ -191,7 +191,9 @@ wd.marketplace.template = function(spec){
         myself.$logo = $('<div class="templateLogo"></div>').appendTo(header);
         myself.$actions = $('<div class="templateActions"></div>').appendTo(header);
         myself.$panels = $('<div class="templatePanels"></div>').appendTo(header);
-        myself.$title = $('<div class="templateTitle contrast-color">Pentaho Marketplace</div>').appendTo(header);
+        myself.$title = $('<div class="templateTitle contrast-color"></div>')
+           
+            .appendTo(header);
   
         header.append($('<div class="templateHShadow"></div>'));
         
@@ -483,9 +485,8 @@ wd.marketplace.components.pluginHeader = function(spec){
         
         $wrapper.empty();
         
-        $("<div/>").addClass("pluginHeaderTitleWrapper pentaho-titled-toolbar pentaho-padding-sm pentaho-background contrast-color").append(
-            $("<div/>").addClass("pluginHeaderLogo").text(plugin.getPluginInfo().id)
-                .append( $("<img/>").attr('src', plugin.getPluginInfo().img))
+        $("<div/>").addClass("pluginHeaderTitleWrapper pentaho-titled-toolbar pentaho-padding-sm pentaho-background contrast-color pentaho-rounded-panel2").append(
+            $("<div/>").addClass("pluginHeaderLogo").append( $("<img/>").attr('src', plugin.getPluginInfo().img))
                 .appendTo($wrapper))
         .append(
             $("<div/>").addClass("pluginHeaderTitle").text(plugin.getPluginInfo().name).appendTo($wrapper))
@@ -495,7 +496,7 @@ wd.marketplace.components.pluginHeader = function(spec){
             ).appendTo($wrapper);
             
             
-        var $versionWrapper = $("<div/>").addClass("pluginHeaderVersionWrapper " + 
+        var $versionWrapper = $("<div/>").addClass("pentaho-rounded-panel2 pluginHeaderVersionWrapper " + 
             (myself.isUpdateAvailable()?"pluginHeaderVersionAvailable pluginGradientGreen":"pluginHeaderVersionUpdated pluginGradient"))
         .appendTo($wrapper);
         
@@ -594,7 +595,8 @@ wd.marketplace.components.pluginBody = function(spec){
         // Wrapper for description
         
         $pluginBodyDescWrapper = $("<div/>").addClass("pluginBodyDescWrapper clearfix").appendTo($wrapper)
-        .append($("<div/>").addClass("pluginBodyDescLogo prepend-1 span-4 append-1").text("Logo"))
+        .append($("<div/>").addClass("pluginBodyDescLogo prepend-1 span-4 append-1")
+            .append( $("<img/>").attr('src', plugin.getPluginInfo().img) ) )
         .append($("<div/>").addClass("pluginBodyDescDesc span-18 last")
             .append($("<div/>").addClass("pluginBodyTitle").text("Information"))
             .append($("<div/>").addClass("pluginBodyDescription").text(plugin.getPluginInfo().description))

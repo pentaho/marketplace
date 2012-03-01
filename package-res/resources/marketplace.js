@@ -293,12 +293,12 @@ wd.marketplace.actions.aboutAction = function(spec){
     return myself;
         
 };
-
+/*
 marketplace.getRegistry().registerAction( wd.marketplace.actions.aboutAction({
     name: "about",
     description: "About",
     order: 10
-}) );
+}) );*/
 
 
 

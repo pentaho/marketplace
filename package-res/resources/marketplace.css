@@ -52,8 +52,13 @@ html, body {
 
 .aboutActionWrapper{
     width:950px;
+    height:140px;
     margin-bottom:15px;
-    
+    -moz-transition: all 500ms ease-in 0s;
+    background-color: white;
+    border-radius: 4px 4px 4px 4px;
+    overflow: hidden;
+    padding:10px;
 }
 .aboutActionLogo {
     background: url('http://www.webdetails.pt/ficheiros/marketplace_logo.png') repeat scroll 0 0 transparent;

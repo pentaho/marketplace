@@ -340,6 +340,9 @@ wd.marketplace.components.plugin = function(spec){
         
         // pluginBody
         pluginBody = wd.marketplace.components.pluginBody({
+            installAction: function(branch){
+                panel.installPlugin(myself,branch);
+            },
             uninstallAction: function(){
                 panel.uninstallPlugin(myself);
             }
@@ -519,6 +522,7 @@ wd.marketplace.components.pluginBody = function(spec){
         name: "pluginBody",
         description: "Plugin Body",
         cssClass: "pluginBody",
+        installAction: undefined,
         uninstallAction: undefined
     }; 
     
@@ -631,7 +635,7 @@ wd.marketplace.components.pluginBody = function(spec){
                     cssClass: "pluginVersion",
                     pluginVersion: v,
                     clickAction: function(){
-                        myself.caf.notificationEngine.getNotification().info("Showing details");
+                        spec.installAction(v.branch);                        
                     }
                 }).draw($availableVersions);
             })
@@ -891,30 +895,58 @@ wd.marketplace.panels.marketplacePanel = function(spec){
     }
     
     
+    myself.installPlugin = function(plugin, branch){
+        
+        myself.log("Install plugin " + plugin.getPluginInfo().id + ", Branch: " + branch,"info")
+        
+        // 1. Set the notification for the installing operation
+        myself.startOperation(INSTALL, plugin, branch);
+        
+        // 2. Send to engine
+        myself.caf.engine.installPlugin(plugin.getPluginInfo().id, branch, function(){
+            myself.log("Install plugin done: " + plugin.getPluginInfo().id +", branch " + branch ,"info")
+            myself.stopOperation(INSTALL, plugin, branch)
+        })
+        
+    }
+    
+        
     myself.uninstallPlugin = function(plugin){
         
         myself.log("Uninstall plugin " + plugin.getPluginInfo().id ,"info")
         
         // 1. Set the notification for the installing operation
-        myself.startOperation(UNINSTALL);
+        myself.startOperation(UNINSTALL, plugin);
         
         // 2. Send to engine
         myself.caf.engine.uninstallPlugin(plugin.getPluginInfo().id, function(){
             myself.log("Uninstall plugin done: " + plugin.getPluginInfo().id ,"info")
-            myself.stopOperation(UNINSTALL)
+            myself.stopOperation(UNINSTALL, plugin)
         })
         
     }
 
 
-    myself.startOperation = function(operation){
+    myself.startOperation = function(operation, plugin, branch){
         
+        if(operation == INSTALL){
+            myself.caf.notificationEngine.getNotification().info("Installing " + plugin.getPluginInfo().name +" ("+ branch +")");
+        }
+        else{
+            myself.caf.notificationEngine.getNotification().info("Uninstalling " + plugin.getPluginInfo().name);
+        }
         myself.log("Starting " + operation + " operation");
     }
     
     
-    myself.stopOperation = function(operation){
+    myself.stopOperation = function(operation, plugin, branch){
 
+        if(operation == INSTALL){
+            myself.caf.notificationEngine.getNotification().success("Installed " + plugin.getPluginInfo().name +" ("+ branch +"), please restart server");
+        }
+        else{
+            myself.caf.notificationEngine.getNotification().success("Uninstalled " + plugin.getPluginInfo().name+", please restart server");
+        }
         myself.log("Stopping " + operation + " operation");
         
     }

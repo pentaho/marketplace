@@ -2,6 +2,7 @@
 <availablePlugins>
     <plugin id="pentaho-cdf-dd">
         <img>http://www.webdetails.pt/ficheiros/cde.png</img>
+        <smallImg>http://www.webdetails.pt/ficheiros/cde_plugin.png</smallImg>
         <name>Community Dashboard Editor</name>
         <learnMoreUrl>http://cde.webdetails.org</learnMoreUrl>
         <description>The Community Dashboard Editor (CDE) is the outcome of real-world needs: It was born to greatly simplify the creation, edition and rendering of dashboards.
@@ -9,7 +10,7 @@
 CDE and the technology underneath (CDF, CDA and CCC) allows to develop and deploy dashboards in the Pentaho platform in a fast and effective way.
         </description>
         <company>WebDetails</company>
-        <companyLogo>http://www.webdetails.pt/conteudos/logo.png</companyLogo>
+        <companyLogo>http://www.webdetails.pt/ficheiros/wd_logo.png</companyLogo>
 
 		<versions>
 			<version branch='STABLE'>
@@ -32,12 +33,13 @@ CDE and the technology underneath (CDF, CDA and CCC) allows to develop and deplo
     </plugin>
     <plugin id="cda">
         <img>http://www.webdetails.pt/ficheiros/cda.png</img>
+        <smallImg>http://www.webdetails.pt/ficheiros/cda_plugin.png</smallImg>
         <name>Community Data Access</name>
         <learnMoreUrl>http://cda.webdetails.org</learnMoreUrl>
         <description>Community Data Access (CDA) is a Pentaho plugin designed for accessing data with great flexibility. Born for overcoming some cons of the older implementation, CDA allows you to access any of the various Pentaho data sources.   </description>
         <company>WebDetails</company>
         <companyUrl>http://webdetails.pt</companyUrl>
-        <companyLogo>http://www.webdetails.pt/conteudos/logo.png</companyLogo>
+        <companyLogo>http://www.webdetails.pt/ficheiros/wd_logo.png</companyLogo>
 		<versions>
 			<version branch='STABLE'>
                                 <version>12.03.01</version>
@@ -62,13 +64,14 @@ CDE and the technology underneath (CDF, CDA and CCC) allows to develop and deplo
   
     <plugin id="pentaho-cdf">
         <img>http://www.webdetails.pt/ficheiros/cdf.png</img>
+        <smallImg>http://www.webdetails.pt/ficheiros/cdf_plugin.png</smallImg>
         <name>Community Dashboards Framework</name>
         <learnMoreUrl>http://cdf.webdetails.org</learnMoreUrl>
         <description>Community Dashboards Framework (CDF) is a Pentaho plugin designed for drawing dashboards.</description>
         <company>WebDetails</company>
         <companyUrl>http://webdetails.pt</companyUrl>
         
-        <companyLogo>http://www.webdetails.pt/conteudos/logo.png</companyLogo>
+        <companyLogo>http://www.webdetails.pt/ficheiros/wd_logo.png</companyLogo>
 	<versions>
 			<version branch='STABLE'>
                                 <version>stable</version>
@@ -93,12 +96,13 @@ CDE and the technology underneath (CDF, CDA and CCC) allows to develop and deplo
 
     <plugin id="cgg">
         <img>http://www.webdetails.pt/ficheiros/cgg.png</img>
+        <smallImg>http://www.webdetails.pt/ficheiros/cgg_plugin.png</smallImg>
         <name>Community Graphics Generator</name>
         <learnMoreUrl>http://ctools.webdetails.org</learnMoreUrl>
         <description>Community Graphics Generator (CGG) is a Pentaho plugin designed for rendering CCC charts serverside, enabling you to embed them into Pentaho Reports.</description>
         <company>WebDetails</company>
         <companyUrl>http://webdetails.pt</companyUrl>    
-        <companyLogo>http://www.webdetails.pt/conteudos/logo.png</companyLogo>
+        <companyLogo>http://www.webdetails.pt/ficheiros/wd_logo.png</companyLogo>
         <installationNotes>Please remember to replace the batik, xml-apis and xmlgraphics jars on WEB-INF/lib with the ones on system/CGG/lib.</installationNotes>
 	<versions>
 			<version branch='TRUNK'>
@@ -112,7 +116,8 @@ CDE and the technology underneath (CDF, CDA and CCC) allows to develop and deplo
     </plugin>
     
     <plugin id='marketplace'>
-        <img>http://www.webdetails.pt/ficheiros/marketplace_logo.png</img>
+        <img>http://www.webdetails.pt/ficheiros/mk.png</img>
+        <smallImg>http://www.webdetails.pt/ficheiros/mk_plugin.png</smallImg>
         <name>Pentaho Marketplace</name>
         <learnMoreUrl>http://wiki.pentaho.com/display/PMOPEN/Pentaho+BI+Server+Marketplace+Plugin</learnMoreUrl>
         <description>Provide Pentaho, Partners, and Community Developers a marketplace for plugins within the BI Server product.</description>
@@ -132,6 +137,7 @@ CDE and the technology underneath (CDF, CDA and CCC) allows to develop and deplo
 
     <plugin id='saiku'>
         <img>http://www.webdetails.pt/ficheiros/saiku.png</img>
+        <smallImg>http://www.webdetails.pt/ficheiros/saiku_plugin.png</smallImg>
         <name>Saiku Analytics</name>
         <learnMoreUrl>http://analytical-labs.com/</learnMoreUrl>
         <description>Saiku is a modular open-source analysis suite offering lightweight OLAP which remains easily embeddable, extendable and configurable.

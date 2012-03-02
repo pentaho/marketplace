@@ -649,9 +649,15 @@ wd.marketplace.components.pluginHeader = function(spec){
         var $versionWrapper = $("<div/>").addClass("pentaho-rounded-panel2 pluginHeaderVersionWrapper ")
         .appendTo($wrapper);
         
-        $("<div/>").addClass("pluginHeaderVersionLabel").text(plugin.getPluginInfo().installedBranch+"").appendTo($versionWrapper);
-        $("<div/>").text(plugin.getPluginInfo().installedVersion+"").appendTo($versionWrapper);
 
+        if(plugin.getPluginInfo().installed){
+         
+            $("<div/>").addClass("pluginHeaderVersionLabel").text(plugin.getPluginInfo().installedBranch).appendTo($versionWrapper);
+            $("<div/>").text(plugin.getPluginInfo().installedVersion).appendTo($versionWrapper);
+        }
+        else{
+            $("<div/>").addClass("pluginHeaderVersionNotInstalled").text("Not installed").appendTo($versionWrapper);
+        }
 
         if(typeof spec.clickAction === "function"){
             $wrapper.click(spec.clickAction);

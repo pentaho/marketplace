@@ -298,6 +298,11 @@ body .marketplaceCollapsed{
 
 }
 
+.pluginHeaderVersionNotInstalled{
+    font-size: 8px;
+    margin-top: 10px;
+    color: #808080;
+}
 
 .pluginBody{
 

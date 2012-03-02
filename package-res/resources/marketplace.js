@@ -261,14 +261,15 @@ wd.marketplace.actions.toggleAction = function(spec){
         name: "about",
         description: "About action",
         toggleText: "Information",
-        order: 110
+        order: 110,
+        container: undefined 
     };
 
       
     spec = $.extend({},_spec,spec);    
     var myself = wd.caf.action(spec);
    
-    var actionPh;
+    var $actionPh;
    
     
     myself.init = function(caf){
@@ -276,7 +277,7 @@ wd.marketplace.actions.toggleAction = function(spec){
         myself.log("Generic entity init","debug");
         myself.caf = caf;
         
-        if (!actionPh){
+        if (!$actionPh){
             myself.setupAction();
         }   
     }
@@ -290,27 +291,52 @@ wd.marketplace.actions.toggleAction = function(spec){
 
     myself.executeAction = function(){
 
-        if(Modernizr.csstransitions){          
-            actionPh.toggleClass("marketplaceTransparent marketplaceMoveOut");
-        }
-        else{
-            actionPh.toggle();
-        }
+        myself.toggle();
         
     } 
     
+    
+    myself.hide = function (){   
+        if(Modernizr.csstransitions){          
+            $actionPh.addClass("marketplaceTransparent marketplaceMoveOut");
+        }
+        else{
+            $actionPh.hide();
+        }    
+    }
+    
+    myself.show = function (){  
+        if(Modernizr.csstransitions){          
+            $actionPh.removeClass("marketplaceTransparent marketplaceMoveOut");
+        }
+        else{
+            $actionPh.show();
+        } 
+    }
+    
+    myself.toggle = function (){  
+        if(Modernizr.csstransitions){          
+            $actionPh.toggleClass("marketplaceTransparent marketplaceMoveOut");
+        }
+        else{
+            $actionPh.toggle();
+        }  
+    }
      
     myself.setupAction = function(){
-          
-        var container = myself.caf.templateEngine.getTemplate().$toggleActionContainer;
         
-        actionPh = $('<div/>').addClass('toggleActionWrapper marketplaceTransparent marketplaceMoveOut')
+        
+        // TODO: Change the way the placeholder is passed? 
+        //       This way the action is not dependent on the template.
+        var container = spec.container || myself.caf.templateEngine.getTemplate().$toggleActionContainer;
+        
+        $actionPh = $('<div/>').addClass('toggleActionWrapper marketplaceTransparent marketplaceMoveOut')
         .append( $('<div/>').addClass('toggleActionLogo') )
         .append( $('<div/>').addClass('toggleActionDesc')
             .text( spec.toggleText ) )
         .append( $('<div/>').addClass('toggleActionDevBy') );
        
-        container.append(actionPh);
+        container.append($actionPh);
     }
         
     return myself;
@@ -321,7 +347,9 @@ marketplace.getRegistry().registerAction( wd.marketplace.actions.toggleAction({
     name: "about",
     description: "About",
     toggleText: 'Pentaho Marketplace plugin allows you to browse through available plugins and customize your Pentaho installation. Enjoy!',
-    order: 10
+    order: 10,
+    container: marketplace.getRegistry()
+        .getTemplate( marketplace.options.template ).$toggleActionContainer
 }) );
 
 
@@ -1093,7 +1121,9 @@ wd.marketplace.popups.basicPopup = function(spec){
         status: "Status",
         details: "details",
         bottom: "bottom",
-        img: ""
+        img: "",
+        cssClass:"",
+        buttons: []
     };
 
 
@@ -1111,12 +1141,13 @@ wd.marketplace.popups.basicPopup = function(spec){
 
         // Write: topPoup, contentPopup, bottomPopup
         
-        var $ph = $("<div/>").addClass("basicPopupContainer");
+        var $ph = $("<div/>").addClass("basicPopupContainer " + " " + options.cssClass);
         
-        $centerContainer = $("<div/>").addClass("cafBasicPopupCenterContainer").appendTo($ph).append(myself.drawCenterContent(options));
+        $centerContainer = $("<div/>").addClass("cafBasicPopupCenterContainer").appendTo($ph)
+            .append( $('<div>&nbsp;</div>').addClass('popupImgContainer') )
+            .append( myself.drawCenterContent(options) );
         $bottomContainer = $("<div/>").addClass("cafBasicPopupBottomContainer").appendTo($ph)
-            .append(options.bottom)
-            .append(myself.drawBottomContent(options));
+            .append(myself.drawBottomContent(options).prepend(options.bottom) );
 
         myself.log("here");
         return $ph;
@@ -1129,16 +1160,14 @@ wd.marketplace.popups.basicPopup = function(spec){
      * @memberof wd.caf.impl.popups.basicPopup
      */
     myself.drawCenterContent = spec.drawCenterContent || function(options){
-        var imgContainer = $('<div/>').addClass('imgContainer').append( $('<img/>').attr('src', options.img) ),
-            msgContainer = $('<div/>').addClass('msgContainer')
-                .append( $('<span/>').addClass('status').append(
-                    (typeof options.status === "function") ? options.status(myself,options) : options.status) )
-                .append( $('<span/>').addClass('info').append(
-                    (typeof options.content === "function") ? options.content(myself,options) : options.content) )
-                .append( $('<span/>').addClass('details').append(
-                    (typeof options.details === "function") ? options.details(myself,options) : options.details) );
+        return $('<div/>').addClass('popupInfoContainer')
+            .append( $('<div/>').addClass('popupStatus').append(
+                (typeof options.status === "function") ? options.status(myself,options) : options.status) )
+            .append( $('<div/>').addClass('popupContent').append(
+                (typeof options.content === "function") ? options.content(myself,options) : options.content) )
+            .append( $('<div/>').addClass('popupDetails').append(
+                (typeof options.details === "function") ? options.details(myself,options) : options.details) );
             
-        return imgContainer, msgContainer;
     }
 
 
@@ -1182,6 +1211,7 @@ wd.marketplace.popups.closePopup = function(spec){
         bottom: "bottom",
         img: "", 
         validateFunction: undefined,
+        cssClass:"",
         buttons:[{
             label: "Close",
             validate: false,
@@ -1240,7 +1270,8 @@ wd.marketplace.popups.okcancelPopup = function(spec){
         status: "Status",
         details: "details",
         bottom: "bottom",
-        img: "", 
+        img: "",
+        cssClass:"",
         validateFunction: undefined,
         okCallback: function(){
             myself.log("Action not defined","warn")
@@ -1430,7 +1461,7 @@ wd.marketplace.panels.marketplacePanel = function(spec){
             content: plugin.getPluginInfo().name +" ("+ branch +")",
             details: "",
             bottom: "You are about to start the installation. Do you want to proceed?",
-
+            cssClass: "popupInstall",
             okCallback: function(){
                 myself.log("Install plugin " + plugin.getPluginInfo().id + ", Branch: " + branch,"info");
         
@@ -1457,6 +1488,7 @@ wd.marketplace.panels.marketplacePanel = function(spec){
             content: plugin.getPluginInfo().name,
             details: "",
             bottom: "You are about to uninstall. Do you want to proceed?",
+            cssClass: "popupUninstall",
             okCallback: function(){
                 myself.log("Uninstall plugin " + plugin.getPluginInfo().id ,"info");
         
@@ -1481,11 +1513,13 @@ wd.marketplace.panels.marketplacePanel = function(spec){
         
         if(operation == INSTALL){
             var popupStatus = "Installing ",
-                popupContent = plugin.getPluginInfo().name +" ("+ branch +")";
+                popupContent = plugin.getPluginInfo().name +" ("+ branch +")",
+                cssClass =  "popupInstall popupOperation";
         }
         else{
            var popupStatus = "Uninstalling ",
-               popupContent = plugin.getPluginInfo().name;
+               popupContent = plugin.getPluginInfo().name,
+               cssClass =  "popupUninstall popupOperation";
         }
         myself.log("Starting " + operation + " operation");
 
@@ -1493,7 +1527,8 @@ wd.marketplace.panels.marketplacePanel = function(spec){
             status: popupStatus,
             content: popupContent,
             details: "please wait...",
-            bottom: popupStatus 
+            bottom: popupStatus,
+            cssClass: cssClass
         });
 
     }
@@ -1503,11 +1538,13 @@ wd.marketplace.panels.marketplacePanel = function(spec){
 
         if(operation == INSTALL){
             var popupStatus = "Successfuly Installed ",
-                popupDetails = "Installed" + plugin.getPluginInfo().name +" ("+ branch +")";
+                popupDetails = "Installed " + plugin.getPluginInfo().name +" ("+ branch +")",
+                cssClass = "popupInstall popupSuccess";
         }
         else{
            var popupStatus = "Successfully Uninstalled ",
-               popupDetails= "Uninstalled" + plugin.getPluginInfo().name;
+               popupDetails= "Uninstalled " + plugin.getPluginInfo().name,
+               cssClass = "popupUninstall popupSuccess";
         }
         myself.log("Starting " + operation + " operation");
 
@@ -1515,12 +1552,23 @@ wd.marketplace.panels.marketplacePanel = function(spec){
             status: popupStatus,
             content: "Thank you.",
             bottom: "Close",
-            details: popupDetails
+            details: popupDetails,
+            cssClass: cssClass
         });
         
         myself.caf.actionEngine.getAction('refresh').executeAction();
         
         
+        // TODO: Instantiate this action here?
+        var restartAction = wd.marketplace.actions.toggleAction({
+            name: "restart",
+            description: "Restart Server",
+            toggleText: 'Please restart your server!',
+            order: 20,
+            container: myself.caf.templateEngine.getTemplate().$toggleActionContainer
+        });
+        restartAction.init();
+        restartAction.executeAction();
     }
     
     

@@ -61,7 +61,7 @@ html, body {
 .toggleActionWrapper{
 
     margin-bottom:15px;
-    height:140px;
+    min-height:50px;
 
     -webkit-transition: all 500ms ease-in;
     -moz-transition: all 500ms ease-in;
@@ -72,6 +72,9 @@ html, body {
     border-radius: 4px 4px 4px 4px;
     overflow: hidden;
     padding:10px;
+    
+    float:left;
+    width:100%;
 }
 
 
@@ -84,7 +87,7 @@ html, body {
     width: 154px;
 }
 .toggleActionDesc{
-
+    display:inline-block;
 }
 .toggleActionDevBy{
 
@@ -457,3 +460,132 @@ body .marketplaceCollapsed{
     color: red;
 }
 
+
+div.cafPopupContent {
+    background-color: white;
+}
+.cafPopupContent {
+    background-color: white;
+    border: 0px;
+    min-height: 220px;
+    min-width: 750px;
+    padding: 0px;
+    text-align: left;
+    
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px; 
+    
+    overflow:hidden;
+}
+
+.cafBasicPopupCenterContainer {
+    min-height: 185px;
+}
+
+.popupImgContainer {
+    width:130px;
+    height:90px;
+    display:inline-block;
+    float:left;
+    vertical-align: top;
+    margin-top:27px;
+    margin-left:50px;
+}
+.popupInstall .popupImgContainer {
+    background: url('img/updateAvailable.png') no-repeat;
+}
+.popupInstall.popupSuccess .popupImgContainer {
+    background: url('img/statusInstalled.png') no-repeat;
+}
+.popupInstall.popupOperation .popupImgContainer {
+    background: url('img/statusInstalling.gif') no-repeat;
+}
+.popupUninstall .popupImgContainer {
+    background:  none;
+}
+.popupUninstall.popupSuccess .popupImgContainer{
+    background: none;
+}
+.popupUninstall.popupOperation .popupImgContainer {
+    background: url('img/statusUninstalling.gif') no-repeat;
+}
+
+.popupInfoContainer {
+    height:100%;
+    display:inline-block;
+    float:left;
+    vertical-align: top;
+}
+
+.popupInfoContainer .popupStatus{
+    color: #7d7d7d;
+    font-size:25px;
+    margin-top:35px;
+}
+.popupSuccess .popupInfoContainer .popupStatus{
+    color: #498812;
+}
+.popupError .popupInfoContainer .popupStatus{
+    color: #AC8A8B;
+}
+.popupInfoContainer .popupContent{
+    color: #7d7d7d;
+    font-size:16px;
+    margin-top:5px;
+    height:55px;
+    vertical-align:top;
+}
+.popupInfoContainer .popupDetails{
+    color: #7d7d7d;
+    font-size:11px;
+    margin-top:5px;
+}
+
+.cafBasicPopupBottomContainer{
+    min-height: 35px;
+    height:35px;
+}
+
+.cafPopupBottomContent {
+    background: #7d7d7d;
+    padding-left:30px;
+    color:white;
+    height:100%;
+    margin:0px;
+    padding-top:8px;
+    font-size:11px;
+}
+.popupSuccess .cafPopupBottomContent {
+    background: #498812;
+}
+
+.popupError .cafPopupBottomContent {
+    background: #AC8A8B;
+}
+
+.popupClose {
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px; 
+    
+    height:25px;
+    width:65px;
+    vertical-align: middle;
+    margin-right:20px;
+    margin-left:0px;
+    margin-top:-2px;
+    padding:2px 8px;
+    
+    color:#7d7d7d;
+    
+    background: #d8d8d8; 
+    background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2Q4ZDhkOCIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNmY2ZjZmMiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
+    background: -moz-linear-gradient(top,  #d8d8d8 0%, #fcfcfc 100%); 
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#d8d8d8), color-stop(100%,#fcfcfc)); 
+    background: -webkit-linear-gradient(top,  #d8d8d8 0%,#fcfcfc 100%); 
+    background: -o-linear-gradient(top,  #d8d8d8 0%,#fcfcfc 100%); 
+    background: -ms-linear-gradient(top,  #d8d8d8 0%,#fcfcfc 100%); 
+    background: linear-gradient(top,  #d8d8d8 0%,#fcfcfc 100%); 
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#d8d8d8', endColorstr='#fcfcfc',GradientType=0 ); 
+}

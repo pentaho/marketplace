@@ -18,15 +18,7 @@
 
 
 	<overlays>
-		<overlay id="launch" resourcebundle="content/marketplace/resources/lang/messages.properties">
-			<button 
-				id="launch_new_marketplace" 
-				label="${Launcher.NEW_MARKETPLACE}" 
-				image="content/marketplace/resources/img/marketplace_icon.png"
-				command="openURL('${Launcher.MARKETPLACE}', '${Launcher.MARKETPLACE_TOOLTIP}', 'content/marketplace/resources/marketplace.html')"/>
-		</overlay>
-                
-                
+                            
 		<overlay id="startup.marketplace"  resourcebundle="../content/marketplace/resources/lang/messages.properties">
 			<overlay id="startup.marketplace" resourcebundle="../content/marketplace/resources/lang/messages.properties">
 				<toolbar id="mainToolbar">

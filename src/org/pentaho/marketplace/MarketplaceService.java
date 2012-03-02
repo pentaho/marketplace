@@ -381,6 +381,7 @@ public class MarketplaceService {
             if (versionElements.getLength() >= 1) {
                 Element versionElement = (Element) versionElements.item(0);
                 
+                plugin.setInstalledBuildId(versionElement.getAttribute("buildId"));
                 plugin.setInstalledBranch(versionElement.getAttribute("branch"));
                 plugin.setInstalledVersion(versionElement.getTextContent());
                 
@@ -434,7 +435,8 @@ public class MarketplaceService {
                                 getElementChildValue(versionElement, "downloadUrl"),
                                 getElementChildValue(versionElement, "samplesDownloadUrl"),
                                 getElementChildValue(versionElement, "description"),
-                                getElementChildValue(versionElement, "changelog"));
+                                getElementChildValue(versionElement, "changelog"),
+                                getElementChildValue(versionElement, "buildId"));
                     }
                     plugin.setVersions(versions);
                 }

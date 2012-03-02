@@ -31,8 +31,9 @@ public class PluginVersion implements Serializable {
     private String samplesDownloadUrl;
     private String description;
     private String changelog;
+    private String buildId;
 
-    public PluginVersion(String branch, String name, String version, String downloadUrl, String samplesDownloadUrl, String description, String changelog) {
+    public PluginVersion(String branch, String name, String version, String downloadUrl, String samplesDownloadUrl, String description, String changelog, String buildId) {
         this.branch = branch;
         this.name = name;
         this.version = version;
@@ -40,6 +41,7 @@ public class PluginVersion implements Serializable {
         this.samplesDownloadUrl = samplesDownloadUrl;
         this.description = description;
         this.changelog = changelog;
+        this.buildId = buildId;
     }
 
     public String getBranch() {
@@ -119,5 +121,12 @@ public class PluginVersion implements Serializable {
      */
     public String getChangelog() {
         return changelog;
+    }
+
+    /**
+     * @return the buildId
+     */
+    public String getBuildId() {
+        return buildId;
     }
 }

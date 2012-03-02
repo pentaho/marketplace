@@ -111,6 +111,7 @@ public class MarketplaceServiceTest {
     Assert.assertEquals("This is RC1 - pretty cool version but still not quite there", alternativeVersions[0].getDescription());
     Assert.assertEquals("http://www.webdetails.pt/RC/ficheiros/CDE-bundle-1.0-RC3.tar.bz2",  alternativeVersions[0].getDownloadUrl());
     Assert.assertEquals("http://www.webdetails.pt/RC/ficheiros/CDE-bundle-1.0-RC3-samples.tar.bz2",  alternativeVersions[0].getSamplesDownloadUrl());    
+    Assert.assertNull(alternativeVersions[0].getBuildId());    
 
     
     PluginVersion desiredVersion = plugins[0].getVersionByBranch("TRUNK");
@@ -119,6 +120,7 @@ public class MarketplaceServiceTest {
     Assert.assertEquals("TRUNK", desiredVersion.getBranch());
     Assert.assertEquals("Trunk", desiredVersion.getName());
     Assert.assertEquals("Change Log for TRUNK", desiredVersion.getChangelog());
+    Assert.assertEquals("135", desiredVersion.getBuildId());
     
   }
   

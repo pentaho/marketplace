@@ -52,6 +52,7 @@ public class MarketplaceServiceTest {
     Assert.assertEquals(3, plugins.length);
     Assert.assertEquals("cde", plugins[0].getId());
     Assert.assertEquals("wt_transparent.png", plugins[0].getImg());
+    Assert.assertEquals("wt_transparent_small.png", plugins[0].getSmallImg());
     Assert.assertEquals("Community Dashboard Editor", plugins[0].getName());
     Assert.assertEquals("http://cde.webdetails.org", plugins[0].getLearnMoreUrl());
 //    Assert.assertEquals("http://www.webdetails.pt/ficheiros/CDE-bundle-1.0-RC3.tar.bz2", plugins[0].getDownloadUrl());

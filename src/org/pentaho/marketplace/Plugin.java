@@ -27,6 +27,7 @@ public class Plugin implements Serializable {
     private String id;
     private String name;
     private String img;
+    private String smallImg;
     private String learnMoreUrl;
     private String description;
     private String company;
@@ -186,5 +187,19 @@ public class Plugin implements Serializable {
      */
     public void setInstalledBuildId(String installedBuildId) {
         this.installedBuildId = installedBuildId;
+    }
+
+    /**
+     * @return the smallImg
+     */
+    public String getSmallImg() {
+        return smallImg;
+    }
+
+    /**
+     * @param smallImg the smallImg to set
+     */
+    public void setSmallImg(String smallImg) {
+        this.smallImg = smallImg;
     }
 }

@@ -2,6 +2,7 @@
 <availablePlugins>
   <plugin id="cde">
     <img>wt_transparent.png</img>
+    <smallImg>wt_transparent_small.png</smallImg>    
     <name>Community Dashboard Editor</name>
     <learnMoreUrl>http://cde.webdetails.org</learnMoreUrl>
     <downloadUrl>http://www.webdetails.pt/ficheiros/CDE-bundle-1.0-RC3.tar.bz2</downloadUrl>
@@ -15,6 +16,7 @@ CDE and the technology underneath (CDF, CDA and CCC) allows to develop and deplo
   </plugin>
   <plugin id="cda">
     <img>wt_transparent.png</img>
+
     <name>Community Data Access</name>
     <learnMoreUrl>http://cda.webdetails.org</learnMoreUrl>
     <downloadUrl>http://localhost:8080/cda-1.0.zip</downloadUrl>

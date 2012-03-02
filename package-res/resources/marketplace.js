@@ -4,6 +4,7 @@ wd.marketplace = wd.marketplace || {};
 wd.marketplace.panels = wd.marketplace.panels || {};
 wd.marketplace.components = wd.marketplace.components || {};
 wd.marketplace.actions = wd.marketplace.actions || {};
+wd.marketplace.popups = wd.marketplace.popups || {};
 
             
             
@@ -1045,6 +1046,238 @@ wd.marketplace.components.pluginVersionDesc = function(spec){
     return myself;
 }
 
+
+/*
+ *
+ *  Popups
+ *
+ */ 
+
+
+wd.marketplace.popups.basicPopup = function(spec){
+
+
+    /**
+     * Specific specs
+     */
+    var _spec = {
+        name: "basic",
+        description: "Basic Popup"        
+    };
+
+    /* Specific options for showing */
+    var _options = {        
+        content: "Content", 
+        status: "Status",
+        details: "details",
+        bottom: "bottom",
+        img: ""
+    };
+
+
+    spec = $.extend({},_spec,spec);
+    var options = $.extend({},_options,options);
+    var myself = wd.caf.impl.popups.basicPopup(spec);
+
+     /**
+     * Draws the content
+     * @name basicPopup.drawContent
+     * @memberof wd.caf.impl.popups.basicPopup
+     * @param Object to control this popups' behavior
+     */
+    myself.drawContent = spec.drawContent || function(options){
+
+        // Write: topPoup, contentPopup, bottomPopup
+        
+        var $ph = $("<div/>").addClass("basicPopupContainer");
+        
+        $centerContainer = $("<div/>").addClass("cafBasicPopupCenterContainer").appendTo($ph).append(myself.drawCenterContent(options));
+        $bottomContainer = $("<div/>").addClass("cafBasicPopupBottomContainer").appendTo($ph)
+            .append(options.bottom)
+            .append(myself.drawBottomContent(options));
+
+        myself.log("here");
+        return $ph;
+    }
+
+
+    /**
+     * Draws the center content
+     * @name basicPopup.drawTopContent
+     * @memberof wd.caf.impl.popups.basicPopup
+     */
+    myself.drawCenterContent = spec.drawCenterContent || function(options){
+        var imgContainer = $('<div/>').addClass('imgContainer').append( $('<img/>').attr('src', options.img) ),
+            msgContainer = $('<div/>').addClass('msgContainer')
+                .append( $('<span/>').addClass('status').append(
+                    (typeof options.status === "function") ? options.status(myself,options) : options.status) )
+                .append( $('<span/>').addClass('info').append(
+                    (typeof options.content === "function") ? options.content(myself,options) : options.content) )
+                .append( $('<span/>').addClass('details').append(
+                    (typeof options.details === "function") ? options.details(myself,options) : options.details) );
+            
+        return imgContainer, msgContainer;
+    }
+
+
+    /**
+     * Shows the popup
+     * @name basicPopup.show
+     * @memberof wd.caf.impl.popups.basicPopup
+     * @param Object to control this popups' behavior. eg: {content: "Test",buttons:[...]}
+     */
+    myself.show = spec.show || function(options){
+        
+        options = $.extend({},_options,options);
+        
+        myself.log("Popup show action");
+        myself.caf.popupEngine.show(myself,options);
+        
+    }
+    
+    return myself;
+}
+
+marketplace.getRegistry().registerPopup( wd.marketplace.popups.basicPopup() );
+
+
+wd.marketplace.popups.closePopup = function(spec){
+
+
+    /**
+     * Specific specs
+     */
+    var _spec = {
+        name: "close",
+        description: "Close Popup"        
+    };
+
+    /* Specific options for showing */
+    var _options = {        
+        content: "Content", 
+        status: "Status",
+        details: "details",
+        bottom: "bottom",
+        img: "", 
+        validateFunction: undefined,
+        buttons:[{
+            label: "Close",
+            validate: false,
+            cssClass: "popupClose", 
+            callback: function(popup,options){
+                myself.hide()
+            },
+            validateFunction: undefined
+        }
+        ]
+    }
+
+
+    spec = $.extend({},_spec,spec);
+    var options  = $.extend({},_options,options);
+    var myself = wd.marketplace.popups.basicPopup(spec);
+    
+    
+    /**
+     * Shows the popup
+     * @name basicPopup.show
+     * @memberof wd.caf.impl.popups.basicPopup
+     * @param Object to control this popups' behavior. eg: {content: "Test",buttons:[...]}
+     */
+    myself.show = spec.show || function(options){
+        
+        options = $.extend({},_options,options);
+        
+        myself.log("Popup show action");
+        myself.caf.popupEngine.show(myself,options);
+        
+    }
+    
+    return myself;
+}
+
+
+marketplace.getRegistry().registerPopup( wd.marketplace.popups.closePopup() );
+
+
+
+wd.marketplace.popups.okcancelPopup = function(spec){
+
+
+    /**
+     * Specific specs
+     */
+    var _spec = {
+        name: "okcancel",
+        description: "Ok/Cancel Popup"        
+    };
+
+    /* Specific options for showing */
+    var _options = {        
+        content: "Content", 
+        status: "Status",
+        details: "details",
+        bottom: "bottom",
+        img: "", 
+        validateFunction: undefined,
+        okCallback: function(){
+            myself.log("Action not defined","warn")
+        },
+        buttons:[
+        {
+            label: "Ok",
+            validate: true,
+            cssClass: "popupClose", 
+            callback: function(popup,options){
+                // Call function. if return true, hide.
+                if(options.okCallback(popup,options)){
+                    myself.hide();
+                }
+            },
+            validateFunction: undefined
+        },
+        {
+            
+            label: "Cancel",
+            validate: false,
+            cssClass: "popupClose", 
+            callback: function(popup,options){
+                myself.hide()
+            },
+            validateFunction: undefined
+        }
+        ]
+    }
+
+
+    spec = $.extend({},_spec,spec);
+    var options  = $.extend({},_options,options);
+    var myself = wd.marketplace.popups.basicPopup(spec);
+    
+    
+    /**
+     * Shows the popup
+     * @name basicPopup.show
+     * @memberof wd.caf.impl.popups.basicPopup
+     * @param Object to control this popups' behavior. eg: {content: "Test",buttons:[...]}
+     */
+    myself.show = spec.show || function(options){
+        
+        options = $.extend({},_options,options);
+        
+        myself.log("Popup show action");
+        myself.caf.popupEngine.show(myself,options);
+        
+    }
+    
+    return myself;
+}
+
+
+marketplace.getRegistry().registerPopup( wd.marketplace.popups.okcancelPopup() );
+
+
+
 /*
  *
  *  Panels
@@ -1053,7 +1286,7 @@ wd.marketplace.components.pluginVersionDesc = function(spec){
 
 wd.marketplace.panels.marketplacePanel = function(spec){
   
-        
+    
     /**
      * Specific specs
      */
@@ -1075,6 +1308,9 @@ wd.marketplace.panels.marketplacePanel = function(spec){
     
     // BlueprintMixin
     wd.caf.modules.blueprintPanelModule(myself);
+
+
+
 
 
     // Components
@@ -1167,10 +1403,12 @@ wd.marketplace.panels.marketplacePanel = function(spec){
     
     
     myself.installPlugin = function(plugin, branch){
-        
+                
          myself.caf.popupEngine.getPopup("okcancel").show({
-            header:"TODO: Install",
-            content:"Install",
+            status: "Do you want to install now?",
+            content: plugin.getPluginInfo().name +" ("+ branch +")",
+            details: "",
+            bottom: "You are about to start the installation. Do you want to proceed?",
             okCallback: function(){
                 myself.log("Install plugin " + plugin.getPluginInfo().id + ", Branch: " + branch,"info");
         
@@ -1181,7 +1419,6 @@ wd.marketplace.panels.marketplacePanel = function(spec){
                 myself.caf.engine.installPlugin(plugin.getPluginInfo().id, branch, function(){
                     myself.log("Install plugin done: " + plugin.getPluginInfo().id +", branch " + branch ,"info")
                     myself.stopOperation(INSTALL, plugin, branch)
-                    myself.caf.popupEngine.hide()
                 })
             },
             validateFunction: function () { return true }
@@ -1192,8 +1429,10 @@ wd.marketplace.panels.marketplacePanel = function(spec){
     myself.uninstallPlugin = function(plugin){
         
         myself.caf.popupEngine.getPopup("okcancel").show({
-            header:"TODO: uninstall",
-            content:"Uninstall",
+            status: "Do you want to uninstall now?",
+            content: plugin.getPluginInfo().name,
+            details: "",
+            bottom: "You are about to uninstall. Do you want to proceed?",
             okCallback: function(){
                 myself.log("Uninstall plugin " + plugin.getPluginInfo().id ,"info");
         
@@ -1203,46 +1442,67 @@ wd.marketplace.panels.marketplacePanel = function(spec){
                 // 2. Send to engine
                 myself.caf.engine.uninstallPlugin(plugin.getPluginInfo().id, function(){
                     myself.log("Uninstall plugin done: " + plugin.getPluginInfo().id ,"info");
-                    myself.stopOperation(UNINSTALL, plugin);
-                    myself.caf.popupEngine.hide()
-                })
+                    myself.stopOperation(UNINSTALL, plugin); 
+                });
             },
             validateFunction: function () { return true }
-        });
-      
+        });      
     }
 
 
     myself.startOperation = function(operation, plugin, branch){
         
         if(operation == INSTALL){
-            myself.caf.notificationEngine.getNotification().info("Installing " + plugin.getPluginInfo().name +" ("+ branch +")");
+            var popupStatus = "Installing ",
+                popupContent = plugin.getPluginInfo().name +" ("+ branch +")";
         }
         else{
-            myself.caf.notificationEngine.getNotification().info("Uninstalling " + plugin.getPluginInfo().name);
+           var popupStatus = "Uninstalling ",
+               popupContent = plugin.getPluginInfo().name;
         }
         myself.log("Starting " + operation + " operation");
+
+        myself.caf.popupEngine.getPopup("basic").show({
+            status: popupStatus,
+            content: popupContent,
+            details: "please wait...",
+            bottom: popupStatus 
+        });
+
     }
     
     
     myself.stopOperation = function(operation, plugin, branch){
 
         if(operation == INSTALL){
-            myself.caf.notificationEngine.getNotification().success("Installed " + plugin.getPluginInfo().name +" ("+ branch +"), please restart server");
+            var popupStatus = "Successfuly Installed ",
+                popupDetails = "Installed" + plugin.getPluginInfo().name +" ("+ branch +")";
         }
         else{
-            myself.caf.notificationEngine.getNotification().success("Uninstalled " + plugin.getPluginInfo().name+", please restart server");
+           var popupStatus = "Successfully Uninstalled ",
+               popupDetails= "Uninstalled" + plugin.getPluginInfo().name;
         }
-        myself.log("Stopping " + operation + " operation");
+        myself.log("Starting " + operation + " operation");
+
+        myself.caf.popupEngine.getPopup("close").show({
+            status: popupStatus,
+            content: "Thank you.",
+            bottom: "Close",
+            details: popupDetails
+        });
+        
+        myself.caf.actionEngine.getAction('refresh').executeAction();
+        
         
     }
     
     
-
     return myself;
     
     
 };
+
+
 
 
 

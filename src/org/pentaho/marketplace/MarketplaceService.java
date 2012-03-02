@@ -350,7 +350,7 @@ public class MarketplaceService {
         }
 
         if (site == null || "".equals(site)) {
-            site = "https://raw.github.com/webdetails/marketplace/caf/PentahoMarketplacePlugins.xml";
+            site = "https://raw.github.com/webdetails/marketplace/master/PentahoMarketplacePlugins.xml";
         }
 
         site = resolveVersion(site);
@@ -417,6 +417,7 @@ public class MarketplaceService {
                 plugin.setCompanyLogo(getElementChildValue(element, "companyLogo"));
                 plugin.setDescription(getElementChildValue(element, "description"));
                 plugin.setImg(getElementChildValue(element, "img"));
+                plugin.setSmallImg(getElementChildValue(element, "smallImg"));
                 plugin.setLearnMoreUrl(getElementChildValue(element, "learnMoreUrl"));
                 plugin.setName(getElementChildValue(element, "name"));
                 plugin.setInstallationNotes(getElementChildValue(element, "installationNotes"));

@@ -34,6 +34,7 @@ public class Plugin implements Serializable {
     private String companyLogo;
     private String installedBranch;
     private String installedVersion;
+    private String installedBuildId;    
     private String installationNotes;
     private boolean installed;
     private PluginVersion[] versions;
@@ -171,5 +172,19 @@ public class Plugin implements Serializable {
             }
         }
         return null;
+    }
+
+    /**
+     * @return the installedBuildId
+     */
+    public String getInstalledBuildId() {
+        return installedBuildId;
+    }
+
+    /**
+     * @param installedBuildId the installedBuildId to set
+     */
+    public void setInstalledBuildId(String installedBuildId) {
+        this.installedBuildId = installedBuildId;
     }
 }

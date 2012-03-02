@@ -62,17 +62,19 @@ html, body {
 
     margin-bottom:15px;
     height:140px;
-    
-    -webkit-transition: all 500ms ease-in-out;
-    -moz-transition: all 500ms ease-in-out;
-    -o-transition: all 500ms ease-in-out;
-    transition: all 500ms ease-in-out;
-    
+
+    -webkit-transition: all 500ms ease-in;
+    -moz-transition: all 500ms ease-in;
+    -o-transition: all 500ms ease-in;
+    transition: all 500ms ease-in;
+
     background-color: white;
     border-radius: 4px 4px 4px 4px;
     overflow: hidden;
     padding:10px;
 }
+
+
 .toggleActionLogo {
     background: url('http://www.webdetails.pt/ficheiros/marketplace_logo.png') repeat scroll 0 0 transparent;
     display: inline-block;
@@ -82,11 +84,11 @@ html, body {
     width: 154px;
 }
 .toggleActionDesc{
-    
+
 }
 .toggleActionDevBy{
-    
-    
+
+
 }
 .marketplaceMoveOut {
     margin-top:-600px;
@@ -148,7 +150,7 @@ html, body {
 
 .pluginWrapper {
 
-/*    margin-top:5px;*/
+    /*    margin-top:5px;*/
 
 }
 
@@ -179,6 +181,7 @@ body .marketplaceCollapsed{
 .pluginHeader {
 
     overflow: hidden;
+    /*    color: #969696;*/
     /*    height: 52px;*/
 
     -webkit-border-radius: 4px;
@@ -192,15 +195,20 @@ body .marketplaceCollapsed{
 
 }
 
-.pluginHeader:hover .pluginHeaderTitle{
-    font-size: 20px
+.pluginHeader .pluginHeaderTitle, .pluginHeader .pluginHeaderUpdates{
+    color: #969696;
+
 }
 
-.pluginHeader.pluginSelected{
-/*    font-size: 20px;*/
+.pluginHeader:hover .pluginHeaderTitle, .pluginHeader:hover .pluginHeaderUpdates{
+    color: white;
 }
 
-.pluginHeader:active .pluginHeaderTitle{
+.pluginHeader.pluginSelected .pluginHeaderTitle, .pluginHeader.pluginSelected .pluginHeaderUpdates{
+    color: white;
+}
+
+.pluginHeader:active .pluginHeaderTitle, .pluginHeader:active .pluginHeaderUpdates{
     color: #aaa;
 }
 
@@ -252,7 +260,7 @@ body .marketplaceCollapsed{
     background-image: url('img/statusUpdateAvailable.png');
 }
 
-    
+
 .pluginStatusUpToDate{
     background-image: url('img/statusUpToDate.png');
 }
@@ -279,7 +287,7 @@ body .marketplaceCollapsed{
     width: 150px;
     font-size: 10px;
     text-align: center;
-    
+
     background: #d8d8d8; 
     background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2Q4ZDhkOCIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNmY2ZjZmMiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
     background: -moz-linear-gradient(top,  #d8d8d8 0%, #fcfcfc 100%); 
@@ -310,7 +318,7 @@ body .marketplaceCollapsed{
     margin-bottom: 5px;
 
     background-color: white;
-    
+
     -webkit-border-radius: 4px;
     -moz-border-radius: 4px;
     border-radius: 4px; 
@@ -329,10 +337,10 @@ body .marketplaceCollapsed{
     -moz-transition: all 500ms ease-in-out;
     -o-transition: all 500ms ease-in-out;
     transition: all 500ms ease-in-out;
-    
+
 }
 
-.pluginBodyTitle{
+.pluginBodyTitle, .pluginVersionDescTitle{
 
     color: #808080;
     height: 30px;
@@ -349,21 +357,48 @@ body .marketplaceCollapsed{
     width:140px;
 }
 
-.pluginBodyDescription{
+.pluginBodyDescription, .pluginVersionDescDescription{
     height: 120px;
+    margin-bottom: 15px;
     overflow-y: auto;
 }
 
+
+.pluginVersionDescVersion{
+    height: 50px;
+}
+
+.pluginVersionDescInstallButton{
+    margin-left: -5px;
+    display: inline-block;
+    width: 127px;
+    height: 46px;
+    background: url('img/installButton.png') no-repeat;
+
+}
+
+.pluginVersionDescInstallButton:hover{
+    background-position: -127px;
+}
+
+.pluginVersionDescInstallButton:active{
+    background-position: -254px;
+}
+
+
 .pluginBodyFooterContent{
-    
-    margin-top: 10x;
+
     padding-top: 10px;
-    padding-bottom: 10px;
+    padding-bottom: 20px;
     margin-bottom: 10px;
-    
-    border-top: 1px solid #808080;
+
     text-align: right;
-   
+
+}
+
+.pluginHorizontalSeparator{
+    height: 24px;
+    background: url('img/shadow.png') center no-repeat;
 }
 
 .pluginBodyFooterContent a{
@@ -375,15 +410,26 @@ body .marketplaceCollapsed{
     min-height: 1px; /* Give it existance */
 }
 
+
+
 .pluginVersions{
 
     margin-bottom: 20px;
-    
+
 }
 
 .pluginVersion {
     float: left;
     padding-right: 40px;
+    
+}
+
+.pluginVersion:hover{
+    color: #969696;
+}
+
+.pluginVersion:active{
+    color: green;
 }
 
 .pluginVersionNumber{
@@ -391,7 +437,11 @@ body .marketplaceCollapsed{
 }
 
 .pluginVersionHighlight{
-    text-decoration: underline;
+/*  Disabled for now  text-decoration: underline;*/
+}
+
+.pluginVersionSelected{
+    color: green;
 }
 
 .uninstallVersion{

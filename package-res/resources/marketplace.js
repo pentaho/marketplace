@@ -113,7 +113,10 @@ wd.marketplace.engine = function(myself,spec){
         $.ajax({
             url: "../installpluginjson",
             dataType: 'json',
-            data: {pluginId: pluginId, versionId: branchId},
+            data: {
+                pluginId: pluginId, 
+                versionId: branchId
+            },
             success: callback,
             error: impl.errorUpdating
         });
@@ -128,7 +131,9 @@ wd.marketplace.engine = function(myself,spec){
         $.ajax({
             url: "../uninstallpluginjson",
             dataType: 'json',
-            data: {pluginId: pluginId},
+            data: {
+                pluginId: pluginId
+            },
             success: callback,
             error: impl.errorUpdating
         });
@@ -190,7 +195,7 @@ wd.marketplace.template = function(spec){
         myself.$panels = $('<div class="templatePanels"></div>').appendTo(header);
         myself.$title = $('<div class="templateTitle contrast-color"></div>')
            
-            .appendTo(header);
+        .appendTo(header);
   
         header.append($('<div class="templateHShadow"></div>'));
         
@@ -299,12 +304,12 @@ wd.marketplace.actions.toggleAction = function(spec){
         var container = myself.caf.templateEngine.getTemplate().$toggleActionContainer;
         
         actionPh = $('<div/>').addClass('toggleActionWrapper marketplaceTransparent marketplaceMoveOut')
-            .append( $('<div/>').addClass('toggleActionLogo') )
-            .append( $('<div/>').addClass('toggleActionDesc')
-                .text( spec.toggleText ) )
-            .append( $('<div/>').addClass('toggleActionDevBy') );
+        .append( $('<div/>').addClass('toggleActionLogo') )
+        .append( $('<div/>').addClass('toggleActionDesc')
+            .text( spec.toggleText ) )
+        .append( $('<div/>').addClass('toggleActionDevBy') );
        
-       container.append(actionPh);
+        container.append(actionPh);
     }
         
     return myself;
@@ -637,7 +642,7 @@ wd.marketplace.components.pluginHeader = function(spec){
         
         $("<div/>").addClass("pluginHeaderTitleWrapper pentaho-titled-toolbar pentaho-padding-sm pentaho-background contrast-color pentaho-rounded-panel2").append(
             $("<div/>").addClass("pluginHeaderLogo").append( $("<img/>").attr('src', plugin.getPluginInfo().img))
-                .appendTo($wrapper))
+            .appendTo($wrapper))
         .append(
             $("<div/>").addClass("pluginHeaderTitle").text(plugin.getPluginInfo().name).appendTo($wrapper))
         .append(
@@ -709,6 +714,7 @@ wd.marketplace.components.pluginBody = function(spec){
     
     // Details section
     var $pluginBodyDesc, $pluginVersionDesc;
+    var pluginVersionDesc;
     
     myself.setPlugin = function(_plugin){
         plugin = _plugin;
@@ -761,11 +767,9 @@ wd.marketplace.components.pluginBody = function(spec){
         
         
         // Add the pluginVersionDescription, hidden at start
-        var pluginVersionDesc =  wd.marketplace.components.pluginVersionDesc({
+        pluginVersionDesc =  wd.marketplace.components.pluginVersionDesc({
             cssClass: "pluginVersionDesc marketplaceHidden",
-            clickAction: function(){
-                wd.warm("NOT DONE YET");
-            }
+            installAction: spec.installAction
         });
         
         pluginVersionDesc.draw($pluginBodyDetailsArea);
@@ -793,7 +797,7 @@ wd.marketplace.components.pluginBody = function(spec){
                 cssClass: "pluginVersion",
                 pluginVersion: plugin.getInstalledVersion(),
                 clickAction: function(){
-                    myself.caf.notificationEngine.getNotification().info("Showing details");
+                    myself.showBodyDesc();
                 }
             }).draw($installedVersion);
 
@@ -822,7 +826,9 @@ wd.marketplace.components.pluginBody = function(spec){
                     cssClass: "pluginVersion",
                     pluginVersion: v,
                     clickAction: function(){
-                        spec.installAction(v.branch);
+                        
+                        //spec.installAction(v.branch);
+                        myself.showVersionDesc(v);
                     },
                     highlight: highlight
                 }).draw($availableVersions);
@@ -842,15 +848,10 @@ wd.marketplace.components.pluginBody = function(spec){
         }
 
         
-        
-
-        // Add version components
-        // wd.marketplace.components.pluginVersion({pluginVersion: })
-        
-
 
         // Add footer
         var footerContent = $("<div/>").addClass("pluginBodyFooterContent")
+        .append($("<div/>").addClass("pluginHorizontalSeparator"))
         .appendTo($("<div/>").addClass("clearfix pluginBodyFooter span-22 prepend-1 append-1 last").appendTo($wrapper))
         
         // we'll put company logo or name, and a link if we have it
@@ -862,37 +863,44 @@ wd.marketplace.components.pluginBody = function(spec){
             footerContent.append(content);
         }
 
-
-
-    /*
-        
-        var $versionWrapper = $("<div/>").addClass("pluginBodyVersionWrapper " + 
-            (myself.isUpdateAvailable()?"pluginBodyVersionAvailable":"pluginBodyVersionUpdated"))
-        .appendTo($wrapper);
-        
-        $("<div/>").text("Version").appendTo($versionWrapper);
-        $("<div/>").text(pluginInfo.availableVersion+"").appendTo($versionWrapper);
-
-        $("<div/>").addClass("pluginBodyUpdates")
-        .text(myself.isUpdateAvailable()?"Updates available":"Updated version").appendTo($wrapper);
-        */
-
         
     }
     
     
     myself.showVersionDesc = function(version){
         
-        $pluginBodyDesc.addClass("martketplaceHidden");
-        $pluginVersionDesc.removeClass("martketplaceHidden");
+        myself.log("showVersionDesc " + version);
+        
+        pluginVersionDesc.setPluginVersion(version);
+        pluginVersionDesc.update();
+        
+        $pluginBodyDesc.addClass("marketplaceHidden");
+        $pluginVersionDesc.removeClass("marketplaceHidden");
+        
+        
+        // Mark this one selected
+        $availableVersions.find(".pluginVersion").each(function(idx,v){
+            var $v = $(v);
+            if($v.data("pluginVersion") == version){
+                $v.addClass("pluginVersionSelected");
+            }
+            else{
+                $v.removeClass("pluginVersionSelected");
+            }
+        });
+        
         
     }
     
     myself.showBodyDesc = function(){
         
-        $pluginBodyDesc.removeClass("martketplaceHidden");
-        $pluginVersionDesc.addClass("martketplaceHidden");
+        myself.log("showBodyDesc");
         
+        $pluginBodyDesc.removeClass("marketplaceHidden");
+        $pluginVersionDesc.addClass("marketplaceHidden");
+
+        // unselectAll
+        $availableVersions.find(".pluginVersionSelected").removeClass("pluginVersionSelected");
     }
     
     
@@ -911,6 +919,9 @@ wd.marketplace.components.pluginBody = function(spec){
     
     
     myself.show = function(){
+
+        // Always force body desc to show
+        myself.showBodyDesc();
         
         if(Modernizr.csstransitions){  
         
@@ -921,6 +932,7 @@ wd.marketplace.components.pluginBody = function(spec){
             $element.show();
         }        
         
+
     }
 
 
@@ -953,7 +965,7 @@ wd.marketplace.components.pluginVersion = function(spec){
 
     myself.draw = function($ph){
         
-        $wrapper = $("<div/>").addClass(spec.cssClass)
+        $wrapper = $("<div/>").addClass(spec.cssClass).data("pluginVersion",spec.pluginVersion)
         .append($("<span/>").addClass("pluginVersionNumber").text(spec.pluginVersion.version))
         
         if(spec.highlight){
@@ -991,7 +1003,7 @@ wd.marketplace.components.pluginVersionDesc = function(spec){
         description: "Plugin Version Description",
         cssClass: "pluginVersionDesc",
         pluginVersion: undefined,
-        clickAction: undefined
+        installAction: undefined
     }; 
     
     
@@ -1007,7 +1019,7 @@ wd.marketplace.components.pluginVersionDesc = function(spec){
         
         $pluginVersionDescWrapper = $("<div/>").addClass(spec.cssClass +" clearfix").appendTo($ph);
         
-        //myself.update();
+    //myself.update();
 
         
     }
@@ -1019,26 +1031,36 @@ wd.marketplace.components.pluginVersionDesc = function(spec){
         
         $pluginVersionDescWrapper.empty();
         
-        $pluginVersionDescWrapper
-        .append($("<div/>").addClass("pluginBodyDescLogo prepend-1 span-4 append-1").text(pluginVersion.version))
-        .append($("<div/>").addClass("pluginBodyDescDesc span-18 last")
-            .append($("<div/>").addClass("pluginBodyTitle").text("Information"))
-            .append($("<div/>").addClass("pluginBodyDescription").text(pluginVersion.changelog))
-            )
-        ;
+        // install button
+        var $installButton = $("<div/>").addClass("pluginVersionDescInstallButton ");
+        $installButton.addClass("cafPointer");
+        $installButton.click(myself.installAction);
         
-        if(typeof spec.clickAction === "function"){
-            $pluginVersionDescWrapper.addClass("cafPointer");
-            $pluginVersionDescWrapper.click(spec.clickAction);
-        }
+        $pluginVersionDescWrapper
+        .append($("<div/>").addClass("pluginVersionDescLeftArea prepend-1 span-4 append-1")
+            .append($("<div/>").addClass("clearfix pluginVersionDescTitle").text(pluginVersion.branch))
+            .append($("<div/>").addClass("clearfix pluginVersionDescVersion").text(pluginVersion.version))
+            .append($("<div/>").append($installButton))
 
-
+            )
+        .append($("<div/>").addClass("pluginVersionDescDesc span-18 last")
+            .append($("<div/>").addClass("pluginVersionDescTitle").text("Version information"))
+            .append($("<div/>").addClass("pluginVersionDescDescription").text(pluginVersion.changelog!=null?pluginVersion.changelog:"Not available"))
+        
+            );
+        
     }
     
     
     myself.setPluginVersion = function(_pluginVersion){
         
         pluginVersion = _pluginVersion;
+        
+    }
+    
+    myself.installAction = function(){
+        
+        spec.installAction(pluginVersion.branch);
         
     }
     
@@ -1168,7 +1190,7 @@ wd.marketplace.panels.marketplacePanel = function(spec){
     
     myself.installPlugin = function(plugin, branch){
         
-         myself.caf.popupEngine.getPopup("okcancel").show({
+        myself.caf.popupEngine.getPopup("okcancel").show({
             header:"TODO: Install",
             content:"Install",
             okCallback: function(){
@@ -1184,7 +1206,9 @@ wd.marketplace.panels.marketplacePanel = function(spec){
                     myself.caf.popupEngine.hide()
                 })
             },
-            validateFunction: function () { return true }
+            validateFunction: function () {
+                return true
+            }
         });
     }
     
@@ -1207,7 +1231,9 @@ wd.marketplace.panels.marketplacePanel = function(spec){
                     myself.caf.popupEngine.hide()
                 })
             },
-            validateFunction: function () { return true }
+            validateFunction: function () {
+                return true
+            }
         });
       
     }

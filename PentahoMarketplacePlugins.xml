@@ -9,6 +9,7 @@
 CDE and the technology underneath (CDF, CDA and CCC) allows to develop and deploy dashboards in the Pentaho platform in a fast and effective way.
         </description>
         <company>WebDetails</company>
+        <companyLogo>http://www.webdetails.pt/conteudos/logo.png</companyLogo>
 
 		<versions>
 			<version branch='STABLE'>
@@ -36,7 +37,7 @@ CDE and the technology underneath (CDF, CDA and CCC) allows to develop and deplo
         <description>Community Data Access (CDA) is a Pentaho plugin designed for accessing data with great flexibility. Born for overcoming some cons of the older implementation, CDA allows you to access any of the various Pentaho data sources.   </description>
         <company>WebDetails</company>
         <companyUrl>http://webdetails.pt</companyUrl>
-        
+        <companyLogo>http://www.webdetails.pt/conteudos/logo.png</companyLogo>
 		<versions>
 			<version branch='STABLE'>
                                 <version>12.03.01</version>
@@ -67,6 +68,7 @@ CDE and the technology underneath (CDF, CDA and CCC) allows to develop and deplo
         <company>WebDetails</company>
         <companyUrl>http://webdetails.pt</companyUrl>
         
+        <companyLogo>http://www.webdetails.pt/conteudos/logo.png</companyLogo>
 	<versions>
 			<version branch='STABLE'>
                                 <version>stable</version>
@@ -95,7 +97,8 @@ CDE and the technology underneath (CDF, CDA and CCC) allows to develop and deplo
         <learnMoreUrl>http://ctools.webdetails.org</learnMoreUrl>
         <description>Community Graphics Generator (CGG) is a Pentaho plugin designed for rendering CCC charts serverside, enabling you to embed them into Pentaho Reports.</description>
         <company>WebDetails</company>
-        <companyUrl>http://webdetails.pt</companyUrl>       
+        <companyUrl>http://webdetails.pt</companyUrl>    
+        <companyLogo>http://www.webdetails.pt/conteudos/logo.png</companyLogo>
         <installationNotes>Please remember to replace the batik, xml-apis and xmlgraphics jars on WEB-INF/lib with the ones on system/CGG/lib.</installationNotes>
 	<versions>
 			<version branch='TRUNK'>
@@ -115,6 +118,7 @@ CDE and the technology underneath (CDF, CDA and CCC) allows to develop and deplo
         <description>Provide Pentaho, Partners, and Community Developers a marketplace for plugins within the BI Server product.</description>
         <company>Pentaho</company>
         <companyUrl>http://pentaho.com</companyUrl>
+        <companyLogo>http://www.pentaho.com/images/2011/logo.png</companyLogo>
         <versions>
             <version branch='TRUNK'>
                 <version>TRUNK-SNAPSHOT</version>
@@ -134,6 +138,7 @@ CDE and the technology underneath (CDF, CDA and CCC) allows to develop and deplo
 Our RESTful server connects to existing OLAP systems, which then powers user-friendly, intuitive analytics via our lightweight JQuery based frontend.</description>
         <company>Analytical Labs</company>
         <companyUrl>http://analytical-labs.com/</companyUrl>
+        <companyLogo>http://www.webdetails.pt/ficheiros/saiku.png</companyLogo>
         <versions>
             <version branch='TRUNK'>
                 <version>Trunk</version>

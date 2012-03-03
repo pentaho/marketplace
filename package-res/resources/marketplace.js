@@ -354,6 +354,19 @@ marketplace.getRegistry().registerAction( wd.marketplace.actions.toggleAction({
 
 
 
+// TODO: Temporarily adding this action to a new module. Changed CAF to account for non linked actions.
+marketplace.getRegistry().registerEntity( 'hiddenAction' ,
+    wd.marketplace.actions.toggleAction({
+        name: "restart",
+        description: "Restart Server",
+        toggleText: 'Please restart your server!',
+        order: 20,
+        container: marketplace.getRegistry()
+            .getTemplate( marketplace.options.template ).$toggleActionContainer
+}));
+
+
+
 /*
  *
  *  Components
@@ -1385,7 +1398,10 @@ wd.marketplace.panels.marketplacePanel = function(spec){
             $("<div/>").addClass(spec.cssClass).text("Connecting to server").appendTo($ph);
         }
     
-    })
+    });
+    
+    
+    var restartAction;
       
       
     /**
@@ -1558,17 +1574,11 @@ wd.marketplace.panels.marketplacePanel = function(spec){
         
         myself.caf.actionEngine.getAction('refresh').executeAction();
         
-        
-        // TODO: Instantiate this action here?
-        var restartAction = wd.marketplace.actions.toggleAction({
-            name: "restart",
-            description: "Restart Server",
-            toggleText: 'Please restart your server!',
-            order: 20,
-            container: myself.caf.templateEngine.getTemplate().$toggleActionContainer
-        });
-        restartAction.init();
-        restartAction.executeAction();
+        if (!restartAction){
+            restartAction = myself.caf.getRegistry().getEntity( 'hiddenAction' , 'restart');
+            restartAction.init(myself.caf);
+        };  
+        restartAction.show();
     }
     
     

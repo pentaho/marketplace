@@ -354,12 +354,12 @@ marketplace.getRegistry().registerAction( wd.marketplace.actions.toggleAction({
 
 
 
-// TODO: Temporarily adding this action to a new module. Changed CAF to account for non linked actions.
+// TODO: Temporarily adding this action to a new module. Change CAF to account for non linked actions.
 marketplace.getRegistry().registerEntity( 'hiddenAction' ,
     wd.marketplace.actions.toggleAction({
         name: "restart",
         description: "Restart Server",
-        toggleText: 'Please restart your server!',
+        toggleText: 'You will need to restart the server.',
         order: 20,
         container: marketplace.getRegistry()
             .getTemplate( marketplace.options.template ).$toggleActionContainer

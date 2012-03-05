@@ -485,7 +485,7 @@ div.cafPopupContent {
 
 .popupImgContainer {
     width:130px;
-    height:90px;
+    height:120px;
     display:inline-block;
     float:left;
     vertical-align: top;
@@ -493,10 +493,13 @@ div.cafPopupContent {
     margin-left:50px;
 }
 .popupInstall .popupImgContainer {
-    background: url('img/updateAvailable.png') no-repeat;
+    background: url('img/popupInstall.png') no-repeat;
 }
 .popupInstall.popupSuccess .popupImgContainer {
-    background: url('img/statusInstalled.png') no-repeat;
+    background: url('img/popupInstallSuccess.png') no-repeat;
+}
+.popupInstall.popupError .popupImgContainer {
+    background: url('img/popupInstallError.png') no-repeat;
 }
 .popupInstall.popupOperation .popupImgContainer {
     background: url('img/statusInstalling.gif') no-repeat;

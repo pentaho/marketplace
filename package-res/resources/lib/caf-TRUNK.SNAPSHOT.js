@@ -224,11 +224,11 @@ wd.caf.application = function(spec) {
         wd.caf.modules.notificationEngine(myself);
 
 
-        myself.popupEngine.start();
-        myself.notificationEngine.start();
         myself.templateEngine.start();
         myself.transitionEngine.start();
+        myself.popupEngine.start();
         myself.panelEngine.start();
+        myself.notificationEngine.start();
         
         // Bind keys
         
@@ -2681,7 +2681,7 @@ wd.caf.template = function( spec) {
         
         myself.$panelsContainer = $('<div class="templatePanelsContainer"></div>')
         .appendTo(wrapper);
-        
+        ;
         
         
         return wrapper;
@@ -2701,7 +2701,7 @@ wd.caf.template = function( spec) {
         var actions = myself.caf.actionEngine.listActions();
         
         actions.map(function(action){
-            $('<div class="cafAction cafLinks"></div>').text(action.getDescription())
+            $('<div class="cafAction cafLinks"></div>').append(action.getDescription())
             .data("action",action)
             .appendTo(myself.$actions);
         });

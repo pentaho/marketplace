@@ -107,7 +107,7 @@ wd.marketplace.engine = function(myself,spec){
     }
     
     
-    impl.installPlugin = function(pluginId, branchId, callback){
+    impl.installPlugin = function(pluginId, branchId, callbackSuccess, callbackError){
 
         wd.info("Marketplace engine: installing plugin: " + pluginId + " (" + branchId + ")");
         
@@ -118,14 +118,20 @@ wd.marketplace.engine = function(myself,spec){
                 pluginId: pluginId, 
                 versionId: branchId
             },
-            success: callback,
-            error: impl.errorUpdating
+            success: function(jqXHR, textStatus){
+                if ( jqXHR.code !== 'PLUGIN_INSTALLED'){
+                    callbackError(jqXHR, textStatus);
+                } else {
+                    callbackSuccess(jqXHR, textStatus);
+                }
+            },
+            error: callbackError
         });
         
     }
     
 
-    impl.uninstallPlugin = function(pluginId, callback){
+    impl.uninstallPlugin = function(pluginId, callbackSuccess, callbackError){
         
         wd.info("Marketplace engine: uninstalling plugin: " + pluginId);
         
@@ -135,14 +141,18 @@ wd.marketplace.engine = function(myself,spec){
             data: {
                 pluginId: pluginId
             },
-            success: callback,
-            error: impl.errorUpdating
+            success: function(jqXHR, textStatus){
+                if ( jqXHR.code !== 'PLUGIN_UNINSTALLED'){
+                    callbackError(jqXHR, textStatus);
+                } else {
+                    callbackSuccess(jqXHR, textStatus);
+                }
+            },
+            error: callbackError
         });
         
 
     }
-
-
     
     impl.errorUpdating = function(jqXHR, textStatus, errorThrown){
         
@@ -858,7 +868,7 @@ wd.marketplace.components.pluginBody = function(spec){
         $pluginBodyDesc = $("<div/>").addClass("pluginBodyDesc clearfix").appendTo($pluginBodyDetailsArea)
         .append($("<div/>").addClass("pluginBodyDescLogo prepend-1 span-4 append-1")
             .append( $("<img/>").attr('src', plugin.getPluginInfo().img) ) )
-        .append($("<div/>").addClass("pluginBodyDescDesc span-18 last")
+        .append($("<div/>").addClass("pluginBodyDescDesc span-17 append-1 last")
             .append($("<div/>").addClass("pluginBodyTitle").text("Information"))
             .append($("<div/>").addClass("pluginBodyDescription").text(plugin.getPluginInfo().description))
             )
@@ -936,7 +946,7 @@ wd.marketplace.components.pluginBody = function(spec){
         
     
         // Uninstall action
-        var $uninstallWrapper = $("<div/>").addClass("pluginBodyVersions pluginVersions uninstallVersion span-3").append(
+        var $uninstallWrapper = $("<div/>").addClass("pluginBodyVersions pluginVersions uninstallVersion span-3 last").append(
             $("<div/>").text("Uninstall")
             )
         .appendTo($wrapper)
@@ -1545,7 +1555,10 @@ wd.marketplace.panels.marketplacePanel = function(spec){
                 myself.caf.engine.installPlugin(plugin.getPluginInfo().id, branch, function(){
                     myself.log("Install plugin done: " + plugin.getPluginInfo().id +", branch " + branch ,"info")
                     myself.stopOperation(INSTALL, plugin, branch)
-                })
+                }, function(){
+                    myself.log("Error installing plugin: " + plugin.getPluginInfo().id +", branch " + branch ,"info")
+                    myself.errorOperation(INSTALL, plugin, branch)
+                } );
             },
             validateFunction: function () {
                 return true
@@ -1572,7 +1585,10 @@ wd.marketplace.panels.marketplacePanel = function(spec){
                 myself.caf.engine.uninstallPlugin(plugin.getPluginInfo().id, function(){
                     myself.log("Uninstall plugin done: " + plugin.getPluginInfo().id ,"info");
                     myself.stopOperation(UNINSTALL, plugin); 
-                });
+                }, function(){
+                    myself.log("Error uninstalling plugin: " + plugin.getPluginInfo().id ,"info");
+                    myself.errorOperation(UNINSTALL, plugin); 
+                } );
             },
             validateFunction: function () {
                 return true
@@ -1619,7 +1635,7 @@ wd.marketplace.panels.marketplacePanel = function(spec){
             popupDetails= "Uninstalled " + plugin.getPluginInfo().name,
             cssClass = "popupUninstall popupSuccess";
         }
-        myself.log("Starting " + operation + " operation");
+        myself.log("Stopping " + operation + " operation");
 
         myself.caf.popupEngine.getPopup("close").show({
             status: popupStatus,
@@ -1635,6 +1651,33 @@ wd.marketplace.panels.marketplacePanel = function(spec){
             restartInfoComponent = myself.caf.getRegistry().getEntity('components', 'restart');
         }   
         restartInfoComponent.draw( myself.caf.templateEngine.getTemplate().$toggleActionContainer );
+    }
+    
+    myself.errorOperation = function(operation, plugin, branch, errorMsg){
+        
+        errorMsg = errorMsg || "";
+        if(operation == INSTALL){
+            var popupStatus = "Error Installing ",
+            popupDetails = errorMsg,
+            cssClass = "popupInstall popupError";
+        }
+        else{
+            var popupStatus = "Error Uninstalling ",
+            popupDetails= errorMsg,
+            cssClass = "popupUninstall popupError";
+        }
+        myself.log("Starting " + operation + " operation");
+
+        myself.caf.popupEngine.getPopup("close").show({
+            status: popupStatus,
+            content: "Please try again later",
+            bottom: "Close",
+            details: popupDetails,
+            cssClass: cssClass
+        });
+        
+        myself.caf.actionEngine.getAction('refresh').executeAction();
+        
     }
     
     

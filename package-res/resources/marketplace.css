@@ -347,7 +347,7 @@ body .marketplaceCollapsed{
 
     color: #808080;
     height: 30px;
-    font-size: 8px;
+    font-size: 9px;
 }
 
 
@@ -427,8 +427,11 @@ body .marketplaceCollapsed{
 
 .pluginVersion {
     float: left;
-    padding-right: 40px;
+    padding-right: 80px;
     
+}
+.installedVersion .pluginVersion {
+    padding-right: 15px;
 }
 
 .pluginVersion:hover{
@@ -441,6 +444,7 @@ body .marketplaceCollapsed{
 
 .pluginVersionNumber{
     font-weight: bold;
+    display:block;
 }
 
 .pluginVersionHighlight{
@@ -537,7 +541,7 @@ div.cafPopupContent {
     color: #498812;
 }
 .popupError .popupInfoContainer .popupStatus{
-    color: #AC8A8B;
+    color: #B91813;
 }
 .popupInfoContainer .popupContent{
     color: #7d7d7d;
@@ -571,7 +575,7 @@ div.cafPopupContent {
 }
 
 .popupError .cafPopupBottomContent {
-    background: #AC8A8B;
+    background: #B91813;
 }
 
 .popupClose {

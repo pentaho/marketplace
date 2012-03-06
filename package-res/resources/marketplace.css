@@ -502,16 +502,19 @@ div.cafPopupContent {
     background: url('img/popupInstallError.png') no-repeat;
 }
 .popupInstall.popupOperation .popupImgContainer {
-    background: url('img/statusInstalling.gif') no-repeat;
+    background: url('img/popupInstalling.gif') no-repeat;
 }
 .popupUninstall .popupImgContainer {
-    background:  none;
+    background: url('img/popupUninstall.png') no-repeat;
 }
-.popupUninstall.popupSuccess .popupImgContainer{
-    background: none;
+.popupUninstall.popupSuccess .popupImgContainer {
+    background: url('img/popupUninstallSuccess.png') no-repeat;
+}
+.popupUninstall.popupError .popupImgContainer {
+    background: url('img/popupUninstallError.png') no-repeat;
 }
 .popupUninstall.popupOperation .popupImgContainer {
-    background: url('img/statusUninstalling.gif') no-repeat;
+    background: url('img/popupUninstalling.gif') no-repeat;
 }
 
 .popupInfoContainer {

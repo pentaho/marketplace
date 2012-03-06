@@ -1261,7 +1261,7 @@ wd.marketplace.popups.closePopup = function(spec){
         validateFunction: undefined,
         cssClass:"",
         buttons:[{
-            label: "Close",
+            label: "OK",
             validate: false,
             cssClass: "popupClose", 
             callback: function(popup,options){

@@ -349,12 +349,21 @@ marketplace.getRegistry().registerAction( wd.marketplace.actions.toggleAction({
     toggleText: 'Pentaho Marketplace plugin allows you to browse through available plugins and customize your Pentaho installation. Enjoy!',
     order: 10,
     container: marketplace.getRegistry()
-        .getTemplate( marketplace.options.template ).$toggleActionContainer
+    .getTemplate( marketplace.options.template ).$toggleActionContainer
 }) );
 
 
 
-
+// TODO: Temporarily adding this action to a new module. Change CAF to account for non linked actions.
+marketplace.getRegistry().registerEntity( 'hiddenAction' ,
+    wd.marketplace.actions.toggleAction({
+        name: "restart",
+        description: "Restart Server",
+        toggleText: 'You will need to restart the server.',
+        order: 20,
+        container: marketplace.getRegistry()
+        .getTemplate( marketplace.options.template ).$toggleActionContainer
+    }));
 
 
 
@@ -597,7 +606,8 @@ wd.marketplace.components.plugin = function(spec){
         // Directly return an object that shows the installed version, filling in the details
         var version = {
             branch: pluginInfo.installedBranch,
-            version: pluginInfo.installedVersion
+            version: pluginInfo.installedVersion,
+            buildId: pluginInfo.installedBuildId
         }
         
         // Try to find the name
@@ -639,7 +649,19 @@ wd.marketplace.components.plugin = function(spec){
         var isUpdateAvailable;
         pluginInfo.versions.map(function(v){
             if(v.branch == installedVersion.branch){
-                isUpdateAvailable = v.version != installedVersion.version;
+                
+                if(v.version != installedVersion.version){
+                    isUpdateAvailable = true;    
+                }
+                else{
+                    // do we have buildId?
+                    if(v.buildId){
+                        isUpdateAvailable = v.buildId != installedVersion.buildId;
+                    }
+                    else{
+                        isUpdateAvailable = false;
+                    }
+                }
                 return false;
             }
         })
@@ -714,7 +736,7 @@ wd.marketplace.components.pluginHeader = function(spec){
         $wrapper.empty();
         
         $("<div/>").addClass("pluginHeaderTitleWrapper pentaho-titled-toolbar pentaho-padding-sm pentaho-background contrast-color pentaho-rounded-panel2").append(
-            $("<div/>").addClass("pluginHeaderLogo").append( $("<img/>").attr('src', plugin.getPluginInfo().img))
+            $("<div/>").addClass("pluginHeaderLogo").append( $("<img/>").attr('src', plugin.getPluginInfo().smallImg || plugin.getPluginInfo().img))
             .appendTo($wrapper))
         .append(
             $("<div/>").addClass("pluginHeaderTitle").text(plugin.getPluginInfo().name).appendTo($wrapper))
@@ -932,7 +954,7 @@ wd.marketplace.components.pluginBody = function(spec){
         .appendTo($("<div/>").addClass("clearfix pluginBodyFooter span-22 prepend-1 append-1 last").appendTo($wrapper))
         
         // we'll put company logo or name, and a link if we have it
-        var content = plugin.getPluginInfo().companyLogoUrl?'<img src="'+plugin.getPluginInfo().companyLogoUrl+'" />':plugin.getPluginInfo().company;
+        var content = plugin.getPluginInfo().companyLogo?'<img src="'+plugin.getPluginInfo().companyLogo+'" />':plugin.getPluginInfo().company;
         if(plugin.getPluginInfo().companyUrl){
             footerContent.append('<a href="'+plugin.getPluginInfo().companyUrl+'" target="_blank">'+content+'</a>');
         }
@@ -1179,7 +1201,7 @@ wd.marketplace.popups.basicPopup = function(spec){
     var options = $.extend({},_options,options);
     var myself = wd.caf.impl.popups.basicPopup(spec);
 
-     /**
+    /**
      * Draws the content
      * @name basicPopup.drawContent
      * @memberof wd.caf.impl.popups.basicPopup
@@ -1192,10 +1214,10 @@ wd.marketplace.popups.basicPopup = function(spec){
         var $ph = $("<div/>").addClass("basicPopupContainer " + " " + options.cssClass);
         
         $centerContainer = $("<div/>").addClass("cafBasicPopupCenterContainer").appendTo($ph)
-            .append( $('<div>&nbsp;</div>').addClass('popupImgContainer') )
-            .append( myself.drawCenterContent(options) );
+        .append( $('<div>&nbsp;</div>').addClass('popupImgContainer') )
+        .append( myself.drawCenterContent(options) );
         $bottomContainer = $("<div/>").addClass("cafBasicPopupBottomContainer").appendTo($ph)
-            .append(myself.drawBottomContent(options).prepend(options.bottom) );
+        .append(myself.drawBottomContent(options).prepend(options.bottom) );
 
         myself.log("here");
         return $ph;
@@ -1209,12 +1231,12 @@ wd.marketplace.popups.basicPopup = function(spec){
      */
     myself.drawCenterContent = spec.drawCenterContent || function(options){
         return $('<div/>').addClass('popupInfoContainer')
-            .append( $('<div/>').addClass('popupStatus').append(
-                (typeof options.status === "function") ? options.status(myself,options) : options.status) )
-            .append( $('<div/>').addClass('popupContent').append(
-                (typeof options.content === "function") ? options.content(myself,options) : options.content) )
-            .append( $('<div/>').addClass('popupDetails').append(
-                (typeof options.details === "function") ? options.details(myself,options) : options.details) );
+        .append( $('<div/>').addClass('popupStatus').append(
+            (typeof options.status === "function") ? options.status(myself,options) : options.status) )
+        .append( $('<div/>').addClass('popupContent').append(
+            (typeof options.content === "function") ? options.content(myself,options) : options.content) )
+        .append( $('<div/>').addClass('popupDetails').append(
+            (typeof options.details === "function") ? options.details(myself,options) : options.details) );
             
     }
 
@@ -1507,7 +1529,7 @@ wd.marketplace.panels.marketplacePanel = function(spec){
     
     
     myself.installPlugin = function(plugin, branch){      
-         myself.caf.popupEngine.getPopup("okcancel").show({
+        myself.caf.popupEngine.getPopup("okcancel").show({
             status: "Do you want to install now?",
             content: plugin.getPluginInfo().name +" ("+ branch +")",
             details: "",
@@ -1564,13 +1586,13 @@ wd.marketplace.panels.marketplacePanel = function(spec){
         
         if(operation == INSTALL){
             var popupStatus = "Installing ",
-                popupContent = plugin.getPluginInfo().name +" ("+ branch +")",
-                cssClass =  "popupInstall popupOperation";
+            popupContent = plugin.getPluginInfo().name +" ("+ branch +")",
+            cssClass =  "popupInstall popupOperation";
         }
         else{
-           var popupStatus = "Uninstalling ",
-               popupContent = plugin.getPluginInfo().name,
-               cssClass =  "popupUninstall popupOperation";
+            var popupStatus = "Uninstalling ",
+            popupContent = plugin.getPluginInfo().name,
+            cssClass =  "popupUninstall popupOperation";
         }
         myself.log("Starting " + operation + " operation");
 
@@ -1589,13 +1611,13 @@ wd.marketplace.panels.marketplacePanel = function(spec){
 
         if(operation == INSTALL){
             var popupStatus = "Successfuly Installed ",
-                popupDetails = "Installed " + plugin.getPluginInfo().name +" ("+ branch +")",
-                cssClass = "popupInstall popupSuccess";
+            popupDetails = "Installed " + plugin.getPluginInfo().name +" ("+ branch +")",
+            cssClass = "popupInstall popupSuccess";
         }
         else{
-           var popupStatus = "Successfully Uninstalled ",
-               popupDetails= "Uninstalled " + plugin.getPluginInfo().name,
-               cssClass = "popupUninstall popupSuccess";
+            var popupStatus = "Successfully Uninstalled ",
+            popupDetails= "Uninstalled " + plugin.getPluginInfo().name,
+            cssClass = "popupUninstall popupSuccess";
         }
         myself.log("Starting " + operation + " operation");
 

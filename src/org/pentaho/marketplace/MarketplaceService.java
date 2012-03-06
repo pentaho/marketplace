@@ -52,27 +52,25 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
 import flexjson.JSONSerializer;
-import javax.xml.namespace.QName;
+import java.util.ArrayList;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathFactory;
-import org.pentaho.di.core.logging.LogLevel;
+import org.apache.commons.io.filefilter.DirectoryFileFilter;
+
 
 public class MarketplaceService {
 
     private Log logger = LogFactory.getLog(MarketplaceService.class);
     public static final String PLUGIN_NAME = "marketplace";
     private XPath xpath;
-    
+
     public MarketplaceService() {
-    
+
         xpath = XPathFactory.newInstance().newXPath();
-        
+
     }
 
-    
-    
-    
     public static class MarketplaceSecurityException extends Exception {
 
         private static final long serialVersionUID = -1852471739131561628L;
@@ -87,9 +85,17 @@ public class MarketplaceService {
         // load plugins from url
         Plugin plugins[] = loadPluginsFromSite();
 
-        // determine if any of the plugins are installed and what version they are
-        IPluginManager pluginManager = PentahoSystem.get(IPluginManager.class, PentahoSessionHolder.getSession());
-        List<String> installedPlugins = pluginManager.getRegisteredPlugins();
+
+        // There are 2 methods of doing this. 
+        // 1) Plugin manager
+        // 2) Scan file system
+        // We'll use 2) because 1) gets totally screwed up after we do an install/uninstall operation
+
+        // List<String> installedPlugins = getInstalledPluginsFromPluginManager();
+        List<String> installedPlugins = getInstalledPluginsFromFileSystem();
+
+
+
         if (installedPlugins.size() > 0) {
             Map<String, Plugin> marketplacePlugins = new HashMap<String, Plugin>();
             if (plugins != null) {
@@ -109,10 +115,43 @@ public class MarketplaceService {
         return plugins;
     }
 
+    protected List<String> getInstalledPluginsFromPluginManager() {
+
+
+        // determine if any of the plugins are installed and what version they are
+        IPluginManager pluginManager = PentahoSystem.get(IPluginManager.class, PentahoSessionHolder.getSession());
+        return pluginManager.getRegisteredPlugins();
+
+    }
+    
+
+    private List<String> getInstalledPluginsFromFileSystem() {
+        
+        ArrayList<String> plugins = new ArrayList<String>();
+        
+        File systemDir = new File(PentahoSystem.getApplicationContext().getSolutionPath("system/"));
+        
+        String[] dirs = systemDir.list(DirectoryFileFilter.INSTANCE);
+        
+        for (int i = 0; i < dirs.length; i++) {
+            String dir = dirs[i];
+            if((new File(systemDir.getAbsolutePath()+File.separator+dir+File.separator+"plugin.xml")).isFile()){
+                plugins.add(dir);
+            }
+            
+        }
+        
+        return plugins;
+        
+        
+        
+    }
+
+    
     public StatusMessage uninstallPlugin(String id) throws MarketplaceSecurityException {
         Plugin plugins[] = getPlugins();
         Plugin toUninstall = null;
-        
+
         for (Plugin plugin : plugins) {
             if (plugin.getId().equals(id)) {
                 toUninstall = plugin;
@@ -121,8 +160,8 @@ public class MarketplaceService {
         if (toUninstall == null) {
             return new StatusMessage("NO_PLUGIN", "Plugin Not Found");
         }
-        
-        String versionBranch = toUninstall.getInstalledBranch();   
+
+        String versionBranch = toUninstall.getInstalledBranch();
         // get plugin path
 
         String jobPath = PentahoSystem.getApplicationContext().getSolutionPath("system/" + PLUGIN_NAME + "/processes/uninstall_plugin.kjb");
@@ -135,7 +174,7 @@ public class MarketplaceService {
 
             job.getJobMeta().setParameterValue("uninstallLocation", PentahoSystem.getApplicationContext().getSolutionPath("system/" + toUninstall.getId()));
             job.getJobMeta().setParameterValue("uninstallBackup", PentahoSystem.getApplicationContext().getSolutionPath("system/plugin-cache/backups/" + toUninstall.getId() + "_" + new Date().getTime()));
-            if ( versionBranch != null && versionBranch.length() > 0 && toUninstall.getVersionByBranch(versionBranch).getSamplesDownloadUrl() != null) {
+            if (versionBranch != null && versionBranch.length() > 0 && toUninstall.getVersionByBranch(versionBranch).getSamplesDownloadUrl() != null) {
                 job.getJobMeta().setParameterValue("samplesUninstallLocation", PentahoSystem.getApplicationContext().getSolutionPath("plugin-samples/" + toUninstall.getId()));
                 job.getJobMeta().setParameterValue("samplesUninstallBackup", PentahoSystem.getApplicationContext().getSolutionPath("system/plugin-cache/backups/" + toUninstall.getId() + "_samples_" + new Date().getTime()));
             }
@@ -201,7 +240,7 @@ public class MarketplaceService {
         try {
             JobMeta jobMeta = new JobMeta(jobPath, null);
             Job job = new Job(null, jobMeta);
-                    
+
             File file = new File(PentahoSystem.getApplicationContext().getSolutionPath("system/plugin-cache/downloads"));
             file.mkdirs();
             file = new File(PentahoSystem.getApplicationContext().getSolutionPath("system/plugin-cache/backups"));
@@ -365,7 +404,7 @@ public class MarketplaceService {
      * @param pluginId the plugin id related to the version.
      */
     protected String discoverInstalledVersion(Plugin plugin) {
-        
+
         String versionPath = PentahoSystem.getApplicationContext().getSolutionPath("system/" + plugin.getId() + "/version.xml");
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         FileReader reader = null;
@@ -380,11 +419,11 @@ public class MarketplaceService {
             NodeList versionElements = dom.getElementsByTagName("version");
             if (versionElements.getLength() >= 1) {
                 Element versionElement = (Element) versionElements.item(0);
-                
+
                 plugin.setInstalledBuildId(versionElement.getAttribute("buildId"));
                 plugin.setInstalledBranch(versionElement.getAttribute("branch"));
                 plugin.setInstalledVersion(versionElement.getTextContent());
-                
+
                 return versionElement.getTextContent();
             }
         } catch (Exception e) {
@@ -423,9 +462,9 @@ public class MarketplaceService {
                 plugin.setInstallationNotes(getElementChildValue(element, "installationNotes"));
 
                 //NodeList availableVersions = element.getElementsByTagName("version");
-                NodeList availableVersions = (NodeList) xpath.evaluate("versions/version", element,XPathConstants.NODESET);
-                
-                
+                NodeList availableVersions = (NodeList) xpath.evaluate("versions/version", element, XPathConstants.NODESET);
+
+
                 if (availableVersions.getLength() > 0) {
                     PluginVersion[] versions = new PluginVersion[availableVersions.getLength()];
                     for (int j = 0; j < availableVersions.getLength(); j++) {

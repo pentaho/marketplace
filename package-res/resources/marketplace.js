@@ -237,7 +237,7 @@ marketplace.getRegistry().registerTemplate(wd.marketplace.template());
 
 marketplace.getRegistry().registerAction( wd.caf.action({
     name: "refresh",
-    description: "Refresh",
+    description: "<div class='actionRefresh'>&nbsp;</div>",
     order: 20,
     executeAction: function(){
         this.caf.engine.refresh();
@@ -345,7 +345,7 @@ wd.marketplace.actions.toggleAction = function(spec){
 
 marketplace.getRegistry().registerAction( wd.marketplace.actions.toggleAction({
     name: "about",
-    description: "About",
+    description: "<div class='actionAbout'>&nbsp;</div>",
     toggleText: 'Pentaho Marketplace plugin allows you to browse through available plugins and customize your Pentaho installation. Enjoy!',
     order: 10,
     container: marketplace.getRegistry()
@@ -372,6 +372,46 @@ marketplace.getRegistry().registerEntity( 'hiddenAction' ,
  *  Components
  *
  */ 
+
+wd.marketplace.components.infoDiv = function(spec) {
+
+
+    /**
+     * Specific specs
+     */
+    
+    var _spec = {
+        name: "override",
+        type: "component",
+        description: "override description"
+    };
+    
+    spec = $.extend({},_spec,spec);
+    var myself = wd.caf.component(spec);
+    
+    var isDrawn;
+   
+    myself.draw = function ($ph) {
+        if (!isDrawn){
+            var $actionPh = $('<div/>').addClass('toggleActionWrapper')
+                .append( $('<div/>').addClass('toggleActionLogo') )
+                .append( $('<div/>').addClass('toggleActionDesc')
+                    .text( spec.description ) );
+            $ph.append($actionPh);
+            
+            isDrawn = true;
+        }   
+    }
+    
+    return myself;
+};
+
+marketplace.getRegistry().registerEntity('components', wd.marketplace.components.infoDiv({
+    name: 'restart',
+    description: 'You need to restart the server'
+}));
+
+
 
 
 wd.marketplace.components.label = function(spec){
@@ -712,8 +752,12 @@ wd.marketplace.components.pluginHeader = function(spec){
 
         if(plugin.getPluginInfo().installed){
          
-            $("<div/>").addClass("pluginHeaderVersionLabel").text(plugin.getPluginInfo().installedBranch).appendTo($versionWrapper);
-            $("<div/>").text(plugin.getPluginInfo().installedVersion).appendTo($versionWrapper);
+            $("<div/>").addClass("pluginHeaderVersionLabel")
+                .text( !plugin.getPluginInfo().installedBranch ? "" : plugin.getPluginInfo().installedBranch )
+                .appendTo($versionWrapper);
+            $("<div/>")
+                .text( !plugin.getPluginInfo().installedVersion ? "" : plugin.getPluginInfo().installedVersion )
+                .appendTo($versionWrapper);;
         }
         else{
             $("<div/>").addClass("pluginHeaderVersionNotInstalled").text("Not installed").appendTo($versionWrapper);
@@ -1414,7 +1458,7 @@ wd.marketplace.panels.marketplacePanel = function(spec){
     });
     
     
-    var restartAction;
+    var restartInfoComponent; 
       
       
     /**
@@ -1587,11 +1631,10 @@ wd.marketplace.panels.marketplacePanel = function(spec){
         
         myself.caf.actionEngine.getAction('refresh').executeAction();
         
-        if (!restartAction){
-            restartAction = myself.caf.getRegistry().getEntity( 'hiddenAction' , 'restart');
-            restartAction.init(myself.caf);
-        };  
-        restartAction.show();
+        if (!restartInfoComponent) {
+            restartInfoComponent = myself.caf.getRegistry().getEntity('components', 'restart');
+        }   
+        restartInfoComponent.draw( myself.caf.templateEngine.getTemplate().$toggleActionContainer );
     }
     
     

@@ -375,8 +375,8 @@ body .marketplaceCollapsed{
     margin-left: -5px;
     display: inline-block;
     width: 127px;
-    height: 46px;
-    background: url('img/installButton.png') no-repeat;
+    height: 50px;
+    background: url('img/installButton.png') no-repeat top left;
 
 }
 
@@ -397,6 +397,10 @@ body .marketplaceCollapsed{
 
     text-align: right;
 
+}
+
+.pluginBodyFooterContent img{
+    height: 30px;
 }
 
 .pluginHorizontalSeparator{

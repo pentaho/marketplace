@@ -96,25 +96,16 @@ html, body {
     margin-bottom:15px;
     min-height:32px;
     line-height:32px;
+    opacity:0.7;
     
     text-align: center;
 
-    -webkit-transition: all 500ms ease-in;
-    -moz-transition: all 500ms ease-in;
-    -o-transition: all 500ms ease-in;
-    transition: all 500ms ease-in;
+    -webkit-transition: all 1500ms ease-in;
+    -moz-transition: all 1500ms ease-in;
+    -o-transition: all 1500ms ease-in;
+    transition: all 1500ms ease-in;
 
-    background: #dbdbdb; /* Old browsers */
-    /* IE9 SVG, needs conditional override of 'filter' to 'none' */
-    background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2RiZGJkYiIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNmYWZhZmEiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
-    background: -moz-linear-gradient(top,  #dbdbdb 0%, #fafafa 100%); /* FF3.6+ */
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#dbdbdb), color-stop(100%,#fafafa)); /* Chrome,Safari4+ */
-    background: -webkit-linear-gradient(top,  #dbdbdb 0%,#fafafa 100%); /* Chrome10+,Safari5.1+ */
-    background: -o-linear-gradient(top,  #dbdbdb 0%,#fafafa 100%); /* Opera 11.10+ */
-    background: -ms-linear-gradient(top,  #dbdbdb 0%,#fafafa 100%); /* IE10+ */
-    background: linear-gradient(top,  #dbdbdb 0%,#fafafa 100%); /* W3C */
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#dbdbdb', endColorstr='#fafafa',GradientType=0 ); /* IE6-8 */
-    
+    background: #dbdbdb; 
     
     -webkit-border-radius: 4px;
     -moz-border-radius: 4px;
@@ -126,6 +117,11 @@ html, body {
     
     font-size:18px;
     color:#565656;
+}
+
+.infoDivWrapper.infoDivPulsate{
+    opacity:1;
+    background:white;
 }
 
 .toggleActionWrapper{
@@ -653,20 +649,22 @@ div.cafPopupContent {
 }
 
 .cafPopupBottomContent {
-    background: #7d7d7d;
+    background: url('img/shad_bottom.png') no-repeat 0 0;
+    background-color: #7d7d7d;
     padding-left:30px;
     color:white;
     height:100%;
     margin:0px;
     padding-top:8px;
     font-size:11px;
+    border-top:none;
 }
 .popupSuccess .cafPopupBottomContent {
-    background: #498812;
+    background-color: #498812;
 }
 
 .popupError .cafPopupBottomContent {
-    background: #B91813;
+    background-color: #B91813;
 }
 
 .popupClose {

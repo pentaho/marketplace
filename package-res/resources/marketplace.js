@@ -381,7 +381,8 @@ wd.marketplace.components.infoDiv = function(spec) {
     var _spec = {
         name: "override",
         type: "component",
-        description: "override description"
+        description: "override description",
+        pulsatePeriod: undefined
     };
     
     spec = $.extend({},_spec,spec);
@@ -395,7 +396,24 @@ wd.marketplace.components.infoDiv = function(spec) {
             $ph.append($actionPh);
             
             isDrawn = true;
+            
+            if (spec.pulsatePeriod){
+                myself.pulsate($actionPh);
+            }
         }   
+    }
+    
+    myself.pulsate = function ($ph) {
+        $ph.addClass('infoDivPulsate');
+        
+        setTimeout ( function(){
+            $ph.removeClass('infoDivPulsate')
+        },2500);
+        
+        setTimeout(function(){
+            myself.pulsate($ph);
+        }, spec.pulsatePeriod || 5000);
+        
     }
     
     return myself;
@@ -403,7 +421,8 @@ wd.marketplace.components.infoDiv = function(spec) {
 
 marketplace.getRegistry().registerEntity('components', wd.marketplace.components.infoDiv({
     name: 'restart',
-    description: 'Please restart the server now.'
+    description: 'Please restart the server now.',
+    pulsatePeriod: 5000
 }));
 
 
@@ -1613,7 +1632,7 @@ wd.marketplace.panels.marketplacePanel = function(spec){
         if(operation == INSTALL){
             var popupStatus = "Successfuly Installed ",
             popupContent = plugin.getPluginInfo().name +" ("+ branch +")",
-            popupDetails = plugin.getPluginInfo().installationNotes,
+            popupDetails = (plugin.getPluginInfo().installationNotes) ? plugin.getPluginInfo().installationNotes : "",
             cssClass = "popupInstall popupSuccess";
         }
         else{

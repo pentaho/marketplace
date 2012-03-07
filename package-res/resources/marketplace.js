@@ -248,7 +248,7 @@ marketplace.getRegistry().registerTemplate(wd.marketplace.template());
 marketplace.getRegistry().registerAction( wd.caf.action({
     name: "refresh",
     description: "<div class='actionRefresh'>&nbsp;</div>",
-    order: 20,
+    order: 10,
     executeAction: function(){
         this.caf.engine.refresh();
     }
@@ -357,23 +357,11 @@ marketplace.getRegistry().registerAction( wd.marketplace.actions.toggleAction({
     name: "about",
     description: "<div class='actionAbout'>&nbsp;</div>",
     toggleText: 'Pentaho Marketplace plugin allows you to browse through available plugins and customize your Pentaho installation. Enjoy!',
-    order: 10,
+    order: 20,
     container: marketplace.getRegistry()
     .getTemplate( marketplace.options.template ).$toggleActionContainer
 }) );
 
-
-
-// TODO: Temporarily adding this action to a new module. Change CAF to account for non linked actions.
-marketplace.getRegistry().registerEntity( 'hiddenAction' ,
-    wd.marketplace.actions.toggleAction({
-        name: "restart",
-        description: "Restart Server",
-        toggleText: 'You will need to restart the server.',
-        order: 20,
-        container: marketplace.getRegistry()
-        .getTemplate( marketplace.options.template ).$toggleActionContainer
-    }));
 
 
 
@@ -403,10 +391,7 @@ wd.marketplace.components.infoDiv = function(spec) {
    
     myself.draw = function ($ph) {
         if (!isDrawn){
-            var $actionPh = $('<div/>').addClass('toggleActionWrapper')
-                .append( $('<div/>').addClass('toggleActionLogo') )
-                .append( $('<div/>').addClass('toggleActionDesc')
-                    .text( spec.description ) );
+            var $actionPh = $('<div/>').addClass('infoDivWrapper').text( spec.description );
             $ph.append($actionPh);
             
             isDrawn = true;
@@ -418,7 +403,7 @@ wd.marketplace.components.infoDiv = function(spec) {
 
 marketplace.getRegistry().registerEntity('components', wd.marketplace.components.infoDiv({
     name: 'restart',
-    description: 'You need to restart the server'
+    description: 'Please restart the server now.'
 }));
 
 
@@ -1627,19 +1612,21 @@ wd.marketplace.panels.marketplacePanel = function(spec){
 
         if(operation == INSTALL){
             var popupStatus = "Successfuly Installed ",
-            popupDetails = "Installed " + plugin.getPluginInfo().name +" ("+ branch +")",
+            popupContent = plugin.getPluginInfo().name +" ("+ branch +")",
+            popupDetails = plugin.getPluginInfo().installationNotes,
             cssClass = "popupInstall popupSuccess";
         }
         else{
             var popupStatus = "Successfully Uninstalled ",
-            popupDetails= "Uninstalled " + plugin.getPluginInfo().name,
+            popupContent = plugin.getPluginInfo().name,
+            popupDetails = "Thank you",
             cssClass = "popupUninstall popupSuccess";
         }
         myself.log("Stopping " + operation + " operation");
 
         myself.caf.popupEngine.getPopup("close").show({
             status: popupStatus,
-            content: "Thank you.",
+            content: popupContent,
             bottom: "Close",
             details: popupDetails,
             cssClass: cssClass

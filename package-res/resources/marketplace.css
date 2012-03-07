@@ -649,7 +649,7 @@ div.cafPopupContent {
 }
 
 .cafPopupBottomContent {
-    background: url('img/shad_bottom.png') no-repeat 0 0;
+    background: url('img/shad_bottom.png') no-repeat 0 -1px;
     background-color: #7d7d7d;
     padding-left:30px;
     color:white;

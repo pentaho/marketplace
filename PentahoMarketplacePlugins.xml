@@ -1,5 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <availablePlugins>
+    
+    <plugin id='marketplace'>
+        <img>http://www.webdetails.pt/ficheiros/mk.png</img>
+        <smallImg>http://www.webdetails.pt/ficheiros/mk_plugin.png</smallImg>
+        <name>Pentaho Marketplace</name>
+        <learnMoreUrl>http://wiki.pentaho.com/display/PMOPEN/Pentaho+BI+Server+Marketplace+Plugin</learnMoreUrl>
+        <description>Provide Pentaho, Partners, and Community Developers a marketplace for plugins within the BI Server product.</description>
+        <company>Pentaho</company>
+        <companyUrl>http://pentaho.com</companyUrl>
+        <companyLogo>http://www.pentaho.com/images/2011/logo.png</companyLogo>
+        <versions>
+            <version branch='TRUNK'>
+                <version>TRUNK-SNAPSHOT</version>
+                <name>Trunk</name>
+                <downloadUrl>http://ci.analytical-labs.com/job/Webdetails-Marketplace/lastSuccessfulBuild/artifact/dist/marketplace-plugin-TRUNK-SNAPSHOT.zip</downloadUrl>
+                <description>Trunk Snapshot. Install at your own risk...</description>
+            </version>
+        </versions>
+    </plugin>
+  
+    
+    
+    
     <plugin id="pentaho-cdf-dd">
         <img>http://www.webdetails.pt/ficheiros/cde.png</img>
         <smallImg>http://www.webdetails.pt/ficheiros/cde_plugin.png</smallImg>
@@ -115,25 +138,6 @@ CDE and the technology underneath (CDF, CDA and CCC) allows to develop and deplo
 		</versions>                       
     </plugin>
     
-    <plugin id='marketplace'>
-        <img>http://www.webdetails.pt/ficheiros/mk.png</img>
-        <smallImg>http://www.webdetails.pt/ficheiros/mk_plugin.png</smallImg>
-        <name>Pentaho Marketplace</name>
-        <learnMoreUrl>http://wiki.pentaho.com/display/PMOPEN/Pentaho+BI+Server+Marketplace+Plugin</learnMoreUrl>
-        <description>Provide Pentaho, Partners, and Community Developers a marketplace for plugins within the BI Server product.</description>
-        <company>Pentaho</company>
-        <companyUrl>http://pentaho.com</companyUrl>
-        <companyLogo>http://www.pentaho.com/images/2011/logo.png</companyLogo>
-        <versions>
-            <version branch='TRUNK'>
-                <version>TRUNK-SNAPSHOT</version>
-                <name>Trunk</name>
-                <downloadUrl>http://ci.analytical-labs.com/job/Webdetails-Marketplace/lastSuccessfulBuild/artifact/dist/marketplace-plugin-TRUNK-SNAPSHOT.zip</downloadUrl>
-                <description>Trunk Snapshot. Install at your own risk...</description>
-            </version>
-        </versions>
-    </plugin>
-  
 
     <plugin id='saiku'>
         <img>http://www.webdetails.pt/ficheiros/saiku.png</img>

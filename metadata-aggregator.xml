@@ -1,0 +1,52 @@
+<!--===========================================================================
+  This is the build file for the Pentaho Marketplace project.
+
+  This build file will use the common_build.xml file as the default build
+  process and should only override the tasks that need to differ from
+  the common build file.
+
+  See build-res/subfloor-pkg.xml for more details
+============================================================================-->
+<project name="Pentaho Marketplace Metadata Aggregator" basedir="." default="build" xmlns:ivy="antlib:org.apache.ivy.ant">
+
+    <description>
+      This build file is used to create the Pentaho Marketplace Metadata plugin based on each plugin distribution file
+    </description>
+
+	<taskdef name="xmltask" 
+            classname="com.oopsconsultancy.xmltask.ant.XmlTask">
+            
+		 <classpath path="xmltask.jar" />            
+            
+            
+            </taskdef>
+
+
+
+	<target name="build">
+	
+		<mkdir dir='.tmp'/>
+	
+		<!--Get all files-->
+		<get src="http://ci.analytical-labs.com/job/Webdetails-CDA/lastSuccessfulBuild/artifact/dist/marketplace.xml" dest=".tmp/cda-trunk.xml"/>				
+		<get src="http://ci.analytical-labs.com/job/Webdetails-CDA-Release/lastSuccessfulBuild/artifact/dist/marketplace.xml" dest=".tmp/cda-release.xml"/>		
+		<get src="http://ci.analytical-labs.com/job/Webdetails-CGG/lastSuccessfulBuild/artifact/dist/marketplace.xml" dest=".tmp/cgg-trunk.xml"/>
+
+
+		<!--Replace on xml-->
+		 <xmltask source="PentahoMarketplacePlugins.xml" dest="PentahoMarketplacePlugins.xml"> 
+		   <replace path="/availablePlugins/plugin[@id='cda']/versions/version[@branch='TRUNK']" 
+        	 withFile=".tmp/cda-trunk.xml"/> 
+		   <replace path="/availablePlugins/plugin[@id='cda']/versions/version[@branch='STABLE']" 
+        	 withFile=".tmp/cda-release.xml"/> 
+		   <replace path="/availablePlugins/plugin[@id='cgg']/versions/version[@branch='TRUNK']" 
+        	 withFile=".tmp/cgg-trunk.xml"/>         	 
+		</xmltask> 
+		
+		
+		
+		<!--Delete .tmp folder-->
+		<delete dir='.tmp'/>
+	</target>
+
+</project>

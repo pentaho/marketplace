@@ -105,12 +105,12 @@ CDE and the technology underneath (CDF, CDA and CCC) allows to develop and deplo
                                 <description>12.02.29 Release</description>
 			</version>    	                    
 			<version branch="TRUNK">
-		<version>${distribution.version}</version>
+		<version>TRUNK-SNAPSHOT</version>
 		<name>Trunk</name>
 		<downloadUrl>http://ci.analytical-labs.com/job/Webdetails-CDF/lastSuccessfulBuild/artifact/bi-platform-v2-plugin/dist/pentaho-cdf-TRUNK-SNAPSHOT.zip</downloadUrl>
 		<samplesDownloadUrl>http://ci.analytical-labs.com/job/Webdetails-CDF/lastSuccessfulBuild/artifact/bi-platform-v2-plugin/dist/pentaho-cdf-samples-TRUNK-SNAPSHOT.zip</samplesDownloadUrl>
 		<description>Trunk Snapshot. Install at your own risk....</description>
-		<buildId>279</buildId>
+		<buildId>280</buildId>
 		</version>    	
 		</versions>
                 

@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <availablePlugins>
     
-    <plugin id='marketplace'>
+    <plugin id="marketplace">
         <img>http://www.webdetails.pt/ficheiros/mk.png</img>
         <smallImg>http://www.webdetails.pt/ficheiros/mk_plugin.png</smallImg>
         <name>Pentaho Marketplace</name>
@@ -11,7 +11,7 @@
         <companyUrl>http://pentaho.com</companyUrl>
         <companyLogo>http://www.pentaho.com/images/2011/logo.png</companyLogo>
         <versions>
-            <version branch='TRUNK'>
+            <version branch="TRUNK">
                 <version>TRUNK-SNAPSHOT</version>
                 <name>Trunk</name>
                 <downloadUrl>http://ci.analytical-labs.com/job/Webdetails-Marketplace/lastSuccessfulBuild/artifact/dist/marketplace-plugin-TRUNK-SNAPSHOT.zip</downloadUrl>
@@ -36,7 +36,7 @@ CDE and the technology underneath (CDF, CDA and CCC) allows to develop and deplo
         <companyLogo>http://www.webdetails.pt/ficheiros/wd_logo.png</companyLogo>
 
 		<versions>
-			<version branch='STABLE'>
+			<version branch="STABLE">
                                 <version>12.02.29</version>
 				<name>Stable</name>
                                 <changelog>First Stable Release for CDE. Includes a new location for samples (inside plugin-samples)</changelog>
@@ -44,7 +44,7 @@ CDE and the technology underneath (CDF, CDA and CCC) allows to develop and deplo
 				<samplesDownloadUrl>http://ci.analytical-labs.com/job/Webdetails-CDE-Release/271/artifact/server/plugin/dist/pentaho-cdf-dd-solution-12.02.29.zip</samplesDownloadUrl>
                                 <description>12.02.29 Release</description>
 			</version>    	                    
-			<version branch='TRUNK'>
+			<version branch="TRUNK">
                                 <version>TRUNK-SNAPSHOT</version>
 				<name>Trunk</name>
 				<downloadUrl>http://ci.analytical-labs.com/job/Webdetails-CDE/lastSuccessfulBuild/artifact/server/plugin/dist/pentaho-cdf-dd-TRUNK-SNAPSHOT.zip</downloadUrl>
@@ -64,21 +64,22 @@ CDE and the technology underneath (CDF, CDA and CCC) allows to develop and deplo
         <companyUrl>http://webdetails.pt</companyUrl>
         <companyLogo>http://www.webdetails.pt/ficheiros/wd_logo.png</companyLogo>
 		<versions>
-			<version branch='STABLE'>
-                                <version>12.03.01</version>
-				<name>Stable</name>
-				<downloadUrl>http://ci.analytical-labs.com/job/Webdetails-CDA-Release/lastSuccessfulBuild/artifact/dist/cda-12.03.01.zip</downloadUrl>
-				<samplesDownloadUrl>http://ci.analytical-labs.com/job/Webdetails-CDA-Release/lastSuccessfulBuild/artifact/dist/cda-samples-12.03.01.zip</samplesDownloadUrl>
-                                <description>12.03.01 Release</description>
-			</version>    	                    
-			<version branch='TRUNK'>
-                                <version>TRUNK-SNAPSHOT</version>
-				<name>Trunk</name>
-				<downloadUrl>http://ci.analytical-labs.com/job/Webdetails-CDA/lastSuccessfulBuild/artifact/dist/cda-TRUNK-SNAPSHOT.zip</downloadUrl>
-				<samplesDownloadUrl>http://ci.analytical-labs.com/job/Webdetails-CDA/lastSuccessfulBuild/artifact/dist/cda-samples-TRUNK-SNAPSHOT.zip</samplesDownloadUrl>
-				<description>Trunk Snapshot. Install at your own risk....</description>
-                                <buildId>115</buildId>
-			</version>    	
+			<version branch="STABLE">
+		<version>12.03.09</version>
+		<name>Stable</name>
+		<downloadUrl>http://ci.analytical-labs.com/job/Webdetails-CDA-Release/lastSuccessfulBuild/artifact/dist/cda-12.03.09.zip</downloadUrl>
+		<samplesDownloadUrl>http://ci.analytical-labs.com/job/Webdetails-CDA-Release/lastSuccessfulBuild/artifact/dist/cda-samples-12.03.09.zip</samplesDownloadUrl>
+		<description>12.03.09 release.</description>
+		<buildId/>
+		</version>    	                    
+			<version branch="TRUNK">
+		<version>TRUNK-SNAPSHOT</version>
+		<name>Trunk</name>
+		<downloadUrl>http://ci.analytical-labs.com/job/Webdetails-CDA/lastSuccessfulBuild/artifact/dist/cda-TRUNK-SNAPSHOT.zip</downloadUrl>
+		<samplesDownloadUrl>http://ci.analytical-labs.com/job/Webdetails-CDA/lastSuccessfulBuild/artifact/dist/cda-samples-TRUNK-SNAPSHOT.zip</samplesDownloadUrl>
+		<description>Trunk Snapshot. Install at your own risk....</description>
+		<buildId>118</buildId>
+		</version>    	
 		</versions>
         
         
@@ -96,14 +97,14 @@ CDE and the technology underneath (CDF, CDA and CCC) allows to develop and deplo
         
         <companyLogo>http://www.webdetails.pt/ficheiros/wd_logo.png</companyLogo>
 	<versions>
-			<version branch='STABLE'>
+			<version branch="STABLE">
                                 <version>12.02.29</version>
 				<name>Stable</name>
 				<downloadUrl>http://ci.analytical-labs.com/job/Webdetails-CDF-Release/18/artifact/bi-platform-v2-plugin/dist/pentaho-cdf-12.02.29.zip</downloadUrl>
 				<samplesDownloadUrl>http://ci.analytical-labs.com/job/Webdetails-CDF-Release/18/artifact/bi-platform-v2-plugin/dist/pentaho-cdf-samples-12.02.29.zip</samplesDownloadUrl>
                                 <description>12.02.29 Release</description>
 			</version>    	                    
-			<version branch='TRUNK'>
+			<version branch="TRUNK">
                                 <version>TRUNK-SNAPSHOT</version>
 				<name>Trunk</name>
 				<downloadUrl>http://ci.analytical-labs.com/job/Webdetails-CDF/lastSuccessfulBuild/artifact/bi-platform-v2-plugin/dist/pentaho-cdf-TRUNK-SNAPSHOT.zip</downloadUrl>
@@ -128,18 +129,18 @@ CDE and the technology underneath (CDF, CDA and CCC) allows to develop and deplo
         <companyLogo>http://www.webdetails.pt/ficheiros/wd_logo.png</companyLogo>
         <installationNotes>Please remember to replace the batik, xml-apis and xmlgraphics jars on WEB-INF/lib with the ones on system/CGG/lib.</installationNotes>
 	<versions>
-			<version branch='TRUNK'>
-                                <version>TRUNK-SNAPSHOT</version>
-				<name>Trunk</name>
-				<downloadUrl>http://ci.analytical-labs.com/job/Webdetails-CGG/lastSuccessfulBuild/artifact/dist/cgg-TRUNK-SNAPSHOT.zip</downloadUrl>
-				<description>Trunk Snapshot. Install at your own risk....</description>
-                                <buildId>64</buildId>
-			</version>    	
+			<version branch="TRUNK">
+		<version>TRUNK-SNAPSHOT</version>
+		<name>Trunk</name>
+		<downloadUrl>http://ci.analytical-labs.com/job/Webdetails-CGG/lastSuccessfulBuild/artifact/dist/cgg-TRUNK-SNAPSHOT.zip</downloadUrl>
+		<description>Trunk snapshot. install at your own risk...</description>
+		<buildId>69</buildId>
+		</version>    	
 		</versions>                       
     </plugin>
     
 
-    <plugin id='saiku'>
+    <plugin id="saiku">
         <img>http://www.webdetails.pt/ficheiros/saiku.png</img>
         <smallImg>http://www.webdetails.pt/ficheiros/saiku_plugin.png</smallImg>
         <name>Saiku Analytics</name>
@@ -150,7 +151,7 @@ Our RESTful server connects to existing OLAP systems, which then powers user-fri
         <companyUrl>http://analytical-labs.com/</companyUrl>
         <companyLogo>http://www.webdetails.pt/ficheiros/saiku.png</companyLogo>
         <versions>
-            <version branch='TRUNK'>
+            <version branch="TRUNK">
                 <version>Trunk</version>
                 <name>Trunk</name>
                 <downloadUrl>http://ci.analytical-labs.com/job/saiku-plugin/lastSuccessfulBuild/artifact/saiku-bi-platform-plugin/target/saiku-plugin-2.3-SNAPSHOT.zip</downloadUrl>

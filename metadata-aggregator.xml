@@ -23,6 +23,21 @@
 
 
 
+	<macrodef name="git">
+		<attribute name="command" />
+		<attribute name="dir" default="" />
+		<element name="args" optional="true" />
+		<sequential>
+			<echo message="git @{command}" />
+			<exec executable="git" dir="@{dir}">
+				<arg value="@{command}" />
+				<args/>
+			</exec>
+		</sequential>
+	</macrodef>
+
+
+
 	<target name="build">
 	
 		<mkdir dir='.tmp'/>
@@ -42,6 +57,19 @@
 		   <replace path="/availablePlugins/plugin[@id='cgg']/versions/version[@branch='TRUNK']" 
         	 withFile=".tmp/cgg-trunk.xml"/>         	 
 		</xmltask> 
+		
+		
+		<git command="add">
+			<args>
+				<arg value="PentahoMarketplacePlugins.xml" />
+			</args>
+		</git>
+		<git command="commit">
+			<args>
+				<arg value="-am 'New version of plugin metadata'" />
+			</args>
+		</git>
+		<git command="push" />		
 		
 		
 		

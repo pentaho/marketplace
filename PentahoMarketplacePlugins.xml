@@ -65,11 +65,11 @@ CDE and the technology underneath (CDF, CDA and CCC) allows to develop and deplo
         <companyLogo>http://www.webdetails.pt/ficheiros/wd_logo.png</companyLogo>
 		<versions>
 			<version branch="STABLE">
-		<version>12.03.08</version>
+		<version>12.03.09</version>
 		<name>Stable</name>
-		<downloadUrl>http://ci.analytical-labs.com/job/Webdetails-CDA-Release/lastSuccessfulBuild/artifact/dist/cda-12.03.08.zip</downloadUrl>
-		<samplesDownloadUrl>http://ci.analytical-labs.com/job/Webdetails-CDA-Release/lastSuccessfulBuild/artifact/dist/cda-samples-12.03.08.zip</samplesDownloadUrl>
-		<description>12.03.08 release.</description>
+		<downloadUrl>http://ci.analytical-labs.com/job/Webdetails-CDA-Release/lastSuccessfulBuild/artifact/dist/cda-12.03.09.zip</downloadUrl>
+		<samplesDownloadUrl>http://ci.analytical-labs.com/job/Webdetails-CDA-Release/lastSuccessfulBuild/artifact/dist/cda-samples-12.03.09.zip</samplesDownloadUrl>
+		<description>12.03.09 release.</description>
 		<buildId/>
 		</version>    	                    
 			<version branch="TRUNK">

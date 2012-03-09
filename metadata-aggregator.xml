@@ -46,6 +46,8 @@
 		<get src="http://ci.analytical-labs.com/job/Webdetails-CDA/lastSuccessfulBuild/artifact/dist/marketplace.xml" dest=".tmp/cda-trunk.xml"/>				
 		<get src="http://ci.analytical-labs.com/job/Webdetails-CDA-Release/lastSuccessfulBuild/artifact/dist/marketplace.xml" dest=".tmp/cda-release.xml"/>		
 		<get src="http://ci.analytical-labs.com/job/Webdetails-CGG/lastSuccessfulBuild/artifact/dist/marketplace.xml" dest=".tmp/cgg-trunk.xml"/>
+		<get src="http://ci.analytical-labs.com/job/Webdetails-CDF/lastSuccessfulBuild/artifact/dist/marketplace.xml" dest=".tmp/cdf-trunk.xml"/>		
+		<get src="http://ci.analytical-labs.com/job/Webdetails-CDE/lastSuccessfulBuild/artifact/dist/marketplace.xml" dest=".tmp/cde-trunk.xml"/>				
 
 
 		<!--Replace on xml-->
@@ -56,6 +58,11 @@
         	 withFile=".tmp/cda-release.xml"/> 
 		   <replace path="/availablePlugins/plugin[@id='cgg']/versions/version[@branch='TRUNK']" 
         	 withFile=".tmp/cgg-trunk.xml"/>         	 
+		   <replace path="/availablePlugins/plugin[@id='pentaho-cdf']/versions/version[@branch='TRUNK']" 
+        	 withFile=".tmp/cdf-trunk.xml"/>         	 
+		   <replace path="/availablePlugins/plugin[@id='pentaho-cdf-dd']/versions/version[@branch='TRUNK']" 
+        	 withFile=".tmp/cde-trunk.xml"/>         	 
+        	 
 		</xmltask> 
 		
 		

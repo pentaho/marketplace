@@ -45,13 +45,13 @@ CDE and the technology underneath (CDF, CDA and CCC) allows to develop and deplo
                                 <description>12.02.29 Release</description>
 			</version>    	                    
 			<version branch="TRUNK">
-                                <version>TRUNK-SNAPSHOT</version>
-				<name>Trunk</name>
-				<downloadUrl>http://ci.analytical-labs.com/job/Webdetails-CDE/lastSuccessfulBuild/artifact/server/plugin/dist/pentaho-cdf-dd-TRUNK-SNAPSHOT.zip</downloadUrl>
-				<samplesDownloadUrl>http://ci.analytical-labs.com/job/Webdetails-CDE/lastSuccessfulBuild/artifact/server/plugin/dist/pentaho-cdf-dd-solution-TRUNK-SNAPSHOT.zip</samplesDownloadUrl>
-				<description>Trunk Snapshot. Install at your own risk....</description>
-                                <buildId>180</buildId>
-			</version>    	
+		<version>TRUNK-SNAPSHOT</version>
+		<name>Trunk</name>
+		<downloadUrl>http://ci.analytical-labs.com/job/Webdetails-CDE/lastSuccessfulBuild/artifact/server/plugin/dist/pentaho-cdf-dd-TRUNK-SNAPSHOT.zip</downloadUrl>
+		<samplesDownloadUrl>http://ci.analytical-labs.com/job/Webdetails-CDE/lastSuccessfulBuild/artifact/server/plugin/dist/pentaho-cdf-dd-solution-TRUNK-SNAPSHOT.zip</samplesDownloadUrl>
+		<description>Trunk Snapshot. Install at your own risk....</description>
+		<buildId>191</buildId>
+		</version>    	
 		</versions>
     </plugin>
     <plugin id="cda">
@@ -105,13 +105,13 @@ CDE and the technology underneath (CDF, CDA and CCC) allows to develop and deplo
                                 <description>12.02.29 Release</description>
 			</version>    	                    
 			<version branch="TRUNK">
-                                <version>TRUNK-SNAPSHOT</version>
-				<name>Trunk</name>
-				<downloadUrl>http://ci.analytical-labs.com/job/Webdetails-CDF/lastSuccessfulBuild/artifact/bi-platform-v2-plugin/dist/pentaho-cdf-TRUNK-SNAPSHOT.zip</downloadUrl>
-				<samplesDownloadUrl>http://ci.analytical-labs.com/job/Webdetails-CDF/lastSuccessfulBuild/artifact/bi-platform-v2-plugin/dist/pentaho-cdf-samples-TRUNK-SNAPSHOT.zip</samplesDownloadUrl>
-				<description>Trunk Snapshot. Install at your own risk....</description>
-                                <buildId>267</buildId>
-			</version>    	
+		<version>TRUNK-SNAPSHOT</version>
+		<name>Trunk</name>
+		<downloadUrl>http://ci.analytical-labs.com/job/Webdetails-CDF/lastSuccessfulBuild/artifact/bi-platform-v2-plugin/dist/pentaho-cdf-TRUNK-SNAPSHOT.zip</downloadUrl>
+		<samplesDownloadUrl>http://ci.analytical-labs.com/job/Webdetails-CDF/lastSuccessfulBuild/artifact/bi-platform-v2-plugin/dist/pentaho-cdf-samples-TRUNK-SNAPSHOT.zip</samplesDownloadUrl>
+		<description>Trunk Snapshot. Install at your own risk....</description>
+		<buildId>285</buildId>
+		</version>    	
 		</versions>
                 
         

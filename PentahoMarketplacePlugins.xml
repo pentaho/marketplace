@@ -138,7 +138,13 @@ CDE and the technology underneath (CDF, CDA and CCC) allows to develop and deplo
 		<buildId>69</buildId>
 		</version>    	
 		
-					<version branch="STABLE"></version>
+					<version branch="STABLE">
+		<version>12.03.19</version>
+		<name>Stable</name>
+		<downloadUrl>http://ci.analytical-labs.com/job/Webdetails-CGG-Release/lastSuccessfulBuild/artifact/dist/cgg-12.03.19.zip</downloadUrl>
+		<description>Release 12.03.19</description>
+		<buildId/>
+		</version>
 		
 		</versions>                       
     </plugin>

@@ -184,7 +184,26 @@ CDE and the technology underneath (CDF, CDA and CCC) allows to develop and deplo
         <smallImg>http://www.webdetails.pt/ficheiros/cdb_plugin.png</smallImg>
         <name>Community Data Browser</name>
         <learnMoreUrl>http://ctools.webdetails.org</learnMoreUrl>
-        <description>Calling Business Analysts! Now you can Slice & Dice your Data directly from Pentaho. Make your own analysis in an autonomous and easy way. </description>
+        <description>Calling Business Analysts! Now you can Slice and Dice your Data directly from Pentaho. Make your own analysis in an autonomous and easy way. </description>
+        <company>WebDetails</company>
+        <companyUrl>http://webdetails.pt</companyUrl>    
+        <companyLogo>http://www.webdetails.pt/ficheiros/wd_logo.png</companyLogo>
+	<versions>
+			<version branch="TRUNK">		
+		</version>    			
+					<version branch="STABLE"></version>
+		
+		</versions>                       
+    </plugin>    
+
+
+
+  <plugin id="cdc">
+        <img>http://www.webdetails.pt/ficheiros/cdc.png</img>
+        <smallImg>http://www.webdetails.pt/ficheiros/cdc_plugin.png</smallImg>
+        <name>Community Data Browser</name>
+        <learnMoreUrl>http://ctools.webdetails.org</learnMoreUrl>
+        <description>CDC stands for Community Distributed Cache and allows for high-performance, scalable and distributed memory clustering cache based on Hazelcast for both CDA and Mondrian.</description>
         <company>WebDetails</company>
         <companyUrl>http://webdetails.pt</companyUrl>    
         <companyLogo>http://www.webdetails.pt/ficheiros/wd_logo.png</companyLogo>

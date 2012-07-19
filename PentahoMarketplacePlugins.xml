@@ -189,9 +189,20 @@ CDE and the technology underneath (CDF, CDA and CCC) allows to develop and deplo
         <companyUrl>http://webdetails.pt</companyUrl>    
         <companyLogo>http://www.webdetails.pt/ficheiros/wd_logo.png</companyLogo>
 	<versions>
-			<version branch="TRUNK">		
+			<version branch="TRUNK">
+		<version>TRUNK-20120719</version>
+		<name>Trunk</name>
+		<downloadUrl>http://ci.analytical-labs.com/job/Webdetails-CDB/lastSuccessfulBuild/artifact/dist/cdb-TRUNK-SNAPSHOT.zip</downloadUrl>
+		<description>Trunk Snapshot. Install at your own risk....</description>
+		<buildId>33</buildId>
 		</version>    			
-					<version branch="STABLE"></version>
+					<version branch="STABLE">
+		<version>12.07.19</version>
+		<name>Stable</name>
+		<downloadUrl>http://ci.analytical-labs.com/job/Webdetails-CDB-Release/lastSuccessfulBuild/artifact/dist/cdb-12.07.19.zip</downloadUrl>
+		<description>12.07.19 release.</description>
+		<buildId/>
+		</version>
 		
 		</versions>                       
     </plugin>    
@@ -208,9 +219,20 @@ CDE and the technology underneath (CDF, CDA and CCC) allows to develop and deplo
         <companyUrl>http://webdetails.pt</companyUrl>    
         <companyLogo>http://www.webdetails.pt/ficheiros/wd_logo.png</companyLogo>
 	<versions>
-			<version branch="TRUNK">		
+			<version branch="TRUNK">
+		<version>TRUNK-20120712</version>
+		<name>Trunk</name>
+		<downloadUrl>http://ci.analytical-labs.com/job/Webdetails-CDC/lastSuccessfulBuild/artifact/dist/cdc-TRUNK-SNAPSHOT.zip</downloadUrl>
+		<description>Trunk Snapshot. Install at your own risk....</description>
+		<buildId>75</buildId>
 		</version>    			
-					<version branch="STABLE"></version>
+					<version branch="STABLE">
+		<version>12.07.19</version>
+		<name>Stable</name>
+		<downloadUrl>http://ci.analytical-labs.com/job/Webdetails-CDC-Release/lastSuccessfulBuild/artifact/dist/cdc-12.07.19.zip</downloadUrl>
+		<description>12.07.19 release.</description>
+		<buildId/>
+		</version>
 		
 		</versions>                       
     </plugin>    

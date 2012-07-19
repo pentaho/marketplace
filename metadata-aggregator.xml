@@ -53,6 +53,8 @@
 		<get src="http://ci.analytical-labs.com/job/Webdetails-CDE-Release/lastSuccessfulBuild/artifact/server/plugin/dist/marketplace.xml" dest=".tmp/cde-release.xml"/>						
 		<get src="http://ci.analytical-labs.com/job/Webdetails-CDV/lastSuccessfulBuild/artifact/dist/marketplace.xml" dest=".tmp/cdv-trunk.xml"/>				
 		<get src="http://ci.analytical-labs.com/job/Webdetails-CDV-Release/lastSuccessfulBuild/artifact/dist/marketplace.xml" dest=".tmp/cdv-release.xml"/>						
+		<get src="http://ci.analytical-labs.com/job/Webdetails-CDB/lastSuccessfulBuild/artifact/dist/marketplace.xml" dest=".tmp/cdb-trunk.xml"/>				
+		<get src="http://ci.analytical-labs.com/job/Webdetails-CDB-Release/lastSuccessfulBuild/artifact/dist/marketplace.xml" dest=".tmp/cdb-release.xml"/>						
 
 
 		<!--Replace on xml-->
@@ -77,6 +79,10 @@
         	 withFile=".tmp/cdv-trunk.xml"/>         	 
 		   <replace path="/availablePlugins/plugin[@id='cdv']/versions/version[@branch='STABLE']" 
         	 withFile=".tmp/cdv-release.xml"/>         	 
+		   <replace path="/availablePlugins/plugin[@id='cdb']/versions/version[@branch='TRUNK']" 
+        	 withFile=".tmp/cdb-trunk.xml"/>         	 
+		   <replace path="/availablePlugins/plugin[@id='cdb']/versions/version[@branch='STABLE']" 
+        	 withFile=".tmp/cdb-release.xml"/>         	 
         	 
         	 
 		</xmltask> 

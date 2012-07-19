@@ -143,6 +143,29 @@ CDE and the technology underneath (CDF, CDA and CCC) allows to develop and deplo
 		</versions>                       
     </plugin>
     
+  <plugin id="cdv">
+        <img>http://www.webdetails.pt/ficheiros/cdv.png</img>
+        <smallImg>http://www.webdetails.pt/ficheiros/cdv_plugin.png</smallImg>
+        <name>Community Data Validation</name>
+        <learnMoreUrl>http://ctools.webdetails.org</learnMoreUrl>
+        <description>n the words of one of the wise men who are still around: "Our business isn't displaying stats, ours is the confidence business". The system we created to instantly detect and report data related errors, CDV, is key to achieve absolute accuracy in the numbers our dashboards display.</description>
+        <company>WebDetails</company>
+        <companyUrl>http://webdetails.pt</companyUrl>    
+        <companyLogo>http://www.webdetails.pt/ficheiros/wd_logo.png</companyLogo>
+	<versions>
+			<version branch="TRUNK">
+		<version>TRUNK-SNAPSHOT</version>
+		<name>Trunk</name>
+		<downloadUrl>http://ci.analytical-labs.com/job/Webdetails-CGG/lastSuccessfulBuild/artifact/dist/cgg-TRUNK-SNAPSHOT.zip</downloadUrl>
+		<description>Trunk snapshot. install at your own risk...</description>
+		<buildId>69</buildId>
+		</version>    	
+		
+					<version branch="STABLE"></version>
+		
+		</versions>                       
+    </plugin>    
+    
 
     <plugin id="saiku">
         <img>http://www.webdetails.pt/ficheiros/saiku.png</img>

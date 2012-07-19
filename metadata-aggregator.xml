@@ -51,6 +51,8 @@
 		<get src="http://ci.analytical-labs.com/job/Webdetails-CDF-Release/lastSuccessfulBuild/artifact/bi-platform-v2-plugin/dist/marketplace.xml" dest=".tmp/cdf-release.xml"/>				
 		<get src="http://ci.analytical-labs.com/job/Webdetails-CDE/lastSuccessfulBuild/artifact/server/plugin/dist/marketplace.xml" dest=".tmp/cde-trunk.xml"/>				
 		<get src="http://ci.analytical-labs.com/job/Webdetails-CDE-Release/lastSuccessfulBuild/artifact/server/plugin/dist/marketplace.xml" dest=".tmp/cde-release.xml"/>						
+		<get src="http://ci.analytical-labs.com/job/Webdetails-CDV/lastSuccessfulBuild/artifact/server/plugin/dist/marketplace.xml" dest=".tmp/cdv-trunk.xml"/>				
+		<get src="http://ci.analytical-labs.com/job/Webdetails-CDV-Release/lastSuccessfulBuild/artifact/server/plugin/dist/marketplace.xml" dest=".tmp/cdv-release.xml"/>						
 
 
 		<!--Replace on xml-->
@@ -71,6 +73,10 @@
         	 withFile=".tmp/cde-trunk.xml"/>         	 
 		   <replace path="/availablePlugins/plugin[@id='pentaho-cdf-dd']/versions/version[@branch='STABLE']" 
         	 withFile=".tmp/cde-release.xml"/>         	 
+		   <replace path="/availablePlugins/plugin[@id='cdv']/versions/version[@branch='TRUNK']" 
+        	 withFile=".tmp/cdv-trunk.xml"/>         	 
+		   <replace path="/availablePlugins/plugin[@id='cdv']/versions/version[@branch='STABLE']" 
+        	 withFile=".tmp/cdv-release.xml"/>         	 
         	 
         	 
 		</xmltask> 

@@ -22,174 +22,184 @@ package org.pentaho.marketplace;
 import java.io.Serializable;
 
 public class Plugin implements Serializable {
-  private static final long serialVersionUID = 8252279235434152138L;
-  private String id;
-  private String name;
-  private String img;
-  private String learnMoreUrl;
-  private String downloadUrl;
-  private String samplesDownloadUrl;
-  private String availableVersion;
-  private String description;
-  private String company;
-  private String companyUrl;
-  private String installedVersion;
-  private String changelog;
-  private String installationNotes;
-  private boolean installed;
-  private PluginVersion[] alternativeVersions;
-  
-  public Plugin() {}
-  
-  public Plugin(String img, String name, String availableVersion, String description, String learnMoreUrl, String company, String companyUrl) {
-    this.setImg(img);
-    this.setName(name);
-    this.setAvailableVersion(availableVersion);
-    this.setDescription(description);
-    this.setLearnMoreUrl(learnMoreUrl);
-    this.setCompany(company);
-    this.setCompanyUrl(companyUrl);
-  }
 
-  
-  public String getInstallationNotes() {
-      return installationNotes;
-  }
-  
-  
-  public void setInstallationNotes(String installationNotes) {
-      this.installationNotes = installationNotes;
-  }
-  
-  public String getImg() {
-    return img;
-  }
+    private static final long serialVersionUID = 8252279235434152138L;
+    private String id;
+    private String name;
+    private String img;
+    private String smallImg;
+    private String learnMoreUrl;
+    private String description;
+    private String company;
+    private String companyUrl;
+    private String companyLogo;
+    private String installedBranch;
+    private String installedVersion;
+    private String installedBuildId;    
+    private String installationNotes;
+    private boolean installed;
+    private PluginVersion[] versions;
 
-  public void setImg(String img) {
-    this.img = img;
-  }
+    public Plugin() {
+    }
 
-  public String getName() {
-    return name;
-  }
+    public Plugin(String img, String name, String description, String learnMoreUrl, String company, String companyUrl) {
+        this.setImg(img);
+        this.setName(name);
+        this.setDescription(description);
+        this.setLearnMoreUrl(learnMoreUrl);
+        this.setCompany(company);
+        this.setCompanyUrl(companyUrl);
+    }
 
-  public void setName(String name) {
-    this.name = name;
-  }
+    public String getInstallationNotes() {
+        return installationNotes;
+    }
 
-  public String getLearnMoreUrl() {
-    return learnMoreUrl;
-  }
+    public void setInstallationNotes(String installationNotes) {
+        this.installationNotes = installationNotes;
+    }
 
-  public void setLearnMoreUrl(String learnMoreUrl) {
-    this.learnMoreUrl = learnMoreUrl;
-  }
+    public String getImg() {
+        return img;
+    }
 
-  public String getId() {
-    return id;
-  }
+    public void setImg(String img) {
+        this.img = img;
+    }
 
-  public void setId(String id) {
-    this.id = id;
-  }
+    public String getName() {
+        return name;
+    }
 
-  public String getDownloadUrl() {
-    return downloadUrl;
-  }
+    public void setName(String name) {
+        this.name = name;
+    }
 
-  public void setDownloadUrl(String downloadUrl) {
-    this.downloadUrl = downloadUrl;
-  }
+    public String getLearnMoreUrl() {
+        return learnMoreUrl;
+    }
 
-  public String getSamplesDownloadUrl() {
-    return samplesDownloadUrl;
-  }
+    public void setLearnMoreUrl(String learnMoreUrl) {
+        this.learnMoreUrl = learnMoreUrl;
+    }
 
-  public void setSamplesDownloadUrl(String samplesDownloadUrl) {
-    this.samplesDownloadUrl = samplesDownloadUrl;
-  }
-  
-  
-  public String getAvailableVersion() {
-    return availableVersion;
-  }
+    public String getId() {
+        return id;
+    }
 
-  public void setAvailableVersion(String availableVersion) {
-    this.availableVersion = availableVersion;
-  }
+    public void setId(String id) {
+        this.id = id;
+    }
 
-  public String getDescription() {
-    return description;
-  }
+    public String getDescription() {
+        return description;
+    }
 
-  public void setDescription(String description) {
-    this.description = description;
-  }
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-  public String getCompany() {
-    return company;
-  }
+    public String getCompany() {
+        return company;
+    }
 
-  public void setCompany(String company) {
-    this.company = company;
-  }
+    public void setCompany(String company) {
+        this.company = company;
+    }
 
-  public String getCompanyUrl() {
-    return companyUrl;
-  }
+    public String getCompanyUrl() {
+        return companyUrl;
+    }
 
-  public void setCompanyUrl(String companyUrl) {
-    this.companyUrl = companyUrl;
-  }
+    public void setCompanyUrl(String companyUrl) {
+        this.companyUrl = companyUrl;
+    }
 
-  public String getInstalledVersion() {
-    return installedVersion;
-  }
+    public String getInstalledVersion() {
+        return installedVersion;
+    }
 
-  public void setInstalledVersion(String installedVersion) {
-    this.installedVersion = installedVersion;
-  }
+    public void setInstalledVersion(String installedVersion) {
+        this.installedVersion = installedVersion;
+    }
 
-  public boolean isInstalled() {
-    return installed;
-  }
+    public boolean isInstalled() {
+        return installed;
+    }
 
-  public void setInstalled(boolean installed) {
-    this.installed = installed;
-  }
-  
-  
-  public String getChangelog() {
-    return changelog;
-  }
+    public void setInstalled(boolean installed) {
+        this.installed = installed;
+    }
 
-  public void setChangelog(String changelog) {
-    this.changelog = changelog;
-  }
+    
+    public String getCompanyLogo() {
+        return companyLogo;
+    }
 
-    /**
-     * @return the alternativeVersions
-     */
-    public PluginVersion[] getAlternativeVersions() {
-        return alternativeVersions;
+    public void setCompanyLogo(String companyLogo) {
+        this.companyLogo = companyLogo;
+    }
+
+    public String getInstalledBranch() {
+        return installedBranch;
+    }
+
+    public void setInstalledBranch(String installedBranch) {
+        this.installedBranch = installedBranch;
     }
 
     /**
-     * @param alternativeVersions the alternativeVersions to set
+     * @return the versions
      */
-    public void setAlternativeVersions(PluginVersion[] alternativeVersions) {
-        this.alternativeVersions = alternativeVersions;
+    public PluginVersion[] getVersions() {
+        return versions;
     }
-  
- 
-    public PluginVersion getVersionById(String id) {
-        if (this.alternativeVersions == null)
+
+    /**
+     * @param versions the versions to set
+     */
+    public void setVersions(PluginVersion[] versions) {
+        this.versions = versions;
+    }
+
+    public PluginVersion getVersionByBranch(String branch) {
+        if (this.versions == null) {
             return null;
-        for (int i=0; i < this.alternativeVersions.length; i++) {
-            if (id != null && id.equals(this.alternativeVersions[i].getId()))
-                return this.alternativeVersions[i];
+        }
+        for (int i = 0; i < this.versions.length; i++) {
+            if (branch != null && branch.equals(this.versions[i].getBranch())) {
+                return this.versions[i];
+            }
         }
         return null;
     }
-    
+
+    /**
+     * @return the installedBuildId
+     */
+    public String getInstalledBuildId() {
+        return installedBuildId;
+    }
+
+    /**
+     * @param installedBuildId the installedBuildId to set
+     */
+    public void setInstalledBuildId(String installedBuildId) {
+        this.installedBuildId = installedBuildId;
+    }
+
+    /**
+     * @return the smallImg
+     */
+    public String getSmallImg() {
+        return smallImg;
+    }
+
+    /**
+     * @param smallImg the smallImg to set
+     */
+    public void setSmallImg(String smallImg) {
+        this.smallImg = smallImg;
+    }
 }

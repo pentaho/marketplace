@@ -15,19 +15,22 @@ CDE and the technology underneath (CDF, CDA and CCC) allows to develop and deplo
     </changelog>
     <company>WebDetails</company>
     <companyUrl>http://webdetails.pt</companyUrl>
-    <alternativeVersions>
-    	<alternativeVersion id='RC'>
+    <versions>
+    	<version branch='RC'>
     		<name>Release Candidate</name>
 			<downloadUrl>http://www.webdetails.pt/RC/ficheiros/CDE-bundle-1.0-RC3.tar.bz2</downloadUrl>
 			<samplesDownloadUrl>http://www.webdetails.pt/RC/ficheiros/CDE-bundle-1.0-RC3-samples.tar.bz2</samplesDownloadUrl>
 			<description>This is RC1 - pretty cool version but still not quite there</description>
-    	</alternativeVersion>
-    	<alternativeVersion id='TRUNK'>
+                        <changelog>ChangeLog for RC</changelog>
+    	</version>
+    	<version branch='TRUNK'>
     		<name>Trunk</name>
 			<downloadUrl>http://www.webdetails.pt/TRUNK/ficheiros/CDE-bundle-1.0-RC3.tar.bz2</downloadUrl>
 			<samplesDownloadUrl>http://www.webdetails.pt/TRUNK/ficheiros/CDE-bundle-1.0-RC3.tar.bz2</samplesDownloadUrl>
 			<description>Trunk Snapshot. Install at your own risk....</description>
-    	</alternativeVersion>    	
-    </alternativeVersions>
+                        <changelog>Change Log for TRUNK</changelog>
+                        <buildId>135</buildId>
+    	</version>    	
+    </versions>
   </plugin>  
 </availablePlugins>

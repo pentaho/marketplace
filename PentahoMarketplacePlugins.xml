@@ -190,11 +190,11 @@ CDE and the technology underneath (CDF, CDA and CCC) allows to develop and deplo
         <companyLogo>http://www.webdetails.pt/ficheiros/wd_logo.png</companyLogo>
 	<versions>
 			<version branch="TRUNK">
-		<version>TRUNK-20120822</version>
+		<version>TRUNK-20120823</version>
 		<name>Trunk</name>
 		<downloadUrl>http://ci.analytical-labs.com/job/Webdetails-CDB/lastSuccessfulBuild/artifact/dist/cdb-TRUNK-SNAPSHOT.zip</downloadUrl>
 		<description>Trunk Snapshot. Install at your own risk....</description>
-		<buildId>53</buildId>
+		<buildId>54</buildId>
 		</version>    			
 					<version branch="STABLE">
 		<version>12.07.19</version>

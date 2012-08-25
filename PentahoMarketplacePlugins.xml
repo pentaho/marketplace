@@ -65,11 +65,11 @@ CDE and the technology underneath (CDF, CDA and CCC) allows to develop and deplo
         <companyLogo>http://www.webdetails.pt/ficheiros/wd_logo.png</companyLogo>
 		<versions>
 			<version branch="STABLE">
-		<version>12.07.19</version>
+		<version>12.08.25</version>
 		<name>Stable</name>
-		<downloadUrl>http://ci.analytical-labs.com/job/Webdetails-CDA-Release/lastSuccessfulBuild/artifact/dist/cda-12.07.19.zip</downloadUrl>
-		<samplesDownloadUrl>http://ci.analytical-labs.com/job/Webdetails-CDA-Release/lastSuccessfulBuild/artifact/dist/cda-samples-12.07.19.zip</samplesDownloadUrl>
-		<description>12.07.19 release.</description>
+		<downloadUrl>http://ci.analytical-labs.com/job/Webdetails-CDA-Release/lastSuccessfulBuild/artifact/dist/cda-12.08.25.zip</downloadUrl>
+		<samplesDownloadUrl>http://ci.analytical-labs.com/job/Webdetails-CDA-Release/lastSuccessfulBuild/artifact/dist/cda-samples-12.08.25.zip</samplesDownloadUrl>
+		<description>12.08.25 release.</description>
 		<buildId/>
 		</version>    	                    
 			<version branch="TRUNK">
@@ -190,11 +190,11 @@ CDE and the technology underneath (CDF, CDA and CCC) allows to develop and deplo
         <companyLogo>http://www.webdetails.pt/ficheiros/wd_logo.png</companyLogo>
 	<versions>
 			<version branch="TRUNK">
-		<version>TRUNK-20120823</version>
+		<version>TRUNK-20120824</version>
 		<name>Trunk</name>
 		<downloadUrl>http://ci.analytical-labs.com/job/Webdetails-CDB/lastSuccessfulBuild/artifact/dist/cdb-TRUNK-SNAPSHOT.zip</downloadUrl>
 		<description>Trunk Snapshot. Install at your own risk....</description>
-		<buildId>54</buildId>
+		<buildId>55</buildId>
 		</version>    			
 					<version branch="STABLE">
 		<version>12.07.19</version>
@@ -220,11 +220,11 @@ CDE and the technology underneath (CDF, CDA and CCC) allows to develop and deplo
         <companyLogo>http://www.webdetails.pt/ficheiros/wd_logo.png</companyLogo>
 	<versions>
 			<version branch="TRUNK">
-		<version>TRUNK-20120821</version>
+		<version>TRUNK-20120824</version>
 		<name>Trunk</name>
 		<downloadUrl>http://ci.analytical-labs.com/job/Webdetails-CDC/lastSuccessfulBuild/artifact/dist/cdc-TRUNK-SNAPSHOT.zip</downloadUrl>
 		<description>Trunk Snapshot. Install at your own risk....</description>
-		<buildId>96</buildId>
+		<buildId>97</buildId>
 		</version>    			
 					<version branch="STABLE">
 		<version>12.07.19</version>

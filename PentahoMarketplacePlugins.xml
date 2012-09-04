@@ -78,7 +78,7 @@ CDE and the technology underneath (CDF, CDA and CCC) allows to develop and deplo
 		<downloadUrl>http://ci.analytical-labs.com/job/Webdetails-CDA/lastSuccessfulBuild/artifact/dist/cda-TRUNK-SNAPSHOT.zip</downloadUrl>
 		<samplesDownloadUrl>http://ci.analytical-labs.com/job/Webdetails-CDA/lastSuccessfulBuild/artifact/dist/cda-samples-TRUNK-SNAPSHOT.zip</samplesDownloadUrl>
 		<description>Trunk Snapshot. Install at your own risk....</description>
-		<buildId>179</buildId>
+		<buildId>180</buildId>
 		</version>    	
 		</versions>
         
@@ -220,11 +220,11 @@ CDE and the technology underneath (CDF, CDA and CCC) allows to develop and deplo
         <companyLogo>http://www.webdetails.pt/ficheiros/wd_logo.png</companyLogo>
 	<versions>
 			<version branch="TRUNK">
-		<version>TRUNK-20120830</version>
+		<version>TRUNK-20120904</version>
 		<name>Trunk</name>
 		<downloadUrl>http://ci.analytical-labs.com/job/Webdetails-CDC/lastSuccessfulBuild/artifact/dist/cdc-TRUNK-SNAPSHOT.zip</downloadUrl>
 		<description>Trunk Snapshot. Install at your own risk....</description>
-		<buildId>100</buildId>
+		<buildId>101</buildId>
 		</version>    			
 					<version branch="STABLE">
 		<version>12.07.19</version>

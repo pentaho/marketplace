@@ -23,38 +23,33 @@ import java.io.Serializable;
 
 public class PluginVersion implements Serializable {
 
-    
     private static final long serialVersionUID = 8252279235434152153L;
-    
-    
-    private String id;
+    private String branch;
     private String name;
+    private String version;
     private String downloadUrl;
     private String samplesDownloadUrl;
     private String description;
-    
+    private String changelog;
+    private String buildId;
 
-    
-    public PluginVersion(String id, String name, String downloadUrl, String samplesDownloadUrl, String description) {
-        this.id = id;
+    public PluginVersion(String branch, String name, String version, String downloadUrl, String samplesDownloadUrl, String description, String changelog, String buildId) {
+        this.branch = branch;
         this.name = name;
+        this.version = version;
         this.downloadUrl = downloadUrl;
         this.samplesDownloadUrl = samplesDownloadUrl;
         this.description = description;
+        this.changelog = changelog;
+        this.buildId = buildId;
     }
 
-    /**
-     * @return the id
-     */
-    public String getId() {
-        return id;
+    public String getBranch() {
+        return branch;
     }
 
-    /**
-     * @param id the id to set
-     */
-    public void setId(String id) {
-        this.id = id;
+    public void setBranch(String branch) {
+        this.branch = branch;
     }
 
     /**
@@ -69,6 +64,14 @@ public class PluginVersion implements Serializable {
      */
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getVersion() {
+        return version;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
     }
 
     /**
@@ -112,5 +115,18 @@ public class PluginVersion implements Serializable {
     public void setDescription(String description) {
         this.description = description;
     }
-    
+
+    /**
+     * @return the changelog
+     */
+    public String getChangelog() {
+        return changelog;
+    }
+
+    /**
+     * @return the buildId
+     */
+    public String getBuildId() {
+        return buildId;
+    }
 }

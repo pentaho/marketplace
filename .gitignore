@@ -2,7 +2,9 @@
 ####################
 bin
 dist
-lib
+/build
+/lib
 test-lib
 dev-lib
 override.properties
+/nbproject/private

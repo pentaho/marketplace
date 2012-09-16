@@ -135,14 +135,14 @@ CDE and the technology underneath (CDF, CDA and CCC) allows to develop and deplo
 		<name>Trunk</name>
 		<downloadUrl>http://ci.analytical-labs.com/job/Webdetails-CGG/lastSuccessfulBuild/artifact/dist/cgg-TRUNK-SNAPSHOT.zip</downloadUrl>
 		<description>Trunk snapshot. install at your own risk...</description>
-		<buildId>84</buildId>
+		<buildId>85</buildId>
 		</version>    	
 		
 					<version branch="STABLE">
-		<version>12.09.05</version>
+		<version>12.09.16</version>
 		<name>Stable</name>
-		<downloadUrl>http://ci.analytical-labs.com/job/Webdetails-CGG-Release/lastSuccessfulBuild/artifact/dist/cgg-12.09.05.zip</downloadUrl>
-		<description>Release 12.09.05</description>
+		<downloadUrl>http://ci.analytical-labs.com/job/Webdetails-CGG-Release/lastSuccessfulBuild/artifact/dist/cgg-12.09.16.zip</downloadUrl>
+		<description>Release 12.09.16</description>
 		<buildId/>
 		</version>
 		

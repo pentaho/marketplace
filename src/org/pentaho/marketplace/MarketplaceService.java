@@ -22,6 +22,7 @@ package org.pentaho.marketplace;
 import java.io.File;
 import java.io.FileReader;
 import java.io.StringReader;
+import java.net.URLClassLoader;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -141,12 +142,16 @@ public class MarketplaceService {
             
         }
         
-        return plugins;
-        
-        
-        
+        return plugins;   
     }
-
+    
+    private void closeClassLoader(String pluginId) {
+      IPluginManager pluginManager = PentahoSystem.get(IPluginManager.class, PentahoSessionHolder.getSession());
+      ClassLoader cl = pluginManager.getClassLoader(pluginId);
+      if (cl != null && cl instanceof URLClassLoader) {
+        Util.closeURLClassLoader((URLClassLoader)cl);
+      }
+    }
     
     public StatusMessage uninstallPlugin(String id) throws MarketplaceSecurityException {
         Plugin plugins[] = getPlugins();
@@ -161,6 +166,9 @@ public class MarketplaceService {
             return new StatusMessage("NO_PLUGIN", "Plugin Not Found");
         }
 
+        // before deletion, close class loader
+        closeClassLoader(toUninstall.getId());
+        
         String versionBranch = toUninstall.getInstalledBranch();
         // get plugin path
 

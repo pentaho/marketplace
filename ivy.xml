@@ -24,7 +24,7 @@
         <dependency org="net.sf.flexjson"       name="flexjson" rev="2.1" transitive="false" conf="default->default"/>
         <dependency org="org.springframework.security"   name="spring-security-core"      rev="2.0.5.RELEASE" transitive="false"/>
         <dependency org="javax.servlet" name="servlet-api" rev="2.4" />
-
+   		<dependency org="org.hibernate" name="hibernate" rev="3.2.6.ga" transitive="false"/>
 
         <!--  Pentaho dependencies -->
         <dependency org="pentaho" name="pentaho-bi-platform-api"             rev="${dependency.bi-platform.revision}" changing="true" transitive="false"/>

@@ -370,9 +370,7 @@ public class TelemetryHelperTest {
     ITelemetryDataProvider dprovider = getDefaultTelemetryDataProvider(true);
     th.setDataProvider(dprovider);
     Assert.assertTrue(th.publishTelemetryEvent());
-    Assert.assertEquals("pentahoTelemetry?ep1=ev1&platVersion=4.5&pluginVersion=12.09.05&type=other&plugin=CDF", 
-            th.calledUrl());
-    
+Assert.assertTrue(th.calledUrl.contains("ep1=ev1&platVersion=4.5&pluginVersion=12.09.05&type=other&plugin=CDF"));    
     Thread.sleep(1000);//Not pretty but works
     Assert.assertEquals(0, th.requestQueueSize());    
   }
@@ -387,9 +385,7 @@ public class TelemetryHelperTest {
     ITelemetryDataProvider dprovider = getDefaultTelemetryDataProvider(true);
     th.setDataProvider(dprovider);
     Assert.assertTrue(th.publishTelemetryEvent());
-    Assert.assertEquals("pentahoTelemetry?ep1=ev1&platVersion=4.5&pluginVersion=12.09.05&type=other&plugin=CDF", 
-            th.calledUrl());
-    
+Assert.assertTrue(th.calledUrl.contains("ep1=ev1&platVersion=4.5&pluginVersion=12.09.05&type=other&plugin=CDF"));    
     Thread.sleep(1000); //Not pretty but works
     Assert.assertEquals(1, th.requestQueueSize());    
   }
@@ -405,8 +401,8 @@ public class TelemetryHelperTest {
     ITelemetryDataProvider dprovider = getDefaultTelemetryDataProvider(true);
     th.setDataProvider(dprovider);
     Assert.assertTrue(th.publishTelemetryEvent());
-    Assert.assertEquals("pentahoTelemetry?ep1=ev1&platVersion=4.5&pluginVersion=12.09.05&type=other&plugin=CDF", 
-            th.calledUrl());
+    Assert.assertTrue(th.calledUrl.contains("ep1=ev1&platVersion=4.5&pluginVersion=12.09.05&type=other&plugin=CDF"));
+            
     
     Thread.sleep(1000); //Not pretty but works
     Assert.assertEquals(1, th.requestQueueSize());    

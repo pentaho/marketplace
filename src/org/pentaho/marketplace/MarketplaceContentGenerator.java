@@ -9,6 +9,8 @@ import java.io.OutputStream;
 import org.pentaho.platform.api.engine.IParameterProvider;
 import org.pentaho.platform.api.engine.ServiceException;
 import org.pentaho.platform.engine.core.system.PentahoSystem;
+import org.pentaho.telemetry.BaPluginTelemetry;
+import org.pentaho.telemetry.TelemetryHelper.TelemetryEventType;
 import pt.webdetails.cpf.SimpleContentGenerator;
 import pt.webdetails.cpf.annotations.AccessLevel;
 import pt.webdetails.cpf.annotations.Exposed;
@@ -34,8 +36,6 @@ public class MarketplaceContentGenerator extends SimpleContentGenerator {
     @Exposed(accessLevel = AccessLevel.PUBLIC)
     @OutputType(MIME_JSON)
     public void getpluginsjson(OutputStream out) throws IOException {
-
-
 
         try {
             out.write(getMarketplaceService().getPluginsJson().getBytes(ENCODING));

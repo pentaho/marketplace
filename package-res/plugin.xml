@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin title="marketplace">
-
+<lifecycle-listener class="org.pentaho.marketplace.MarketplaceLifeCycleListener"/>
     <static-paths>
         <static-path url="/marketplace/resources" localFolder="resources"/>
     </static-paths>

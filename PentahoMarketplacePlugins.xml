@@ -190,7 +190,7 @@ CDE and the technology underneath (CDF, CDA and CCC) allows to develop and deplo
         <companyLogo>http://www.webdetails.pt/ficheiros/wd_logo.png</companyLogo>
 	<versions>
 			<version branch="TRUNK">
-		<version>TRUNK-20120917</version>
+		<version>TRUNK-SNAPSHOT</version>
 		<name>Trunk</name>
 		<downloadUrl>http://ci.analytical-labs.com/job/Webdetails-CDB/lastSuccessfulBuild/artifact/dist/cdb-TRUNK-SNAPSHOT.zip</downloadUrl>
 		<description>Trunk Snapshot. Install at your own risk....</description>
@@ -212,7 +212,7 @@ CDE and the technology underneath (CDF, CDA and CCC) allows to develop and deplo
   <plugin id="cdc">
         <img>http://www.webdetails.pt/ficheiros/cdc.png</img>
         <smallImg>http://www.webdetails.pt/ficheiros/cdc_plugin.png</smallImg>
-        <name>Community Data Browser</name>
+        <name>Community Distributed Cache</name>
         <learnMoreUrl>http://ctools.webdetails.org</learnMoreUrl>
         <description>CDC stands for Community Distributed Cache and allows for high-performance, scalable and distributed memory clustering cache based on Hazelcast for both CDA and Mondrian.</description>
         <company>WebDetails</company>
@@ -220,7 +220,7 @@ CDE and the technology underneath (CDF, CDA and CCC) allows to develop and deplo
         <companyLogo>http://www.webdetails.pt/ficheiros/wd_logo.png</companyLogo>
 	<versions>
 			<version branch="TRUNK">
-		<version>TRUNK-20120917</version>
+		<version>TRUNK-SNAPSHOT</version>
 		<name>Trunk</name>
 		<downloadUrl>http://ci.analytical-labs.com/job/Webdetails-CDC/lastSuccessfulBuild/artifact/dist/cdc-TRUNK-SNAPSHOT.zip</downloadUrl>
 		<description>Trunk Snapshot. Install at your own risk....</description>

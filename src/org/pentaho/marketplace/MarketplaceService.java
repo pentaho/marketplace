@@ -58,6 +58,8 @@ import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathFactory;
 import org.apache.commons.io.filefilter.DirectoryFileFilter;
+import org.pentaho.telemetry.BaPluginTelemetry;
+import org.pentaho.telemetry.TelemetryHelper.TelemetryEventType;
 
 
 public class MarketplaceService {
@@ -199,6 +201,16 @@ public class MarketplaceService {
             logger.error(e.getMessage(), e);
         }
 
+        
+        
+        BaPluginTelemetry telemetryEvent = new BaPluginTelemetry(PLUGIN_NAME);
+        Map<String, String> extraInfo = new HashMap<String, String>(1);
+        extraInfo.put("uninstalledPlugin", toUninstall.getId());
+        extraInfo.put("uninstalledPluginVersion", toUninstall.getInstalledVersion());
+        extraInfo.put("uninstalledPluginBranch", toUninstall.getInstalledBranch());
+        telemetryEvent.sendTelemetryRequest(TelemetryEventType.REMOVAL, extraInfo);
+        
+        
         return new StatusMessage("PLUGIN_UNINSTALLED", toUninstall.getName() + " was successfully uninstalled.  Please restart your BI Server.");
 
     }
@@ -285,6 +297,15 @@ public class MarketplaceService {
             logger.error(e.getMessage(), e);
         }
 
+        
+        BaPluginTelemetry telemetryEvent = new BaPluginTelemetry(PLUGIN_NAME);
+        Map<String, String> extraInfo = new HashMap<String, String>(1);
+        extraInfo.put("installedPlugin", toInstall.getId());
+        extraInfo.put("installedVersion", availableVersion);
+        extraInfo.put("installedBranch", versionBranch);
+        
+        telemetryEvent.sendTelemetryRequest(TelemetryEventType.INSTALLATION, extraInfo);
+        
         return new StatusMessage("PLUGIN_INSTALLED", toInstall.getName() + " was successfully installed.  Please restart your BI Server. \n" + toInstall.getInstallationNotes());
     }
 
@@ -397,7 +418,7 @@ public class MarketplaceService {
         }
 
         if (site == null || "".equals(site)) {
-            site = "https://raw.github.com/webdetails/marketplace/master/PentahoMarketplacePlugins.xml";
+            site = "https://raw.github.com/webdetails/marketplace/metadata/PentahoMarketplacePlugins.xml";
         }
 
         site = resolveVersion(site);

@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <settings>
     <marketplace-site>https://raw.github.com/webdetails/marketplace/metadata/PentahoMarketplacePlugins.xml</marketplace-site>
+    <telemetry-site>http://localhost/pentahoTelemetry</telemetry-site>
 </settings>

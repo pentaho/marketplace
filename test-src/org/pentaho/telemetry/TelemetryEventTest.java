@@ -30,8 +30,8 @@ public class TelemetryEventTest {
   
   @Test
   public void TestEventOrdering() {
-    TelemetryEvent te = new TelemetryEvent("url", 500, TimeUnit.MINUTES);
-    TelemetryEvent te2 = new TelemetryEvent("url", 400, TimeUnit.MINUTES);
+    TelemetryEvent te = new TelemetryEvent("url", 500, TimeUnit.MINUTES, 0);
+    TelemetryEvent te2 = new TelemetryEvent("url", 400, TimeUnit.MINUTES, 0);
     
     Assert.assertEquals(-1, te2.compareTo(te));
     

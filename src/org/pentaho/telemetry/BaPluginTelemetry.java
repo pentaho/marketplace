@@ -148,53 +148,14 @@ public class BaPluginTelemetry {
   }
   
   
-  /**
-   * Enable telemetry publishing for this plugin
-   */
-  public void enablePluginTelemetry() {
-    changeTelemetryFlag(true);
-  }
-  
-  /**
-   * Disables telemetry publishing for this plugin
-   */
-  public void disablePluginTelemetry() {
-    changeTelemetryFlag(false);
-  }
         
   
   /**
    * Determines whether the current plugin is allowed to publish telemetry events
    * @return <i> true</i> if telemetry is enabled, <i>false</i> otherwise.
    */
-  public boolean isPluginTelemetryEnabled() {
-    String settingsPath = PentahoSystem.getApplicationContext().getSolutionPath("system/" + this.pluginName + "/settings.xml");
-    DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-    FileReader reader = null;
-    try {
-      File file = new File(settingsPath);
-      if (!file.exists()) {
-        return false;
-      }
-      DocumentBuilder db = dbf.newDocumentBuilder();
-      reader = new FileReader(settingsPath);
-      Document dom = db.parse(new InputSource(reader));
-      NodeList telemetryElements = dom.getElementsByTagName("telemetry");
-      if (telemetryElements.getLength() >= 1) {
-        Element telemetryElement = (Element) telemetryElements.item(0);
-        return Boolean.parseBoolean(telemetryElement.getTextContent());
-      }
-    } catch (Exception e) {
-      logger.error("Error while trying to read plugin telemetry info for " + pluginName, e);
-    } finally {
-      try {
-        if (reader != null) {
-          reader.close();
-        }
-      } catch (Exception e) {
-      }
-    }
-    return false;            
+  public boolean isPluginTelemetryEnabled() {        
+    return Boolean.parseBoolean(PentahoSystem.getSystemSetting("telemetry", "true"));    
   }
   
   
@@ -215,50 +176,6 @@ public class BaPluginTelemetry {
     return baseUrl;
   }
   
-  private void changeTelemetryFlag(boolean telemetryFlag) {
-    
-    String settingsPath = PentahoSystem.getApplicationContext().getSolutionPath("system/" + this.pluginName + "/settings.xml");
-    DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-    FileReader reader = null;
-    try {
-      File file = new File(settingsPath);
-      DocumentBuilder db = dbf.newDocumentBuilder();
-      Document dom;
-      if (!file.exists()) {
-        dom = db.parse("<settings><telemetry>false</telemetry></settings>");
-      } else {
-        reader = new FileReader(settingsPath);
-        dom = db.parse(new InputSource(reader));
-      }
-            
-      NodeList telemetryElements = dom.getElementsByTagName("telemetry");
-      Element telemetryElement;
-      if (telemetryElements.getLength() >= 1) {
-        telemetryElement = (Element) telemetryElements.item(0);                
-      } else {
-        telemetryElement = dom.createElement("telemetry");
-        dom.getElementsByTagName("settings").item(0).appendChild(telemetryElement);
-      }
-      
-      telemetryElement.setTextContent(Boolean.toString(telemetryFlag));        
-      
-      TransformerFactory tFactory = TransformerFactory.newInstance();
-      Transformer transformer = tFactory.newTransformer();
-
-      DOMSource source = new DOMSource(dom);
-      StreamResult result = new StreamResult(file);
-      transformer.transform(source, result);               
-    } catch (Exception e) {
-      logger.error("Error while trying to read plugin telemetry info for " + pluginName, e);
-    } finally {
-      try {
-        if (reader != null) {
-          reader.close();
-        }
-      } catch (Exception e) {
-      }
-    }
-  }
   
   
   private String getPluginVersion() {

@@ -19,21 +19,16 @@
  */
 package org.pentaho.telemetry;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import java.io.File;
 import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.DelayQueue;
 import java.util.concurrent.TimeUnit;
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.HttpMethod;
-import org.apache.commons.httpclient.URI;
-import org.apache.commons.httpclient.methods.GetMethod;
-import java.net.HttpURLConnection;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.ThreadPoolExecutor;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.pentaho.platform.engine.core.system.PentahoSystem;
 
 public class TelemetryHelper {
 
@@ -42,90 +37,64 @@ public class TelemetryHelper {
     INSTALLATION, REMOVAL, USAGE, OTHER
   };
 
-  private static final int MAX_NUM_ATTEMPTS = 10;
-  private static final int WAIT_BETWEEN_TRIES_MINUTES = 5;
   
   private static Log logger = LogFactory.getLog(TelemetryHelper.class);
-  protected static BlockingQueue<TelemetryEvent> requestQueue = new DelayQueue<TelemetryEvent>();
+
+  protected static final BlockingQueue<TelemetryEvent> requestQueue = 
+          new ArrayBlockingQueue<TelemetryEvent>(100);
   private ITelemetryDataProvider dataProvider;
-  protected static HttpClient defaultHttpClient;
 
-  protected static HttpClient getHttpClient() {
-    return defaultHttpClient != null ? defaultHttpClient : new HttpClient();
-  }
-  protected static HttpMethod defaultHttpMethod;
-
-  protected static HttpMethod getHttpMethod() {
-    return defaultHttpMethod != null ? defaultHttpMethod : new GetMethod();
-  }
-
-  static {
-    //Launch the thread that will send the request
-    Thread requestThread = new Thread(new Runnable() {
-
-      @Override
-      public void run() {
-        try {
-          do {
-            TelemetryEvent event = requestQueue.take();
-
-            
-            final HttpClient httpClient = getHttpClient();
-            final HttpMethod httpMethod = getHttpMethod();
-            try {
-              int timeout = 30000;
-
-              httpClient.getHttpConnectionManager().getParams().setSoTimeout(timeout);
-
-              String url = event.getUrlToCall();
-              httpMethod.setURI(new URI(url, true));
-
-              
-              logger.info("Calling " + url);
-              
-              // Execute the request
-              final int resultCode = httpClient.executeMethod(httpMethod);
-              if (resultCode != HttpURLConnection.HTTP_OK) {
-                logger.error("Invalid Result Code Returned: " + resultCode);
-                setupEventRetry(event);
-              } else {
-                String resultXml = httpMethod.getResponseBodyAsString();
-                //TO DO: Improve error detection
-                if (resultXml.indexOf("OK") < 0) {
-                  logger.warn("Telemetry request had unexpected result: " + resultXml + ".");
-                  setupEventRetry(event);
-                  
-                }
+  private static final ScheduledThreadPoolExecutor threadPoolExecutor = 
+          new ScheduledThreadPoolExecutor(
+            1, 
+            new ThreadFactory() {
+              @Override
+              public Thread newThread(Runnable r) {
+                Thread t = new Thread(r);
+                t.setName("Telemetry Event Sender Thread");
+                t.setDaemon(true);
+                return t;
               }
-              
-              // Clean up
-              httpMethod.releaseConnection();
-              
-            } catch (Exception e) {
-              logger.warn("Exception caught while making telemetry reuest.", e);
-              setupEventRetry(event);
-            }
-          } while (true);
-        } catch (InterruptedException ie) {
-          logger.warn("Got interrupted");
-        }
+            },
+            new ThreadPoolExecutor.DiscardPolicy()
+          );
+  
 
-      }
-    });
+  
+  protected static String getTelemetryPath() {
+    return PentahoSystem.getApplicationContext().getSolutionPath("system/.telemetry");
+  }
+  
+  protected static String getLastSubmissionsPath() {
+    return PentahoSystem.getApplicationContext().getSolutionPath("system/.telemetry/lastsubmission");    
+  }
+  
+  static {
+    
+    //Ensure we have the folders we need created on fileSystem
+    final String telemetryPath = getTelemetryPath();
+    final File telemetryDir = new File(telemetryPath);
+    if(!telemetryDir.exists()){
+      telemetryDir.mkdir();
+    }            
 
+    final String lastSubmissionPath = getLastSubmissionsPath();
+    final File lastSubmissionDir = new File(lastSubmissionPath);
+    if(!lastSubmissionDir.exists()){
+      lastSubmissionDir.mkdir();
+    }            
+        
+    //Launch the thread that will send the events to the server (max once a day)
+    threadPoolExecutor.scheduleAtFixedRate(new TelemetryEventSender(lastSubmissionDir, telemetryDir), 0, 24, TimeUnit.HOURS);
+    
+    //Launch the thread that will store the requests on filesystem
+    Thread requestThread = new Thread(new TelemetryEventKeeper(requestQueue, telemetryPath));
+    requestThread.setName("Telemetry Event keeper Thread");
+    requestThread.setDaemon(true);
     requestThread.start();
   }
 
   
-  private static void setupEventRetry(TelemetryEvent event) {
-    int pastAttempts = event.getNumAttempts();
-    pastAttempts++;
-    if (pastAttempts < MAX_NUM_ATTEMPTS) {
-      logger.info("Rescheduling telemetry event publish to " + WAIT_BETWEEN_TRIES_MINUTES*pastAttempts + " minutes from now.");
-      requestQueue.add(new TelemetryEvent(event.getUrlToCall(), WAIT_BETWEEN_TRIES_MINUTES*pastAttempts, TimeUnit.MINUTES, pastAttempts));        
-    } else
-      logger.info("Unable to publish telemetry event for url " + event.getUrlToCall() + ". Tried " + MAX_NUM_ATTEMPTS + " times and failed. Removing event from queue");
-  }
   
   
   public TelemetryHelper() {
@@ -153,64 +122,15 @@ public class TelemetryHelper {
       return false;
     }
 
-    try {
-      return sendRequest(getUrl());
-    } catch (UnsupportedEncodingException uee) {
-      logger.error("UTF-8 is apparently not supported by your system. Unable to create telemetry event", uee);
-      return false;
-    }
+
+      return sendRequest(new TelemetryEvent(this.dataProvider));
 
   }
 
 
-  protected String getUrl() throws UnsupportedEncodingException {
-    if (dataProvider != null) {
-      //Build parameters map
-      Map<String, String> parameters = new HashMap<String, String>();
-      if (dataProvider.getExtraInformation() != null) {
-        parameters.putAll(dataProvider.getExtraInformation());
-      }
-      parameters.put("type", dataProvider.getEventType() == TelemetryHelper.TelemetryEventType.OTHER ? "other"
-              : (dataProvider.getEventType() == TelemetryHelper.TelemetryEventType.INSTALLATION ? "install"
-              : (dataProvider.getEventType() == TelemetryHelper.TelemetryEventType.REMOVAL ? "removal"
-              : "usage")));
-      parameters.put("plugin", dataProvider.getPluginName());
-      parameters.put("platVersion", dataProvider.getPlatformVersion());
-      parameters.put("pluginVersion", dataProvider.getPluginVersion());
-      parameters.put("timestamp","" + System.currentTimeMillis() );
 
-      String baseUrl = dataProvider.getBaseUrl();
-
-      final StringBuffer queryString = new StringBuffer();
-      queryString.append(baseUrl);
-      if (parameters != null) {
-        String connector = ""; //$NON-NLS-1$
-        if (baseUrl.indexOf('?') == -1) {
-          connector = "?"; //$NON-NLS-1$
-        } else if (!baseUrl.endsWith("&")) { //$NON-NLS-1$
-          connector = "&"; //$NON-NLS-1$
-        }
-
-        for (final Iterator it = parameters.keySet().iterator(); it.hasNext();) {
-          final String key = (String)it.next();
-          if (key != null) {
-            final String value = parameters.get(key);
-            queryString.append(connector).append(URLEncoder.encode(key, "UTF-8")).
-                    append('=').
-                    append(URLEncoder.encode(value, "UTF-8"));
-            connector = "&"; //$NON-NLS-1$
-          }
-        }
-      }
-      return queryString.toString();
-    }
-
-    return null;
-
-  }
-
-  protected boolean sendRequest(String url) {
-    return requestQueue.offer(new TelemetryEvent(url, 0, TimeUnit.NANOSECONDS, 0));
+  protected boolean sendRequest(TelemetryEvent te) {
+    return requestQueue.offer(te);
   }
 
   private boolean isTelemetryEnabled() {

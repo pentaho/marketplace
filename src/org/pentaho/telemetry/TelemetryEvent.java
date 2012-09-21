@@ -16,8 +16,12 @@
  *
  * Created Set 17th, 2012
  * @author Pedro Vale (pedro.vale@webdetails.pt)
- */package org.pentaho.telemetry;
+ */
+package org.pentaho.telemetry;
 
+import flexjson.JSONSerializer;
+import java.io.Serializable;
+import java.util.Map;
 import java.util.concurrent.Delayed;
 import java.util.concurrent.TimeUnit;
 
@@ -27,46 +31,32 @@ import java.util.concurrent.TimeUnit;
   * Useful for setting up retry attempts
   * @author pedrovale
   */
-public class TelemetryEvent implements Delayed {
+public class TelemetryEvent implements Serializable {
 
   private String urlToCall;
-  private long delay;
-  private TimeUnit delayTimeUnit;
-  private final long origin;
-  private final int attempts;
+  private String pluginName, 
+          pluginVersion,
+          platformVersion;
+  private long eventTimestamp;
+  private TelemetryHelper.TelemetryEventType eventType;
 
+  private Map<String, String> extraInfo;
   
-  
-  public TelemetryEvent(String urlToCall, long delay, TimeUnit delayTimeUnit, int attempts) {
-    this.urlToCall = urlToCall;
-    this.delay = delay;
-    this.delayTimeUnit = delayTimeUnit;
-    this.origin = System.currentTimeMillis();
-    this.attempts = attempts;
+  public TelemetryEvent(ITelemetryDataProvider dataProvider) {
+    this.urlToCall = dataProvider.getBaseUrl();
+
+    this.eventType = dataProvider.getEventType();
+    this.pluginName = dataProvider.getPluginName();
+    this.pluginVersion = dataProvider.getPluginVersion();
+    this.platformVersion = dataProvider.getPlatformVersion();
+    this.extraInfo = dataProvider.getExtraInformation();
+    this.eventTimestamp = System.currentTimeMillis();
+
   }
   
-  
-  public int getNumAttempts() {
-    return this.attempts;
-  }
-  
-  @Override
-  public long getDelay(TimeUnit tu) {
-    long delayInMillisecods = TimeUnit.MILLISECONDS.convert(delay, delayTimeUnit);
-    
-    return tu.convert(delayInMillisecods - ( System.currentTimeMillis() - origin ), TimeUnit.MILLISECONDS);
-  }
-
-  @Override
-  public int compareTo(Delayed t) {
-    long tDelay = t.getDelay(delayTimeUnit);
-    long myDelay = getDelay(delayTimeUnit);
-    if (myDelay < tDelay )
-      return -1;
-    else if (myDelay == tDelay)
-      return 0;
-
-    return 1;
+  public String encodeEvent() {
+    JSONSerializer serializer = new JSONSerializer();
+    return serializer.deepSerialize(this);
   }
 
   /**
@@ -81,6 +71,48 @@ public class TelemetryEvent implements Delayed {
    */
   public void setUrlToCall(String urlToCall) {
     this.urlToCall = urlToCall;
+  }
+
+  /**
+   * @return the pluginName
+   */
+  public String getPluginName() {
+    return pluginName;
+  }
+
+  /**
+   * @return the pluginVersion
+   */
+  public String getPluginVersion() {
+    return pluginVersion;
+  }
+
+  /**
+   * @return the platformVersion
+   */
+  public String getPlatformVersion() {
+    return platformVersion;
+  }
+
+  /**
+   * @return the eventTimestamp
+   */
+  public long getEventTimestamp() {
+    return eventTimestamp;
+  }
+
+  /**
+   * @return the eventType
+   */
+  public TelemetryHelper.TelemetryEventType getEventType() {
+    return eventType;
+  }
+
+  /**
+   * @return the extraInfo
+   */
+  public Map<String, String> getExtraInfo() {
+    return extraInfo;
   }
   
 }

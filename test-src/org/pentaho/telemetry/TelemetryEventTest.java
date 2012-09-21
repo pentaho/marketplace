@@ -19,26 +19,41 @@
  */
 package org.pentaho.telemetry;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import junit.framework.Assert;
 import org.junit.Test;
 
 
 
-public class TelemetryEventTest {
+public class TelemetryEventTest extends TelemetryBaseTest {
 
   
   @Test
-  public void TestEventOrdering() {
-    TelemetryEvent te = new TelemetryEvent("url", 500, TimeUnit.MINUTES, 0);
-    TelemetryEvent te2 = new TelemetryEvent("url", 400, TimeUnit.MINUTES, 0);
+  public void testEventCreation() {
+    TelemetryEvent te = new TelemetryEvent(getDefaultTelemetryDataProvider("CDF", true));
+
     
-    Assert.assertEquals(-1, te2.compareTo(te));
-    
-    Assert.assertEquals(0, te2.compareTo(te2));
-    
-    Assert.assertEquals(1, te.compareTo(te2));
-    
-    
+    Assert.assertEquals("CDF", te.getPluginName());
+    Assert.assertEquals("12.09.05", te.getPluginVersion());
+    Assert.assertEquals("4.5", te.getPlatformVersion());
+    Assert.assertEquals(TelemetryHelper.TelemetryEventType.OTHER, te.getEventType());
+        
   }
+  
+  
+  
+  @Test
+  public void testEventEncode() {
+    TelemetryEvent te = new TelemetryEvent(getDefaultTelemetryDataProvider("CDF", true));
+    
+    
+    String x = te.encodeEvent();
+    Assert.assertEquals(x.substring(79), "\"eventType\":\"OTHER\",\"extraInfo\":{\"ep1\":\"ev1\"},\"platformVersion\":\"4.5\",\"pluginName\":\"CDF\",\"pluginVersion\":\"12.09.05\",\"urlToCall\":\"pentahoTelemetry\"}");   
+  }
+  
+  
+
+  
 }

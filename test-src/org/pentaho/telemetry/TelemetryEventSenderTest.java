@@ -20,10 +20,9 @@
 
 package org.pentaho.telemetry;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashMap;
-import java.util.Map;
 import org.apache.commons.httpclient.ConnectionPoolTimeoutException;
 import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HostConfiguration;
@@ -38,9 +37,12 @@ import org.apache.commons.httpclient.StatusLine;
 import org.apache.commons.httpclient.URI;
 import org.apache.commons.httpclient.URIException;
 import org.apache.commons.httpclient.auth.AuthState;
+import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.params.HttpConnectionManagerParams;
 import org.apache.commons.httpclient.params.HttpMethodParams;
+import org.junit.After;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
  
@@ -48,42 +50,32 @@ import org.junit.Test;
 
 
 
-public class TelemetryHelperTest {
+public class TelemetryEventSenderTest extends TelemetryBaseTest {
 
-  public class TelemetryHelperForTests extends TelemetryHelper {
-      private String calledUrl;
+  public class TelemetryEventSenderForTests extends TelemetryEventSender {
+                
+      public int blockSize;  
+      public String blockDataZero;
+      public String blockDataOne;
       
-      
-      public TelemetryHelperForTests(final int resultCode, final boolean exception) {
-        requestQueue.clear();
+      public TelemetryEventSenderForTests(File submissionDir, File telemetryDir, 
+              final int resultCode, final boolean exception) {
         
-        defaultHttpMethod  = new HttpMethod() {
+        super(submissionDir, telemetryDir);
 
-        @Override
-        public String getName() {
-          throw new UnsupportedOperationException("Not supported yet.");
-        }
+        
+        defaultHttpMethod  = new PostMethod() {
 
-        @Override
-        public HostConfiguration getHostConfiguration() {
-          throw new UnsupportedOperationException("Not supported yet.");
-        }
-
-        @Override
-        public void setPath(String string) {
-          throw new UnsupportedOperationException("Not supported yet.");
-        }
-
-        @Override
-        public String getPath() {
-          throw new UnsupportedOperationException("Not supported yet.");
-        }
-
-        @Override
-        public URI getURI() throws URIException {
-          throw new UnsupportedOperationException("Not supported yet.");
-        }
-
+          private int callNumber;
+            @Override 
+        public void addParameter(String paramName, String paramValue) {
+              if (callNumber == 0)
+                blockDataZero = paramValue;
+              else
+                blockDataOne = paramValue;
+              callNumber++;
+            }
+          
         @Override
         public void setURI(URI uri) throws URIException {
           
@@ -141,7 +133,7 @@ public class TelemetryHelperTest {
 
         @Override
         public void setFollowRedirects(boolean bln) {
-          throw new UnsupportedOperationException("Not supported yet.");
+
         }
 
         @Override
@@ -298,6 +290,7 @@ public class TelemetryHelperTest {
         
         defaultHttpClient = new HttpClient() {
           
+          @Override
            public int executeMethod(HttpMethod method) throws IOException, HttpException {
              if (exception)
                throw new IOException();
@@ -345,125 +338,125 @@ public class TelemetryHelperTest {
         };
       }
       
+      
       @Override
-      protected boolean sendRequest(String url) {
-        calledUrl = url;
-        return super.sendRequest(url);
+      protected void sendRequest(File[] blockToSend) {     
+        
+        this.blockSize = 0;
+        
+        for (File f: blockToSend)
+          if (f != null) blockSize++;
+        
+        super.sendRequest(blockToSend);
+        
+        
       }
-      
-      
-  
-      
-      public String calledUrl() {return calledUrl;};
+ 
        
-      public int requestQueueSize() {return requestQueue.size();}
-  
+        
   }  
   
   
-  @Test
-  public void TestPublishWithEnabledTelemetry()  throws InterruptedException {
-
-    
-    TelemetryHelperForTests th = new TelemetryHelperForTests(200, false) ;
-    
-    ITelemetryDataProvider dprovider = getDefaultTelemetryDataProvider(true);
-    th.setDataProvider(dprovider);
-    Assert.assertTrue(th.publishTelemetryEvent());
-Assert.assertTrue(th.calledUrl.contains("ep1=ev1&platVersion=4.5&pluginVersion=12.09.05&type=other&plugin=CDF"));    
-    Thread.sleep(1000);//Not pretty but works
-    Assert.assertEquals(0, th.requestQueueSize());    
-  }
-  
-
-  @Test
-  public void TestPublishFailedResponseCode() throws InterruptedException {
-
-    
-    TelemetryHelperForTests th = new TelemetryHelperForTests(500, false) ;
-    
-    ITelemetryDataProvider dprovider = getDefaultTelemetryDataProvider(true);
-    th.setDataProvider(dprovider);
-    Assert.assertTrue(th.publishTelemetryEvent());
-Assert.assertTrue(th.calledUrl.contains("ep1=ev1&platVersion=4.5&pluginVersion=12.09.05&type=other&plugin=CDF"));    
-    Thread.sleep(1000); //Not pretty but works
-    Assert.assertEquals(1, th.requestQueueSize());    
-  }
-  
-
-  
-  @Test
-  public void TestPublishException() throws InterruptedException {
-
-    
-    TelemetryHelperForTests th = new TelemetryHelperForTests(500, true) ;
-    
-    ITelemetryDataProvider dprovider = getDefaultTelemetryDataProvider(true);
-    th.setDataProvider(dprovider);
-    Assert.assertTrue(th.publishTelemetryEvent());
-    Assert.assertTrue(th.calledUrl.contains("ep1=ev1&platVersion=4.5&pluginVersion=12.09.05&type=other&plugin=CDF"));
-            
-    
-    Thread.sleep(1000); //Not pretty but works
-    Assert.assertEquals(1, th.requestQueueSize());    
-  }
-  
-  
-  
-  @Test
-  public void TestPublishWithDisabledTelemetry() {
-    TelemetryHelper th = new TelemetryHelper();
-    
-    Assert.assertFalse(th.publishTelemetryEvent()); //Must be false before setting dataProvider
-    ITelemetryDataProvider dprovider = getDefaultTelemetryDataProvider(false);
-    th.setDataProvider(dprovider);
-    Assert.assertFalse(th.publishTelemetryEvent());
-    
-  }
-  
-  
-  private ITelemetryDataProvider getDefaultTelemetryDataProvider(final boolean enabled) {
-      return new ITelemetryDataProvider() {
-
-      @Override
-      public String getPlatformVersion() {
-        return "4.5";
-      }
-
-      @Override
-      public String getPluginName() {
-        return "CDF";
-      }
-
-      @Override
-      public String getPluginVersion() {
-        return "12.09.05";
-      }
-
-      @Override
-      public Map<String, String> getExtraInformation() {
-        HashMap<String, String> extraInfo = new HashMap<String, String>();
-        extraInfo.put("ep1", "ev1");
-        return extraInfo;
-      }
-
-      @Override
-      public TelemetryHelper.TelemetryEventType getEventType() {
-        return TelemetryHelper.TelemetryEventType.OTHER;
-      }
-
-      @Override
-      public boolean isTelemetryEnabled() {
-        return enabled;
-      }
  
-      @Override 
-      public String getBaseUrl() {
-        return "pentahoTelemetry";
-      }      
-      
-      
-    };    
+  
+  
+  @Before
+  public void setup() {
+    File f1 = new File("lastSubmission");
+    if (!f1.exists())
+      f1.mkdir();
+    
+    File f2 = new File("telemetryFiles");
+    if (!f2.exists())
+      f2.mkdir();
+    
+ 
+    cleanFolder(f1);
+    cleanFolder(f2);       
   }
   
+  
+  @After 
+  public void teardown() {
+    File f1 = new File("lastSubmission");
+    File f2 = new File("telemetryFiles");
+    
+    cleanFolder(f1);
+    cleanFolder(f2);       
+    
+  }
+  
+  @Test
+  public void TestSend()  throws InterruptedException {
+
+    TelemetryEvent te = new TelemetryEvent(getDefaultTelemetryDataProvider("CDE", true));
+    TelemetryEvent te2 = new TelemetryEvent(getDefaultTelemetryDataProvider("CDF", true));
+    
+    File lastSubmissionDir = new File("lastSubmission");
+    File telemetryFiles = new File("telemetryFiles");
+    createTelEvent(te, lastSubmissionDir);
+    
+    createTelEvent(te, telemetryFiles);
+    Thread.sleep(100);
+    createTelEvent(te2, telemetryFiles);
+    
+    TelemetryEventSenderForTests th = new TelemetryEventSenderForTests(
+            lastSubmissionDir, telemetryFiles
+            , 200, false);
+    
+    th.run();
+    
+    
+    Assert.assertTrue(th.blockDataZero.indexOf("\"pluginName\":\"CDE\"") > 0);
+    Assert.assertTrue(th.blockDataZero.indexOf("\"pluginName\":\"CDF\"") > 0);
+    Assert.assertEquals(2, th.blockSize);
+    
+    File[] fileList = getTelFilesInFolder(lastSubmissionDir);
+    Assert.assertEquals(2, fileList.length);
+    
+    fileList = getTelFilesInFolder(telemetryFiles);
+    Assert.assertEquals(0, fileList.length);    
+    
+    
+  }
+   
+
+  @Test
+  public void testSendDifferentUrls()  throws InterruptedException {
+
+    TelemetryEvent te = new TelemetryEvent(getDefaultTelemetryDataProvider("CDE", true, "url1"));
+    TelemetryEvent te2 = new TelemetryEvent(getDefaultTelemetryDataProvider("CDF", true, "url2"));
+    
+    File lastSubmissionDir = new File("lastSubmission");
+    File telemetryFiles = new File("telemetryFiles");
+    createTelEvent(te, lastSubmissionDir);
+    
+    createTelEvent(te, telemetryFiles);
+    Thread.sleep(100);
+    createTelEvent(te2, telemetryFiles);
+    
+    TelemetryEventSenderForTests th = new TelemetryEventSenderForTests(
+            lastSubmissionDir, telemetryFiles
+            , 200, false);
+    
+    th.run();
+    
+    
+    Assert.assertEquals(2, th.blockSize);
+
+    Assert.assertTrue(th.blockDataZero.indexOf("\"pluginName\":\"CDE\"") > 0);
+    Assert.assertTrue(th.blockDataOne.indexOf("\"pluginName\":\"CDF\"") > 0);
+
+    File[] fileList = getTelFilesInFolder(lastSubmissionDir);
+    Assert.assertEquals(2, fileList.length);
+    
+    fileList = getTelFilesInFolder(telemetryFiles);
+    Assert.assertEquals(0, fileList.length);    
+    
+    
+  }
+
+
+
+
 }

@@ -27,8 +27,8 @@ import java.util.concurrent.TimeUnit;
 
  
  /**
-  * Internal class to be used in conjuntion with the telemetry event request queue.
-  * Useful for setting up retry attempts
+  * Represents a telemetry event. Will be serialized to file system (to store
+  * before publishing) and to JSON on publish time
   * @author pedrovale
   */
 public class TelemetryEvent implements Serializable {

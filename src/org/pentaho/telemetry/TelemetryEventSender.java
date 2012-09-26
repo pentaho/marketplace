@@ -26,18 +26,28 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.HttpURLConnection;
 
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.URI;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+/**
+ * Used by TelemetryHelper to manage sending the telemetry requests to a server
+ * @author pedrovale
+ */
 public class TelemetryEventSender implements Runnable {
 
+  private static final int DAYS_TO_KEEP_FILES = 5;
+  private static final int BLOCK_SIZE = 50;
+  
   private static final Log logger = LogFactory.getLog(TelemetryEventSender.class);
+
   protected static PostMethod defaultHttpMethod;
   protected static HttpClient defaultHttpClient;
   protected File lastSubmissionDir;
@@ -58,12 +68,19 @@ public class TelemetryEventSender implements Runnable {
     return defaultHttpMethod != null ? defaultHttpMethod : new PostMethod();
   }
 
+  /***
+   * Given an array of telemetry event files, parses them, builds a JSON array
+   * with all the events and dispatches them to one or more urls. Deletes files
+   * if request was successful.
+   * @param blockToSend Array of files with telemetry events to send to the server
+   */
   protected void sendRequest(File[] blockToSend) {
     final HttpClient httpClient = getHttpClient();
     final PostMethod httpMethod = getHttpMethod();
 
     String baseUrl = null;
     HashMap<String, StringBuffer> urlsAndPostData = new HashMap<String, StringBuffer>();
+    HashMap<String, List<File>> urlsAndFiles = new HashMap<String, List<File>>();
     for (File f : blockToSend) {
       if (f == null)
         break;
@@ -81,10 +98,15 @@ public class TelemetryEventSender implements Runnable {
         } else
           postData.append(", ");
         
+        
         postData.append(event.encodeEvent());
         
         urlsAndPostData.put(event.getUrlToCall(), postData);
-
+        List<File> filesForThisUrl = urlsAndFiles.get(event.getUrlToCall());
+        if (filesForThisUrl == null)
+            filesForThisUrl = new ArrayList<File>();
+        filesForThisUrl.add(f);
+        urlsAndFiles.put(event.getUrlToCall(), filesForThisUrl);
       } catch (IOException ioe) {
         logger.error("Error caught while deserializing telemetry event.", ioe);
       } catch (ClassNotFoundException cnfe) {
@@ -98,7 +120,8 @@ public class TelemetryEventSender implements Runnable {
       String url = urlIterator.next();
       StringBuffer postData = urlsAndPostData.get(url);
       postData.append("]");
-
+      boolean success = true;
+      
       try {                  
         int timeout = 30000;
 
@@ -115,11 +138,13 @@ public class TelemetryEventSender implements Runnable {
         final int resultCode = httpClient.executeMethod(httpMethod);
         if (resultCode != HttpURLConnection.HTTP_OK) {
           logger.error("Invalid Result Code Returned: " + resultCode);
+          success = false;
         } else {
           String resultXml = httpMethod.getResponseBodyAsString();
           //TO DO: Improve error detection
-          if (resultXml.indexOf("OK") < 0) {
+          if (resultXml.indexOf("<result>OK</result>") < 0) {
             logger.warn("Telemetry request had unexpected result: " + resultXml + ".");
+            success = false;
           }
         }
 
@@ -127,18 +152,25 @@ public class TelemetryEventSender implements Runnable {
         httpMethod.releaseConnection();
 
       } catch (Exception e) {
-        logger.warn("Exception caught while making telemetry reuest.", e);
-      }                        
+        logger.warn("Exception caught while making telemetry request.", e);
+        success = false;
+      }         
+      
+      //Clear files
+      if (success) {
+        for (File f : blockToSend) {
+          if (f != null) {
+            File newFile = new File(lastSubmissionDir, f.getName());
+            f.renameTo(newFile);
+            f.delete();
+          }
+        }        
+      }
+      
+      
     }
     
 
-    for (File f : blockToSend) {
-      if (f != null) {
-        File newFile = new File(lastSubmissionDir, f.getName());
-        f.renameTo(newFile);
-        f.delete();
-      }
-    }
   }
 
   @Override
@@ -159,15 +191,21 @@ public class TelemetryEventSender implements Runnable {
     });
 
 
-    //TO DO: Set a maximum number of requests that can be sent per thread 
-    //run
-    File[] block = new File[50];
+    File[] block = new File[BLOCK_SIZE];
     int blockIndex = 0;
+    Calendar cld = Calendar.getInstance();
+    cld.add(Calendar.DAY_OF_YEAR, -DAYS_TO_KEEP_FILES);
     for (File f : unsubmittedRequests) {
-      //Create blocks of 50
-      if (blockIndex > 0 && blockIndex % 50 == 0) {
+      //Check if file was created more than 5 days ago. If so, dismiss it
+      if (f.lastModified() < cld.getTime().getTime()) {
+        f.delete();
+        continue;
+      }
+      
+      //Create blocks of BLOCK_SIZE
+      if (blockIndex > 0 && blockIndex % BLOCK_SIZE == 0) {
         sendRequest(block);
-        block = new File[50];
+        block = new File[BLOCK_SIZE];
         blockIndex = 0;
       } else {
         block[blockIndex] = f;

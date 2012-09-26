@@ -27,6 +27,10 @@ import java.util.concurrent.BlockingQueue;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+/***
+ * Used by TelemetryHelper to manage storing telemetry events on file system
+ * @author pedrovale
+ */
 public class TelemetryEventKeeper implements Runnable {
 
   private static final Log logger = LogFactory.getLog(TelemetryEventKeeper.class);  
@@ -50,20 +54,23 @@ public class TelemetryEventKeeper implements Runnable {
         }
   }
   
+  /**
+   * Takes an event from the event queue and stores it in the filesystem.
+   * @throws InterruptedException 
+   */
   public void process() throws InterruptedException {
-            TelemetryEvent event = queue.take();
+    TelemetryEvent event = queue.take();
             
-            try {
-              FileOutputStream fout = new FileOutputStream(requestPath + "/" + System.currentTimeMillis() + ".tel");
-              ObjectOutputStream oos = new ObjectOutputStream(fout);
-              oos.writeObject(event);
-              oos.close();            
-            } catch (FileNotFoundException fnfe) {
-              logger.warn("Unable to create file for telemetry event", fnfe);
-            }
-            catch (IOException ioe) {
-              logger.error("Error caught while creating file for telemetry event", ioe);
-            }                            
+    try {
+      FileOutputStream fout = new FileOutputStream(requestPath + "/" + System.currentTimeMillis() + ".tel");
+      ObjectOutputStream oos = new ObjectOutputStream(fout);
+      oos.writeObject(event);
+      oos.close();            
+    } catch (FileNotFoundException fnfe) {
+      logger.warn("Unable to create file for telemetry event", fnfe);
+    } catch (IOException ioe) {    
+      logger.error("Error caught while creating file for telemetry event", ioe);
+    }                            
   }
   
 }

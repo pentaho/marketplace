@@ -491,9 +491,13 @@ public class MarketplaceService {
                 plugin.setCompanyUrl(getElementChildValue(element, "author_url"));
                 plugin.setCompanyLogo(getElementChildValue(element, "author_logo"));
                 plugin.setImg(getElementChildValue(element, "img"));
+
                 plugin.setSmallImg(getElementChildValue(element, "small_img"));
                 plugin.setLearnMoreUrl(getElementChildValue(element, "documentation_url"));
                 plugin.setInstallationNotes(getElementChildValue(element, "installation_notes"));
+                plugin.setLicense(getElementChildValue(element, "license"));
+                plugin.setDependencies(getElementChildValue(element, "dependencies"));
+
 
                 //NodeList availableVersions = element.getElementsByTagName("version");
                 NodeList availableVersions = (NodeList) xpath.evaluate("versions/version", element, XPathConstants.NODESET);
@@ -509,7 +513,9 @@ public class MarketplaceService {
                                 getElementChildValue(versionElement, "samples_url"),
                                 getElementChildValue(versionElement, "description"),
                                 getElementChildValue(versionElement, "changelog"),
+
                                 getElementChildValue(versionElement, "build_id"),
+                                getElementChildValue(versionElement, "releaseDate"));                                
                                 getElementChildValue(versionElement, "min_parent_version"),
                                 getElementChildValue(versionElement, "max_parent_version"));
                         if (withinParentVersion(pv)) {
@@ -520,6 +526,18 @@ public class MarketplaceService {
                     plugin.setVersions(versions);
                 }
                 
+                NodeList availableScreenshots = (NodeList) xpath.evaluate("screenshots/screenshot", element, XPathConstants.NODESET);
+                if (availableScreenshots.getLength() > 0) {
+                    String[] screenshots = new String[availableScreenshots.getLength()];
+                    
+                    for (int j = 0; j < availableScreenshots.getLength(); j++) {
+                        Element screenshotElement = (Element) availableScreenshots.item(j);
+                        screenshots[j] = screenshotElement.getTextContent();
+                    }
+                    
+                    plugin.setScreenshots(screenshots);
+                }
+
                 // only include plugins that have versions within this release 
                 if (plugin.getVersions() != null && plugin.getVersions().size() > 0) {
                   pluginList.add(plugin);

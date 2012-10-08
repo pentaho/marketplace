@@ -35,6 +35,7 @@ wd.marketplace.engine = function(myself,spec){
     
     impl.init = function(){
         
+        $("html").addClass(active_theme);
         // Add pentaho style
         $("body").addClass("pentaho-page-background");
         
@@ -610,7 +611,35 @@ wd.marketplace.components.plugin = function(spec){
         
     }
     
+    //returns main plugin context excluding versions
+    myself.getPluginMainContent = function(){
+    	var version = {
+        	//creator info
+        	company: pluginInfo.company,
+        	companyLogo: pluginInfo.companyLogo,
+        	companyUrl: pluginInfo.companyUrl,
+        	
+        	//plugin info
+        	name: pluginInfo.name,
+        	description: pluginInfo.description,
+        	dependencies: pluginInfo.dependencies,
+        	license: pluginInfo.license,
+        	img: pluginInfo.img,
+        	smallImg: pluginInfo.smallImg,
+        	screenshots: pluginInfo.screenshots,
+        	
+        	installed: pluginInfo.installed
+        };
+        
+        return version;
+    }
     
+    //returns main plugin context excluding versions
+    myself.getPluginVersions = function(){
+    	return pluginInfo.versions;
+    }
+    
+    //returns installed version main content
     myself.getInstalledVersion = function(){
 
         if(!pluginInfo.installed){
@@ -618,29 +647,41 @@ wd.marketplace.components.plugin = function(spec){
         }
 
         // Directly return an object that shows the installed version, filling in the details
-        var version = {
-            branch: pluginInfo.installedBranch,
-            version: pluginInfo.installedVersion,
-            buildId: pluginInfo.installedBuildId
-        }
+        // digest the current json and return only the needed info.
+        var version = {      	
+        	//installed version info
+        	branch: pluginInfo.installedBranch,
+        	buildId: pluginInfo.installedBuildId,
+        	version: pluginInfo.installedVersion
+        };
+        
         
         // Try to find the name
         pluginInfo && $.isArray(pluginInfo.versions) && pluginInfo.versions.map(function(v){
             if(v.branch == version.branch){
-                version.name = v.name;
+                version.changeLog = v.changeLog;
+                version.versionDescription = v.description;
+                version.releaseDate = v.releaseDate;
                 return false;
             }
         });
         
         // if not found, default to branch id
         if(!version.name){
-            version.name = version.branch;
+            version.name = version.installedBranch;
         }
         
         return version;
         
     }
-    
+
+    myself.getDefaultVersion = function(){
+        var version = pluginInfo.versions[0]; //TODO: Default is not necessarily the first on the list
+        
+        return version;
+        
+    }
+        
     
     myself.getInstallationStatus = function(){
         
@@ -655,13 +696,13 @@ wd.marketplace.components.plugin = function(spec){
         
         
         // No versions available? 
-        if (!pluginInfo.versions || pluginInfo.versions.length == 0){
+        if (!myself.getPluginVersions() || myself.getPluginVersions().length == 0){
             return installationStatus["INSTALLED"];
         }
         
         // loop through the others
         var isUpdateAvailable;
-        pluginInfo.versions.map(function(v){
+        myself.getPluginVersions().map(function(v){
             if(v.branch == installedVersion.branch){
                 
                 if(v.version != installedVersion.version){
@@ -713,7 +754,7 @@ wd.marketplace.components.pluginHeader = function(spec){
     var plugin;
 
     // Containers
-    var $wrapper, $versionWrapper;
+    var $wrapper, $buttonWrapper;
     
     myself.setPlugin = function(_plugin){
         plugin = _plugin;
@@ -749,7 +790,8 @@ wd.marketplace.components.pluginHeader = function(spec){
 
         $wrapper.empty();
         
-        $("<div/>").addClass("pluginHeaderTitleWrapper pentaho-titled-toolbar pentaho-padding-sm pentaho-background contrast-color pentaho-rounded-panel2").append(
+      /*  $("<div/>").addClass("pluginHeaderTitleWrapper pentaho-titled-toolbar pentaho-padding-sm pentaho-background contrast-color pentaho-rounded-panel2")
+        .append(
             $("<div/>").addClass("pluginHeaderLogo").append( $("<img/>").attr('src', plugin.getPluginInfo().smallImg || plugin.getPluginInfo().img))
             .appendTo($wrapper))
         .append(
@@ -757,10 +799,15 @@ wd.marketplace.components.pluginHeader = function(spec){
         .append(
             $("<div/>").addClass("pluginHeaderUpdates " + installationStatus.cssClass)
             .text(installationStatus.description).appendTo($wrapper)    
-            ).appendTo($wrapper);
+            ).appendTo($wrapper);*/
+
+        $("<div/>").addClass("pluginHeaderTitleWrapper ")
+          .append($("<div/>").addClass("pluginHeaderTitle").text(plugin.getPluginInfo().name ) )
+          .append($("<div/>").addClass("pluginHeaderVersion").text(plugin.getPluginInfo().installedVersion ) )
+        .appendTo($wrapper);
             
             
-        var $versionWrapper = $("<div/>").addClass("pentaho-rounded-panel2 pluginHeaderVersionWrapper ")
+        var $buttonWrapper = $("<div/>").addClass("pluginHeaderButtonWrapper ").addClass('pluginHeaderVersionWrapper') //TODO: remove this last one
         .appendTo($wrapper);
         
 
@@ -768,17 +815,17 @@ wd.marketplace.components.pluginHeader = function(spec){
          
             $("<div/>").addClass("pluginHeaderVersionLabel")
                 .text( !plugin.getPluginInfo().installedBranch ? "" : plugin.getPluginInfo().installedBranch )
-                .appendTo($versionWrapper);
+                .appendTo($buttonWrapper);
             $("<div/>")
                 .text( !plugin.getPluginInfo().installedVersion ? "" : plugin.getPluginInfo().installedVersion )
-                .appendTo($versionWrapper);;
+                .appendTo($buttonWrapper);
         }
         else{
-            $("<div/>").addClass("pluginHeaderVersionNotInstalled").text("Not installed").appendTo($versionWrapper);
+            $("<div/>").addClass("pluginHeaderVersionNotInstalled").text("Not installed").appendTo($buttonWrapper);
         }
 
         if(typeof spec.clickAction === "function"){
-            $wrapper.click(spec.clickAction);
+            $wrapper.find('.pluginHeaderTitleWrapper').click(spec.clickAction);
         }
 
         
@@ -795,7 +842,6 @@ wd.marketplace.components.pluginHeader = function(spec){
     return myself;
 
 }
-
 
 wd.marketplace.components.pluginBody = function(spec){
     
@@ -818,17 +864,25 @@ wd.marketplace.components.pluginBody = function(spec){
     // BlueprintMixin
     wd.caf.modules.blueprintPanelModule(myself);
 
+  
 
-    var plugin;
+    var plugin, selectedVersion;
 
     // Containers
-    var $element, $wrapper, $pluginBodyDetailsArea, $pluginBodyInstallWrapper, 
-    $installedVersion, $availableVersions;
+    var $element, $wrapper, 
+        $pluginBodyTop, $pluginBodyDetailsArea, $pluginBodyBottom;
+
+    // Top Elements
+    var $closeButtonObj;
     
-    // Details section
-    var $pluginBodyDesc, $pluginVersionDesc;
-    var pluginVersionDesc;
-    
+    // Details Area   
+    var pluginVersionDetails;
+
+    // Bottom Elements
+    var $versionSelectorObj, $installButtonObj, $updateButtonObj, $uninstallButtonObj;
+
+
+
     myself.setPlugin = function(_plugin){
         plugin = _plugin;
     }
@@ -846,15 +900,20 @@ wd.marketplace.components.pluginBody = function(spec){
         $wrapper = $("<div/>").addClass("pluginBodyVisibilityToggle").appendTo($element);
         
         // On draw, this will be collapsed
-        if(Modernizr.csstransitions){
-            
-            myself.hide();
-
+      /*  if(Modernizr.csstransitions){  
+          myself.hide();
         }
         else{
             $element.addClass("marketplaceHidden");
         }
+      */  // TODO: modify this when details area is final, to
+       
+        var mainPluginContent = plugin.getPluginMainContent(),
+        	version = ( mainPluginContent.installed) ? plugin.getInstalledVersion() : plugin.getDefaultVersion(),
+        	v = $.extend({},mainPluginContent,version);
         
+        
+        myself.selectVersion(v); 
         myself.update();
 
         
@@ -864,165 +923,107 @@ wd.marketplace.components.pluginBody = function(spec){
     myself.update = function(){
         
         $wrapper.empty();
-        
-        
-        // Wrapper for detailsArea
-        $pluginBodyDetailsArea = $("<div/>").addClass("pluginBodyDetailsArea").appendTo($wrapper);
-        
-        $pluginBodyDesc = $("<div/>").addClass("pluginBodyDesc clearfix").appendTo($pluginBodyDetailsArea)
-        .append($("<div/>").addClass("pluginBodyDescLogo prepend-1 span-4 append-1")
-            .append( $("<img/>").attr('src', plugin.getPluginInfo().img) ) )
-        .append($("<div/>").addClass("pluginBodyDescDesc span-17 append-1 last")
-            .append($("<div/>").addClass("pluginBodyTitle").text("Information"))
-            .append($("<div/>").addClass("pluginBodyDescription").text(plugin.getPluginInfo().description))
-            )
-        ;
-        
-        
-        // Add the pluginVersionDescription, hidden at start
-        pluginVersionDesc =  wd.marketplace.components.pluginVersionDesc({
-            cssClass: "pluginVersionDesc marketplaceHidden",
-            installAction: spec.installAction
-        });
-        
-        pluginVersionDesc.draw($pluginBodyDetailsArea);
-        $pluginVersionDesc = $pluginBodyDetailsArea.find(".pluginVersionDesc");
-        
-        
-        
-        // Wrapper for pluginBodyInstall
-        $pluginBodyInstallWrapper = undefined; // todo
-        
-        
-        // Current version
-        var $installedVersionWrapper = $("<div/>").addClass("pluginBodyVersions prepend-1 span-4 append-1").appendTo($wrapper);
-        
-        if(plugin.getPluginInfo().installed){
-            
-            $installedVersion = $("<div/>").addClass("pluginVersions installedVersion clearfix");
 
-            $installedVersionWrapper.append(
-                $("<div/>").addClass("pluginBodyTitle").text("Installed Version")
-                )
-            .append($installedVersion);
-            
-            wd.marketplace.components.pluginVersion({
-                cssClass: "pluginVersion",
-                pluginVersion: plugin.getInstalledVersion(),
-                clickAction: function(){
-                    myself.showBodyDesc();
-                }
-            }).draw($installedVersion);
+        
+        // Top title and close buttom
+        $pluginBodyTop = $("<div/>").addClass("pluginBodyTop clearfix").appendTo($wrapper);
+        
+        var pluginInfo = plugin.getPluginInfo();
 
-        }
-         
-        
-        // Available versions
-        var $availableVersionsWrapper = $("<div/>").addClass("pluginBodyVersions currentVersion span-15").appendTo($wrapper);
-        
-        if(plugin.getPluginInfo().versions){
-    
-            $availableVersions = $("<div/>").addClass("pluginVersions availableVersions clearfix");
-        
-            $availableVersionsWrapper.append(
-                $("<div/>").addClass("pluginBodyTitle").text("Available Versions")
-                )
-            .append($availableVersions);
-            
-        
-            plugin.getPluginInfo().versions.map(function(v){
-                
-                // see if this matches the installed plugin
-                var highlight = !!plugin.getInstalledVersion() && v.branch == plugin.getInstalledVersion().branch;
-                
-                wd.marketplace.components.pluginVersion({
-                    cssClass: "pluginVersion",
-                    pluginVersion: v,
-                    clickAction: function(){
-                        
-                        //spec.installAction(v.branch);
-                        myself.showVersionDesc(v);
+         $("<div/>").addClass("pluginHeaderTitleWrapper")
+          .append($("<div/>").addClass("pluginHeaderTitle").text(pluginInfo.name ) )
+          .append($("<div/>").addClass("pluginHeaderVersion").text(pluginInfo.installedBuildId != undefined? pluginInfo.installedVersion + ' ('+ pluginInfo.installedBuildId +')' : pluginInfo.installedBranch + ' (' + pluginInfo.installedVersion + ')' ) )
+        .appendTo($pluginBodyTop);
+
+        var $closeButtonObj = $("<div/>").addClass("pluginHeaderButtonWrapper ").addClass('pluginHeaderVersionWrapper') //TODO: remove this last one when css is working
+        .appendTo($pluginBodyTop);
+
+        wd.marketplace.components.pluginButton({
+                    cssClass: "closeButton ",
+                    label: "Close",
+                    clickAction: function () {
+                      myself.log( "This one needs to close the details section. Implement");
+                      // TODO: implement this thingie.
                     },
-                    highlight: highlight
-                }).draw($availableVersions);
-            })
-        }
+                    image: "img/close.png"
+        }).draw($closeButtonObj);
         
-    
-        // Uninstall action
-        var $uninstallWrapper = $("<div/>").addClass("pluginBodyVersions pluginVersions uninstallVersion span-3 last").append(
-            $("<div/>").text("Uninstall")
-            )
-        .appendTo($wrapper)
 
-        if(typeof spec.uninstallAction === "function"){
-            $uninstallWrapper.addClass("cafPointer");
-            $uninstallWrapper.click( spec.uninstallAction );
-        }
+        // Wrapper for detailsArea
+        $pluginBodyDetailsArea = $("<div/>").addClass("pluginBodyDetailsArea clearfix").appendTo($wrapper);
 
-        
+        pluginVersionDetails = wd.marketplace.components.pluginVersionDetails({});
+        pluginVersionDetails.setPluginVersion(selectedVersion);
+        pluginVersionDetails.draw($pluginBodyDetailsArea);
 
         // Add footer
-        var footerContent = $("<div/>").addClass("pluginBodyFooterContent")
-        .append($("<div/>").addClass("pluginHorizontalSeparator"))
-        .appendTo($("<div/>").addClass("clearfix pluginBodyFooter span-22 prepend-1 append-1 last").appendTo($wrapper))
+        $pluginBodyBottom = $("<div/>").addClass("pluginBodyBottom clearfix").appendTo($wrapper);
+        $versionSelectorObj =  $("<div/>").addClass("pluginVersionSelectorContainer span-6").appendTo($wrapper);
+        $installButtonObj =  $("<div/>").addClass("pluginButton span-4").appendTo($wrapper);
+        $updateButtonObj =  $("<div/>").addClass("pluginButton span-4").appendTo($wrapper);
+        $uninstallButtonObj =  $("<div/>").addClass("pluginButton span-4").appendTo($wrapper);
         
-        // we'll put company logo or name, and a link if we have it
-        var content = plugin.getPluginInfo().companyLogo?'<img src="'+plugin.getPluginInfo().companyLogo+'" />':plugin.getPluginInfo().company;
-        if(plugin.getPluginInfo().companyUrl){
-            footerContent.append('<a href="'+plugin.getPluginInfo().companyUrl+'" target="_blank">'+content+'</a>');
+
+        if(plugin.getPluginInfo().versions){
+            var selector = wd.marketplace.components.pluginVersionSelector({
+                cssClass: "pluginVersionSelector",
+                availableVersions: plugin.getPluginInfo().versions ,
+                changeAction: myself.selectVersion
+            });
+            selector.setPluginVersion(selectedVersion);
+            selector.draw($versionSelectorObj);
         }
-        else{
-            footerContent.append(content);
-        }
+
+        wd.marketplace.components.pluginButton({
+            cssClass: "pluginButton",
+            label: "Install",
+            clickAction: function(){ 
+                spec.installAction(selectedVersion.branch);
+            }
+        }).draw($installButtonObj);
+
+        wd.marketplace.components.pluginButton({
+        	cssClass: "pluginButton",
+            label: "Update",
+            clickAction: function(){ 
+                var v = plugin.getInstalledVersion();
+                spec.installAction( v.branch ) ;
+            }
+        }).draw($updateButtonObj);
+
+        wd.marketplace.components.pluginButton({
+            cssClass: "pluginButton",
+            label: "Uninstall",
+            clickAction: spec.uninstallAction
+        }).draw($uninstallButtonObj);
+
+
 
         
     }
     
     
-    myself.showVersionDesc = function(version){
+    myself.selectVersion = function(version){
         
-        myself.log("showVersionDesc " + version);
+        myself.log("Selecting branch: " + version.branch);
         
-        pluginVersionDesc.setPluginVersion(version);
-        pluginVersionDesc.update();
-        
-        $pluginBodyDesc.addClass("marketplaceHidden");
-        $pluginVersionDesc.removeClass("marketplaceHidden");
-        
-        
-        // Mark this one selected
-        $availableVersions.find(".pluginVersion").each(function(idx,v){
-            var $v = $(v);
-            if($v.data("pluginVersion") == version){
-                $v.addClass("pluginVersionSelected");
-            }
-            else{
-                $v.removeClass("pluginVersionSelected");
-            }
-        });
-        
-        
+        selectedVersion = version;  
+           
+        if(pluginVersionDetails != undefined) {
+        	pluginVersionDetails.setPluginVersion(selectedVersion);   
+        	pluginVersionDetails.update();
+        }
     }
     
-    myself.showBodyDesc = function(){
-        
+    myself.showBodyDesc = function(){   
         myself.log("showBodyDesc");
-        
-        $pluginBodyDesc.removeClass("marketplaceHidden");
-        $pluginVersionDesc.addClass("marketplaceHidden");
-
-        // unselectAll
-        $availableVersions.find(".pluginVersionSelected").removeClass("pluginVersionSelected");
     }
     
     
     myself.hide = function(){
         
         if(Modernizr.csstransitions){
-            
             $wrapper.css("margin-top","-400px").addClass("marketplaceTransparent");
-
         }
         else{
             $element.hide();
@@ -1037,9 +1038,7 @@ wd.marketplace.components.pluginBody = function(spec){
         myself.showBodyDesc();
         
         if(Modernizr.csstransitions){  
-        
             $wrapper.css("margin-top","0px").removeClass("marketplaceTransparent");
-            
         }
         else{
             $element.show();
@@ -1053,87 +1052,62 @@ wd.marketplace.components.pluginBody = function(spec){
 
 }
 
-
-wd.marketplace.components.pluginVersion = function(spec){
+wd.marketplace.components.pluginVersionDetails = function(spec){
     
-    /**
-     * Specific specs
-     */
+    //
+    // Specific specs
+    //
     
     var _spec = {
-        name: "pluginVersion",
-        description: "Plugin Version",
-        cssClass: "pluginVersion",
-        pluginVersion: "",
-        highlight: false,
-        clickAction: undefined
+        name: "pluginVersionDetails",
+        description: "Plugin Version Details",
+        cssClass: "pluginVersionDetails"
     }; 
     
     
     spec = $.extend({},_spec,spec);
     var myself = wd.caf.component(spec);
-
-    var $wrapper;
-
-
-    myself.draw = function($ph){
-        
-        $wrapper = $("<div/>").addClass(spec.cssClass).data("pluginVersion",spec.pluginVersion)
-        .append($("<span/>").addClass("pluginVersionNumber").text(spec.pluginVersion.version))
-        
-        if(spec.highlight){
-            $wrapper.addClass("pluginVersionHighlight");
+    
+    var propertyMappingLeft = {
+        companyUrl:{
+            label: "Created by"
+        },
+        version:{
+            label: "Version"
+        },
+        license: {
+            label: "License"
+        },
+        dependencies:{
+            label: "Dependencies"
         }
-        
-        if(spec.pluginVersion.name){
-            $wrapper.append($("<span/>").addClass("pluginVersionBranch").text(" (" + spec.pluginVersion.name + ")"))
-            
-        }
-        
-        if(typeof spec.clickAction === "function"){
-            $wrapper.addClass("cafPointer");
-            $wrapper.click(spec.clickAction);
-        }
-
-        $wrapper.appendTo($ph);
-
-        
     }
     
-    return myself;
-}
-
-
-
-wd.marketplace.components.pluginVersionDesc = function(spec){
-    
-    /**
-     * Specific specs
-     */
-    
-    var _spec = {
-        name: "pluginVersionDesc",
-        description: "Plugin Version Description",
-        cssClass: "pluginVersionDesc",
-        pluginVersion: undefined,
-        installAction: undefined
-    }; 
-    
-    
-    spec = $.extend({},_spec,spec);
-    var myself = wd.caf.component(spec);
+    var propertyMappingRight = {
+    	description:{
+            label: "Description"
+        },
+        versionDescription:{
+        },
+        screenshots:{
+        	label: "Screenshots"
+        }
+    }
 
     var pluginVersion;
-
-    var $pluginVersionDescWrapper;
-
+    
+    myself.getPluginVersion = function(){
+    	return pluginVersion;
+    }
+    
+    myself.setPluginVersion = function(_pluginVersion){
+    	pluginVersion = _pluginVersion;
+    }
 
     myself.draw = function($ph){
         
-        $pluginVersionDescWrapper = $("<div/>").addClass(spec.cssClass +" clearfix").appendTo($ph);
-        
-    //myself.update();
-
+        myself.setPlaceholder($ph);
+        myself.update();
         
     }
     
@@ -1141,44 +1115,209 @@ wd.marketplace.components.pluginVersionDesc = function(spec){
     
     myself.update = function(){
         
+        var $ph = myself.getPlaceholder().empty(); 
         
-        $pluginVersionDescWrapper.empty();
-        
-        // install button
-        var $installButton = $("<div/>").addClass("pluginVersionDescInstallButton ");
-        $installButton.addClass("cafPointer");
-        $installButton.click(myself.installAction);
-        
-        $pluginVersionDescWrapper
-        .append($("<div/>").addClass("pluginVersionDescLeftArea prepend-1 span-4 append-1")
-            .append($("<div/>").addClass("clearfix pluginVersionDescTitle").text(pluginVersion.branch))
-            .append($("<div/>").addClass("clearfix pluginVersionDescVersion").text(pluginVersion.version))
-            .append($("<div/>").append($installButton))
 
-            )
-        .append($("<div/>").addClass("pluginVersionDescDesc span-18 last")
-            .append($("<div/>").addClass("pluginVersionDescTitle").text("Version information"))
-            .append($("<div/>").addClass("pluginVersionDescDescription").text(pluginVersion.changelog!=null?pluginVersion.changelog:"Not available"))
+
+        //TODO: Temp. This 'if' might not be necessary
+
+        if (pluginVersion ){
         
-            );
+        	//build left side
+        	var $leftSide = $("<div/>");
+        	$leftSide.addClass("pluginVersionLeft");
+        	$ph.append($leftSide);
+        	
+    		$("<img/>").attr('src',pluginVersion.img).appendTo($leftSide); 
+    		$("<div style='height: 20px'><div class='infoDesc'>INFO</div> <div class='infoIcon'></div></div>").appendTo($leftSide);   
+        	
+        	$.each(propertyMappingLeft, function(prop){
+        		var label = $("<div/>").addClass("clearfix pluginVersionPropLabel"),
+        			value = $("<div/>").addClass("clearfix pluginVersionPropValue");
+        			
+        		label.text(propertyMappingLeft[prop].label);
+        		value.text(pluginVersion[prop]);
+        		
+        		$leftSide.append(label);
+        		$leftSide.append(value);
+        	});
+        	
+        	//build right side
+        	var $rightSide = $("<div/>");
+        	$rightSide.addClass("pluginVersionRight last");
+        	$ph.append($rightSide);
+        	
+        	//append description
+        	$("<div/>").text("Description").appendTo($rightSide);
+        	$("<div/>").html(pluginVersion.description + " <br/> <br/> " + pluginVersion.versionDescription).appendTo($rightSide);
+        	
+        	//append screenshots
+        	$("<div/>").text("Screenshots").appendTo($rightSide);
+        	var $screenshots = $("<div/>").addClass("screenshots"),
+        		$screenshotHolder = $("<div/>").addClass("screenshotsHolder");
+        		
+        	$screenshotHolder.appendTo($screenshots);
+        	
+        	$.each(pluginVersion.screenshots, function(i){
+        		var $imgPh = $("<a/>").addClass('image fancybox').attr('rel','gallery1').attr('href',pluginVersion.screenshots[i]);
+        		$("<img/>").attr('src',pluginVersion.screenshots[i]).attr('height',75).attr('width',150).appendTo($imgPh);   
+        		$screenshotHolder.append($imgPh);     	
+        	}); 
+        	
+        	$screenshotHolder.css('width',pluginVersion.screenshots.length*160+'px');
+        	
+        	$screenshots.appendTo($rightSide);
+        	
+        	$(".fancybox").fancybox();
+        }
         
+    }
+           
+    return myself;
+}
+
+
+
+wd.marketplace.components.pluginVersionSelector = function(spec){
+    
+    /**
+     * Specific specs
+     */
+    
+    var _spec = {
+        name: "pluginVersionSelector",
+        description: "Plugin Version Selector",
+        cssClass: "pluginVersionSelector",
+        availableVersions: undefined,
+        changeAction: undefined
+    }; 
+    
+    
+    spec = $.extend({},_spec,spec);
+    var myself = wd.caf.component(spec);
+
+    var pluginVersion, versionMap = {};
+
+    var $ph, $pluginVersionSelector;
+
+
+    myself.draw = function($ph){
+        myself.setPlaceholder( $ph );
+
+        $.each ( spec.availableVersions , function (idx, el ){
+          versionMap[el.branch] = el;  
+        });
+
+        myself.update();
+    }
+    
+    
+    
+    myself.update = function(){
+        
+        var $ph = myself.getPlaceholder().empty();        
+
+        
+        $pluginVersionSelector = $("<select/>").addClass(spec.cssClass + " chzn-select").appendTo($ph);
+        $.each( spec.availableVersions , function (idx, el) {
+        	var $option = $('<option/>').val(el.branch).text(el.version + " (" + el.name + ")");
+        	if(el.branch == pluginVersion.branch){
+        		$option.attr('selected','selected');
+        	}
+        	$option.appendTo($pluginVersionSelector);
+        });
+        $pluginVersionSelector.change( function () {
+        	//get only relevant properties
+        	var version = versionMap[$pluginVersionSelector.val()];
+        	
+        	var newVersion = {
+        		branch: version.branch,
+        		buildId: version.buildId,
+        		version: version.version,
+                changeLog: version.changeLog,
+                versionDescription: version.description,
+                releaseDate: version.releaseDate
+        	}
+        	
+            myself.setPluginVersion( newVersion );
+            myself.changeAction();     
+        });
+        // $pluginVersionSelector.chosen();
     }
     
     
     myself.setPluginVersion = function(_pluginVersion){
         
-        pluginVersion = _pluginVersion;
+        pluginVersion = $.extend({},pluginVersion, _pluginVersion);
         
     }
     
-    myself.installAction = function(){
+    myself.changeAction = function(){
         
-        spec.installAction(pluginVersion.branch);
+        spec.changeAction(pluginVersion);
         
     }
     
     return myself;
 }
+
+
+
+wd.marketplace.components.pluginButton = function(spec){
+    
+    /**
+     * Specific specs
+     */
+    
+    var _spec = {
+        name: "pluginButton",
+        description: "Plugin Button",
+        cssClass: "pluginButton",
+        clickAction: undefined,
+        label: "Button"
+    }; 
+    
+    
+    spec = $.extend({},_spec,spec);
+    var myself = wd.caf.component(spec);
+
+    var $button;
+
+    myself.draw = function($ph){
+        myself.setPlaceholder( $ph );
+        myself.update();
+    }
+    
+    
+    
+    myself.update = function(){
+
+        var $ph = myself.getPlaceholder().empty();        
+
+        // version selector
+        $button = $("<button/>").addClass(spec.cssClass);
+        
+        if(spec.image != undefined){
+        	$button.append("<span style='line-height: 18px; padding-left: 20px;'>"+spec.label+"</span>");
+        	$button.append("<div class='icon' style='background: url("+spec.image+")'></div>");
+        } else {
+        	$button.text(spec.label);
+        }
+        
+        $button.appendTo($ph);
+        $button.click( myself.clickAction);     
+    }
+    
+        
+    myself.clickAction = function(){
+        
+        spec.clickAction();
+        
+    }
+    
+    return myself;
+}
+
 
 
 /*
@@ -1819,6 +1958,12 @@ function PentahoMarketplace() {
             }
         }
         alert('XML is invalid or no XML parser found');
+        return null;
+    }
+}
+var pentahoMarketplace = new PentahoMarketplace();
+
+alert('XML is invalid or no XML parser found');
         return null;
     }
 }

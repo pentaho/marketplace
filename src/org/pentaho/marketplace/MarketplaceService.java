@@ -489,6 +489,8 @@ public class MarketplaceService {
                 plugin.setLearnMoreUrl(getElementChildValue(element, "learnMoreUrl"));
                 plugin.setName(getElementChildValue(element, "name"));
                 plugin.setInstallationNotes(getElementChildValue(element, "installationNotes"));
+                plugin.setLicense(getElementChildValue(element, "license"));
+                plugin.setDependencies(getElementChildValue(element, "dependencies"));
 
                 //NodeList availableVersions = element.getElementsByTagName("version");
                 NodeList availableVersions = (NodeList) xpath.evaluate("versions/version", element, XPathConstants.NODESET);
@@ -505,9 +507,23 @@ public class MarketplaceService {
                                 getElementChildValue(versionElement, "samplesDownloadUrl"),
                                 getElementChildValue(versionElement, "description"),
                                 getElementChildValue(versionElement, "changelog"),
-                                getElementChildValue(versionElement, "buildId"));
+                                getElementChildValue(versionElement, "buildId"),
+                                getElementChildValue(versionElement, "releaseDate"));
+                               
                     }
                     plugin.setVersions(versions);
+                }
+                
+                NodeList availableScreenshots = (NodeList) xpath.evaluate("screenshots/screenshot", element, XPathConstants.NODESET);
+                if (availableScreenshots.getLength() > 0) {
+                    String[] screenshots = new String[availableScreenshots.getLength()];
+                    
+                    for (int j = 0; j < availableScreenshots.getLength(); j++) {
+                        Element screenshotElement = (Element) availableScreenshots.item(j);
+                        screenshots[j] = screenshotElement.getTextContent();
+                    }
+                    
+                    plugin.setScreenshots(screenshots);
                 }
 
                 pluginArr[i] = plugin;

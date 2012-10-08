@@ -28,7 +28,6 @@ public class MarketplaceContentGenerator extends SimpleContentGenerator {
 
     protected MarketplaceService getMarketplaceService() throws ServiceException {
 
-
         return ((MarketplaceService) PentahoSystem.get(org.pentaho.platform.api.engine.IServiceManager.class).getServiceBean("xml", "MarketplaceService"));
 
     }

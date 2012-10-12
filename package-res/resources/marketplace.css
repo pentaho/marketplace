@@ -12,20 +12,42 @@ html, body {
 }
 
 .marketplacePanel {
+	padding-bottom: 25px;
+}
 
+.panelContainer > div {
+}
+
+.templateWrapper {
+	margin-left: auto;
+	margin-right: auto;
+	overflow: hidden;
+	clear: both;
+	width:950px;
+	-webkit-box-shadow:  0px 0px 10px 0px #000000;
+    box-shadow:  0px 0px 10px 0px #000000;
+    
+    -moz-border-radius: 0px 0px 10px 10px;
+	-webkit-border-radius: 0px 0px 10px 10px;
+	border-radius: 0px 0px 10px 10px;
 }
 
 .templateLogo {
-    background: url('http://www.webdetails.pt/ficheiros/marketplace_logo.png') repeat scroll 0 0 transparent;
     display: inline-block;
     float: left;
-    height: 52px;
-    margin-left: 0px;
     width: 154px;
+    color: #d2d2d2;
+    font-size: 13pt;
+    line-height: 50px;
+    margin-left: 30px;
 }
 
 .templateHead{
     width: 950px;
+    background: #333333;
+    border-left: solid 1px #353535;
+    border-right: solid 1px #353535;
+    height: 50px;  
 }
 
 .templateHead > div.templatePanels{
@@ -185,7 +207,7 @@ html, body {
 .templatePanelsContainer{
 
     /* Remove this later */
-    min-height: 600px;
+    min-height: auto;
     width: 950px;
     margin:0 auto;
 
@@ -195,13 +217,30 @@ html, body {
     position: relative;
 }
 
-.panelContainer{
+.marketplacePanelHeader {
+	height: 73px;
+	padding-top: 40px;
+}
 
-    position: absolute;
-    top: 0px;
+.marketplacePanelHeader > div {
+	display:inline-block;
+	color: #d2d2d2;
+	font-size: 10px;
+	font-weight: bold;
+}
+
+.marketplacePanelHeader .pluginDetails {
+	margin-left: 30px;
+	margin-right: 4px;
+	width: 690px;
+}
+
+.marketplacePanelHeader .action {
+
+}
+
+.panelContainer{
     width: inherit;
-    /*    width: 1150px;*/
-    min-height: 600px;
     margin-left: auto;
     margin-right: auto;
 
@@ -210,6 +249,16 @@ html, body {
     -moz-transition: all 500ms ease-in;
     -o-transition: all 500ms ease-in;
     transition: all 500ms ease-in;
+
+    
+    background: #4A4A4A;
+	border: solid 1px #353535;
+	border-top: none;
+	
+	-moz-border-radius: 0px 0px 10px 10px;
+	-webkit-border-radius: 0px 0px 10px 10px;
+	border-radius: 0px 0px 10px 10px;
+	
 
 }
 
@@ -262,7 +311,7 @@ body .marketplaceCollapsed{
 
 .pluginHeader {
     overflow: hidden;
-    margin-left: 20px;
+    margin-left: 30px;
     height: 75px;
 }
 
@@ -285,7 +334,7 @@ body .marketplaceCollapsed{
 .pluginBody .pluginHeaderTitleWrapper:active{
 
     width: 745px;
-    margin-right:5px;
+    margin-right:4px;
 	display: inline-block;
 	height: 70px;
 	
@@ -302,7 +351,7 @@ body .marketplaceCollapsed{
 	background: linear-gradient(to bottom,  #494949 0%,#202020 100%); /* W3C */
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#494949', endColorstr='#202020',GradientType=0 ); /* IE6-8 */
 	
-	border: solid 2px #242424;
+	border: solid 1px #242424;
 	-moz-border-radius: 5px;
 	-webkit-border-radius: 5px;
 	border-radius: 5px;
@@ -324,7 +373,7 @@ body .marketplaceCollapsed{
 }
 
 .pluginHeaderTitleWrapper:hover {
-	border: solid 2px #454545;
+	border: solid 1px #454545;
 	
 	background: #737373; /* Old browsers */
 	/* IE9 SVG, needs conditional override of 'filter' to 'none' */
@@ -342,7 +391,7 @@ body .marketplaceCollapsed{
 }
 
 .pluginHeaderTitleWrapper:active {
-	border: solid 2px #454545;
+	border: solid 1px #454545;
 	
 	background: #393939; /* Old browsers */
 	/* IE9 SVG, needs conditional override of 'filter' to 'none' */
@@ -373,7 +422,7 @@ body .marketplaceCollapsed{
 .pluginHeaderTitleWrapper .centerSide {
 	border-right: solid 1px #000000;
 	height: 35px;
-	margin: 10px 0px;
+	margin: 12px 0px;
 }
 
 .pluginHeaderTitleWrapper:hover .centerSide, 
@@ -385,7 +434,7 @@ body .marketplaceCollapsed{
 	width: 180px;
 	border-left: solid 1px #4a4e54;
 	height: 35px;
-	margin: 10px 0px;
+	margin: 12px 0px;
 	padding-left: 30px;
 }
 
@@ -436,7 +485,7 @@ body .marketplaceCollapsed{
 
 .pluginHeaderTitleWrapper:hover .rightSide .viewDetailsImage,
 .pluginHeaderTitleWrapper:active .rightSide .viewDetailsImage {
-	background-position: -25px 0px;
+	background-position: -26px 0px;
 }
 
 .pluginHeaderUpdates{
@@ -514,7 +563,7 @@ body .marketplaceCollapsed{
 	-webkit-box-shadow: none;
 	box-shadow: none;	
 	
-	border: solid 2px #242424;
+	border: solid 1px #242424;
 	-moz-border-radius: 5px;
 	-webkit-border-radius: 5px;
 	border-radius: 5px;
@@ -541,7 +590,7 @@ body .marketplaceCollapsed{
 }
 
 .pluginHeaderButtonWrapper button:active {
-	border: solid 2px #454545;
+	border: solid 1px #454545;
 	
 	background: #393939; /* Old browsers */
 	/* IE9 SVG, needs conditional override of 'filter' to 'none' */
@@ -692,7 +741,7 @@ body .marketplaceCollapsed{
 .pluginHeaderButtonWrapper button.installButton,
 .pluginHeaderButtonWrapper button.updateButton,
 .pluginHeaderButtonWrapper button.uptodateButton {
-	width: 200px;
+	width: 195px;
 }
 
 .pluginBody{
@@ -769,7 +818,7 @@ body .marketplaceCollapsed{
 
 .pluginBodyContainerBottom button.installButton,
 .pluginHeader button.installButton {
-	border: solid 2px #287750;
+	border: solid 1px #287750;
 	cursor: pointer;
 	color: #c6edd9;
 	
@@ -792,7 +841,7 @@ body .marketplaceCollapsed{
 
 .pluginBodyContainerBottom button.installButton:hover,
 .pluginHeader button.installButton:hover {
-	border: solid 2px #287750;
+	border: solid 1px #287750;
 	color: #ffffff;
 	
 	background: #99debb; /* Old browsers */
@@ -809,7 +858,7 @@ body .marketplaceCollapsed{
 
 .pluginBodyContainerBottom button.installButton:active,
 .pluginHeader button.installButton:active {
-	border: solid 2px #287750;
+	border: solid 1px #287750;
 	color: #ffffff;
 	
 	background: #19462f; /* Old browsers */
@@ -834,7 +883,7 @@ body .marketplaceCollapsed{
 
 .pluginBodyContainerBottom button.updateButton,
 .pluginHeader button.updateButton {
-	border: solid 2px #ff6700;
+	border: solid 1px #ff6700;
 	color: #ffd285;
 	
 	background: #ffc609; /* Old browsers */
@@ -858,7 +907,7 @@ body .marketplaceCollapsed{
 
 .pluginBodyContainerBottom button.updateButton:hover,
 .pluginHeader button.updateButton:hover {
-	border: solid 2px #ffab12;
+	border: solid 1px #ffab12;
 	color: #ffffff;
 	
 	background: #ffca02; /* Old browsers */
@@ -876,7 +925,7 @@ body .marketplaceCollapsed{
 
 .pluginBodyContainerBottom button.updateButton:active,
 .pluginHeader button.updateButton:active {
-	border: solid 2px #ff6600;
+	border: solid 1px #ff6600;
 	color: #ffffff;
 	
 	background: #ff6600; /* Old browsers */
@@ -900,7 +949,7 @@ body .marketplaceCollapsed{
 }
 
 .pluginBodyContainerBottom button.uninstallButton {
-	border: solid 2px #111111;
+	border: solid 1px #111111;
 	color: #7d7d7d;
 	
 	background: #434343; /* Old browsers */
@@ -922,7 +971,7 @@ body .marketplaceCollapsed{
 }
 
 .pluginBodyContainerBottom button.uninstallButton:hover {
-	border: solid 2px #111111;
+	border: solid 1px #111111;
 	color: #ffffff;
 	
 	background: #4e4e4e; /* Old browsers */
@@ -939,7 +988,7 @@ body .marketplaceCollapsed{
 }
 
 .pluginBodyContainerBottom button.uninstallButton:active {
-	border: solid 2px #111111;
+	border: solid 1px #111111;
 	color: #ffffff;
 	
 	background: #1d1d1d; /* Old browsers */
@@ -965,7 +1014,7 @@ body .marketplaceCollapsed{
 
 .pluginBodyContainerBottom button.uptodateButton,
 .pluginHeader button.uptodateButton {
-	border: solid 2px #242424;
+	border: solid 1px #242424;
 	color: #d76200;
 	
 	background: #434343; /* Old browsers */
@@ -989,7 +1038,7 @@ body .marketplaceCollapsed{
 
 .pluginBodyContainerBottom button.uptodateButton:hover,
 .pluginHeader button.uptodateButton:hover {
-	border: solid 2px #424242;
+	border: solid 1px #424242;
 	color: #d76200;
 	
 	background: #494949; /* Old browsers */
@@ -1007,7 +1056,7 @@ body .marketplaceCollapsed{
 
 .pluginBodyContainerBottom button.uptodateButton:active,
 .pluginHeader button.uptodateButton:active {
-	border: solid 2px #3c3c3c;
+	border: solid 1px #3c3c3c;
 	color: #d76200;
 	
 	background: #737373; /* Old browsers */
@@ -1036,7 +1085,7 @@ body .marketplaceCollapsed{
 .pluginBodyContainerBottom button:disabled,
 .pluginBodyContainerBottom button:disabled:hover,
 .pluginBodyContainerBottom button:disabled:active {
-	border: solid 2px #949494;
+	border: solid 1px #949494;
 	color: #949494;
 	
 	background: #393939; /* Old browsers */
@@ -1510,7 +1559,7 @@ margin-top: 4px;
 	font-weight: bold;
 	line-height: 49px;
 
-	border: solid 2px #111;
+	border: solid 1px #111;
 	color: #7D7D7D;
 	background: #434343; /* Old browsers */
 	/* IE9 SVG, needs conditional override of 'filter' to 'none' */
@@ -1527,7 +1576,7 @@ margin-top: 4px;
 .pluginVersionSelectorContainer select:hover,
 .pluginVersionSelectorContainer .select2-container .select2-choice:hover {
 	color: #ffffff;
-	border: solid 2px #434343;
+	border: solid 1px #434343;
 
 	background: #4e4e4e; /* Old browsers */
 	/* IE9 SVG, needs conditional override of 'filter' to 'none' */

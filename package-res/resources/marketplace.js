@@ -202,12 +202,10 @@ wd.marketplace.template = function(spec){
         var wrapper = $('<div class="templateWrapper"></div>');
         var header  = $('<div class="templateHead"></div>').appendTo(wrapper);
 
-        myself.$logo = $('<div class="templateLogo"></div>').appendTo(header);
+        myself.$logo = $('<div class="templateLogo">Marketplace</div>').appendTo(header);
         myself.$actions = $('<div class="templateActions"></div>').appendTo(header);
         myself.$panels = $('<div class="templatePanels"></div>').appendTo(header);
-        myself.$title = $('<div class="templateTitle contrast-color"></div>')
-           
-        .appendTo(header);
+        myself.$title = $('<div class="templateTitle contrast-color"></div>').appendTo(header);
   
         header.append($('<div class="templateHShadow"></div>'));
         
@@ -1720,16 +1718,6 @@ wd.marketplace.panels.marketplacePanel = function(spec){
 
 
 
-
-
-    // Components
-    
-    var title =  wd.marketplace.components.label({
-        label: spec.description,
-        cssClass:"marketplacePanelTitle pentaho-titled-toolbar pentaho-padding-sm pentaho-rounded-panel2 pentaho-background contrast-color" 
-    });
-
-
     // Connecting componnet
     
     var connectingComponent = wd.caf.component(
@@ -1753,13 +1741,14 @@ wd.marketplace.panels.marketplacePanel = function(spec){
      * @memberof wd.caf.panel
      */
     myself.draw = spec.draw || function($ph){
-        
+        $("<div/>").addClass("marketplacePanelHeader")
+        	.append($("<div/>").addClass("pluginDetails").text("Plugin Details"))
+        	.append($("<div/>").addClass("action").text("Action"))
+        .appendTo($ph);
         
         //$panel = myself.generateBlueprintStructure().appendTo($ph);
         $panel = $("<div/>").appendTo($ph);
-        
-        // Title
-        title.draw($panel);
+
         
         
         $mainContent = $('<div/>').addClass("marketplacePanel");
@@ -1972,14 +1961,14 @@ wd.marketplace.panels.marketplacePanel = function(spec){
 marketplace.getRegistry().registerPanel(wd.marketplace.panels.marketplacePanel({
     name:"installedPluginsPanel",
     description:"Installed plugins",
-    order: 10
+    order: 20
 }));
 
 
 marketplace.getRegistry().registerPanel(wd.marketplace.panels.marketplacePanel({
     name:"allPluginsPanel",
-    description:"Available plugins",
-    order: 20
+    description:"All plugins",
+    order: 10
 }));
 
 /*
@@ -2088,6 +2077,12 @@ function PentahoMarketplace() {
             }
         }
         alert('XML is invalid or no XML parser found');
+        return null;
+    }
+}
+var pentahoMarketplace = new PentahoMarketplace();
+
+ invalid or no XML parser found');
         return null;
     }
 }

@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <settings>
-    <marketplace-site>https://raw.github.com/webdetails/marketplace/master/PentahoMarketplacePlugins.xml</marketplace-site>
+    <marketplace-site>https://raw.github.com/pentaho/marketplace-metadata/master/marketplace.xml</marketplace-site>
 </settings>

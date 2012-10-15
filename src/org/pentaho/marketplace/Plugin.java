@@ -20,6 +20,7 @@
 package org.pentaho.marketplace;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class Plugin implements Serializable {
 
@@ -38,7 +39,7 @@ public class Plugin implements Serializable {
     private String installedBuildId;    
     private String installationNotes;
     private boolean installed;
-    private PluginVersion[] versions;
+    private List<PluginVersion> versions;
 
     public Plugin() {
     }
@@ -152,14 +153,14 @@ public class Plugin implements Serializable {
     /**
      * @return the versions
      */
-    public PluginVersion[] getVersions() {
+    public List<PluginVersion> getVersions() {
         return versions;
     }
 
     /**
      * @param versions the versions to set
      */
-    public void setVersions(PluginVersion[] versions) {
+    public void setVersions(List<PluginVersion> versions) {
         this.versions = versions;
     }
 
@@ -167,9 +168,9 @@ public class Plugin implements Serializable {
         if (this.versions == null) {
             return null;
         }
-        for (int i = 0; i < this.versions.length; i++) {
-            if (branch != null && branch.equals(this.versions[i].getBranch())) {
-                return this.versions[i];
+        for (PluginVersion v : this.versions) {
+            if (branch != null && branch.equals(v.getBranch())) {
+                return v;
             }
         }
         return null;

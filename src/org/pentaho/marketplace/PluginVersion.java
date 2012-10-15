@@ -32,8 +32,10 @@ public class PluginVersion implements Serializable {
     private String description;
     private String changelog;
     private String buildId;
+    private String minParentVersion;
+    private String maxParentVersion;
 
-    public PluginVersion(String branch, String name, String version, String downloadUrl, String samplesDownloadUrl, String description, String changelog, String buildId) {
+    public PluginVersion(String branch, String name, String version, String downloadUrl, String samplesDownloadUrl, String description, String changelog, String buildId, String minParentVersion, String maxParentVersion) {
         this.branch = branch;
         this.name = name;
         this.version = version;
@@ -42,6 +44,8 @@ public class PluginVersion implements Serializable {
         this.description = description;
         this.changelog = changelog;
         this.buildId = buildId;
+        this.minParentVersion = minParentVersion;
+        this.maxParentVersion = maxParentVersion;
     }
 
     public String getBranch() {
@@ -128,5 +132,19 @@ public class PluginVersion implements Serializable {
      */
     public String getBuildId() {
         return buildId;
+    }
+    
+    /**
+     * @return the minParentVersion
+     */
+    public String getMinParentVersion() {
+      return minParentVersion;
+    }
+    
+    /**
+     * @return the maxParentVersion
+     */
+    public String getMaxParentVersion() {
+      return maxParentVersion;
     }
 }

@@ -77,14 +77,14 @@ public class MarketplaceService {
         private static final long serialVersionUID = -1852471739131561628L;
     }
 
-    public Plugin[] getPlugins() throws MarketplaceSecurityException {
+    public List<Plugin> getPlugins() throws MarketplaceSecurityException {
         // return a unauthorized exception if unauthorized?
         if (!hasMarketplacePermission()) {
             throw new MarketplaceSecurityException();
         }
 
         // load plugins from url
-        Plugin plugins[] = loadPluginsFromSite();
+        List<Plugin> plugins = loadPluginsFromSite();
 
 
         // There are 2 methods of doing this. 
@@ -154,7 +154,7 @@ public class MarketplaceService {
     }
     
     public StatusMessage uninstallPlugin(String id) throws MarketplaceSecurityException {
-        Plugin plugins[] = getPlugins();
+        List<Plugin> plugins = getPlugins();
         Plugin toUninstall = null;
 
         for (Plugin plugin : plugins) {
@@ -210,7 +210,7 @@ public class MarketplaceService {
      * @return a status mesasge to display the user
      */
     public StatusMessage installPlugin(String id, String versionBranch) throws MarketplaceSecurityException {
-        Plugin plugins[] = getPlugins();
+        List<Plugin> plugins = getPlugins();
         Plugin toInstall = null;
         for (Plugin plugin : plugins) {
             if (plugin.getId().equals(id)) {
@@ -317,7 +317,7 @@ public class MarketplaceService {
 
     public String getPluginsJson() {
         try {
-            Plugin pluginArray[] = getPlugins();
+            List<Plugin> pluginArray = getPlugins();
             JSONSerializer serializer = new JSONSerializer();
             String json = serializer.deepSerialize(pluginArray);
             return json;
@@ -380,11 +380,12 @@ public class MarketplaceService {
         return json;
     }
 
-    protected String resolveVersion(String url) {
-        // replace the version of the xml url path with the current release version:
-        VersionInfo versionInfo = VersionHelper.getVersionInfo(PentahoSystem.class);
-        String v = versionInfo.getVersionNumber();
-        return url.replaceAll("\\[VERSION\\]", v);
+    protected boolean withinParentVersion(PluginVersion pv) {
+      // need to compare plugin version min and max parent with system version.
+      // replace the version of the xml url path with the current release version:
+      VersionInfo versionInfo = VersionHelper.getVersionInfo(PentahoSystem.class);
+      String v = versionInfo.getVersionNumber();  
+      return new VersionData(v).within(new VersionData(pv.getMinParentVersion()), new VersionData(pv.getMaxParentVersion()));
     }
 
     protected String getMarketplaceSiteContent() {
@@ -397,10 +398,8 @@ public class MarketplaceService {
         }
 
         if (site == null || "".equals(site)) {
-            site = "https://raw.github.com/webdetails/marketplace/master/PentahoMarketplacePlugins.xml";
+            site = "https://raw.github.com/pentaho/marketplace-metadata/master/marketplace.xml";
         }
-
-        site = resolveVersion(site);
 
         return HttpUtil.getURLContent(site);
     }
@@ -447,51 +446,64 @@ public class MarketplaceService {
         return "Unknown";
     }
 
-    protected Plugin[] loadPluginsFromSite() {
+    protected List<Plugin> loadPluginsFromSite() {
         String content = getMarketplaceSiteContent();
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         try {
             DocumentBuilder db = dbf.newDocumentBuilder();
             Document dom = db.parse(new InputSource(new StringReader(content)));
-            NodeList plugins = dom.getElementsByTagName("plugin");
-            Plugin pluginArr[] = new Plugin[plugins.getLength()];
+            NodeList plugins = dom.getElementsByTagName("market_entry");
+            List<Plugin> pluginList = new ArrayList<Plugin>();
             for (int i = 0; i < plugins.getLength(); i++) {
                 Element element = (Element) plugins.item(i);
+                String type = getElementChildValue(element, "type");
+                if (!"Platform".equals(type)) {
+                  continue;
+                }
                 Plugin plugin = new Plugin();
-                plugin.setId(element.getAttribute("id"));
-                plugin.setCompany(getElementChildValue(element, "company"));
-                plugin.setCompanyUrl(getElementChildValue(element, "companyUrl"));
-                plugin.setCompanyLogo(getElementChildValue(element, "companyLogo"));
-                plugin.setDescription(getElementChildValue(element, "description"));
-                plugin.setImg(getElementChildValue(element, "img"));
-                plugin.setSmallImg(getElementChildValue(element, "smallImg"));
-                plugin.setLearnMoreUrl(getElementChildValue(element, "learnMoreUrl"));
+                plugin.setId(getElementChildValue(element, "id"));
                 plugin.setName(getElementChildValue(element, "name"));
-                plugin.setInstallationNotes(getElementChildValue(element, "installationNotes"));
+                plugin.setDescription(getElementChildValue(element, "description"));
+
+                plugin.setCompany(getElementChildValue(element, "author"));
+                plugin.setCompanyUrl(getElementChildValue(element, "author_url"));
+                plugin.setCompanyLogo(getElementChildValue(element, "author_logo"));
+                plugin.setImg(getElementChildValue(element, "img"));
+                plugin.setSmallImg(getElementChildValue(element, "small_img"));
+                plugin.setLearnMoreUrl(getElementChildValue(element, "documentation_url"));
+                plugin.setInstallationNotes(getElementChildValue(element, "installation_notes"));
 
                 //NodeList availableVersions = element.getElementsByTagName("version");
                 NodeList availableVersions = (NodeList) xpath.evaluate("versions/version", element, XPathConstants.NODESET);
-
-
+                
                 if (availableVersions.getLength() > 0) {
-                    PluginVersion[] versions = new PluginVersion[availableVersions.getLength()];
+                    List<PluginVersion> versions = new ArrayList<PluginVersion>();
                     for (int j = 0; j < availableVersions.getLength(); j++) {
                         Element versionElement = (Element) availableVersions.item(j);
-                        versions[j] = new PluginVersion(versionElement.getAttribute("branch"),
+                        PluginVersion pv = new PluginVersion(getElementChildValue(versionElement, "branch"),
                                 getElementChildValue(versionElement, "name"),
                                 getElementChildValue(versionElement, "version"),
-                                getElementChildValue(versionElement, "downloadUrl"),
-                                getElementChildValue(versionElement, "samplesDownloadUrl"),
+                                getElementChildValue(versionElement, "package_url"),
+                                getElementChildValue(versionElement, "samples_url"),
                                 getElementChildValue(versionElement, "description"),
                                 getElementChildValue(versionElement, "changelog"),
-                                getElementChildValue(versionElement, "buildId"));
+                                getElementChildValue(versionElement, "build_id"),
+                                getElementChildValue(versionElement, "min_parent_version"),
+                                getElementChildValue(versionElement, "max_parent_version"));
+                        if (withinParentVersion(pv)) {
+                          versions.add(pv);
+                        }
+                    
                     }
                     plugin.setVersions(versions);
                 }
-
-                pluginArr[i] = plugin;
+                
+                // only include plugins that have versions within this release 
+                if (plugin.getVersions() != null && plugin.getVersions().size() > 0) {
+                  pluginList.add(plugin);
+                }
             }
-            return pluginArr;
+            return pluginList;
         } catch (Exception e) {
             e.printStackTrace();
         }

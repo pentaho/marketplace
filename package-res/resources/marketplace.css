@@ -1692,11 +1692,9 @@ font-family: Arial, sans-serif;
 
 .pluginVersionSelectorContainer select,
 .pluginVersionSelectorContainer .select2-container .select2-choice {
-    outline:none;
+
     display: inline-block;
-    -webkit-appearance:none;
-    -moz-appearance:none;
-    appearance:none;
+
     
     cursor:pointer;
     
@@ -1711,7 +1709,7 @@ font-family: Arial, sans-serif;
 	line-height: 49px;
 
 	border: solid 1px #111;
-	color: #7D7D7D;
+	color: #d2d2d2;
 	background: #434343; /* Old browsers */
 	/* IE9 SVG, needs conditional override of 'filter' to 'none' */
 	background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzQzNDM0MyIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiMwODA4MDgiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
@@ -1725,7 +1723,8 @@ font-family: Arial, sans-serif;
 
 }
 .pluginVersionSelectorContainer select:hover,
-.pluginVersionSelectorContainer .select2-container .select2-choice:hover {
+.pluginVersionSelectorContainer .select2-container .select2-choice:hover,
+.pluginVersionSelectorContainer .select2-dropdown-open select2-drop-above select2-choice {
 	color: #ffffff;
 	border: solid 1px #434343;
 
@@ -1744,5 +1743,47 @@ font-family: Arial, sans-serif;
 .pluginVersionSelectorContainer .select2-container .select2-choice div {
 	background: none;
 	border: none;
-	width: 25px;
+	width: 15px;
+	
+	margin-right: 5px;
+	margin-top: 15px;
+}
+
+.select2-search {
+	display:none;
+}
+
+.select2-drop.select2-drop-above {
+	-webkit-box-shadow: none;
+	-moz-box-shadow: none;
+	-o-box-shadow: none;
+	box-shadow: none;
+	
+	background: #333;
+	color: white;
+	border: 1px solid #262626;
+	
+
+}
+
+.select2-results li {
+	border-bottom: 1px solid #444444;
+	color: #d2d2d2;
+	height: 27px;
+}
+
+.select2-results .select2-highlighted {
+	color: white;
+	font-weight: bold;
+	font-size: 10pt;
+	background: none;
+}
+
+.select2-container .select2-choice div b {
+	background: url('img/selector.png') no-repeat 0px 0px;
+	height: 50%;
+}
+
+.select2-container:hover .select2-choice div b {
+	background: url('img/selector.png') no-repeat -15px 0px;
 }

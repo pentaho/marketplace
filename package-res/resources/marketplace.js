@@ -1394,7 +1394,7 @@ wd.marketplace.components.pluginVersionSelector = function(spec){
             myself.setPluginVersion( newVersion );
             myself.changeAction();     
         });
-        //$pluginVersionSelector.select2();
+        $pluginVersionSelector.select2();
     }
     
     

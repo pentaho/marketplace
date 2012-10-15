@@ -873,9 +873,9 @@
                 viewportBottom = $(window).scrollTop() + document.documentElement.clientHeight,
                 dropTop = offset.top + height,
                 dropLeft = offset.left,
-                enoughRoomBelow = dropTop + dropHeight <= viewportBottom,
-                enoughRoomAbove = (offset.top - dropHeight) >= this.body().scrollTop(),
-                aboveNow = this.dropdown.hasClass("select2-drop-above"),
+                enoughRoomBelow = false,
+                enoughRoomAbove = true,
+                aboveNow = true,
                 bodyOffset,
                 above,
                 css;

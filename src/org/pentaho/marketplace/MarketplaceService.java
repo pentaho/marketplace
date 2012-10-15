@@ -518,7 +518,7 @@ public class MarketplaceService {
                                 getElementChildValue(versionElement, "description"),
                                 getElementChildValue(versionElement, "changelog"),
                                 getElementChildValue(versionElement, "build_id"),
-                                getElementChildValue(versionElement, "releaseDate"));                                
+                                getElementChildValue(versionElement, "releaseDate"),                                
                                 getElementChildValue(versionElement, "min_parent_version"),
                                 getElementChildValue(versionElement, "max_parent_version"));
                         if (withinParentVersion(pv)) {
@@ -541,7 +541,6 @@ public class MarketplaceService {
                     plugin.setScreenshots(screenshots);
                 }
 
-                pluginArr[i] = plugin;
 
                 // only include plugins that have versions within this release 
                 if (plugin.getVersions() != null && plugin.getVersions().size() > 0) {

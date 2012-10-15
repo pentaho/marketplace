@@ -3,26 +3,28 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="test-src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
+	<classpathentry kind="lib" path="lib/commons-codec-1.3.jar"/>
+	<classpathentry kind="lib" path="lib/commons-httpclient-3.0.1.jar"/>
+	<classpathentry kind="lib" path="lib/commons-io-1.4.jar"/>
+	<classpathentry kind="lib" path="lib/commons-lang-2.4.jar"/>
+	<classpathentry kind="lib" path="lib/commons-logging-1.1.jar"/>
+	<classpathentry kind="lib" path="lib/flexjson-2.1.jar"/>
+	<classpathentry kind="lib" path="lib/kettle-core-4.2.0-GA.jar"/>
+	<classpathentry kind="lib" path="lib/kettle-db-4.2.0-GA.jar"/>
+	<classpathentry kind="lib" path="lib/kettle-engine-4.2.0-GA.jar"/>
+	<classpathentry kind="lib" path="lib/pentaho-bi-platform-api-3.9.0-stable.jar"/>
+	<classpathentry kind="lib" path="lib/pentaho-bi-platform-engine-core-3.9.0-stable.jar"/>
+	<classpathentry kind="lib" path="lib/pentaho-bi-platform-engine-security-3.9.0-stable.jar"/>
+	<classpathentry kind="lib" path="lib/pentaho-bi-platform-engine-services-3.9.0-stable.jar"/>
+	<classpathentry kind="lib" path="lib/pentaho-bi-platform-plugin-actions-3.9.0-stable.jar"/>
+	<classpathentry kind="lib" path="lib/pentaho-bi-platform-plugin-services-3.9.0-stable.jar"/>
+	<classpathentry kind="lib" path="lib/pentaho-bi-platform-util-3.9.0-stable.jar"/>
+	<classpathentry kind="lib" path="lib/pentaho-bi-platform-web-3.9.0-stable.jar"/>
+	<classpathentry kind="lib" path="lib/spring-security-core-2.0.5.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/xercesImpl-2.9.1.jar"/>
+	<classpathentry kind="lib" path="lib/xml-apis-1.3.04.jar"/>
+	<classpathentry kind="lib" path="test-lib/junit-4.4.jar"/>
+	<classpathentry kind="lib" path="lib/hibernate-3.2.6.ga.jar"/>
+	<classpathentry kind="lib" path="lib/servlet-api-2.4.jar"/>
 	<classpathentry kind="output" path="bin/eclipse-classpath"/>
-	<classpathentry kind="lib" path="lib/commons-codec-1.3.jar" />
-	<classpathentry kind="lib" path="lib/commons-httpclient-3.0.1.jar" />
-	<classpathentry kind="lib" path="lib/commons-io-1.4.jar" />
-	<classpathentry kind="lib" path="lib/commons-lang-2.4.jar" />
-	<classpathentry kind="lib" path="lib/commons-logging-1.1.jar" />
-	<classpathentry kind="lib" path="lib/flexjson-2.1.jar" />
-	<classpathentry kind="lib" path="lib/kettle-core-4.2.0-GA.jar" />
-	<classpathentry kind="lib" path="lib/kettle-db-4.2.0-GA.jar" />
-	<classpathentry kind="lib" path="lib/kettle-engine-4.2.0-GA.jar" />
-	<classpathentry kind="lib" path="lib/pentaho-bi-platform-api-3.9.0-stable.jar" />
-	<classpathentry kind="lib" path="lib/pentaho-bi-platform-engine-core-3.9.0-stable.jar" />
-	<classpathentry kind="lib" path="lib/pentaho-bi-platform-engine-security-3.9.0-stable.jar" />
-	<classpathentry kind="lib" path="lib/pentaho-bi-platform-engine-services-3.9.0-stable.jar" />
-	<classpathentry kind="lib" path="lib/pentaho-bi-platform-plugin-actions-3.9.0-stable.jar" />
-	<classpathentry kind="lib" path="lib/pentaho-bi-platform-plugin-services-3.9.0-stable.jar" />
-	<classpathentry kind="lib" path="lib/pentaho-bi-platform-util-3.9.0-stable.jar" />
-	<classpathentry kind="lib" path="lib/pentaho-bi-platform-web-3.9.0-stable.jar" />
-	<classpathentry kind="lib" path="lib/spring-security-core-2.0.5.RELEASE.jar" />
-	<classpathentry kind="lib" path="lib/xercesImpl-2.9.1.jar" />
-	<classpathentry kind="lib" path="lib/xml-apis-1.3.04.jar" />
-	<classpathentry kind="lib" path="test-lib/junit-4.4.jar" />
 </classpath>

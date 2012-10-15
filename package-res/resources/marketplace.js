@@ -202,7 +202,7 @@ wd.marketplace.template = function(spec){
         var wrapper = $('<div class="templateWrapper"></div>');
         var header  = $('<div class="templateHead"></div>').appendTo(wrapper);
 
-        myself.$logo = $('<div class="templateLogo"></div>').appendTo(header);
+        myself.$logo = $('<div class="templateLogo">Marketplace</div>').appendTo(header);
         myself.$actions = $('<div class="templateActions"></div>').appendTo(header);
         myself.$panels = $('<div class="templatePanels"></div>').appendTo(header);
         myself.$title = $('<div class="templateTitle contrast-color"></div>').appendTo(header);

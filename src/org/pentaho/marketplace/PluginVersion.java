@@ -40,7 +40,6 @@ public class PluginVersion implements Serializable {
     private String maxParentVersion;
 
 
-
     public PluginVersion(String branch, String name, String version, String downloadUrl, String samplesDownloadUrl, String description, String changelog, String buildId, String releaseDate, String minParentVersion, String maxParentVersion) {
         this.branch = branch;
         this.name = name;

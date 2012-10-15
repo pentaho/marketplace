@@ -519,7 +519,7 @@ public class MarketplaceService {
                                 getElementChildValue(versionElement, "changelog"),
 
                                 getElementChildValue(versionElement, "build_id"),
-                                getElementChildValue(versionElement, "releaseDate"));                                
+                                getElementChildValue(versionElement, "releaseDate"),                                
                                 getElementChildValue(versionElement, "min_parent_version"),
                                 getElementChildValue(versionElement, "max_parent_version"));
                         if (withinParentVersion(pv)) {

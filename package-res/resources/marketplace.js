@@ -202,7 +202,7 @@ wd.marketplace.template = function(spec){
         var wrapper = $('<div class="templateWrapper"></div>');
         var header  = $('<div class="templateHead"></div>').appendTo(wrapper);
 
-        myself.$logo = $('<div class="templateLogo">Marketplace</div>').appendTo(header);
+        myself.$logo = $('<div class="templateLogo"><span>Marketplace</span><span style="color: #F60 ; font-weight: normal">Beta</span></div>').appendTo(header);
         myself.$actions = $('<div class="templateActions"></div>').appendTo(header);
         myself.$panels = $('<div class="templatePanels"></div>').appendTo(header);
         myself.$title = $('<div class="templateTitle contrast-color"></div>').appendTo(header);
@@ -354,7 +354,7 @@ wd.marketplace.actions.toggleAction = function(spec){
 marketplace.getRegistry().registerAction( wd.marketplace.actions.toggleAction({
     name: "about",
     description: "<div class='actionAbout'><img class='image'/></div>",
-    toggleText: 'Pentaho Marketplace plugin allows you to browse through available plugins and customize your Pentaho installation. Enjoy!',
+    toggleText: 'Pentaho Marketplace allows you to browse through available plugins and customize your Pentaho installation. Enjoy!',
     order: 20,
     container: marketplace.getRegistry()
     .getTemplate( marketplace.options.template ).$toggleActionContainer
@@ -811,12 +811,15 @@ wd.marketplace.components.pluginHeader = function(spec){
         $("<div/>").addClass("pluginHeaderTitleWrapper ")
           .append($("<div class='leftSide'/>")
           	.append($("<div/>").addClass("pluginHeaderTitle").text(plugin.getPluginInfo().name ) )
-          	.append($("<div/>").addClass("pluginHeaderVersion").text(installationStatus.description == "Not installed" ? null : plugin.getPluginInfo().installedVersion + ' (' + plugin.getPluginInfo().installedBranch + ')' ) )
+          	.append($("<div/>").addClass("pluginHeaderVersion")
+                .append($("<span/>").addClass("createdBy").text(plugin.getPluginInfo().company ))
+                .append(installationStatus.description == "Not installed" ? $() : $("<span/>").addClass("installedVersion").text("Installed Version: ") )
+                .append(installationStatus.description == "Not installed" ? $() : $("<span/>").text(plugin.getPluginInfo().installedVersion + ' (' + plugin.getPluginInfo().installedBranch + ')' ) ) )
           ).append($("<div class='centerSide'/>")
           ).append($("<div class='rightSide'/>")
           	.append($("<div/>").text("View details").addClass("viewDetailsDesc") )
           	.append($("<div/>").addClass("viewDetailsImage") )
-          )
+          ).addClass(installationStatus.description == "Not installed" ? "" : "installed")
         .appendTo($wrapper);
         
             
@@ -1148,11 +1151,11 @@ wd.marketplace.components.pluginVersionDetails = function(spec){
     var myself = wd.caf.component(spec);
     
     var propertyMappingLeft = {
-        companyUrl:{
-            label: "Created by"
-        },
         version:{
             label: "Version"
+        },
+        companyUrl:{
+            label: "Created by"
         },
         license: {
             label: "License"
@@ -1211,15 +1214,19 @@ wd.marketplace.components.pluginVersionDetails = function(spec){
         	$ph.append($leftSide);
         	
     		$("<img/>").attr('src',pluginVersion.img).appendTo($leftSide); 
-    		$("<div style='height: 25px'><div class='desc'>INFO</div> <div class='infoIcon'></div></div>").appendTo($leftSide);   
+    		$("<div style='height: 25px'> <div class='infoIcon'/><div class='desc'>INFO</div></div>").appendTo($leftSide);   
         	
         	$.each(propertyMappingLeft, function(prop){
         		if(pluginVersion[prop] != undefined){
         			var label = $("<div/>").addClass("clearfix pluginVersionPropLabel"),
         				value = $("<div/>").addClass("clearfix pluginVersionPropValue");
         			
-        			label.text(propertyMappingLeft[prop].label);
-        			value.text(pluginVersion[prop]);
+                    label.text(propertyMappingLeft[prop].label);
+        			if(prop == "companyUrl"){
+                        value.append($("<a href='"+pluginVersion[prop]+"'>"+pluginVersion[prop]+"</a>"));
+                    } else {
+                        value.text(pluginVersion[prop]);
+                    }
         		
         			$leftSide.append(label);
         			$leftSide.append(value);
@@ -1233,7 +1240,7 @@ wd.marketplace.components.pluginVersionDetails = function(spec){
         	
         	
         	//append description
-        	$("<div style='height: 25px; border-bottom: solid 1px #CCC'><div class='desc'>DESCRIPTION</div> <div class='descriptionIcon'></div></div>").appendTo($rightSide); 
+        	$("<div style='height: 25px; border-bottom: solid 1px #CCC'><div class='descriptionIcon'/><div class='desc'>DESCRIPTION</div> </div>").appendTo($rightSide); 
         	$("<div/>").addClass("pluginVersionDescription").html((pluginVersion.description!=null?pluginVersion.description:"") + " <br/> <br/> " + (pluginVersion.versionDescription != null? pluginVersion.versionDescription : "")).appendTo($rightSide);
         	
         	//only input screenshots if it is available
@@ -1243,18 +1250,26 @@ wd.marketplace.components.pluginVersionDetails = function(spec){
         		$ph.append($rightSideSlideshow);
         	
         		//append screenshots
-        		$("<div style='height: 25px; border-bottom: solid 1px #CCC'><div class='desc'>SCREENSHOTS</div> <div class='screenshotsIcon'></div></div>").appendTo($rightSide); 
+        		$("<div style='height: 25px; border-bottom: solid 1px #CCC'><div class='screenshotsIcon'/><div class='desc'>SCREENSHOTS</div> </div>").appendTo($rightSide); 
         		var $screenshots = $("<div/>").addClass("screenshots"),
         			$screenshotHolder = $("<div/>").addClass("screenshotsHolder");
         		
         		$screenshotHolder.appendTo($screenshots);
         		
-        		var $slideshow = $("<div id='slides'/>"),
-        			$slideshowHolder = $("<div/>").addClass("slides_container");
+        		var $slideshow = $("<div/>").addClass("slider-wrapper theme-default"),
+        			$slideshowHolder = $("<div id='slider'/>").addClass("nivoSlider");
         		
         		$slideshowHolder.appendTo($slideshow);
         	
-        	
+        	    var slidesProperties = {
+                    effect: 'fade',
+                    directionNav: true,
+                    startSlide: 0,
+                    randomStart: false,
+                    manualAdvance: true,
+                    animSpeed: 300
+                };
+
         		$.each(pluginVersion.screenshots, function(i){
         			//screenshot
         			var $imgPh = $("<div/>").addClass('image');
@@ -1263,18 +1278,25 @@ wd.marketplace.components.pluginVersionDetails = function(spec){
         					   .attr('width',140)
         					   .addClass("imageBorder")
         					   .click(function(){
-        					   		var paginationButton = $rightSideSlideshow.find('.pagination li:nth-child('+(i+1)+') a');
-        					   		paginationButton.trigger('click');
+                                
+        					   		
         				   		
-        				   		
-        					   		$rightSide.hide();
-        					   		$rightSideSlideshow.show();
+                                    $rightSide.hide();
+                                    $rightSideSlideshow.show();
+
+                                    var paginationButton = $rightSideSlideshow.find('.nivo-controlNav a[rel="'+i+'"]');
+                                    paginationButton.trigger('click');
+
+                                /*    slidesProperties.startSlide = i;
+                                    $slideshowHolder.nivoSlider(slidesProperties);
+        				   		*/
+        					   		
         					   }).appendTo($imgPh);   
         			$screenshotHolder.append($imgPh);  
         		
         			//slideshow
         			$imgPh = $("<div/>");
-        			$("<img/>").attr('src',pluginVersion.screenshots[i]).attr('height',300).attr('width',560).appendTo($imgPh);   
+        			$("<img/>").attr('src',pluginVersion.screenshots[i]).attr('height',300).attr('width',560).attr('data-thumb',pluginVersion.screenshots[i]).appendTo($imgPh);   
         			$slideshowHolder.append($imgPh);  
         		}); 
         		
@@ -1284,19 +1306,10 @@ wd.marketplace.components.pluginVersionDetails = function(spec){
         	
 	        	$slideshow.appendTo($rightSideSlideshow);
    	     	
-				$slideshow.slides({
-					preload: true,
-					play: false,
-					generatePagination: true,
-					generateNextPrev: true,
-					fadeSpeed: 1,
-					preloadImage: 'img/loading.gif',
-					crossfade: true
-					
-				});
+				$slideshowHolder.nivoSlider(slidesProperties);
 				
 				var $closeSlideshowButton = $("<div/>").addClass("closeSlideshowButton").prependTo($rightSideSlideshow);
-				$closeSlideshowButton.append("<div class='text'>close</div>").append("<div class='image'></div>");
+				$closeSlideshowButton.append("<div class='image'></div>").append("<div class='text'>close</div>");
 	
 				$closeSlideshowButton.click(function(){
 					$rightSideSlideshow.hide();
@@ -1802,7 +1815,7 @@ wd.marketplace.panels.marketplacePanel = function(spec){
      */
     myself.draw = spec.draw || function($ph){
         $("<div/>").addClass("marketplacePanelHeader")
-        	.append($("<div/>").addClass("pluginDetails").text("Plugin Details"))
+        	.append($("<div/>").addClass("pluginDetails").text("Details"))
         	.append($("<div/>").addClass("action").text("Action"))
         .appendTo($ph);
         

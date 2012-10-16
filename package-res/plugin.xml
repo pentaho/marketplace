@@ -23,7 +23,7 @@
 			<overlay id="startup.marketplace" resourcebundle="../content/marketplace/resources/lang/messages.properties">
 				<toolbar id="mainToolbar">
 					<toolbarbutton id="newMarketplace" 
-                                        image="../content/marketplace/resources/img/marketplace_icon.png" 
+                                        image="../content/marketplace/resources/img/mk_icon.png" 
                                         onclick="mainToolbarHandler.openUrl('${tabName}','${tabName}','content/marketplace/resources/marketplace.html')" 
                                         tooltiptext="${openNewMarketplace}" 
                                         insertafter="newAnalysisButton"/>

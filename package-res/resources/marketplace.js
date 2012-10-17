@@ -339,10 +339,14 @@ wd.marketplace.actions.toggleAction = function(spec){
         //       This way the action is not dependent on the template.
         var container = spec.container || myself.caf.templateEngine.getTemplate().$toggleActionContainer;
         
-        $actionPh = $('<div/>').addClass('toggleActionWrapper marketplaceTransparent marketplaceMoveOut')
+        $actionPh = $('<div/>').addClass(Modernizr.csstransitions? 'toggleActionWrapper marketplaceTransparent marketplaceMoveOut': 'toggleActionWrapper marketplaceTransparent')
         .append( $('<div/>').addClass('toggleActionDesc')
             .text( spec.toggleText ) )
         .append( $('<div/>').addClass('toggleActionDevBy') );
+
+        if(!Modernizr.csstransitions){
+            $actionPh.css('display','none'); 
+        }
        
         container.append($actionPh);
     }
@@ -1052,13 +1056,13 @@ wd.marketplace.components.pluginBody = function(spec){
 
 		//set buttons depending installationStatus
 		if(installationStatus.description == "Update available"){
-			$installButtonObj.find('button').attr('disabled','disabled');
+			$installButtonObj.find('button').attr('disabled','disabled').addClass('disabled');
 		} else if(installationStatus.description == "Not installed"){
-			$updateButtonObj.find('button').attr('disabled','disabled');
-			$uninstallButtonObj.find('button').attr('disabled','disabled');
+			$updateButtonObj.find('button').attr('disabled','disabled').addClass('disabled');
+			$uninstallButtonObj.find('button').attr('disabled','disabled').addClass('disabled');
 		} else if(installationStatus.description == "Up to date"){
-			$installButtonObj.find('button').attr('disabled','disabled');
-			$updateButtonObj.find('button').attr('disabled','disabled');
+			$installButtonObj.find('button').attr('disabled','disabled').addClass('disabled');
+			$updateButtonObj.find('button').attr('disabled','disabled').addClass('disabled');
 		}
 		
 		
@@ -1084,17 +1088,17 @@ wd.marketplace.components.pluginBody = function(spec){
         	
         	//set buttons depending installationStatus
 			if(installedVersion.branch != selectedVersion.branch){
-				$installButtonObj.find('button').removeAttr('disabled');
-				$updateButtonObj.find('button').attr('disabled','disabled');
-				$uninstallButtonObj.find('button').attr('disabled','disabled');
+				$installButtonObj.find('button').removeAttr('disabled').removeClass('disabled');
+				$updateButtonObj.find('button').attr('disabled','disabled').addClass('disabled');
+				$uninstallButtonObj.find('button').attr('disabled','disabled').addClass('disabled');
 			} else if(installationStatus.description == "Update available"){
-				$installButtonObj.find('button').attr('disabled','disabled');
-				$updateButtonObj.find('button').removeAttr('disabled');
-				$uninstallButtonObj.find('button').removeAttr('disabled');
+				$installButtonObj.find('button').attr('disabled','disabled').addClass('disabled');
+				$updateButtonObj.find('button').removeAttr('disabled').removeClass('disabled');
+				$uninstallButtonObj.find('button').removeAttr('disabled').removeClass('disabled');
 			} else if(installationStatus.description == "Not installed"){
-				$installButtonObj.find('button').removeAttr('disabled');
-				$updateButtonObj.find('button').attr('disabled','disabled');
-				$uninstallButtonObj.find('button').attr('disabled','disabled');
+				$installButtonObj.find('button').removeAttr('disabled').removeClass('disabled');
+				$updateButtonObj.find('button').attr('disabled','disabled').addClass('disabled');
+				$uninstallButtonObj.find('button').attr('disabled','disabled').addClass('disabled');
 			}
 		}                	
     }
@@ -1278,19 +1282,17 @@ wd.marketplace.components.pluginVersionDetails = function(spec){
         					   .attr('width',140)
         					   .addClass("imageBorder")
         					   .click(function(e){
-                                
-        					   		
-        				   		
-                                    $rightSide.hide();
-                                    $rightSideSlideshow.show();
+		   		
+                                    $rightSideSlideshow.css('display','inline-block');
+                                    $rightSide.css('display','none');
 
                                     var paginationButton = $rightSideSlideshow.find('.nivo-controlNav a[rel="'+i+'"]');
                                     paginationButton.trigger('click');
                                     
                                     $(".pluginVersionRight").bind("click",function(e){e.stopPropagation();});
                                     $("body").bind("click.bodyClick",function(e){
-                                        $rightSideSlideshow.hide();
-                                        $rightSide.show();
+                                        $rightSideSlideshow.css('display','none');
+                                        $rightSide.css('display','inline-block');
 
                                         $("body").unbind("click.bodyClick");
                                     });
@@ -1318,8 +1320,8 @@ wd.marketplace.components.pluginVersionDetails = function(spec){
 				$closeSlideshowButton.append("<div class='image'></div>").append("<div class='text'>close</div>");
 	
 				$closeSlideshowButton.click(function(){
-					$rightSideSlideshow.hide();
-					$rightSide.show();
+					$rightSideSlideshow.css('display','none');
+                    $rightSide.css('display','inline-block');
 				});
 				
 				var $prev = $rightSideSlideshow.find('.prev'),
@@ -1338,7 +1340,7 @@ wd.marketplace.components.pluginVersionDetails = function(spec){
 				$next.appendTo($slideshow);
 				$prev.appendTo($slideshow);
 				
-				$rightSideSlideshow.hide();
+				$rightSideSlideshow.css('display','none');
 				}
         	}
         
@@ -2196,12 +2198,6 @@ function PentahoMarketplace() {
             }
         }
         alert('XML is invalid or no XML parser found');
-        return null;
-    }
-}
-var pentahoMarketplace = new PentahoMarketplace();
-
- found');
         return null;
     }
 }

@@ -2,6 +2,8 @@
 <html>
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=9" />
+
     <title>Pentaho Marketplace</title>
     <script type="text/javascript" src="webcontext.js?content=marketplace"></script>
     <script type="text/javascript" src="../../common-ui/resources/web/repo/pentaho-ajax.js"></script>
@@ -29,7 +31,13 @@
     <link rel="stylesheet" href="lib/blueprint/screen.css" type="text/css" media="screen, projection">
     <link rel="stylesheet" href="lib/blueprint/print.css" type="text/css" media="print">
     <!--[if lt IE 8]><link rel="stylesheet" href="lib/blueprint/ie.css" type="text/css" media="screen, projection"><![endif]-->
-    
+    <!--[if gte IE 9]>
+      <style type="text/css">
+        * {
+          filter: none;
+        }
+      </style>
+    <![endif]-->
         
     <link href="marketplace.css" type="text/css" rel="stylesheet"/>
     <script type="text/javascript" src="marketplace.js"></script>
@@ -69,5 +77,4 @@
    
   </script>
 </html>
-
 

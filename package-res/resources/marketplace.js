@@ -1277,7 +1277,7 @@ wd.marketplace.components.pluginVersionDetails = function(spec){
         					   .attr('height',75)
         					   .attr('width',140)
         					   .addClass("imageBorder")
-        					   .click(function(){
+        					   .click(function(e){
                                 
         					   		
         				   		
@@ -1290,6 +1290,15 @@ wd.marketplace.components.pluginVersionDetails = function(spec){
                                 /*    slidesProperties.startSlide = i;
                                     $slideshowHolder.nivoSlider(slidesProperties);
         				   		*/
+                                    e.stopPropagation();
+
+                                    $("body").bind("click.bodyClick",function(e){
+                                        $rightSideSlideshow.hide();
+                                        $rightSide.show();
+                                        //e.stopPropagation();
+
+                                        $("body").unbind("click.bodyClick");
+                                    });
         					   		
         					   }).appendTo($imgPh);   
         			$screenshotHolder.append($imgPh);  

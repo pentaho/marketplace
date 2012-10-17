@@ -1158,8 +1158,8 @@ wd.marketplace.components.pluginVersionDetails = function(spec){
         version:{
             label: "Version"
         },
-        companyUrl:{
-            label: "Created by"
+        company:{
+           label: "Created by" 
         },
         license: {
             label: "License"
@@ -1226,8 +1226,8 @@ wd.marketplace.components.pluginVersionDetails = function(spec){
         				value = $("<div/>").addClass("clearfix pluginVersionPropValue");
         			
                     label.text(propertyMappingLeft[prop].label);
-        			if(prop == "companyUrl"){
-                        value.append($("<a href='"+pluginVersion[prop]+"'>"+pluginVersion[prop]+"</a>"));
+        			if(prop == "company"){
+                        value.append($("<a href='"+pluginVersion["companyUrl"]+"'>"+pluginVersion[prop]+"</a>"));
                     } else {
                         value.text(pluginVersion[prop]);
                     }
@@ -1315,7 +1315,8 @@ wd.marketplace.components.pluginVersionDetails = function(spec){
 	        	$slideshow.appendTo($rightSideSlideshow);
    	     	
 				$slideshowHolder.nivoSlider(slidesProperties);
-				
+                
+                /*				
 				var $closeSlideshowButton = $("<div/>").addClass("closeSlideshowButton").prependTo($rightSideSlideshow);
 				$closeSlideshowButton.append("<div class='image'></div>").append("<div class='text'>close</div>");
 	
@@ -1323,7 +1324,8 @@ wd.marketplace.components.pluginVersionDetails = function(spec){
 					$rightSideSlideshow.css('display','none');
                     $rightSide.css('display','inline-block');
 				});
-				
+				*/
+
 				var $prev = $rightSideSlideshow.find('.prev'),
 					$next = $rightSideSlideshow.find('.next');
 				

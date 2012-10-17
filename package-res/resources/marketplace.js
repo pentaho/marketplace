@@ -1286,19 +1286,16 @@ wd.marketplace.components.pluginVersionDetails = function(spec){
 
                                     var paginationButton = $rightSideSlideshow.find('.nivo-controlNav a[rel="'+i+'"]');
                                     paginationButton.trigger('click');
-
-                                /*    slidesProperties.startSlide = i;
-                                    $slideshowHolder.nivoSlider(slidesProperties);
-        				   		*/
-                                    e.stopPropagation();
-
+                                    
+                                    $(".pluginVersionRight").bind("click",function(e){e.stopPropagation();});
                                     $("body").bind("click.bodyClick",function(e){
                                         $rightSideSlideshow.hide();
                                         $rightSide.show();
-                                        //e.stopPropagation();
 
                                         $("body").unbind("click.bodyClick");
                                     });
+
+                                    e.stopPropagation();
         					   		
         					   }).appendTo($imgPh);   
         			$screenshotHolder.append($imgPh);  
@@ -2199,6 +2196,12 @@ function PentahoMarketplace() {
             }
         }
         alert('XML is invalid or no XML parser found');
+        return null;
+    }
+}
+var pentahoMarketplace = new PentahoMarketplace();
+
+ found');
         return null;
     }
 }

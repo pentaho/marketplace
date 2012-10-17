@@ -31,11 +31,16 @@ public class PluginVersion implements Serializable {
     private String samplesDownloadUrl;
     private String description;
     private String changelog;
+    
+    
+    /** new props **/
     private String buildId;
+    private String releaseDate;
     private String minParentVersion;
     private String maxParentVersion;
 
-    public PluginVersion(String branch, String name, String version, String downloadUrl, String samplesDownloadUrl, String description, String changelog, String buildId, String minParentVersion, String maxParentVersion) {
+
+    public PluginVersion(String branch, String name, String version, String downloadUrl, String samplesDownloadUrl, String description, String changelog, String buildId, String releaseDate, String minParentVersion, String maxParentVersion) {
         this.branch = branch;
         this.name = name;
         this.version = version;
@@ -44,6 +49,7 @@ public class PluginVersion implements Serializable {
         this.description = description;
         this.changelog = changelog;
         this.buildId = buildId;
+        this.releaseDate = releaseDate;
         this.minParentVersion = minParentVersion;
         this.maxParentVersion = maxParentVersion;
     }
@@ -105,6 +111,13 @@ public class PluginVersion implements Serializable {
     public void setSamplesDownloadUrl(String samplesDownloadUrl) {
         this.samplesDownloadUrl = samplesDownloadUrl;
     }
+    
+    /**
+     * @param date the date to set
+     */
+    public void setReleaseDate(String releaseDate) {
+        this.releaseDate = releaseDate;
+    }
 
     /**
      * @return the description
@@ -133,6 +146,7 @@ public class PluginVersion implements Serializable {
     public String getBuildId() {
         return buildId;
     }
+
     
     /**
      * @return the minParentVersion
@@ -147,4 +161,13 @@ public class PluginVersion implements Serializable {
     public String getMaxParentVersion() {
       return maxParentVersion;
     }
+
+
+    /**
+     * @return the date
+     */
+    public String getReleaseDate() {
+        return releaseDate;
+    }
+    
 }

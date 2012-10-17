@@ -45,12 +45,13 @@ CDE and the technology underneath (CDF, CDA and CCC) allows to develop and deplo
 		<versions>
 			<version>
 				<branch>STABLE</branch>
-                <version>12.02.29</version>
+                <version>12.09.05</version>
 				<name>Stable</name>
                 <changelog>First Stable Release for CDE. Includes a new location for samples (inside plugin-samples)</changelog>
 				<package_url>http://ci.analytical-labs.com/job/Webdetails-CDE-Release/271/artifact/server/plugin/dist/pentaho-cdf-dd-12.02.29.zip</package_url>
 				<samples_url>http://ci.analytical-labs.com/job/Webdetails-CDE-Release/271/artifact/server/plugin/dist/pentaho-cdf-dd-solution-12.02.29.zip</samples_url>
-                <description>12.02.29 Release</description>
+                <description>12.09.05 Release</description>
+                <releaseDate>12.09.05</releaseDate>
 			</version>    	                    
 			<version>
 				<branch>TRUNK</branch>
@@ -60,6 +61,7 @@ CDE and the technology underneath (CDF, CDA and CCC) allows to develop and deplo
 				<samples_url>http://ci.analytical-labs.com/job/Webdetails-CDE/lastSuccessfulBuild/artifact/server/plugin/dist/pentaho-cdf-dd-solution-TRUNK-SNAPSHOT.zip</samples_url>
 				<description>Trunk Snapshot. Install at your own risk....</description>
                 <build_id>180</build_id>
+                <releaseDate>12.10.05</releaseDate>
 			</version>    	
 		</versions>
     </market_entry>

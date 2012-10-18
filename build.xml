@@ -14,6 +14,11 @@
       and works with the common_build.xml file.
     </description>
 
+
+ <property name="sequential.build.id"
+            value="1"
+            description="Property that controls the buildId on version.xml. Should be set by CI jobs" />
+
   <!-- Import the subfloor-pkg.xml file which contains all the default tasks -->
     <import file="build-res/subfloor-pkg.xml" />
 
@@ -30,6 +35,7 @@
     <target name="assemble" depends="subfloor-pkg.assemble">
     <!-- Update the version.xml with the current version of this plugin -->
         <replace file="${approot.stage.dir}/version.xml" token="@TRUNK@" value="${project.revision}"/>
+        <replace file="${approot.stage.dir}/version.xml" token="@BUILDID@" value="${sequential.build.id}"/>
     </target>
 	
     <target name="resolve-and-dist" depends="resolve, dist"/>

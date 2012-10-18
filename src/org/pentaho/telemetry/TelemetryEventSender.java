@@ -34,6 +34,10 @@ import java.util.List;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.URI;
 import org.apache.commons.httpclient.methods.PostMethod;
+import org.apache.commons.httpclient.methods.StringRequestEntity;
+import org.apache.commons.httpclient.methods.multipart.MultipartRequestEntity;
+import org.apache.commons.httpclient.methods.multipart.Part;
+import org.apache.commons.httpclient.methods.multipart.StringPart;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -75,8 +79,6 @@ public class TelemetryEventSender implements Runnable {
    * @param blockToSend Array of files with telemetry events to send to the server
    */
   protected void sendRequest(File[] blockToSend) {
-    final HttpClient httpClient = getHttpClient();
-    final PostMethod httpMethod = getHttpMethod();
 
     String baseUrl = null;
     HashMap<String, StringBuffer> urlsAndPostData = new HashMap<String, StringBuffer>();
@@ -120,17 +122,23 @@ public class TelemetryEventSender implements Runnable {
       String url = urlIterator.next();
       StringBuffer postData = urlsAndPostData.get(url);
       postData.append("]");
+      postData.append(System.getProperty("line.separator"));
       boolean success = true;
       
       try {                  
+        
+        final HttpClient httpClient = getHttpClient();
+        final PostMethod httpMethod = getHttpMethod();
+        
+        
         int timeout = 30000;
 
         httpClient.getHttpConnectionManager().getParams().setSoTimeout(timeout);        
         httpMethod.setURI(new URI(url, true));
       
+        Part[] parts = new Part[]{new StringPart("body", postData.toString())};
       
-        httpMethod.setParameter("body", postData.toString());
-
+         httpMethod.setRequestEntity(new StringRequestEntity(postData.toString(), "application/json", "UTF8"));
         logger.info("Calling " + url);
         logger.info("Data: " + postData.toString());
 

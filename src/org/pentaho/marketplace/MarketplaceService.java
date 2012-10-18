@@ -58,6 +58,8 @@ import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathFactory;
 import org.apache.commons.io.filefilter.DirectoryFileFilter;
+import org.pentaho.telemetry.BaPluginTelemetry;
+import org.pentaho.telemetry.TelemetryHelper.TelemetryEventType;
 
 
 public class MarketplaceService {
@@ -199,6 +201,16 @@ public class MarketplaceService {
             logger.error(e.getMessage(), e);
         }
 
+        
+        
+        BaPluginTelemetry telemetryEvent = new BaPluginTelemetry(PLUGIN_NAME);
+        Map<String, String> extraInfo = new HashMap<String, String>(1);
+        extraInfo.put("uninstalledPlugin", toUninstall.getId());
+        extraInfo.put("uninstalledPluginVersion", toUninstall.getInstalledVersion());
+        extraInfo.put("uninstalledPluginBranch", toUninstall.getInstalledBranch());
+        telemetryEvent.sendTelemetryRequest(TelemetryEventType.REMOVAL, extraInfo);
+        
+        
         return new StatusMessage("PLUGIN_UNINSTALLED", toUninstall.getName() + " was successfully uninstalled.  Please restart your BI Server.");
 
     }
@@ -227,7 +239,11 @@ public class MarketplaceService {
             return new StatusMessage("NO_PLUGIN", "Plugin ID contains an illegal character");
         }
 
-
+         // before deletion, close class loader
+        closeClassLoader(toInstall.getId());      
+        
+        
+        
         String downloadUrl, samplesDownloadUrl, availableVersion;
 
         if (versionBranch != null && versionBranch.length() > 0) {
@@ -285,6 +301,15 @@ public class MarketplaceService {
             logger.error(e.getMessage(), e);
         }
 
+        
+        BaPluginTelemetry telemetryEvent = new BaPluginTelemetry(PLUGIN_NAME);
+        Map<String, String> extraInfo = new HashMap<String, String>(1);
+        extraInfo.put("installedPlugin", toInstall.getId());
+        extraInfo.put("installedVersion", availableVersion);
+        extraInfo.put("installedBranch", versionBranch);
+        
+        telemetryEvent.sendTelemetryRequest(TelemetryEventType.INSTALLATION, extraInfo);
+        
         return new StatusMessage("PLUGIN_INSTALLED", toInstall.getName() + " was successfully installed.  Please restart your BI Server. \n" + toInstall.getInstallationNotes());
     }
 
@@ -398,6 +423,7 @@ public class MarketplaceService {
         }
 
         if (site == null || "".equals(site)) {
+
             site = "https://raw.github.com/pentaho/marketplace-metadata/master/marketplace.xml";
         }
 
@@ -469,9 +495,13 @@ public class MarketplaceService {
                 plugin.setCompanyUrl(getElementChildValue(element, "author_url"));
                 plugin.setCompanyLogo(getElementChildValue(element, "author_logo"));
                 plugin.setImg(getElementChildValue(element, "img"));
+
                 plugin.setSmallImg(getElementChildValue(element, "small_img"));
                 plugin.setLearnMoreUrl(getElementChildValue(element, "documentation_url"));
                 plugin.setInstallationNotes(getElementChildValue(element, "installation_notes"));
+                plugin.setLicense(getElementChildValue(element, "license"));
+                plugin.setDependencies(getElementChildValue(element, "dependencies"));
+
 
                 //NodeList availableVersions = element.getElementsByTagName("version");
                 NodeList availableVersions = (NodeList) xpath.evaluate("versions/version", element, XPathConstants.NODESET);
@@ -487,7 +517,9 @@ public class MarketplaceService {
                                 getElementChildValue(versionElement, "samples_url"),
                                 getElementChildValue(versionElement, "description"),
                                 getElementChildValue(versionElement, "changelog"),
+
                                 getElementChildValue(versionElement, "build_id"),
+                                getElementChildValue(versionElement, "releaseDate"),                                
                                 getElementChildValue(versionElement, "min_parent_version"),
                                 getElementChildValue(versionElement, "max_parent_version"));
                         if (withinParentVersion(pv)) {
@@ -498,6 +530,18 @@ public class MarketplaceService {
                     plugin.setVersions(versions);
                 }
                 
+                NodeList availableScreenshots = (NodeList) xpath.evaluate("screenshots/screenshot", element, XPathConstants.NODESET);
+                if (availableScreenshots.getLength() > 0) {
+                    String[] screenshots = new String[availableScreenshots.getLength()];
+                    
+                    for (int j = 0; j < availableScreenshots.getLength(); j++) {
+                        Element screenshotElement = (Element) availableScreenshots.item(j);
+                        screenshots[j] = screenshotElement.getTextContent();
+                    }
+                    
+                    plugin.setScreenshots(screenshots);
+                }
+
                 // only include plugins that have versions within this release 
                 if (plugin.getVersions() != null && plugin.getVersions().size() > 0) {
                   pluginList.add(plugin);

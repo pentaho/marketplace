@@ -40,17 +40,24 @@ public class Plugin implements Serializable {
     private String installationNotes;
     private boolean installed;
     private List<PluginVersion> versions;
+    private String[] screenshots;
+    private String dependencies;
+    private String license;
+
 
     public Plugin() {
     }
 
-    public Plugin(String img, String name, String description, String learnMoreUrl, String company, String companyUrl) {
+    public Plugin(String img, String name, String description, String learnMoreUrl, String company, String companyUrl, String[] screenshots, String dependencies, String license) {
         this.setImg(img);
         this.setName(name);
         this.setDescription(description);
         this.setLearnMoreUrl(learnMoreUrl);
         this.setCompany(company);
         this.setCompanyUrl(companyUrl);
+        this.setScreenshots(screenshots);      
+        this.setDependencies(dependencies);
+        this.setLicense(license);
     }
 
     public String getInstallationNotes() {
@@ -202,5 +209,48 @@ public class Plugin implements Serializable {
      */
     public void setSmallImg(String smallImg) {
         this.smallImg = smallImg;
+    }
+    
+    
+    /**
+     * @return the screenshots
+     */
+    public String[] getScreenshots() {
+        return screenshots;
+    }
+
+    /**
+     * @param screenshots the screenshots to set
+     */
+    public void setScreenshots(String[] screenshots) {
+        this.screenshots = screenshots;
+    }
+    
+    /**
+     * @return the dependencies
+     */
+    public String getDependencies() {
+        return dependencies;
+    }
+
+    /**
+     * @param dependencies the dependencies to set
+     */
+    public void setDependencies(String dependencies) {
+        this.dependencies = dependencies;
+    }
+    
+    /**
+     * @return the license
+     */
+    public String getLicense() {
+        return license;
+    }
+
+    /**
+     * @param license the license to set
+     */
+    public void setLicense(String license) {
+        this.license = license;
     }
 }

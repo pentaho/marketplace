@@ -156,8 +156,11 @@ wd.marketplace.engine = function(myself,spec){
     }
     
     impl.errorUpdating = function(jqXHR, textStatus, errorThrown){
-        
-        myself.notificationEngine.getNotification().error("Error updating - try again later: " + errorThrown);
+        if(jqXHR.responseText.search('Login Error')){
+            myself.notificationEngine.getNotification().error("Session timeout. Please login again.");
+        } else {
+            myself.notificationEngine.getNotification().error("Error updating - try again later: " + errorThrown);    
+        } 
     }
     
 }
@@ -202,7 +205,7 @@ wd.marketplace.template = function(spec){
         var wrapper = $('<div class="templateWrapper"></div>');
         var header  = $('<div class="templateHead"></div>').appendTo(wrapper);
 
-        myself.$logo = $('<div class="templateLogo"><span>Marketplace</span><span style="color: #F60 ; font-weight: normal">Beta</span></div>').appendTo(header);
+        myself.$logo = $('<div class="templateLogo"><span>Marketplace</span></div>').appendTo(header);
         myself.$actions = $('<div class="templateActions"></div>').appendTo(header);
         myself.$panels = $('<div class="templatePanels"></div>').appendTo(header);
         myself.$title = $('<div class="templateTitle contrast-color"></div>').appendTo(header);
@@ -1227,7 +1230,7 @@ wd.marketplace.components.pluginVersionDetails = function(spec){
         			
                     label.text(propertyMappingLeft[prop].label);
         			if(prop == "company"){
-                        value.append($("<a href='"+pluginVersion["companyUrl"]+"'>"+pluginVersion[prop]+"</a>"));
+                        value.append($("<a href='"+pluginVersion["companyUrl"]+"' target='_blank'>"+pluginVersion[prop]+"</a>"));
                     } else {
                         value.text(pluginVersion[prop]);
                     }
@@ -2042,15 +2045,15 @@ wd.marketplace.panels.marketplacePanel = function(spec){
         errorMsg = errorMsg || "";
         if(operation == INSTALL){
             var popupStatus = "Error installing ",
-            popupDetails = "Please, try again later" + "<br/>"+errorMsg,
+            popupDetails = "Please check server logs" + "<br/>"+errorMsg,
             cssClass = "popupInstall popupError";
         } else if(operation == UPDATE){
         	var popupStatus = "Error updating ",
-            popupDetails = "Please, try again later" + "<br/>"+errorMsg,
+            popupDetails = "Please check server logs" + "<br/>"+errorMsg,
             cssClass = "popupInstall popupError";
         } else{
             var popupStatus = "Error uninstalling ",
-            popupDetails= "Please, try again later" + "<br/>"+errorMsg,
+            popupDetails= "Please check server logs" + "<br/>"+errorMsg,
             cssClass = "popupUninstall popupError";
         }
         myself.log("Starting " + operation + " operation");
@@ -2058,7 +2061,7 @@ wd.marketplace.panels.marketplacePanel = function(spec){
         myself.caf.popupEngine.getPopup("close").show({
             status: popupStatus,
             content: undefined,
-            bottom: "Close",
+            bottom: "",
             details: popupDetails,
             cssClass: cssClass
         });

@@ -38,6 +38,8 @@ import org.apache.commons.httpclient.URI;
 import org.apache.commons.httpclient.URIException;
 import org.apache.commons.httpclient.auth.AuthState;
 import org.apache.commons.httpclient.methods.PostMethod;
+import org.apache.commons.httpclient.methods.RequestEntity;
+import org.apache.commons.httpclient.methods.StringRequestEntity;
 import org.apache.commons.httpclient.params.HttpConnectionManagerParams;
 import org.apache.commons.httpclient.params.HttpMethodParams;
 import org.junit.After;
@@ -69,13 +71,19 @@ public class TelemetryEventSenderTest extends TelemetryBaseTest {
           private int callNumber;
             @Override 
         public void addParameter(String paramName, String paramValue) {
-              if (callNumber == 0)
-                blockDataZero = paramValue;
-              else
-                blockDataOne = paramValue;
-              callNumber++;
             }
           
+            @Override 
+            public void setRequestEntity(RequestEntity requestEntity) {
+              StringRequestEntity r = (StringRequestEntity)requestEntity;
+              if (callNumber == 0)
+                blockDataZero = r.getContent();
+              else
+                blockDataOne = r.getContent();
+              callNumber++;
+
+            }
+            
         @Override
         public void setURI(URI uri) throws URIException {
           

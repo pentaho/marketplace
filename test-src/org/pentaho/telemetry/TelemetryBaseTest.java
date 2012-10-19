@@ -27,13 +27,21 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.util.HashMap;
 import java.util.Map;
+import org.junit.Ignore;
+
 
 /**
  *
  * @author pedrovale
  */
+ @Ignore
 public class TelemetryBaseTest {
 
+  
+//   @Test
+//  public void testDummy() {
+//     
+//   }
   
    protected File[] getTelFilesInFolder(File f1) {
     return f1.listFiles(new FilenameFilter() {

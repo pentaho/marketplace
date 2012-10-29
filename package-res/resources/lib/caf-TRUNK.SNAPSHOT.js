@@ -2776,14 +2776,17 @@ wd.caf.template = function( spec) {
             .data("panel",panel)
             .appendTo(myself.$panels);
             
-            
-            
             myself.drawPanelOnContainer(panel);
         });
         
         // bind panels
         myself.$panels.on("click",".cafPanel",function(event){
+            $.each($('.cafPanel'),function(){
+                $(this).removeClass('active');
+            });
+
             var panel = $(this).data("panel");
+            $(this).addClass('active');
             myself.log("Clicked on Panel " + panel.getName());
             panel.select();
         });

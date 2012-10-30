@@ -153,7 +153,7 @@ html, body {
 
 .infoDivWrapper.infoDivPulsate{
 
-    color:white;
+    color:#D76200;
 }
 
 .toggleActionWrapper{
@@ -218,7 +218,7 @@ html, body {
 }
 
 .marketplacePanelHeader {
-	padding-top: 40px;
+	padding-top: 30px;
 }
 
 .panelContainer{
@@ -460,10 +460,7 @@ body .marketplaceCollapsed{
 .pluginHeader .pluginHeaderTitleWrapper  .pluginHeaderTitle {
 	padding-top: 10px;
 	padding-bottom: 10px;
-}
-
-.pluginHeader .pluginHeaderTitleWrapper.installed .pluginHeaderTitle {
-    color:#ffffff;
+	color:#ffffff;
 }
 
 .pluginHeaderTitleWrapper  .pluginHeaderTitle{
@@ -1749,9 +1746,21 @@ font-family: Arial, sans-serif;
 	display:none;
 }
 
+.closeButtonHolder {
+	position:absolute;
+	width:25px;
+	height:25px;
+}
+
 .closeSlideshowButton {
 	cursor: pointer;
-	height: 15px;
+	height: 25px;
+	width: 25px;
+	background: url(img/x.png);
+	position: absolute;
+	z-index: 11;
+	top: -8px;
+	right: -540px;
 }
 
 .closeSlideshowButton > div {

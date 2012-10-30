@@ -161,7 +161,7 @@ wd.marketplace.engine = function(myself,spec){
         if(jqXHR.responseText.search('Login Error')){
             myself.notificationEngine.getNotification().error("Session timeout. Please login again.");
         } else {
-            myself.notificationEngine.getNotification().error("Error updating - try again later: " + errorThrown);    
+            myself.notificationEngine.getNotification().error("Error upgrading - try again later: " + errorThrown);    
         } 
     }
     
@@ -428,7 +428,7 @@ wd.marketplace.components.infoDiv = function(spec) {
 
 marketplace.getRegistry().registerEntity('components', wd.marketplace.components.infoDiv({
     name: 'restart',
-    description: 'Please restart the server now',
+    description: 'So that changes take effect, please restart the server now',
     pulsatePeriod: 5000
 }));
 
@@ -1034,7 +1034,7 @@ wd.marketplace.components.pluginBody = function(spec){
 
         wd.marketplace.components.pluginButton({
         	cssClass: "updateButton",
-            label: "Update",
+            label: "Upgrade",
             clickAction: function(){ 
                 var v = plugin.getInstalledVersion();
                 spec.updateAction( v.branch ) ;
@@ -1312,15 +1312,17 @@ wd.marketplace.components.pluginVersionDetails = function(spec){
    	     	
 				$slideshowHolder.nivoSlider(slidesProperties);
                 
-                /*				
-				var $closeSlideshowButton = $("<div/>").addClass("closeSlideshowButton").prependTo($rightSideSlideshow);
-				$closeSlideshowButton.append("<div class='image'></div>").append("<div class='text'>close</div>");
+                
+				var $closeSlideshowButton = $("<div/>").addClass("closeSlideshowButton");//.prependTo($rightSideSlideshow);
+
+                $("<div/>").addClass('closeButtonHolder').append($closeSlideshowButton).prependTo($rightSideSlideshow);
+				//$closeSlideshowButton.append("<div class='image'></div>").append("<div class='text'>close</div>");
 	
 				$closeSlideshowButton.click(function(){
 					$rightSideSlideshow.css('display','none');
                     $rightSide.css('display','inline-block');
 				});
-				*/
+				
 
 				var $prev = $rightSideSlideshow.find('.prev'),
 					$next = $rightSideSlideshow.find('.next');
@@ -1893,9 +1895,9 @@ wd.marketplace.panels.marketplacePanel = function(spec){
                 myself.caf.engine.installPlugin(plugin.getPluginInfo().id, branch, function(){
                     myself.log("Install plugin done: " + plugin.getPluginInfo().id +", branch " + branch ,"info")
                     myself.stopOperation(INSTALL, plugin, branch)
-                }, function(){
+                }, function(jqXHR, textStatus){
                     myself.log("Error installing plugin: " + plugin.getPluginInfo().id +", branch " + branch ,"info")
-                    myself.errorOperation(INSTALL, plugin, branch)
+                    myself.errorOperation(INSTALL, plugin, branch,jqXHR.message)
                 } );
             },
             validateFunction: function () {
@@ -1921,9 +1923,9 @@ wd.marketplace.panels.marketplacePanel = function(spec){
                 myself.caf.engine.installPlugin(plugin.getPluginInfo().id, branch, function(){
                     myself.log("Upgrade plugin done: " + plugin.getPluginInfo().id +", branch " + branch ,"info")
                     myself.stopOperation(UPDATE, plugin, branch)
-                }, function(){
+                }, function(jqXHR, textStatus){
                     myself.log("Error upgrading plugin: " + plugin.getPluginInfo().id +", branch " + branch ,"info")
-                    myself.errorOperation(UPDATE, plugin, branch)
+                    myself.errorOperation(UPDATE, plugin, branch,jqXHR.message)
                 } );
             },
             validateFunction: function () {
@@ -1951,9 +1953,9 @@ wd.marketplace.panels.marketplacePanel = function(spec){
                 myself.caf.engine.uninstallPlugin(plugin.getPluginInfo().id, function(){
                     myself.log("Uninstall plugin done: " + plugin.getPluginInfo().id ,"info");
                     myself.stopOperation(UNINSTALL, plugin); 
-                }, function(){
+                }, function(jqXHR, textStatus){
                     myself.log("Error uninstalling plugin: " + plugin.getPluginInfo().id ,"info");
-                    myself.errorOperation(UNINSTALL, plugin); 
+                    myself.errorOperation(UNINSTALL, plugin, "" ,jqXHR.message); 
                 } );
             },
             validateFunction: function () {
@@ -1999,17 +2001,17 @@ wd.marketplace.panels.marketplacePanel = function(spec){
         if(operation == INSTALL){
             var popupStatus = "Successfuly installed ",
             popupContent = undefined,
-            popupDetails = "Thank you"+"<br/><br/>"+"Installed "+plugin.getPluginInfo().name +" with branch "+branch+((plugin.getPluginInfo().installationNotes) ? "<br/>"+plugin.getPluginInfo().installationNotes : ""),
+            popupDetails = "Installed "+plugin.getPluginInfo().name +" with branch "+branch+((plugin.getPluginInfo().installationNotes) ? "<br/>"+plugin.getPluginInfo().installationNotes : "")+"<br/><br/>"+"<span style='font-weight: bold; font-size: 13px'>You must restart your server for changes to take effect</span>",
             cssClass = "popupInstall popupSuccess";
         } else if(operation == UPDATE){
             var popupStatus = "Successfuly upgraded ",
             popupContent = undefined,
-            popupDetails = "Thank you"+"<br/><br/>"+"Upgrading "+plugin.getPluginInfo().name +" with branch "+branch+((plugin.getPluginInfo().installationNotes) ? "<br/>"+plugin.getPluginInfo().installationNotes : ""),
+            popupDetails = "Upgraded "+plugin.getPluginInfo().name +" with branch "+branch+((plugin.getPluginInfo().installationNotes) ? "<br/>"+plugin.getPluginInfo().installationNotes : "")+"<br/><br/>"+"<span style='font-weight: bold; font-size: 13px'>You must restart your server for changes to take effect</span>",
             cssClass = "popupInstall popupSuccess";    
         } else{
             var popupStatus = "Successfully uninstalled ",
             popupContent = undefined,
-            popupDetails = "Thank you"+"<br/><br/>"+"Uninstalled "+plugin.getPluginInfo().name,
+            popupDetails = "Uninstalled "+plugin.getPluginInfo().name+"<br/><br/>"+"<span style='font-weight: bold; font-size: 13px'>You must restart your server for changes to take effect</span>",
             cssClass = "popupUninstall popupSuccess";
         }
         myself.log("Stopping " + operation + " operation");
@@ -2035,15 +2037,15 @@ wd.marketplace.panels.marketplacePanel = function(spec){
         errorMsg = errorMsg || "";
         if(operation == INSTALL){
             var popupStatus = "Error installing ",
-            popupDetails = "Please check server logs" + "<br/>"+errorMsg,
+            popupDetails = (errorMsg != "" ? errorMsg + "<br/>": "Please check server logs" + "<br/>"),
             cssClass = "popupInstall popupError";
         } else if(operation == UPDATE){
-        	var popupStatus = "Error updating ",
-            popupDetails = "Please check server logs" + "<br/>"+errorMsg,
+        	var popupStatus = "Error upgrading ",
+            popupDetails = (errorMsg != "" ? errorMsg + "<br/>": "Please check server logs" + "<br/>"),
             cssClass = "popupInstall popupError";
         } else{
             var popupStatus = "Error uninstalling ",
-            popupDetails= "Please check server logs" + "<br/>"+errorMsg,
+            popupDetails = (errorMsg != "" ? errorMsg + "<br/>": "Please check server logs" + "<br/>"),
             cssClass = "popupUninstall popupError";
         }
         myself.log("Starting " + operation + " operation");

@@ -66,6 +66,7 @@ public class MarketplaceService {
 
     private Log logger = LogFactory.getLog(MarketplaceService.class);
     public static final String PLUGIN_NAME = "marketplace";
+    public static final String UNAUTORIZED_ACCESS = "Unauthorized Access. Your Pentaho roles do not allow you to make changes to plugins.";
     private XPath xpath;
 
     public MarketplaceService() {
@@ -332,7 +333,7 @@ public class MarketplaceService {
             return json;
         } catch (MarketplaceSecurityException e) {
             logger.debug(e.getMessage(), e);
-            return createJsonMessage("Unauthorized Access", "ERROR_0002_UNAUTHORIZED_ACCESS");
+            return createJsonMessage(UNAUTORIZED_ACCESS, "ERROR_0002_UNAUTHORIZED_ACCESS");
         }
     }
 
@@ -344,7 +345,7 @@ public class MarketplaceService {
             return json;
         } catch (MarketplaceSecurityException e) {
             logger.debug(e.getMessage(), e);
-            return createJsonMessage("Unauthorized Access", "ERROR_0002_UNAUTHORIZED_ACCESS");
+            return createJsonMessage(UNAUTORIZED_ACCESS, "ERROR_0002_UNAUTHORIZED_ACCESS");
         }
     }
 

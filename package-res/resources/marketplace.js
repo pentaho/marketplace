@@ -49,6 +49,8 @@ wd.marketplace.engine = function(myself,spec){
         
         // Call refresh
         impl.refresh();
+
+        $(".cafPanel.cafLinks:first").addClass('active');
         
         
     }
@@ -159,7 +161,7 @@ wd.marketplace.engine = function(myself,spec){
         if(jqXHR.responseText.search('Login Error')){
             myself.notificationEngine.getNotification().error("Session timeout. Please login again.");
         } else {
-            myself.notificationEngine.getNotification().error("Error updating - try again later: " + errorThrown);    
+            myself.notificationEngine.getNotification().error("Error upgrading - try again later: " + errorThrown);    
         } 
     }
     
@@ -249,7 +251,7 @@ marketplace.getRegistry().registerTemplate(wd.marketplace.template());
 
 marketplace.getRegistry().registerAction( wd.caf.action({
     name: "refresh",
-    description: "<div class='actionRefresh'><img class='image'/></div>",
+    description: "<div class='actionRefresh' title='Refresh'><img class='image'/></div>",
     order: 10,
     executeAction: function(){
         this.caf.engine.refresh();
@@ -360,7 +362,7 @@ wd.marketplace.actions.toggleAction = function(spec){
 
 marketplace.getRegistry().registerAction( wd.marketplace.actions.toggleAction({
     name: "about",
-    description: "<div class='actionAbout'><img class='image'/></div>",
+    description: "<div class='actionAbout' title='Information'><img class='image'/></div>",
     toggleText: 'Pentaho Marketplace allows you to browse through available plugins and customize your Pentaho installation. Enjoy!',
     order: 20,
     container: marketplace.getRegistry()
@@ -426,7 +428,7 @@ wd.marketplace.components.infoDiv = function(spec) {
 
 marketplace.getRegistry().registerEntity('components', wd.marketplace.components.infoDiv({
     name: 'restart',
-    description: 'Please restart the server now',
+    description: 'So that changes take effect, please restart the server now',
     pulsatePeriod: 5000
 }));
 
@@ -562,11 +564,6 @@ wd.marketplace.components.plugin = function(spec){
 				//hide other plugins
 				$.each(myself.getPanel().getPlaceholder().find('.pluginWrapper'), function(){
 					if(!$(this).is($wrapper)) $(this).hide();
-				});
-				
-				
-				$.each($(".marketplacePanelHeader > div"), function(){
-					$(this).hide();
 				});
             },
             installAction: function(branch){
@@ -848,7 +845,7 @@ wd.marketplace.components.pluginHeader = function(spec){
         else if(installationStatus.description == "Update available"){
         	wd.marketplace.components.pluginButton({
         		cssClass: "updateButton",
-            	label: "Update",
+            	label: "Upgrade",
             	clickAction: function(){ 
             	    var v = plugin.getInstalledVersion();
             	    spec.updateAction( v.branch ) ;
@@ -993,10 +990,6 @@ wd.marketplace.components.pluginBody = function(spec){
 						$.each($ph.find('.pluginWrapper'), function(){
 							if(!$(this).is($wrapper)) $(this).show();
 						});
-						
-						$.each($(".marketplacePanelHeader > div"), function(){
-							$(this).show();
-						});
                     },
                     image: "img/close.png"
         }).draw($closeButtonObj);
@@ -1041,7 +1034,7 @@ wd.marketplace.components.pluginBody = function(spec){
 
         wd.marketplace.components.pluginButton({
         	cssClass: "updateButton",
-            label: "Update",
+            label: "Upgrade",
             clickAction: function(){ 
                 var v = plugin.getInstalledVersion();
                 spec.updateAction( v.branch ) ;
@@ -1319,15 +1312,17 @@ wd.marketplace.components.pluginVersionDetails = function(spec){
    	     	
 				$slideshowHolder.nivoSlider(slidesProperties);
                 
-                /*				
-				var $closeSlideshowButton = $("<div/>").addClass("closeSlideshowButton").prependTo($rightSideSlideshow);
-				$closeSlideshowButton.append("<div class='image'></div>").append("<div class='text'>close</div>");
+                
+				var $closeSlideshowButton = $("<div/>").addClass("closeSlideshowButton");//.prependTo($rightSideSlideshow);
+
+                $("<div/>").addClass('closeButtonHolder').append($closeSlideshowButton).prependTo($rightSideSlideshow);
+				//$closeSlideshowButton.append("<div class='image'></div>").append("<div class='text'>close</div>");
 	
 				$closeSlideshowButton.click(function(){
 					$rightSideSlideshow.css('display','none');
                     $rightSide.css('display','inline-block');
 				});
-				*/
+				
 
 				var $prev = $rightSideSlideshow.find('.prev'),
 					$next = $rightSideSlideshow.find('.next');
@@ -1827,10 +1822,7 @@ wd.marketplace.panels.marketplacePanel = function(spec){
      * @memberof wd.caf.panel
      */
     myself.draw = spec.draw || function($ph){
-        $("<div/>").addClass("marketplacePanelHeader")
-        	.append($("<div/>").addClass("pluginDetails").text("Details"))
-        	.append($("<div/>").addClass("action").text("Action"))
-        .appendTo($ph);
+        $("<div/>").addClass("marketplacePanelHeader").appendTo($ph);
         
         //$panel = myself.generateBlueprintStructure().appendTo($ph);
         $panel = $("<div/>").appendTo($ph);
@@ -1903,9 +1895,9 @@ wd.marketplace.panels.marketplacePanel = function(spec){
                 myself.caf.engine.installPlugin(plugin.getPluginInfo().id, branch, function(){
                     myself.log("Install plugin done: " + plugin.getPluginInfo().id +", branch " + branch ,"info")
                     myself.stopOperation(INSTALL, plugin, branch)
-                }, function(){
+                }, function(jqXHR, textStatus){
                     myself.log("Error installing plugin: " + plugin.getPluginInfo().id +", branch " + branch ,"info")
-                    myself.errorOperation(INSTALL, plugin, branch)
+                    myself.errorOperation(INSTALL, plugin, branch,jqXHR.message)
                 } );
             },
             validateFunction: function () {
@@ -1916,24 +1908,24 @@ wd.marketplace.panels.marketplacePanel = function(spec){
     
     myself.updatePlugin = function(plugin, branch){      
         myself.caf.popupEngine.getPopup("okcancel").show({
-            status: "Do you want to update now?",
+            status: "Do you want to upgrade now?",
             content: "<span class='pluginName'>"+plugin.getPluginInfo().name+"</span>"+"<br/>"+"<span class='pluginVersion'>"+branch+"</span>",
             details: "",
-            bottom: "You are about to start the update. Do you want to proceed?",
+            bottom: "You are about to start the upgrade. Do you want to proceed?",
             cssClass: "popupUpdate",
             okCallback: function(){
-                myself.log("Update plugin " + plugin.getPluginInfo().id + ", Branch: " + branch,"info");
+                myself.log("Upgrade plugin " + plugin.getPluginInfo().id + ", Branch: " + branch,"info");
         
                 // 1. Set the notification for the installing operation
                 myself.startOperation(UPDATE, plugin, branch);
 
                 // 2. Send to engine
                 myself.caf.engine.installPlugin(plugin.getPluginInfo().id, branch, function(){
-                    myself.log("Update plugin done: " + plugin.getPluginInfo().id +", branch " + branch ,"info")
+                    myself.log("Upgrade plugin done: " + plugin.getPluginInfo().id +", branch " + branch ,"info")
                     myself.stopOperation(UPDATE, plugin, branch)
-                }, function(){
-                    myself.log("Error updating plugin: " + plugin.getPluginInfo().id +", branch " + branch ,"info")
-                    myself.errorOperation(UPDATE, plugin, branch)
+                }, function(jqXHR, textStatus){
+                    myself.log("Error upgrading plugin: " + plugin.getPluginInfo().id +", branch " + branch ,"info")
+                    myself.errorOperation(UPDATE, plugin, branch,jqXHR.message)
                 } );
             },
             validateFunction: function () {
@@ -1961,9 +1953,9 @@ wd.marketplace.panels.marketplacePanel = function(spec){
                 myself.caf.engine.uninstallPlugin(plugin.getPluginInfo().id, function(){
                     myself.log("Uninstall plugin done: " + plugin.getPluginInfo().id ,"info");
                     myself.stopOperation(UNINSTALL, plugin); 
-                }, function(){
+                }, function(jqXHR, textStatus){
                     myself.log("Error uninstalling plugin: " + plugin.getPluginInfo().id ,"info");
-                    myself.errorOperation(UNINSTALL, plugin); 
+                    myself.errorOperation(UNINSTALL, plugin, "" ,jqXHR.message); 
                 } );
             },
             validateFunction: function () {
@@ -1982,7 +1974,7 @@ wd.marketplace.panels.marketplacePanel = function(spec){
             popupContent = "<span class='pluginName'>"+plugin.getPluginInfo().name+"</span>"+"<br/>"+"<span class='pluginVersion'>"+branch+"</span>",
             cssClass =  "popupInstall popupOperation";
         } else if(operation == UPDATE){
-        	var popupStatus = "Updating",
+        	var popupStatus = "Upgrading",
         	popupDetails = undefined,
             popupContent = "<span class='pluginName'>"+plugin.getPluginInfo().name+"</span>"+"<br/>"+"<span class='pluginVersion'>"+branch+"</span>",
             cssClass =  "popupInstall popupOperation";
@@ -1997,7 +1989,7 @@ wd.marketplace.panels.marketplacePanel = function(spec){
             status: popupStatus,
             content: popupContent,
             details: "Please wait...",
-            bottom: popupStatus,
+            bottom: "",
             cssClass: cssClass
         });
 
@@ -2009,17 +2001,17 @@ wd.marketplace.panels.marketplacePanel = function(spec){
         if(operation == INSTALL){
             var popupStatus = "Successfuly installed ",
             popupContent = undefined,
-            popupDetails = "Thank you"+"<br/><br/>"+"Installed "+plugin.getPluginInfo().name +" with branch "+branch+((plugin.getPluginInfo().installationNotes) ? "<br/>"+plugin.getPluginInfo().installationNotes : ""),
+            popupDetails = "Installed "+plugin.getPluginInfo().name +" with branch "+branch+((plugin.getPluginInfo().installationNotes) ? "<br/>"+plugin.getPluginInfo().installationNotes : "")+"<br/><br/>"+"<span style='font-weight: bold; font-size: 13px'>You must restart your server for changes to take effect</span>",
             cssClass = "popupInstall popupSuccess";
         } else if(operation == UPDATE){
-            var popupStatus = "Successfuly updated ",
+            var popupStatus = "Successfuly upgraded ",
             popupContent = undefined,
-            popupDetails = "Thank you"+"<br/><br/>"+"Updated "+plugin.getPluginInfo().name +" with branch "+branch+((plugin.getPluginInfo().installationNotes) ? "<br/>"+plugin.getPluginInfo().installationNotes : ""),
+            popupDetails = "Upgraded "+plugin.getPluginInfo().name +" with branch "+branch+((plugin.getPluginInfo().installationNotes) ? "<br/>"+plugin.getPluginInfo().installationNotes : "")+"<br/><br/>"+"<span style='font-weight: bold; font-size: 13px'>You must restart your server for changes to take effect</span>",
             cssClass = "popupInstall popupSuccess";    
         } else{
             var popupStatus = "Successfully uninstalled ",
             popupContent = undefined,
-            popupDetails = "Thank you"+"<br/><br/>"+"Uninstalled "+plugin.getPluginInfo().name,
+            popupDetails = "Uninstalled "+plugin.getPluginInfo().name+"<br/><br/>"+"<span style='font-weight: bold; font-size: 13px'>You must restart your server for changes to take effect</span>",
             cssClass = "popupUninstall popupSuccess";
         }
         myself.log("Stopping " + operation + " operation");
@@ -2027,7 +2019,7 @@ wd.marketplace.panels.marketplacePanel = function(spec){
         myself.caf.popupEngine.getPopup("close").show({
             status: popupStatus,
             content: popupContent,
-            bottom: "Close",
+            bottom: "",
             details: popupDetails,
             cssClass: cssClass
         });
@@ -2045,15 +2037,15 @@ wd.marketplace.panels.marketplacePanel = function(spec){
         errorMsg = errorMsg || "";
         if(operation == INSTALL){
             var popupStatus = "Error installing ",
-            popupDetails = "Please check server logs" + "<br/>"+errorMsg,
+            popupDetails = (errorMsg != "" ? errorMsg + "<br/>": "Please check server logs" + "<br/>"),
             cssClass = "popupInstall popupError";
         } else if(operation == UPDATE){
-        	var popupStatus = "Error updating ",
-            popupDetails = "Please check server logs" + "<br/>"+errorMsg,
+        	var popupStatus = "Error upgrading ",
+            popupDetails = (errorMsg != "" ? errorMsg + "<br/>": "Please check server logs" + "<br/>"),
             cssClass = "popupInstall popupError";
         } else{
             var popupStatus = "Error uninstalling ",
-            popupDetails= "Please check server logs" + "<br/>"+errorMsg,
+            popupDetails = (errorMsg != "" ? errorMsg + "<br/>": "Please check server logs" + "<br/>"),
             cssClass = "popupUninstall popupError";
         }
         myself.log("Starting " + operation + " operation");
@@ -2112,99 +2104,4 @@ $(function(){
     marketplace.engine.init();
 })
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* Old stuff */
-
-
-function PentahoMarketplace() {
-    this.getPlugins = function(solution, path, filename ) {
-        var time = new Date().getTime();
-        var resultStr = pentahoGet( CONTEXT_PATH + 'content/ws-run/MarketplaceService/getPluginsJson?time=' + time, '', null, 'text/text' );
-        // pull the state, status, and message out
-        if( !resultStr ) {
-            return null;
-        }
-        var jsonObject = this.getResultMessage(resultStr);
-        return jsonObject;
-    }
-
-    this.getResultMessage = function( str ) {
-        var xml  = this.parseXML(str);
-        var nodeList = xml.getElementsByTagName('return');
-        if( nodeList.length > 0 && nodeList[0].firstChild ) {
-            return nodeList[0].firstChild.nodeValue;
-        }
-        return null;
-    }
-
-    this.installNow = function(pluginId, versionId) {
-        var time = new Date().getTime();
-          
-        var resultStr = pentahoGet( CONTEXT_PATH + 'content/ws-run/MarketplaceService/installPluginJson?pluginId=' + pluginId+ (versionId !== undefined? '&versionId=' +versionId:"") + '&time=' + time, '', null, 'text/text' );
-        // pull the state, status, and message out
-        if( !resultStr ) {
-            return null;
-        }
-        var jsonObject = this.getResultMessage(resultStr);
-        return jsonObject;
-    }
-  
-    this.uninstall = function(pluginId) {
-        var time = new Date().getTime();
-        var resultStr = pentahoGet( CONTEXT_PATH + 'content/ws-run/MarketplaceService/uninstallPluginJson?pluginId=' + pluginId+ '&time=' + time, '', null, 'text/text' );
-        // pull the state, status, and message out
-        if( !resultStr ) {
-            return null;
-        }
-        var jsonObject = this.getResultMessage(resultStr);
-        return jsonObject;
-    }
-  
-    this.parseXML = function(sText) {
-        if( !sText ) {
-            return null;
-        }
-        var xmlDoc;
-        try { //Firefox, Mozilla, Opera, etc.
-            parser=new DOMParser();
-            xmlDoc=parser.parseFromString(sText,"text/xml");
-            return xmlDoc;
-        } catch(e){
-            try { //Internet Explorer
-                xmlDoc=new ActiveXObject("Microsoft.XMLDOM");
-                xmlDoc.async="false";
-                xmlDoc.loadXML(sText);
-                return xmlDoc;
-            } catch(e) {
-            }
-        }
-        alert('XML is invalid or no XML parser found');
-        return null;
-    }
-}
-var pentahoMarketplace = new PentahoMarketplace();
 

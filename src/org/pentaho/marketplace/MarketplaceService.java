@@ -66,6 +66,7 @@ public class MarketplaceService {
 
     private Log logger = LogFactory.getLog(MarketplaceService.class);
     public static final String PLUGIN_NAME = "marketplace";
+    public static final String UNAUTORIZED_ACCESS = "Unauthorized Access. Your Pentaho roles do not allow you to make changes to plugins.";
     private XPath xpath;
 
     public MarketplaceService() {
@@ -79,10 +80,10 @@ public class MarketplaceService {
         private static final long serialVersionUID = -1852471739131561628L;
     }
 
-    public List<Plugin> getPlugins() throws MarketplaceSecurityException {
+    public List<Plugin> getPlugins() {// throws MarketplaceSecurityException {
         // return a unauthorized exception if unauthorized?
         if (!hasMarketplacePermission()) {
-            throw new MarketplaceSecurityException();
+            //throw new MarketplaceSecurityException();
         }
 
         // load plugins from url
@@ -156,6 +157,10 @@ public class MarketplaceService {
     }
     
     public StatusMessage uninstallPlugin(String id) throws MarketplaceSecurityException {
+        if (!hasMarketplacePermission()) {
+            throw new MarketplaceSecurityException();
+        }
+        
         List<Plugin> plugins = getPlugins();
         Plugin toUninstall = null;
 
@@ -222,6 +227,10 @@ public class MarketplaceService {
      * @return a status mesasge to display the user
      */
     public StatusMessage installPlugin(String id, String versionBranch) throws MarketplaceSecurityException {
+        if (!hasMarketplacePermission()) {
+            throw new MarketplaceSecurityException();
+        }
+        
         List<Plugin> plugins = getPlugins();
         Plugin toInstall = null;
         for (Plugin plugin : plugins) {
@@ -324,7 +333,7 @@ public class MarketplaceService {
             return json;
         } catch (MarketplaceSecurityException e) {
             logger.debug(e.getMessage(), e);
-            return createJsonMessage("Unauthorized Access", "ERROR_0002_UNAUTHORIZED_ACCESS");
+            return createJsonMessage(UNAUTORIZED_ACCESS, "ERROR_0002_UNAUTHORIZED_ACCESS");
         }
     }
 
@@ -336,22 +345,22 @@ public class MarketplaceService {
             return json;
         } catch (MarketplaceSecurityException e) {
             logger.debug(e.getMessage(), e);
-            return createJsonMessage("Unauthorized Access", "ERROR_0002_UNAUTHORIZED_ACCESS");
+            return createJsonMessage(UNAUTORIZED_ACCESS, "ERROR_0002_UNAUTHORIZED_ACCESS");
         }
     }
 
     public String getPluginsJson() {
-        try {
+        //try {
             List<Plugin> pluginArray = getPlugins();
             JSONSerializer serializer = new JSONSerializer();
             String json = serializer.deepSerialize(pluginArray);
             return json;
-        } catch (MarketplaceSecurityException e) {
-            logger.debug(e.getMessage(), e);
+        //} catch (MarketplaceSecurityException e) {
+        //    logger.debug(e.getMessage(), e);
             // error(Messages.getErrorString("UserSettingService.ERROR_0002_SETTINGS_READ", e.getLocalizedMessage()), e); //$NON-NLS-1$
             // return createJsonMessage(Messages.getString("UserSettingService.ERROR_0002_SETTINGS_READ", e.getLocalizedMessage()), "ERROR_0002_SETTINGS_READ"); //$NON-NLS-1$ //$NON-NLS-2$
-            return createJsonMessage("Unauthorized Access", "ERROR_0002_UNAUTHORIZED_ACCESS"); //$NON-NLS-1$ //$NON-NLS-2$
-        }
+        //    return createJsonMessage("Unauthorized Access", "ERROR_0002_UNAUTHORIZED_ACCESS"); //$NON-NLS-1$ //$NON-NLS-2$
+        //}
     }
 
     protected boolean hasMarketplacePermission() {

@@ -432,6 +432,7 @@ public class MarketplaceService {
         }
 
         if (site == null || "".equals(site)) {
+
             site = "https://raw.github.com/pentaho/marketplace-metadata/master/marketplace.xml";
 
         }
@@ -504,12 +505,12 @@ public class MarketplaceService {
                 plugin.setCompanyUrl(getElementChildValue(element, "author_url"));
                 plugin.setCompanyLogo(getElementChildValue(element, "author_logo"));
                 plugin.setImg(getElementChildValue(element, "img"));
+
                 plugin.setSmallImg(getElementChildValue(element, "small_img"));
                 plugin.setLearnMoreUrl(getElementChildValue(element, "documentation_url"));
                 plugin.setInstallationNotes(getElementChildValue(element, "installation_notes"));
                 plugin.setLicense(getElementChildValue(element, "license"));
                 plugin.setDependencies(getElementChildValue(element, "dependencies"));
-                
 
 
                 //NodeList availableVersions = element.getElementsByTagName("version");
@@ -526,6 +527,7 @@ public class MarketplaceService {
                                 getElementChildValue(versionElement, "samples_url"),
                                 getElementChildValue(versionElement, "description"),
                                 getElementChildValue(versionElement, "changelog"),
+
                                 getElementChildValue(versionElement, "build_id"),
                                 getElementChildValue(versionElement, "releaseDate"),                                
                                 getElementChildValue(versionElement, "min_parent_version"),
@@ -549,7 +551,6 @@ public class MarketplaceService {
                     
                     plugin.setScreenshots(screenshots);
                 }
-
 
                 // only include plugins that have versions within this release 
                 if (plugin.getVersions() != null && plugin.getVersions().size() > 0) {

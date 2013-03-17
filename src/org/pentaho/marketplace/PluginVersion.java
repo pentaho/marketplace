@@ -35,12 +35,12 @@ public class PluginVersion implements Serializable {
     
     /** new props **/
     private String buildId;
-    private String releaseDate;    
+    private String releaseDate;
     private String minParentVersion;
     private String maxParentVersion;
 
-    public PluginVersion(String branch, String name, String version, String downloadUrl, String samplesDownloadUrl, String description, String changelog, String buildId, String releaseDate, String minParentVersion, String maxParentVersion) {
 
+    public PluginVersion(String branch, String name, String version, String downloadUrl, String samplesDownloadUrl, String description, String changelog, String buildId, String releaseDate, String minParentVersion, String maxParentVersion) {
         this.branch = branch;
         this.name = name;
         this.version = version;
@@ -50,7 +50,6 @@ public class PluginVersion implements Serializable {
         this.changelog = changelog;
         this.buildId = buildId;
         this.releaseDate = releaseDate;
-
         this.minParentVersion = minParentVersion;
         this.maxParentVersion = maxParentVersion;
 
@@ -149,14 +148,6 @@ public class PluginVersion implements Serializable {
         return buildId;
     }
 
-
-    /**
-     * @return the date
-     */
-    public String getReleaseDate() {
-        return releaseDate;
-    }
-    
     
     /**
      * @return the minParentVersion
@@ -172,4 +163,12 @@ public class PluginVersion implements Serializable {
       return maxParentVersion;
     }
 
+
+    /**
+     * @return the date
+     */
+    public String getReleaseDate() {
+        return releaseDate;
+    }
+    
 }

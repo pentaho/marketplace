@@ -435,6 +435,7 @@ public class MarketplaceService {
         if (site == null || "".equals(site)) {
 
             site = "https://raw.github.com/pentaho/marketplace-metadata/master/marketplace.xml";
+
         }
 
         return HttpUtil.getURLContent(site);

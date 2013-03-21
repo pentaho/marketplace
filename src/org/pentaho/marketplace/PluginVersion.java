@@ -52,6 +52,7 @@ public class PluginVersion implements Serializable {
         this.releaseDate = releaseDate;
         this.minParentVersion = minParentVersion;
         this.maxParentVersion = maxParentVersion;
+
     }
 
     public String getBranch() {

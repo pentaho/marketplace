@@ -377,7 +377,8 @@ public class MarketplaceService {
         }
 
         if (roles == null) {
-            roles = "Admin";
+            // If it's true, we'll just check if the user is admin
+            return SecurityHelper.isPentahoAdministrator(PentahoSessionHolder.getSession());            
         }
 
         String roleArr[] = roles.split(","); //$NON-NLS-1$

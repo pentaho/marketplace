@@ -41,10 +41,6 @@ public class Plugin implements Serializable {
     private boolean installed;
     
     /*** new props ***/
-    private String[] screenshots;
-    private String dependencies;
-    private String license;
-
     private List<PluginVersion> versions;
     private String[] screenshots;
     private String dependencies;

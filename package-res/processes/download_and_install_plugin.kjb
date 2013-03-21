@@ -173,8 +173,8 @@
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>261</xloc>
-      <yloc>155</yloc>
+      <xloc>322</xloc>
+      <yloc>88</yloc>
       </entry>
     <entry>
       <name>Success</name>
@@ -205,8 +205,8 @@
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>413</xloc>
-      <yloc>158</yloc>
+      <xloc>412</xloc>
+      <yloc>156</yloc>
       </entry>
     <entry>
       <name>Copy to Destination</name>
@@ -655,17 +655,33 @@
       <xloc>1145</xloc>
       <yloc>350</yloc>
       </entry>
+    <entry>
+      <name>Unzip</name>
+      <description/>
+      <type>COPY_FILES</type>
+      <copy_empty_folders>Y</copy_empty_folders>
+      <arg_from_previous>N</arg_from_previous>
+      <overwrite_files>N</overwrite_files>
+      <include_subfolders>Y</include_subfolders>
+      <remove_source_files>N</remove_source_files>
+      <add_result_filesname>N</add_result_filesname>
+      <destination_is_a_file>N</destination_is_a_file>
+      <create_destination_folder>Y</create_destination_folder>
+      <fields>
+        <field>
+          <source_filefolder>zip:${downloadDestination}</source_filefolder>
+          <destination_filefolder>${stagingDestination}</destination_filefolder>
+          <wildcard/>
+        </field>
+      </fields>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>267</xloc>
+      <yloc>156</yloc>
+      </entry>
   </entries>
   <hops>
-    <hop>
-      <from>Unzip Plugin to Staging</from>
-      <to>Unzipped Plugin Exists</to>
-      <from_nr>0</from_nr>
-      <to_nr>0</to_nr>
-      <enabled>Y</enabled>
-      <evaluation>Y</evaluation>
-      <unconditional>N</unconditional>
-    </hop>
     <hop>
       <from>Delete Staging</from>
       <to>Success</to>
@@ -727,15 +743,6 @@
       <to_nr>0</to_nr>
       <enabled>Y</enabled>
       <evaluation>N</evaluation>
-      <unconditional>N</unconditional>
-    </hop>
-    <hop>
-      <from>Download Plugin</from>
-      <to>Unzip Plugin to Staging</to>
-      <from_nr>0</from_nr>
-      <to_nr>0</to_nr>
-      <enabled>Y</enabled>
-      <evaluation>Y</evaluation>
       <unconditional>N</unconditional>
     </hop>
     <hop>
@@ -955,15 +962,6 @@
       <unconditional>Y</unconditional>
     </hop>
     <hop>
-      <from>Unzip Plugin to Staging</from>
-      <to>Cleanup Staging</to>
-      <from_nr>0</from_nr>
-      <to_nr>0</to_nr>
-      <enabled>Y</enabled>
-      <evaluation>N</evaluation>
-      <unconditional>N</unconditional>
-    </hop>
-    <hop>
       <from>Unzip Samples to Staging</from>
       <to>Cleanup Staging After Samples</to>
       <from_nr>0</from_nr>
@@ -972,7 +970,59 @@
       <evaluation>N</evaluation>
       <unconditional>N</unconditional>
     </hop>
+    <hop>
+      <from>Download Plugin</from>
+      <to>Unzip</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>Y</unconditional>
+    </hop>
+    <hop>
+      <from>Unzip</from>
+      <to>Unzipped Plugin Exists</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>Y</unconditional>
+    </hop>
+    <hop>
+      <from>Unzip</from>
+      <to>Cleanup Staging</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>N</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
   </hops>
   <notepads>
+    <notepad>
+      <note>Had some issues with the unzip step, that caused random failures:
+ http:&#47;&#47;jira.pentaho.com&#47;browse&#47;PDI-9441
+
+Replaced it with a copy step that uses VFS. Even with
+http:&#47;&#47;jira.pentaho.com&#47;browse&#47;PDI-9520 it seems to work</note>
+      <xloc>465</xloc>
+      <yloc>41</yloc>
+      <width>399</width>
+      <heigth>90</heigth>
+      <fontname/>
+      <fontsize>-1</fontsize>
+      <fontbold>N</fontbold>
+      <fontitalic>N</fontitalic>
+      <fontcolorred>0</fontcolorred>
+      <fontcolorgreen>0</fontcolorgreen>
+      <fontcolorblue>0</fontcolorblue>
+      <backgroundcolorred>255</backgroundcolorred>
+      <backgroundcolorgreen>165</backgroundcolorgreen>
+      <backgroundcolorblue>0</backgroundcolorblue>
+      <bordercolorred>100</bordercolorred>
+      <bordercolorgreen>100</bordercolorgreen>
+      <bordercolorblue>100</bordercolorblue>
+      <drawshadow>Y</drawshadow>
+    </notepad>
   </notepads>
 </job>

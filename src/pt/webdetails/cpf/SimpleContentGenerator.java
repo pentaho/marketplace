@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.pentaho.platform.api.engine.IOutputHandler;
 import org.pentaho.platform.api.engine.IParameterProvider;
 import org.pentaho.platform.api.repository.IContentItem;
 import org.pentaho.platform.engine.services.solution.BaseContentGenerator;
@@ -32,7 +33,7 @@ public class SimpleContentGenerator extends BaseContentGenerator {
     public void createContent() {
         IParameterProvider pathParams = parameterProviders.get("path");
         //requestParams = parameterProviders.get("request");
-        final IContentItem contentItem = outputHandler.getOutputContentItem("response", "content", "", instanceId, "text/html");
+        final IContentItem contentItem = outputHandler.getOutputContentItem(IOutputHandler.RESPONSE, "content", instanceId, "text/html");
 
         try {
             final OutputStream out = contentItem.getOutputStream(null);

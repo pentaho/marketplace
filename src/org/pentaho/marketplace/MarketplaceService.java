@@ -35,6 +35,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.pentaho.di.core.Result;
 import org.pentaho.di.core.exception.KettleException;
+import org.pentaho.di.core.logging.LogLevel;
 import org.pentaho.di.job.Job;
 import org.pentaho.di.job.JobMeta;
 import org.pentaho.platform.api.engine.IPluginManager;
@@ -284,7 +285,7 @@ public class MarketplaceService {
             job.getJobMeta().setParameterValue("downloadUrl", downloadUrl);
             if (toInstall.getVersionByBranch(versionBranch).getSamplesDownloadUrl() != null) {
                 job.getJobMeta().setParameterValue("samplesDownloadUrl", samplesDownloadUrl);
-                job.getJobMeta().setParameterValue("samplesDir", PentahoSystem.getApplicationContext().getSolutionPath("plugin-samples"));
+                job.getJobMeta().setParameterValue("samplesDir", "/public/plugin-samples");
                 job.getJobMeta().setParameterValue("samplesTargetDestination", PentahoSystem.getApplicationContext().getSolutionPath("plugin-samples/" + toInstall.getId()));
                 job.getJobMeta().setParameterValue("samplesTargetBackup", PentahoSystem.getApplicationContext().getSolutionPath("system/plugin-cache/backups/" + toInstall.getId() + "_samples_" + new Date().getTime()));
                 job.getJobMeta().setParameterValue("samplesDownloadDestination", PentahoSystem.getApplicationContext().getSolutionPath("system/plugin-cache/downloads/" + toInstall.getId() + "-samples-" + availableVersion + ".zip"));
@@ -298,6 +299,7 @@ public class MarketplaceService {
             job.getJobMeta().setParameterValue("targetBackup", PentahoSystem.getApplicationContext().getSolutionPath("system/plugin-cache/backups/" + toInstall.getId() + "_" + new Date().getTime()));
 
             job.copyParametersFrom(job.getJobMeta());
+            job.setLogLevel(LogLevel.DETAILED);
             job.activateParameters();
             job.start();
             job.waitUntilFinished();

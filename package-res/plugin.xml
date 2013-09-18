@@ -16,9 +16,9 @@
                resourcebundle="content/marketplace/resources/lang/messages" content-url="content/marketplace/resources/marketplace.html">
   </perspective>  
   
-  
+  <!--
     <webservice id="MarketplaceService" type="xml" class="org.pentaho.marketplace.MarketplaceService"/>
-
+-->
 <!--
 	<overlays>
                             
@@ -35,6 +35,7 @@
 		</overlay>
 	</overlays>
 -->
+
 
     <content-generator scope="local" id="marketplace" type="MarketplaceContentGenerator" url="">
         <classname>org.pentaho.marketplace.MarketplaceContentGenerator</classname>

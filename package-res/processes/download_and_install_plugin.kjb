@@ -5,30 +5,30 @@
     <extended_description/>
     <job_version/>
     <job_status>0</job_status>
-  <directory>&#47;</directory>
+  <directory>&#x2f;</directory>
   <created_user>-</created_user>
-  <created_date>2011&#47;10&#47;09 16:08:24.678</created_date>
+  <created_date>2011&#x2f;10&#x2f;09 16&#x3a;08&#x3a;24.678</created_date>
   <modified_user>-</modified_user>
-  <modified_date>2012&#47;01&#47;30 17:10:09.871</modified_date>
+  <modified_date>2012&#x2f;01&#x2f;30 17&#x3a;10&#x3a;09.871</modified_date>
     <parameters>
         <parameter>
             <name>downloadDestination</name>
-            <default_value>&#47;home&#47;gorman&#47;4.0.0&#47;finalGA&#47;biserver-ee&#47;pentaho-solutions&#47;system&#47;plugin-cache&#47;downloads&#47;cda-1.0.zip</default_value>
+            <default_value>&#x2f;home&#x2f;gorman&#x2f;4.0.0&#x2f;finalGA&#x2f;biserver-ee&#x2f;pentaho-solutions&#x2f;system&#x2f;plugin-cache&#x2f;downloads&#x2f;cda-1.0.zip</default_value>
             <description/>
         </parameter>
         <parameter>
             <name>downloadUrl</name>
-            <default_value>http:&#47;&#47;localhost:8080&#47;cda-2.0.zip</default_value>
+            <default_value>http&#x3a;&#x2f;&#x2f;localhost&#x3a;8080&#x2f;cda-2.0.zip</default_value>
             <description/>
         </parameter>
         <parameter>
             <name>samplesDir</name>
-            <default_value>&#47;home&#47;gorman&#47;4.0.0&#47;finalGA&#47;biserver-ee&#47;pentaho-solutions&#47;bi-developers</default_value>
+            <default_value>&#x2f;home&#x2f;gorman&#x2f;4.0.0&#x2f;finalGA&#x2f;biserver-ee&#x2f;pentaho-solutions&#x2f;bi-developers</default_value>
             <description/>
         </parameter>
         <parameter>
             <name>samplesDownloadDestination</name>
-            <default_value>&#47;home&#47;gorman&#47;4.0.0&#47;finalGA&#47;biserver-ee&#47;pentaho-solutions&#47;system&#47;plugin-cache&#47;downloads&#47;cda-samples-1.0.zip</default_value>
+            <default_value>&#x2f;home&#x2f;gorman&#x2f;4.0.0&#x2f;finalGA&#x2f;biserver-ee&#x2f;pentaho-solutions&#x2f;system&#x2f;plugin-cache&#x2f;downloads&#x2f;cda-samples-1.0.zip</default_value>
             <description/>
         </parameter>
         <parameter>
@@ -38,42 +38,42 @@
         </parameter>
         <parameter>
             <name>samplesStagingDestination</name>
-            <default_value>&#47;home&#47;gorman&#47;4.0.0&#47;finalGA&#47;biserver-ee&#47;pentaho-solutions&#47;system&#47;plugin-cache&#47;staging-samples</default_value>
+            <default_value>&#x2f;home&#x2f;gorman&#x2f;4.0.0&#x2f;finalGA&#x2f;biserver-ee&#x2f;pentaho-solutions&#x2f;system&#x2f;plugin-cache&#x2f;staging-samples</default_value>
             <description/>
         </parameter>
         <parameter>
             <name>samplesStagingDestinationAndDir</name>
-            <default_value>&#47;home&#47;gorman&#47;4.0.0&#47;finalGA&#47;biserver-ee&#47;pentaho-solutions&#47;system&#47;plugin-cache&#47;staging-samples&#47;cda</default_value>
+            <default_value>&#x2f;home&#x2f;gorman&#x2f;4.0.0&#x2f;finalGA&#x2f;biserver-ee&#x2f;pentaho-solutions&#x2f;system&#x2f;plugin-cache&#x2f;staging-samples&#x2f;cda</default_value>
             <description/>
         </parameter>
         <parameter>
             <name>samplesTargetBackup</name>
-            <default_value>&#47;home&#47;gorman&#47;4.0.0&#47;finalGA&#47;biserver-ee&#47;pentaho-solutions&#47;system&#47;plugin-cache&#47;backups&#47;cda_Samples_TIMESTAMP</default_value>
+            <default_value>&#x2f;home&#x2f;gorman&#x2f;4.0.0&#x2f;finalGA&#x2f;biserver-ee&#x2f;pentaho-solutions&#x2f;system&#x2f;plugin-cache&#x2f;backups&#x2f;cda_Samples_TIMESTAMP</default_value>
             <description/>
         </parameter>
         <parameter>
             <name>samplesTargetDestination</name>
-            <default_value>&#47;home&#47;gorman&#47;4.0.0&#47;finalGA&#47;biserver-ee&#47;pentaho-solutions&#47;bi-developers&#47;cda</default_value>
+            <default_value>&#x2f;home&#x2f;gorman&#x2f;4.0.0&#x2f;finalGA&#x2f;biserver-ee&#x2f;pentaho-solutions&#x2f;bi-developers&#x2f;cda</default_value>
             <description/>
         </parameter>
         <parameter>
             <name>stagingDestination</name>
-            <default_value>&#47;home&#47;gorman&#47;4.0.0&#47;finalGA&#47;biserver-ee&#47;pentaho-solutions&#47;system&#47;plugin-cache&#47;staging</default_value>
+            <default_value>&#x2f;home&#x2f;gorman&#x2f;4.0.0&#x2f;finalGA&#x2f;biserver-ee&#x2f;pentaho-solutions&#x2f;system&#x2f;plugin-cache&#x2f;staging</default_value>
             <description/>
         </parameter>
         <parameter>
             <name>stagingDestinationAndDir</name>
-            <default_value>&#47;home&#47;gorman&#47;4.0.0&#47;finalGA&#47;biserver-ee&#47;pentaho-solutions&#47;system&#47;plugin-cache&#47;staging&#47;cda</default_value>
+            <default_value>&#x2f;home&#x2f;gorman&#x2f;4.0.0&#x2f;finalGA&#x2f;biserver-ee&#x2f;pentaho-solutions&#x2f;system&#x2f;plugin-cache&#x2f;staging&#x2f;cda</default_value>
             <description/>
         </parameter>
         <parameter>
             <name>targetBackup</name>
-            <default_value>&#47;home&#47;gorman&#47;4.0.0&#47;finalGA&#47;biserver-ee&#47;pentaho-solutions&#47;system&#47;plugin-cache&#47;backups&#47;cda_TIMESTAMP</default_value>
+            <default_value>&#x2f;home&#x2f;gorman&#x2f;4.0.0&#x2f;finalGA&#x2f;biserver-ee&#x2f;pentaho-solutions&#x2f;system&#x2f;plugin-cache&#x2f;backups&#x2f;cda_TIMESTAMP</default_value>
             <description/>
         </parameter>
         <parameter>
             <name>targetDestination</name>
-            <default_value>&#47;home&#47;gorman&#47;4.0.0&#47;finalGA&#47;biserver-ee&#47;pentaho-solutions&#47;system&#47;plugin-cache&#47;test&#47;cda</default_value>
+            <default_value>&#x2f;home&#x2f;gorman&#x2f;4.0.0&#x2f;finalGA&#x2f;biserver-ee&#x2f;pentaho-solutions&#x2f;system&#x2f;plugin-cache&#x2f;test&#x2f;cda</default_value>
             <description/>
         </parameter>
     </parameters>
@@ -89,6 +89,7 @@
     <servername/>
     <data_tablespace/>
     <index_tablespace/>
+    <read_only>true</read_only>
     <attributes>
       <attribute><code>EXTRA_OPTION_INFOBRIGHT.characterEncoding</code><attribute>UTF-8</attribute></attribute>
       <attribute><code>EXTRA_OPTION_MYSQL.defaultFetchSize</code><attribute>500</attribute></attribute>
@@ -106,7 +107,7 @@
 <size_limit_lines/>
 <interval/>
 <timeout_days/>
-<field><id>ID_JOB</id><enabled>Y</enabled><name>ID_JOB</name></field><field><id>CHANNEL_ID</id><enabled>Y</enabled><name>CHANNEL_ID</name></field><field><id>JOBNAME</id><enabled>Y</enabled><name>JOBNAME</name></field><field><id>STATUS</id><enabled>Y</enabled><name>STATUS</name></field><field><id>LINES_READ</id><enabled>Y</enabled><name>LINES_READ</name></field><field><id>LINES_WRITTEN</id><enabled>Y</enabled><name>LINES_WRITTEN</name></field><field><id>LINES_UPDATED</id><enabled>Y</enabled><name>LINES_UPDATED</name></field><field><id>LINES_INPUT</id><enabled>Y</enabled><name>LINES_INPUT</name></field><field><id>LINES_OUTPUT</id><enabled>Y</enabled><name>LINES_OUTPUT</name></field><field><id>LINES_REJECTED</id><enabled>Y</enabled><name>LINES_REJECTED</name></field><field><id>ERRORS</id><enabled>Y</enabled><name>ERRORS</name></field><field><id>STARTDATE</id><enabled>Y</enabled><name>STARTDATE</name></field><field><id>ENDDATE</id><enabled>Y</enabled><name>ENDDATE</name></field><field><id>LOGDATE</id><enabled>Y</enabled><name>LOGDATE</name></field><field><id>DEPDATE</id><enabled>Y</enabled><name>DEPDATE</name></field><field><id>REPLAYDATE</id><enabled>Y</enabled><name>REPLAYDATE</name></field><field><id>LOG_FIELD</id><enabled>Y</enabled><name>LOG_FIELD</name></field></job-log-table>
+<field><id>ID_JOB</id><enabled>Y</enabled><name>ID_JOB</name></field><field><id>CHANNEL_ID</id><enabled>Y</enabled><name>CHANNEL_ID</name></field><field><id>JOBNAME</id><enabled>Y</enabled><name>JOBNAME</name></field><field><id>STATUS</id><enabled>Y</enabled><name>STATUS</name></field><field><id>LINES_READ</id><enabled>Y</enabled><name>LINES_READ</name></field><field><id>LINES_WRITTEN</id><enabled>Y</enabled><name>LINES_WRITTEN</name></field><field><id>LINES_UPDATED</id><enabled>Y</enabled><name>LINES_UPDATED</name></field><field><id>LINES_INPUT</id><enabled>Y</enabled><name>LINES_INPUT</name></field><field><id>LINES_OUTPUT</id><enabled>Y</enabled><name>LINES_OUTPUT</name></field><field><id>LINES_REJECTED</id><enabled>Y</enabled><name>LINES_REJECTED</name></field><field><id>ERRORS</id><enabled>Y</enabled><name>ERRORS</name></field><field><id>STARTDATE</id><enabled>Y</enabled><name>STARTDATE</name></field><field><id>ENDDATE</id><enabled>Y</enabled><name>ENDDATE</name></field><field><id>LOGDATE</id><enabled>Y</enabled><name>LOGDATE</name></field><field><id>DEPDATE</id><enabled>Y</enabled><name>DEPDATE</name></field><field><id>REPLAYDATE</id><enabled>Y</enabled><name>REPLAYDATE</name></field><field><id>LOG_FIELD</id><enabled>Y</enabled><name>LOG_FIELD</name></field><field><id>EXECUTING_SERVER</id><enabled>N</enabled><name>EXECUTING_SERVER</name></field><field><id>EXECUTING_USER</id><enabled>N</enabled><name>EXECUTING_USER</name></field><field><id>START_JOB_ENTRY</id><enabled>N</enabled><name>START_JOB_ENTRY</name></field><field><id>CLIENT</id><enabled>N</enabled><name>CLIENT</name></field></job-log-table>
 <jobentry-log-table><connection/>
 <schema/>
 <table/>
@@ -144,8 +145,8 @@
       <name>Download Plugin</name>
       <description/>
       <type>HTTP</type>
-      <url>${downloadUrl}</url>
-      <targetfilename>${downloadDestination}</targetfilename>
+      <url>&#x24;&#x7b;downloadUrl&#x7d;</url>
+      <targetfilename>&#x24;&#x7b;downloadDestination&#x7d;</targetfilename>
       <file_appended>N</file_appended>
       <date_time_added>N</date_time_added>
       <targetfilename_extention/>
@@ -177,10 +178,10 @@
       <yloc>172</yloc>
       </entry>
     <entry>
-      <name>Does Plugin Already Exist?</name>
+      <name>Does Plugin Already Exist&#x3f;</name>
       <description/>
       <type>FILE_EXISTS</type>
-      <filename>${targetDestination}</filename>
+      <filename>&#x24;&#x7b;targetDestination&#x7d;</filename>
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
@@ -191,7 +192,7 @@
       <name>Unzipped Plugin Exists</name>
       <description/>
       <type>FILE_EXISTS</type>
-      <filename>${stagingDestinationAndDir}</filename>
+      <filename>&#x24;&#x7b;stagingDestinationAndDir&#x7d;</filename>
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
@@ -212,8 +213,8 @@
       <create_destination_folder>Y</create_destination_folder>
       <fields>
         <field>
-          <source_filefolder>${stagingDestinationAndDir}</source_filefolder>
-          <destination_filefolder>${targetDestination}</destination_filefolder>
+          <source_filefolder>&#x24;&#x7b;stagingDestinationAndDir&#x7d;</source_filefolder>
+          <destination_filefolder>&#x24;&#x7b;targetDestination&#x7d;</destination_filefolder>
           <wildcard/>
         </field>
       </fields>
@@ -232,7 +233,7 @@
       <limit_folders>10</limit_folders>
       <fields>
         <field>
-          <name>${stagingDestination}</name>
+          <name>&#x24;&#x7b;stagingDestination&#x7d;</name>
         </field>
       </fields>
       <parallel>N</parallel>
@@ -255,8 +256,8 @@
       <create_destination_folder>Y</create_destination_folder>
       <fields>
         <field>
-          <source_filefolder>${targetDestination}</source_filefolder>
-          <destination_filefolder>${targetBackup}</destination_filefolder>
+          <source_filefolder>&#x24;&#x7b;targetDestination&#x7d;</source_filefolder>
+          <destination_filefolder>&#x24;&#x7b;targetBackup&#x7d;</destination_filefolder>
           <wildcard/>
         </field>
       </fields>
@@ -275,7 +276,7 @@
       <limit_folders>10</limit_folders>
       <fields>
         <field>
-          <name>${targetDestination}</name>
+          <name>&#x24;&#x7b;targetDestination&#x7d;</name>
         </field>
       </fields>
       <parallel>N</parallel>
@@ -293,7 +294,7 @@
       <limit_folders>10</limit_folders>
       <fields>
         <field>
-          <name>${stagingDestination}</name>
+          <name>&#x24;&#x7b;stagingDestination&#x7d;</name>
         </field>
       </fields>
       <parallel>N</parallel>
@@ -317,8 +318,8 @@
       <name>Samples Plugin Download</name>
       <description/>
       <type>HTTP</type>
-      <url>${samplesDownloadUrl}</url>
-      <targetfilename>${samplesDownloadDestination}</targetfilename>
+      <url>&#x24;&#x7b;samplesDownloadUrl&#x7d;</url>
+      <targetfilename>&#x24;&#x7b;samplesDownloadDestination&#x7d;</targetfilename>
       <file_appended>N</file_appended>
       <date_time_added>N</date_time_added>
       <targetfilename_extention/>
@@ -351,12 +352,12 @@
       <yloc>450</yloc>
       </entry>
     <entry>
-      <name>Samples url exists?</name>
+      <name>Samples url exists&#x3f;</name>
       <description/>
       <type>SIMPLE_EVAL</type>
       <valuetype>variable</valuetype>
       <fieldname/>
-      <variablename>${samplesDownloadUrl}</variablename>
+      <variablename>&#x24;&#x7b;samplesDownloadUrl&#x7d;</variablename>
       <fieldtype>string</fieldtype>
       <mask/>
       <comparevalue>none</comparevalue>
@@ -381,7 +382,7 @@
       <limit_folders>10</limit_folders>
       <fields>
         <field>
-          <name>${samplesStagingDestination}</name>
+          <name>&#x24;&#x7b;samplesStagingDestination&#x7d;</name>
         </field>
       </fields>
       <parallel>N</parallel>
@@ -394,7 +395,7 @@
       <name>Unzipped Sample Exists</name>
       <description/>
       <type>FILE_EXISTS</type>
-      <filename>${samplesDownloadDestination}</filename>
+      <filename>&#x24;&#x7b;samplesDownloadDestination&#x7d;</filename>
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
@@ -410,7 +411,7 @@
       <limit_folders>10</limit_folders>
       <fields>
         <field>
-          <name>${samplesStagingDestination}</name>
+          <name>&#x24;&#x7b;samplesStagingDestination&#x7d;</name>
         </field>
       </fields>
       <parallel>N</parallel>
@@ -420,74 +421,12 @@
       <yloc>351</yloc>
       </entry>
     <entry>
-      <name>plugin-samples exist?</name>
-      <description/>
-      <type>FILES_EXIST</type>
-      <filename/>
-      <fields>
-        <field>
-          <name>${samplesDir}</name>
-        </field>
-      </fields>
-      <parallel>N</parallel>
-      <draw>Y</draw>
-      <nr>0</nr>
-      <xloc>1153</xloc>
-      <yloc>511</yloc>
-      </entry>
-    <entry>
-      <name>Create plugin-samples</name>
-      <description/>
-      <type>CREATE_FOLDER</type>
-      <foldername>${samplesDir}</foldername>
-      <fail_of_folder_exists>Y</fail_of_folder_exists>
-      <parallel>N</parallel>
-      <draw>Y</draw>
-      <nr>0</nr>
-      <xloc>1258</xloc>
-      <yloc>261</yloc>
-      </entry>
-    <entry>
-      <name>Create index.xml</name>
-      <description/>
-      <type>CREATE_FILE</type>
-      <filename>${samplesDir}&#47;index.xml</filename>
-      <fail_if_file_exists>Y</fail_if_file_exists>
-      <add_filename_result>N</add_filename_result>
-      <parallel>N</parallel>
-      <draw>Y</draw>
-      <nr>0</nr>
-      <xloc>1356</xloc>
-      <yloc>260</yloc>
-      </entry>
-    <entry>
-      <name>Write to index.xml</name>
-      <description/>
-      <type>WRITE_TO_FILE</type>
-      <filename>${samplesDir}&#47;index.xml</filename>
-      <createParentFolder>N</createParentFolder>
-      <appendFile>N</appendFile>
-      <content>&lt;index&gt;
-	&lt;name&gt;Plugins Samples&lt;&#47;name&gt;
-	&lt;description&gt;Plugins Samples&lt;&#47;description&gt;
-	&lt;icon&gt;samples.png&lt;&#47;icon&gt;
-	&lt;visible&gt;true&lt;&#47;visible&gt;
-	&lt;display-type&gt;icons&lt;&#47;display-type&gt;	
-&lt;&#47;index&gt;</content>
-      <encoding>UTF-8</encoding>
-      <parallel>N</parallel>
-      <draw>Y</draw>
-      <nr>0</nr>
-      <xloc>1468</xloc>
-      <yloc>264</yloc>
-      </entry>
-    <entry>
-      <name>Samples url exists? 2</name>
+      <name>Samples url exists&#x3f; 2</name>
       <description/>
       <type>SIMPLE_EVAL</type>
       <valuetype>variable</valuetype>
       <fieldname/>
-      <variablename>${samplesDownloadUrl}</variablename>
+      <variablename>&#x24;&#x7b;samplesDownloadUrl&#x7d;</variablename>
       <fieldtype>string</fieldtype>
       <mask/>
       <comparevalue>none</comparevalue>
@@ -504,41 +443,6 @@
       <yloc>158</yloc>
       </entry>
     <entry>
-      <name>Make Solution Visible</name>
-      <description/>
-      <type>TRANS</type>
-      <specification_method>filename</specification_method>
-      <trans_object_id/>
-      <filename>${Internal.Job.Filename.Directory}&#47;make_solution_visible.ktr</filename>
-      <transname/>
-      <arg_from_previous>N</arg_from_previous>
-      <params_from_previous>N</params_from_previous>
-      <exec_per_row>N</exec_per_row>
-      <clear_rows>N</clear_rows>
-      <clear_files>N</clear_files>
-      <set_logfile>N</set_logfile>
-      <logfile/>
-      <logext/>
-      <add_date>N</add_date>
-      <add_time>N</add_time>
-      <loglevel>Basic</loglevel>
-      <cluster>N</cluster>
-      <slave_server_name/>
-      <set_append_logfile>N</set_append_logfile>
-      <wait_until_finished>Y</wait_until_finished>
-      <follow_abort_remote>N</follow_abort_remote>
-      <create_parent_folder>N</create_parent_folder>
-      <parameters>        <pass_all_parameters>Y</pass_all_parameters>
-            <parameter>            <name>samplesDir</name>
-            <stream_name>${samplesDir}</stream_name>
-            <value/>
-            </parameter>      </parameters>      <parallel>N</parallel>
-      <draw>Y</draw>
-      <nr>0</nr>
-      <xloc>1145</xloc>
-      <yloc>350</yloc>
-      </entry>
-    <entry>
       <name>Unzip</name>
       <description/>
       <type>COPY_FILES</type>
@@ -552,8 +456,8 @@
       <create_destination_folder>Y</create_destination_folder>
       <fields>
         <field>
-          <source_filefolder>zip:${downloadDestination}</source_filefolder>
-          <destination_filefolder>${stagingDestination}</destination_filefolder>
+          <source_filefolder>zip&#x3a;&#x24;&#x7b;downloadDestination&#x7d;</source_filefolder>
+          <destination_filefolder>&#x24;&#x7b;stagingDestination&#x7d;</destination_filefolder>
           <wildcard/>
         </field>
       </fields>
@@ -569,7 +473,7 @@
       <type>TRANS</type>
       <specification_method>filename</specification_method>
       <trans_object_id/>
-      <filename>${Internal.Job.Filename.Directory}&#47;process_samples.ktr</filename>
+      <filename>&#x24;&#x7b;Internal.Job.Filename.Directory&#x7d;&#x2f;process_samples.ktr</filename>
       <transname/>
       <arg_from_previous>N</arg_from_previous>
       <params_from_previous>N</params_from_previous>
@@ -588,13 +492,14 @@
       <wait_until_finished>Y</wait_until_finished>
       <follow_abort_remote>N</follow_abort_remote>
       <create_parent_folder>N</create_parent_folder>
+      <logging_remote_work>N</logging_remote_work>
       <parameters>        <pass_all_parameters>Y</pass_all_parameters>
             <parameter>            <name>samplesDir</name>
             <stream_name/>
-            <value>${samplesDir}</value>
+            <value>&#x24;&#x7b;samplesDir&#x7d;</value>
             </parameter>            <parameter>            <name>samplesTargetDestination</name>
             <stream_name/>
-            <value>${samplesTargetDestination}</value>
+            <value>&#x24;&#x7b;samplesTargetDestination&#x7d;</value>
             </parameter>      </parameters>      <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
@@ -602,12 +507,12 @@
       <yloc>351</yloc>
       </entry>
     <entry>
-      <name>Transformation</name>
+      <name>Ensure plugin samples exists</name>
       <description/>
       <type>TRANS</type>
       <specification_method>filename</specification_method>
       <trans_object_id/>
-      <filename>${Internal.Job.Filename.Directory}&#47;create_sample_folder.ktr</filename>
+      <filename>&#x24;&#x7b;Internal.Job.Filename.Directory&#x7d;&#x2f;create_sample_folder.ktr</filename>
       <transname/>
       <arg_from_previous>N</arg_from_previous>
       <params_from_previous>N</params_from_previous>
@@ -626,12 +531,13 @@
       <wait_until_finished>Y</wait_until_finished>
       <follow_abort_remote>N</follow_abort_remote>
       <create_parent_folder>N</create_parent_folder>
+      <logging_remote_work>N</logging_remote_work>
       <parameters>        <pass_all_parameters>Y</pass_all_parameters>
       </parameters>      <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>1314</xloc>
-      <yloc>351</yloc>
+      <xloc>1208</xloc>
+      <yloc>354</yloc>
       </entry>
   </entries>
   <hops>
@@ -645,7 +551,7 @@
       <unconditional>Y</unconditional>
     </hop>
     <hop>
-      <from>Does Plugin Already Exist?</from>
+      <from>Does Plugin Already Exist&#x3f;</from>
       <to>Create Backup</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
@@ -690,7 +596,7 @@
       <unconditional>N</unconditional>
     </hop>
     <hop>
-      <from>Does Plugin Already Exist?</from>
+      <from>Does Plugin Already Exist&#x3f;</from>
       <to>Copy to Destination</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
@@ -709,7 +615,7 @@
     </hop>
     <hop>
       <from>Unzipped Plugin Exists</from>
-      <to>Samples url exists?</to>
+      <to>Samples url exists&#x3f;</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
       <enabled>Y</enabled>
@@ -717,7 +623,7 @@
       <unconditional>N</unconditional>
     </hop>
     <hop>
-      <from>Samples url exists?</from>
+      <from>Samples url exists&#x3f;</from>
       <to>Samples Plugin Download</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
@@ -726,8 +632,8 @@
       <unconditional>N</unconditional>
     </hop>
     <hop>
-      <from>Samples url exists?</from>
-      <to>Does Plugin Already Exist?</to>
+      <from>Samples url exists&#x3f;</from>
+      <to>Does Plugin Already Exist&#x3f;</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
       <enabled>Y</enabled>
@@ -754,7 +660,7 @@
     </hop>
     <hop>
       <from>Unzipped Sample Exists</from>
-      <to>Does Plugin Already Exist?</to>
+      <to>Does Plugin Already Exist&#x3f;</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
       <enabled>N</enabled>
@@ -771,26 +677,8 @@
       <unconditional>N</unconditional>
     </hop>
     <hop>
-      <from>Create plugin-samples</from>
-      <to>Create index.xml</to>
-      <from_nr>0</from_nr>
-      <to_nr>0</to_nr>
-      <enabled>Y</enabled>
-      <evaluation>Y</evaluation>
-      <unconditional>N</unconditional>
-    </hop>
-    <hop>
-      <from>Create index.xml</from>
-      <to>Write to index.xml</to>
-      <from_nr>0</from_nr>
-      <to_nr>0</to_nr>
-      <enabled>Y</enabled>
-      <evaluation>Y</evaluation>
-      <unconditional>N</unconditional>
-    </hop>
-    <hop>
       <from>Copy to Destination</from>
-      <to>Samples url exists? 2</to>
+      <to>Samples url exists&#x3f; 2</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
       <enabled>Y</enabled>
@@ -798,7 +686,7 @@
       <unconditional>N</unconditional>
     </hop>
     <hop>
-      <from>Samples url exists? 2</from>
+      <from>Samples url exists&#x3f; 2</from>
       <to>Delete Staging</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
@@ -844,61 +732,34 @@
     </hop>
     <hop>
       <from>Samples Plugin Download</from>
-      <to>Does Plugin Already Exist?</to>
+      <to>Does Plugin Already Exist&#x3f;</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
       <enabled>Y</enabled>
       <evaluation>Y</evaluation>
       <unconditional>N</unconditional>
-    </hop>
-    <hop>
-      <from>Write to index.xml</from>
-      <to>Delete Staging After Samples 2</to>
-      <from_nr>0</from_nr>
-      <to_nr>0</to_nr>
-      <enabled>Y</enabled>
-      <evaluation>Y</evaluation>
-      <unconditional>N</unconditional>
-    </hop>
-    <hop>
-      <from>Write to index.xml</from>
-      <to>Process Samples</to>
-      <from_nr>0</from_nr>
-      <to_nr>0</to_nr>
-      <enabled>N</enabled>
-      <evaluation>N</evaluation>
-      <unconditional>Y</unconditional>
     </hop>
     <hop>
       <from>Process Samples</from>
       <to>Delete Staging After Samples 2</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
-      <enabled>N</enabled>
+      <enabled>Y</enabled>
       <evaluation>Y</evaluation>
       <unconditional>N</unconditional>
     </hop>
     <hop>
-      <from>Make Solution Visible</from>
-      <to>Transformation</to>
+      <from>Ensure plugin samples exists</from>
+      <to>Process Samples</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
       <enabled>Y</enabled>
       <evaluation>Y</evaluation>
-      <unconditional>Y</unconditional>
+      <unconditional>N</unconditional>
     </hop>
     <hop>
-      <from>Transformation</from>
-      <to>Process Samples</to>
-      <from_nr>0</from_nr>
-      <to_nr>0</to_nr>
-      <enabled>N</enabled>
-      <evaluation>Y</evaluation>
-      <unconditional>Y</unconditional>
-    </hop>
-    <hop>
-      <from>Samples url exists? 2</from>
-      <to>Make Solution Visible</to>
+      <from>Samples url exists&#x3f; 2</from>
+      <to>Ensure plugin samples exists</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
       <enabled>Y</enabled>
@@ -908,11 +769,7 @@
   </hops>
   <notepads>
     <notepad>
-      <note>Had some issues with the unzip step, that caused random failures:
- http:&#47;&#47;jira.pentaho.com&#47;browse&#47;PDI-9441
-
-Replaced it with a copy step that uses VFS. Even with
-http:&#47;&#47;jira.pentaho.com&#47;browse&#47;PDI-9520 it seems to work</note>
+      <note>Had some issues with the unzip step, that caused random failures&#x3a;&#xa; http&#x3a;&#x2f;&#x2f;jira.pentaho.com&#x2f;browse&#x2f;PDI-9441&#xa;&#xa;Replaced it with a copy step that uses VFS. Even with&#xa;http&#x3a;&#x2f;&#x2f;jira.pentaho.com&#x2f;browse&#x2f;PDI-9520 it seems to work</note>
       <xloc>465</xloc>
       <yloc>41</yloc>
       <width>399</width>
@@ -933,4 +790,5 @@ http:&#47;&#47;jira.pentaho.com&#47;browse&#47;PDI-9520 it seems to work</note>
       <drawshadow>Y</drawshadow>
     </notepad>
   </notepads>
+
 </job>

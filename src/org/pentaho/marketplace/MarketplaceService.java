@@ -55,17 +55,26 @@ import org.xml.sax.InputSource;
 
 import flexjson.JSONSerializer;
 import java.util.ArrayList;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathFactory;
 import org.apache.commons.io.filefilter.DirectoryFileFilter;
+import org.apache.commons.lang.StringUtils;
 import org.pentaho.telemetry.BaPluginTelemetry;
 import org.pentaho.telemetry.TelemetryHelper.TelemetryEventType;
 
-
+@Path("/marketplace/api/")
 public class MarketplaceService {
 
     private Log logger = LogFactory.getLog(MarketplaceService.class);
+
     public static final String PLUGIN_NAME = "marketplace";
     public static final String UNAUTORIZED_ACCESS = "Unauthorized Access. Your Pentaho roles do not allow you to make changes to plugins.";
     private XPath xpath;
@@ -73,14 +82,18 @@ public class MarketplaceService {
     public MarketplaceService() {
 
         xpath = XPathFactory.newInstance().newXPath();
-
     }
 
+    
+    
+    
     public static class MarketplaceSecurityException extends Exception {
 
         private static final long serialVersionUID = -1852471739131561628L;
     }
 
+    
+    
     public List<Plugin> getPlugins() {// throws MarketplaceSecurityException {
         // return a unauthorized exception if unauthorized?
         if (!hasMarketplacePermission()) {
@@ -129,6 +142,13 @@ public class MarketplaceService {
 
     }
     
+    
+    
+    protected boolean reloadPlugins() {
+        IPluginManager pluginManager = PentahoSystem.get(IPluginManager.class, PentahoSessionHolder.getSession());
+        return pluginManager.reload();
+    }
+    
 
     private List<String> getInstalledPluginsFromFileSystem() {
         
@@ -161,7 +181,7 @@ public class MarketplaceService {
         if (!hasMarketplacePermission()) {
             throw new MarketplaceSecurityException();
         }
-        
+
         List<Plugin> plugins = getPlugins();
         Plugin toUninstall = null;
 
@@ -174,34 +194,34 @@ public class MarketplaceService {
             return new StatusMessage("NO_PLUGIN", "Plugin Not Found");
         }
 
+                
         // before deletion, close class loader
         closeClassLoader(toUninstall.getId());
         
         String versionBranch = toUninstall.getInstalledBranch();
         // get plugin path
-
         String jobPath = PentahoSystem.getApplicationContext().getSolutionPath("system/" + PLUGIN_NAME + "/processes/uninstall_plugin.kjb");
+
         try {
-            JobMeta jobMeta = new JobMeta(jobPath, null);
-            Job job = new Job(null, jobMeta);
+            JobMeta uninstallJobMeta = new JobMeta(jobPath, null);
+            Job job = new Job(null, uninstallJobMeta);
 
             File file = new File(PentahoSystem.getApplicationContext().getSolutionPath("system/plugin-cache/backups"));
             file.mkdirs();
 
+            String uninstallBackup = PentahoSystem.getApplicationContext().getSolutionPath("system/plugin-cache/backups/" + toUninstall.getId() + "_" + new Date().getTime());
             job.getJobMeta().setParameterValue("uninstallLocation", PentahoSystem.getApplicationContext().getSolutionPath("system/" + toUninstall.getId()));
-            job.getJobMeta().setParameterValue("uninstallBackup", PentahoSystem.getApplicationContext().getSolutionPath("system/plugin-cache/backups/" + toUninstall.getId() + "_" + new Date().getTime()));
-            if (versionBranch != null && versionBranch.length() > 0 && toUninstall.getVersionByBranch(versionBranch).getSamplesDownloadUrl() != null) {
-                job.getJobMeta().setParameterValue("samplesUninstallLocation", PentahoSystem.getApplicationContext().getSolutionPath("plugin-samples/" + toUninstall.getId()));
-                job.getJobMeta().setParameterValue("samplesUninstallBackup", PentahoSystem.getApplicationContext().getSolutionPath("system/plugin-cache/backups/" + toUninstall.getId() + "_samples_" + new Date().getTime()));
-            }
+            job.getJobMeta().setParameterValue("uninstallBackup", uninstallBackup);
+            job.getJobMeta().setParameterValue("samplesDir", "/public/plugin-samples/" + toUninstall.getId());
+            
             job.copyParametersFrom(job.getJobMeta());
             job.activateParameters();
             job.start();
             job.waitUntilFinished();
             Result result = job.getResult(); // Execute the selected job.
-
+          
             if (result == null || result.getNrErrors() > 0) {
-                return new StatusMessage("FAIL", "Failed to execute uninstall, see log for details.");
+              return new StatusMessage("FAIL", "Failed to execute uninstall, see log for details.");
             }
         } catch (KettleException e) {
             logger.error(e.getMessage(), e);
@@ -215,7 +235,6 @@ public class MarketplaceService {
         extraInfo.put("uninstalledPluginVersion", toUninstall.getInstalledVersion());
         extraInfo.put("uninstalledPluginBranch", toUninstall.getInstalledBranch());
         telemetryEvent.sendTelemetryRequest(TelemetryEventType.REMOVAL, extraInfo);
-        
         
         return new StatusMessage("PLUGIN_UNINSTALLED", toUninstall.getName() + " was successfully uninstalled.  Please restart your BI Server.");
 
@@ -231,7 +250,7 @@ public class MarketplaceService {
         if (!hasMarketplacePermission()) {
             throw new MarketplaceSecurityException();
         }
-        
+
         List<Plugin> plugins = getPlugins();
         Plugin toInstall = null;
         for (Plugin plugin : plugins) {
@@ -269,11 +288,12 @@ public class MarketplaceService {
         }
 
         // get plugin path
-
         String jobPath = PentahoSystem.getApplicationContext().getSolutionPath("system/" + PLUGIN_NAME + "/processes/download_and_install_plugin.kjb");
-        try {
-            JobMeta jobMeta = new JobMeta(jobPath, null);
-            Job job = new Job(null, jobMeta);
+        
+        
+        try {      
+            JobMeta installJobMeta = new JobMeta(jobPath, null); 
+            Job job = new Job(null, installJobMeta);
 
             File file = new File(PentahoSystem.getApplicationContext().getSolutionPath("system/plugin-cache/downloads"));
             file.mkdirs();
@@ -306,7 +326,7 @@ public class MarketplaceService {
             Result result = job.getResult(); // Execute the selected job.
 
             if (result == null || result.getNrErrors() > 0) {
-                return new StatusMessage("FAIL", "Failed to execute install, see log for details.");
+              return new StatusMessage("FAIL", "Failed to execute install, see log for details.");
             }
         } catch (KettleException e) {
             logger.error(e.getMessage(), e);
@@ -321,13 +341,19 @@ public class MarketplaceService {
         
         telemetryEvent.sendTelemetryRequest(TelemetryEventType.INSTALLATION, extraInfo);
         
+        reloadPlugins();
+        
         return new StatusMessage("PLUGIN_INSTALLED", toInstall.getName() + " was successfully installed.  Please restart your BI Server. \n" + toInstall.getInstallationNotes());
     }
 
     /**
      *  This method wraps the installPlugin method, returning JSON instead of XML.
      */
-    public String installPluginJson(String pluginId, String versionBranch) {
+     @POST
+     @Path("/plugin/{pluginId}/{versionBranch}")
+     @Produces(MediaType.APPLICATION_JSON)    
+    public String installPluginJson(@PathParam("pluginId") String pluginId, 
+            @PathParam("versionBranch") String versionBranch) {
         try {
             StatusMessage msg = installPlugin(pluginId, versionBranch);
             JSONSerializer serializer = new JSONSerializer();
@@ -339,7 +365,11 @@ public class MarketplaceService {
         }
     }
 
-    public String uninstallPluginJson(String pluginId) {
+     
+     @DELETE
+     @Path("/plugin/{pluginId}")
+     @Produces(MediaType.APPLICATION_JSON)         
+    public String uninstallPluginJson(@PathParam("pluginId")  String pluginId) {
         try {
             StatusMessage msg = uninstallPlugin(pluginId);
             JSONSerializer serializer = new JSONSerializer();
@@ -351,6 +381,11 @@ public class MarketplaceService {
         }
     }
 
+    
+    
+    @GET
+    @Path("/plugins")
+    @Produces(MediaType.APPLICATION_JSON)    
     public String getPluginsJson() {
         //try {
             List<Plugin> pluginArray = getPlugins();
@@ -486,6 +521,9 @@ public class MarketplaceService {
 
     protected List<Plugin> loadPluginsFromSite() {
         String content = getMarketplaceSiteContent();
+        //Sometimes this call fails. Second attemp is always succesfull
+        if (StringUtils.isEmpty(content))
+          content = getMarketplaceSiteContent();
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         try {
             DocumentBuilder db = dbf.newDocumentBuilder();

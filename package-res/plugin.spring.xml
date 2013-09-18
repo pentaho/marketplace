@@ -8,5 +8,9 @@
                            http://jax-ws.dev.java.net/spring/servlet http://jax-ws.dev.java.net/spring/servlet.xsd">
 
   <context:annotation-config />
+    <bean id="api" class="org.pentaho.platform.web.servlet.JAXRSPluginServlet"/>
+    <bean id="service" class="org.pentaho.marketplace.MarketplaceService"/>
+
     <bean id="marketplace" class="org.pentaho.marketplace.MarketplaceContentGenerator" scope="prototype"/>
+    
 </beans>

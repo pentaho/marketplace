@@ -77,7 +77,7 @@ wd.marketplace.engine = function(myself,spec){
         
         
         $.ajax({
-            url: "../getpluginsjson",
+            url: "../../../plugin/marketplace/api/plugins",
             dataType: 'json',
             data: [],
             success: impl.processPluginListResponse,
@@ -115,12 +115,10 @@ wd.marketplace.engine = function(myself,spec){
         wd.info("Marketplace engine: installing plugin: " + pluginId + " (" + branchId + ")");
         
         $.ajax({
-            url: "../installpluginjson",
+            type: "POST",
+            url: "../../../plugin/marketplace/api/plugin/" + pluginId + "/" + branchId,
             dataType: 'json',
-            data: {
-                pluginId: pluginId, 
-                versionId: branchId
-            },
+            data: {},
             success: function(jqXHR, textStatus){
                 if ( jqXHR.code !== 'PLUGIN_INSTALLED'){
                     callbackError(jqXHR, textStatus);
@@ -139,11 +137,10 @@ wd.marketplace.engine = function(myself,spec){
         wd.info("Marketplace engine: uninstalling plugin: " + pluginId);
         
         $.ajax({
-            url: "../uninstallpluginjson",
+            type: "DELETE",
+            url: "../../../plugin/marketplace/api/plugin/" + pluginId,
             dataType: 'json',
-            data: {
-                pluginId: pluginId
-            },
+            data: {},
             success: function(jqXHR, textStatus){
                 if ( jqXHR.code !== 'PLUGIN_UNINSTALLED'){
                     callbackError(jqXHR, textStatus);
@@ -2001,17 +1998,17 @@ wd.marketplace.panels.marketplacePanel = function(spec){
         if(operation == INSTALL){
             var popupStatus = "Successfuly installed ",
             popupContent = undefined,
-            popupDetails = "Installed "+plugin.getPluginInfo().name +" with branch "+branch+((plugin.getPluginInfo().installationNotes) ? "<br/>"+plugin.getPluginInfo().installationNotes : "")+"<br/><br/>"+"<span style='font-weight: bold; font-size: 13px'>You must restart your server for changes to take effect</span>",
+            popupDetails = "Installed "+plugin.getPluginInfo().name +" with branch "+branch+((plugin.getPluginInfo().installationNotes) ? "<br/>"+plugin.getPluginInfo().installationNotes : "")+"<br/><br/>"; //+"<span style='font-weight: bold; font-size: 13px'>You must restart your server for changes to take effect</span>",
             cssClass = "popupInstall popupSuccess";
         } else if(operation == UPDATE){
             var popupStatus = "Successfuly upgraded ",
             popupContent = undefined,
-            popupDetails = "Upgraded "+plugin.getPluginInfo().name +" with branch "+branch+((plugin.getPluginInfo().installationNotes) ? "<br/>"+plugin.getPluginInfo().installationNotes : "")+"<br/><br/>"+"<span style='font-weight: bold; font-size: 13px'>You must restart your server for changes to take effect</span>",
+            popupDetails = "Upgraded "+plugin.getPluginInfo().name +" with branch "+branch+((plugin.getPluginInfo().installationNotes) ? "<br/>"+plugin.getPluginInfo().installationNotes : "")+"<br/><br/>"; //+"<span style='font-weight: bold; font-size: 13px'>You must restart your server for changes to take effect</span>",
             cssClass = "popupInstall popupSuccess";    
         } else{
             var popupStatus = "Successfully uninstalled ",
             popupContent = undefined,
-            popupDetails = "Uninstalled "+plugin.getPluginInfo().name+"<br/><br/>"+"<span style='font-weight: bold; font-size: 13px'>You must restart your server for changes to take effect</span>",
+            popupDetails = "Uninstalled "+plugin.getPluginInfo().name+"<br/><br/>"; //+"<span style='font-weight: bold; font-size: 13px'>You must restart your server for changes to take effect</span>",
             cssClass = "popupUninstall popupSuccess";
         }
         myself.log("Stopping " + operation + " operation");
@@ -2025,11 +2022,13 @@ wd.marketplace.panels.marketplacePanel = function(spec){
         });
         
         myself.caf.actionEngine.getAction('refresh').executeAction();
-        
+
+      /*
         if (!restartInfoComponent) {
             restartInfoComponent = myself.caf.getRegistry().getEntity('components', 'restart');
         }   
         restartInfoComponent.draw( myself.caf.templateEngine.getTemplate().$toggleActionContainer );
+      */
     }
     
     myself.errorOperation = function(operation, plugin, branch, errorMsg){

@@ -40,6 +40,11 @@ public class MarketplaceServiceTest {
       public List<Plugin> loadPluginsFromSite() {
         return super.loadPluginsFromSite();
       }
+      
+      protected boolean reloadPlugins() {
+        return true;
+      }
+      
     };
     
     List<Plugin> plugins = service.loadPluginsFromSite();

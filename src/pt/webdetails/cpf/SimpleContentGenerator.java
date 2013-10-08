@@ -32,7 +32,7 @@ public class SimpleContentGenerator extends BaseContentGenerator {
     public void createContent() {
         IParameterProvider pathParams = parameterProviders.get("path");
         //requestParams = parameterProviders.get("request");
-        final IContentItem contentItem = outputHandler.getOutputContentItem("response", "content", "", instanceId, "text/html");
+        final IContentItem contentItem = outputHandler.getOutputContentItem("response", "content", instanceId, "text/html");
 
         try {
             final OutputStream out = contentItem.getOutputStream(null);

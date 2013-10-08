@@ -4,12 +4,25 @@
 
 package org.pentaho.marketplace;
 
+import java.util.List;
+import java.util.Locale;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.pentaho.platform.api.engine.IPentahoSession;
 import org.pentaho.platform.api.engine.IPluginLifecycleListener;
+import org.pentaho.platform.api.engine.IUserDetailsRoleListService;
 import org.pentaho.platform.api.engine.PluginLifecycleException;
+import org.pentaho.platform.engine.core.system.PentahoSystem;
+import org.pentaho.platform.engine.core.system.UserSession;
+import org.pentaho.platform.plugin.action.mondrian.catalog.MondrianCatalogHelper;
+
+import org.pentaho.platform.engine.security.SecurityHelper;
+import org.pentaho.platform.util.messages.LocaleHelper;
 import org.pentaho.telemetry.BaPluginTelemetry;
 import org.pentaho.telemetry.TelemetryHelper.TelemetryEventType;
+import org.springframework.security.Authentication;
+import org.springframework.security.GrantedAuthority;
+import org.springframework.security.providers.anonymous.AnonymousAuthenticationToken;
 
 /**
  * Responsible for setting up distributed cache from configuration.

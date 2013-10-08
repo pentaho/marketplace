@@ -1,4 +1,4 @@
-/*
+/*!
 * Slides, A Slideshow Plugin for jQuery
 * Intructions: http://slidesjs.com
 * By: Nathan Searles, http://nathansearles.com
@@ -17,6 +17,7 @@
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
+
 (function($){
 	$.fn.slides = function( option ) {
 		// override defaults with specified option

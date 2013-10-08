@@ -364,7 +364,7 @@ public class MarketplaceService {
     }
 
     protected boolean hasMarketplacePermission() {
-        Authentication auth = SecurityHelper.getInstance().getAuthentication(PentahoSessionHolder.getSession(), true);
+        Authentication auth = SecurityHelper.getAuthentication(PentahoSessionHolder.getSession(), true);
         IPluginResourceLoader resLoader = PentahoSystem.get(IPluginResourceLoader.class, null);
         String roles = null;
         String users = null;
@@ -378,7 +378,7 @@ public class MarketplaceService {
 
         if (roles == null) {
             // If it's true, we'll just check if the user is admin
-            return SecurityHelper.getInstance().isPentahoAdministrator(PentahoSessionHolder.getSession());            
+            return SecurityHelper.isPentahoAdministrator(PentahoSessionHolder.getSession());            
         }
 
         String roleArr[] = roles.split(","); //$NON-NLS-1$

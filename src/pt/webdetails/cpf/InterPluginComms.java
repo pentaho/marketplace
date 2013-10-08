@@ -8,7 +8,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Map;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.pentaho.platform.api.engine.IContentGenerator;
@@ -75,7 +74,7 @@ public class InterPluginComms
     IContentGenerator contentGenerator;
     try
     {
-      contentGenerator = pluginManager.getContentGenerator(plugin.getName(), (String) null);
+      contentGenerator = pluginManager.getContentGenerator(plugin.getName(), userSession);
     }
     catch (Exception e)
     {

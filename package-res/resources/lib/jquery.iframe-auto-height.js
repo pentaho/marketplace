@@ -1,5 +1,15 @@
-/*jslint white: true, indent: 2, onevar: false, browser: true, undef: true, nomen: false, eqeqeq: true, plusplus: false, bitwise: true, regexp: true, strict: false, newcap: true, immed: true */
-/*global window, console, jQuery, setTimeout */
+/*!
+* Copyright 2002 - 2013 Pentaho Corporation.  All rights reserved.
+* 
+* This software was developed by Pentaho Corporation and is provided under the terms
+* of the Mozilla Public License, Version 2.0, or any later version. You may not use
+* this file except in compliance with the license. If you need a copy of the license,
+* please go to  http://mozilla.org/MPL/2.0/. The Initial Developer is Pentaho Corporation.
+*
+* Software distributed under the Mozilla Public License is distributed on an "AS IS"
+* basis, WITHOUT WARRANTY OF ANY KIND, either express or  implied. Please refer to
+* the license for the specific language governing your rights and limitations.
+*/
 
 /*
   Plugin: iframe autoheight jQuery Plugin
@@ -21,6 +31,7 @@
   see README: http://github.com/house9/jquery-iframe-auto-height
 
 */
+
 (function ($) {
   $.fn.iframeAutoHeight = function (spec) {
     

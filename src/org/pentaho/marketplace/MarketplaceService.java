@@ -1,22 +1,20 @@
-/*
- * This program is free software; you can redistribute it and/or modify it under the 
- * terms of the GNU Lesser General Public License, version 2.1 as published by the Free Software 
- * Foundation.
- *
- * You should have received a copy of the GNU Lesser General Public License along with this 
- * program; if not, you can obtain a copy at http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html 
- * or from the Free Software Foundation, Inc., 
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
- *
- * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
- * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- * See the GNU Lesser General Public License for more details.
- *
- * Copyright 2011 Pentaho Corporation.  All rights reserved.
- *
- * Created Oct 10th, 2011
- * @author Will Gorman (wgorman@pentaho.com)
- */
+/*!
+* This program is free software; you can redistribute it and/or modify it under the
+* terms of the GNU Lesser General Public License, version 2.1 as published by the Free Software
+* Foundation.
+*
+* You should have received a copy of the GNU Lesser General Public License along with this
+* program; if not, you can obtain a copy at http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+* or from the Free Software Foundation, Inc.,
+* 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+*
+* This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+* without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+* See the GNU Lesser General Public License for more details.
+*
+* Copyright (c) 2002-2013 Pentaho Corporation..  All rights reserved.
+*/
+
 package org.pentaho.marketplace;
 
 import java.io.File;
@@ -35,6 +33,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.pentaho.di.core.Result;
 import org.pentaho.di.core.exception.KettleException;
+import org.pentaho.di.core.logging.LogLevel;
 import org.pentaho.di.job.Job;
 import org.pentaho.di.job.JobMeta;
 import org.pentaho.platform.api.engine.IPluginManager;
@@ -54,17 +53,26 @@ import org.xml.sax.InputSource;
 
 import flexjson.JSONSerializer;
 import java.util.ArrayList;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathFactory;
 import org.apache.commons.io.filefilter.DirectoryFileFilter;
+import org.apache.commons.lang.StringUtils;
 import org.pentaho.telemetry.BaPluginTelemetry;
 import org.pentaho.telemetry.TelemetryHelper.TelemetryEventType;
 
-
+@Path("/marketplace/api/")
 public class MarketplaceService {
 
     private Log logger = LogFactory.getLog(MarketplaceService.class);
+
     public static final String PLUGIN_NAME = "marketplace";
     public static final String UNAUTORIZED_ACCESS = "Unauthorized Access. Your Pentaho roles do not allow you to make changes to plugins.";
     private XPath xpath;
@@ -72,14 +80,18 @@ public class MarketplaceService {
     public MarketplaceService() {
 
         xpath = XPathFactory.newInstance().newXPath();
-
     }
 
+    
+    
+    
     public static class MarketplaceSecurityException extends Exception {
 
         private static final long serialVersionUID = -1852471739131561628L;
     }
 
+    
+    
     public List<Plugin> getPlugins() {// throws MarketplaceSecurityException {
         // return a unauthorized exception if unauthorized?
         if (!hasMarketplacePermission()) {
@@ -128,6 +140,13 @@ public class MarketplaceService {
 
     }
     
+    
+    
+    protected boolean reloadPlugins() {
+        IPluginManager pluginManager = PentahoSystem.get(IPluginManager.class, PentahoSessionHolder.getSession());
+        return pluginManager.reload();
+    }
+    
 
     private List<String> getInstalledPluginsFromFileSystem() {
         
@@ -160,7 +179,7 @@ public class MarketplaceService {
         if (!hasMarketplacePermission()) {
             throw new MarketplaceSecurityException();
         }
-        
+
         List<Plugin> plugins = getPlugins();
         Plugin toUninstall = null;
 
@@ -173,34 +192,34 @@ public class MarketplaceService {
             return new StatusMessage("NO_PLUGIN", "Plugin Not Found");
         }
 
+                
         // before deletion, close class loader
         closeClassLoader(toUninstall.getId());
         
         String versionBranch = toUninstall.getInstalledBranch();
         // get plugin path
-
         String jobPath = PentahoSystem.getApplicationContext().getSolutionPath("system/" + PLUGIN_NAME + "/processes/uninstall_plugin.kjb");
+
         try {
-            JobMeta jobMeta = new JobMeta(jobPath, null);
-            Job job = new Job(null, jobMeta);
+            JobMeta uninstallJobMeta = new JobMeta(jobPath, null);
+            Job job = new Job(null, uninstallJobMeta);
 
             File file = new File(PentahoSystem.getApplicationContext().getSolutionPath("system/plugin-cache/backups"));
             file.mkdirs();
 
+            String uninstallBackup = PentahoSystem.getApplicationContext().getSolutionPath("system/plugin-cache/backups/" + toUninstall.getId() + "_" + new Date().getTime());
             job.getJobMeta().setParameterValue("uninstallLocation", PentahoSystem.getApplicationContext().getSolutionPath("system/" + toUninstall.getId()));
-            job.getJobMeta().setParameterValue("uninstallBackup", PentahoSystem.getApplicationContext().getSolutionPath("system/plugin-cache/backups/" + toUninstall.getId() + "_" + new Date().getTime()));
-            if (versionBranch != null && versionBranch.length() > 0 && toUninstall.getVersionByBranch(versionBranch).getSamplesDownloadUrl() != null) {
-                job.getJobMeta().setParameterValue("samplesUninstallLocation", PentahoSystem.getApplicationContext().getSolutionPath("plugin-samples/" + toUninstall.getId()));
-                job.getJobMeta().setParameterValue("samplesUninstallBackup", PentahoSystem.getApplicationContext().getSolutionPath("system/plugin-cache/backups/" + toUninstall.getId() + "_samples_" + new Date().getTime()));
-            }
+            job.getJobMeta().setParameterValue("uninstallBackup", uninstallBackup);
+            job.getJobMeta().setParameterValue("samplesDir", "/public/plugin-samples/" + toUninstall.getId());
+            
             job.copyParametersFrom(job.getJobMeta());
             job.activateParameters();
             job.start();
             job.waitUntilFinished();
             Result result = job.getResult(); // Execute the selected job.
-
+          
             if (result == null || result.getNrErrors() > 0) {
-                return new StatusMessage("FAIL", "Failed to execute uninstall, see log for details.");
+              return new StatusMessage("FAIL", "Failed to execute uninstall, see log for details.");
             }
         } catch (KettleException e) {
             logger.error(e.getMessage(), e);
@@ -214,7 +233,6 @@ public class MarketplaceService {
         extraInfo.put("uninstalledPluginVersion", toUninstall.getInstalledVersion());
         extraInfo.put("uninstalledPluginBranch", toUninstall.getInstalledBranch());
         telemetryEvent.sendTelemetryRequest(TelemetryEventType.REMOVAL, extraInfo);
-        
         
         return new StatusMessage("PLUGIN_UNINSTALLED", toUninstall.getName() + " was successfully uninstalled.  Please restart your BI Server.");
 
@@ -230,7 +248,7 @@ public class MarketplaceService {
         if (!hasMarketplacePermission()) {
             throw new MarketplaceSecurityException();
         }
-        
+
         List<Plugin> plugins = getPlugins();
         Plugin toInstall = null;
         for (Plugin plugin : plugins) {
@@ -268,11 +286,12 @@ public class MarketplaceService {
         }
 
         // get plugin path
-
         String jobPath = PentahoSystem.getApplicationContext().getSolutionPath("system/" + PLUGIN_NAME + "/processes/download_and_install_plugin.kjb");
-        try {
-            JobMeta jobMeta = new JobMeta(jobPath, null);
-            Job job = new Job(null, jobMeta);
+        
+        
+        try {      
+            JobMeta installJobMeta = new JobMeta(jobPath, null); 
+            Job job = new Job(null, installJobMeta);
 
             File file = new File(PentahoSystem.getApplicationContext().getSolutionPath("system/plugin-cache/downloads"));
             file.mkdirs();
@@ -284,27 +303,28 @@ public class MarketplaceService {
             job.getJobMeta().setParameterValue("downloadUrl", downloadUrl);
             if (toInstall.getVersionByBranch(versionBranch).getSamplesDownloadUrl() != null) {
                 job.getJobMeta().setParameterValue("samplesDownloadUrl", samplesDownloadUrl);
-                job.getJobMeta().setParameterValue("samplesDir", PentahoSystem.getApplicationContext().getSolutionPath("plugin-samples"));
+                job.getJobMeta().setParameterValue("samplesDir", "/public/plugin-samples");
                 job.getJobMeta().setParameterValue("samplesTargetDestination", PentahoSystem.getApplicationContext().getSolutionPath("plugin-samples/" + toInstall.getId()));
                 job.getJobMeta().setParameterValue("samplesTargetBackup", PentahoSystem.getApplicationContext().getSolutionPath("system/plugin-cache/backups/" + toInstall.getId() + "_samples_" + new Date().getTime()));
-                job.getJobMeta().setParameterValue("samplesDownloadDestination", PentahoSystem.getApplicationContext().getSolutionPath("system/plugin-cache/downloads/" + toInstall.getId() + "-samples-" + availableVersion + ".zip"));
+                job.getJobMeta().setParameterValue("samplesDownloadDestination", PentahoSystem.getApplicationContext().getSolutionPath("system/plugin-cache/downloads/" + toInstall.getId() + "-samples-" + availableVersion + "_" + new Date().getTime() + ".zip"));
                 job.getJobMeta().setParameterValue("samplesStagingDestination", PentahoSystem.getApplicationContext().getSolutionPath("system/plugin-cache/staging_samples"));
                 job.getJobMeta().setParameterValue("samplesStagingDestinationAndDir", PentahoSystem.getApplicationContext().getSolutionPath("system/plugin-cache/staging_samples/" + toInstall.getId()));
             }
-            job.getJobMeta().setParameterValue("downloadDestination", PentahoSystem.getApplicationContext().getSolutionPath("system/plugin-cache/downloads/" + toInstall.getId() + "-" + availableVersion + ".zip"));
+            job.getJobMeta().setParameterValue("downloadDestination", PentahoSystem.getApplicationContext().getSolutionPath("system/plugin-cache/downloads/" + toInstall.getId() + "-" + availableVersion + "_" + new Date().getTime() + ".zip"));
             job.getJobMeta().setParameterValue("stagingDestination", PentahoSystem.getApplicationContext().getSolutionPath("system/plugin-cache/staging"));
             job.getJobMeta().setParameterValue("stagingDestinationAndDir", PentahoSystem.getApplicationContext().getSolutionPath("system/plugin-cache/staging/" + toInstall.getId()));
             job.getJobMeta().setParameterValue("targetDestination", PentahoSystem.getApplicationContext().getSolutionPath("system/" + toInstall.getId()));
             job.getJobMeta().setParameterValue("targetBackup", PentahoSystem.getApplicationContext().getSolutionPath("system/plugin-cache/backups/" + toInstall.getId() + "_" + new Date().getTime()));
 
             job.copyParametersFrom(job.getJobMeta());
+            job.setLogLevel(LogLevel.DETAILED);
             job.activateParameters();
             job.start();
             job.waitUntilFinished();
             Result result = job.getResult(); // Execute the selected job.
 
             if (result == null || result.getNrErrors() > 0) {
-                return new StatusMessage("FAIL", "Failed to execute install, see log for details.");
+              return new StatusMessage("FAIL", "Failed to execute install, see log for details.");
             }
         } catch (KettleException e) {
             logger.error(e.getMessage(), e);
@@ -319,13 +339,19 @@ public class MarketplaceService {
         
         telemetryEvent.sendTelemetryRequest(TelemetryEventType.INSTALLATION, extraInfo);
         
+        reloadPlugins();
+        
         return new StatusMessage("PLUGIN_INSTALLED", toInstall.getName() + " was successfully installed.  Please restart your BI Server. \n" + toInstall.getInstallationNotes());
     }
 
     /**
      *  This method wraps the installPlugin method, returning JSON instead of XML.
      */
-    public String installPluginJson(String pluginId, String versionBranch) {
+     @POST
+     @Path("/plugin/{pluginId}/{versionBranch}")
+     @Produces(MediaType.APPLICATION_JSON)    
+    public String installPluginJson(@PathParam("pluginId") String pluginId, 
+            @PathParam("versionBranch") String versionBranch) {
         try {
             StatusMessage msg = installPlugin(pluginId, versionBranch);
             JSONSerializer serializer = new JSONSerializer();
@@ -337,7 +363,11 @@ public class MarketplaceService {
         }
     }
 
-    public String uninstallPluginJson(String pluginId) {
+     
+     @DELETE
+     @Path("/plugin/{pluginId}")
+     @Produces(MediaType.APPLICATION_JSON)         
+    public String uninstallPluginJson(@PathParam("pluginId")  String pluginId) {
         try {
             StatusMessage msg = uninstallPlugin(pluginId);
             JSONSerializer serializer = new JSONSerializer();
@@ -349,6 +379,11 @@ public class MarketplaceService {
         }
     }
 
+    
+    
+    @GET
+    @Path("/plugins")
+    @Produces(MediaType.APPLICATION_JSON)    
     public String getPluginsJson() {
         //try {
             List<Plugin> pluginArray = getPlugins();
@@ -364,7 +399,7 @@ public class MarketplaceService {
     }
 
     protected boolean hasMarketplacePermission() {
-        Authentication auth = SecurityHelper.getAuthentication(PentahoSessionHolder.getSession(), true);
+        Authentication auth = SecurityHelper.getInstance().getAuthentication(PentahoSessionHolder.getSession(), true);
         IPluginResourceLoader resLoader = PentahoSystem.get(IPluginResourceLoader.class, null);
         String roles = null;
         String users = null;
@@ -378,7 +413,7 @@ public class MarketplaceService {
 
         if (roles == null) {
             // If it's true, we'll just check if the user is admin
-            return SecurityHelper.isPentahoAdministrator(PentahoSessionHolder.getSession());            
+            return SecurityHelper.getInstance().isPentahoAdministrator(PentahoSessionHolder.getSession());            
         }
 
         String roleArr[] = roles.split(","); //$NON-NLS-1$
@@ -484,6 +519,9 @@ public class MarketplaceService {
 
     protected List<Plugin> loadPluginsFromSite() {
         String content = getMarketplaceSiteContent();
+        //Sometimes this call fails. Second attemp is always succesfull
+        if (StringUtils.isEmpty(content))
+          content = getMarketplaceSiteContent();
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         try {
             DocumentBuilder db = dbf.newDocumentBuilder();

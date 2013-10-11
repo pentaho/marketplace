@@ -2010,17 +2010,17 @@ wd.marketplace.panels.marketplacePanel = function(spec){
         if(operation == INSTALL){
             var popupStatus = "Successfuly installed ",
             popupContent = undefined,
-            popupDetails = "Installed "+plugin.getPluginInfo().name +" with branch "+branch+((plugin.getPluginInfo().installationNotes) ? "<br/>"+plugin.getPluginInfo().installationNotes : "")+"<br/><br/>"; //+"<span style='font-weight: bold; font-size: 13px'>You must restart your server for changes to take effect</span>",
+            popupDetails = "Installed "+plugin.getPluginInfo().name +" with branch "+branch+((plugin.getPluginInfo().installationNotes) ? "<br/>"+plugin.getPluginInfo().installationNotes : "")+"<br/><br/>" +"<span style='font-weight: bold; font-size: 13px'>You must restart your server for changes to take effect</span>",
             cssClass = "popupInstall popupSuccess";
         } else if(operation == UPDATE){
             var popupStatus = "Successfuly upgraded ",
             popupContent = undefined,
-            popupDetails = "Upgraded "+plugin.getPluginInfo().name +" with branch "+branch+((plugin.getPluginInfo().installationNotes) ? "<br/>"+plugin.getPluginInfo().installationNotes : "")+"<br/><br/>"; //+"<span style='font-weight: bold; font-size: 13px'>You must restart your server for changes to take effect</span>",
+            popupDetails = "Upgraded "+plugin.getPluginInfo().name +" with branch "+branch+((plugin.getPluginInfo().installationNotes) ? "<br/>"+plugin.getPluginInfo().installationNotes : "")+"<br/><br/>" + "<span style='font-weight: bold; font-size: 13px'>You must restart your server for changes to take effect</span>",
             cssClass = "popupInstall popupSuccess";    
         } else{
             var popupStatus = "Successfully uninstalled ",
             popupContent = undefined,
-            popupDetails = "Uninstalled "+plugin.getPluginInfo().name+"<br/><br/>"; //+"<span style='font-weight: bold; font-size: 13px'>You must restart your server for changes to take effect</span>",
+            popupDetails = "Uninstalled "+plugin.getPluginInfo().name+"<br/><br/>" +"<span style='font-weight: bold; font-size: 13px'>You must restart your server for changes to take effect</span>",
             cssClass = "popupUninstall popupSuccess";
         }
         myself.log("Stopping " + operation + " operation");

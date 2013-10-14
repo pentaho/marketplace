@@ -287,11 +287,11 @@ public class MarketplaceService {
                 job.getJobMeta().setParameterValue("samplesDir", PentahoSystem.getApplicationContext().getSolutionPath("plugin-samples"));
                 job.getJobMeta().setParameterValue("samplesTargetDestination", PentahoSystem.getApplicationContext().getSolutionPath("plugin-samples/" + toInstall.getId()));
                 job.getJobMeta().setParameterValue("samplesTargetBackup", PentahoSystem.getApplicationContext().getSolutionPath("system/plugin-cache/backups/" + toInstall.getId() + "_samples_" + new Date().getTime()));
-                job.getJobMeta().setParameterValue("samplesDownloadDestination", PentahoSystem.getApplicationContext().getSolutionPath("system/plugin-cache/downloads/" + toInstall.getId() + "-samples-" + availableVersion + ".zip"));
+                job.getJobMeta().setParameterValue("samplesDownloadDestination", PentahoSystem.getApplicationContext().getSolutionPath("system/plugin-cache/downloads/" + toInstall.getId() + "-samples-" + availableVersion + "_" + new Date().getTime() + ".zip"));
                 job.getJobMeta().setParameterValue("samplesStagingDestination", PentahoSystem.getApplicationContext().getSolutionPath("system/plugin-cache/staging_samples"));
                 job.getJobMeta().setParameterValue("samplesStagingDestinationAndDir", PentahoSystem.getApplicationContext().getSolutionPath("system/plugin-cache/staging_samples/" + toInstall.getId()));
             }
-            job.getJobMeta().setParameterValue("downloadDestination", PentahoSystem.getApplicationContext().getSolutionPath("system/plugin-cache/downloads/" + toInstall.getId() + "-" + availableVersion + ".zip"));
+            job.getJobMeta().setParameterValue("downloadDestination", PentahoSystem.getApplicationContext().getSolutionPath("system/plugin-cache/downloads/" + toInstall.getId() + "-" + availableVersion + "_" + new Date().getTime() + ".zip"));
             job.getJobMeta().setParameterValue("stagingDestination", PentahoSystem.getApplicationContext().getSolutionPath("system/plugin-cache/staging"));
             job.getJobMeta().setParameterValue("stagingDestinationAndDir", PentahoSystem.getApplicationContext().getSolutionPath("system/plugin-cache/staging/" + toInstall.getId()));
             job.getJobMeta().setParameterValue("targetDestination", PentahoSystem.getApplicationContext().getSolutionPath("system/" + toInstall.getId()));
@@ -377,7 +377,8 @@ public class MarketplaceService {
         }
 
         if (roles == null) {
-            roles = "Admin";
+            // If it's true, we'll just check if the user is admin
+            return SecurityHelper.isPentahoAdministrator(PentahoSessionHolder.getSession());            
         }
 
         String roleArr[] = roles.split(","); //$NON-NLS-1$

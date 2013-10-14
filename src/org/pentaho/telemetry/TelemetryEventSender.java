@@ -19,6 +19,7 @@
  */
 package org.pentaho.telemetry;
 
+import java.io.EOFException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FilenameFilter;
@@ -109,6 +110,9 @@ public class TelemetryEventSender implements Runnable {
             filesForThisUrl = new ArrayList<File>();
         filesForThisUrl.add(f);
         urlsAndFiles.put(event.getUrlToCall(), filesForThisUrl);
+      } catch (EOFException eofe) {
+        logger.warn("EOF caught while deserializing telemetry event. Probably a corrupt save. Deleting event.", eofe);
+        f.delete();        
       } catch (IOException ioe) {
         logger.error("Error caught while deserializing telemetry event.", ioe);
       } catch (ClassNotFoundException cnfe) {

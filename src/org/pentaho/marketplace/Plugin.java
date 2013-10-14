@@ -39,6 +39,8 @@ public class Plugin implements Serializable {
     private String installedBuildId;    
     private String installationNotes;
     private boolean installed;
+
+    /*** new props ***/
     private List<PluginVersion> versions;
     private String[] screenshots;
     private String dependencies;

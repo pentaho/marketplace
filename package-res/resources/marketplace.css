@@ -471,7 +471,7 @@ body .marketplaceCollapsed {
 	background: -ms-linear-gradient(top,  #007297 57%,#005f7d 100%); /* IE10+ */
 	background: linear-gradient(to bottom,  #007297 57%,#005f7d 100%); /* W3C */
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#007297', endColorstr='#005f7d',GradientType=0 ); /* IE6-9 */ /* IE6-8 */
-	padding-bottom: 9px;
+	padding-bottom: 5px;
 	-webkit-box-shadow: none;
 	box-shadow: none;
 	-moz-border-radius: 4px;
@@ -803,18 +803,20 @@ body .marketplaceCollapsed {
 }
 
 .pluginBodyContainerBottom button.uptodateButton, .pluginHeader button.uptodateButton, .pluginBodyContainerBottom button.uptodateButton:hover, .pluginHeader button.uptodateButton:hover, .pluginBodyContainerBottom button.uptodateButton:active, .pluginHeader button.uptodateButton:active {
-	border: solid 1px #242424;
-	color: #d76200;
-	background: #434343; /* Old browsers */
-	background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzQzNDM0MyIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiMwODA4MDgiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
-	background: -moz-linear-gradient(top,  #434343 0%, #080808 100%); /* FF3.6+ */
-	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#434343), color-stop(100%,#080808)); /* Chrome,Safari4+ */
-	background: -webkit-linear-gradient(top,  #434343 0%,#080808 100%); /* Chrome10+,Safari5.1+ */
-	background: -o-linear-gradient(top,  #434343 0%,#080808 100%); /* Opera 11.10+ */
-	background: -ms-linear-gradient(top,  #434343 0%,#080808 100%); /* IE10+ */
-	background: linear-gradient(to bottom,  #434343 0%,#080808 100%); /* W3C */
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#434343', endColorstr='#080808',GradientType=0 ); /* IE6-8 */
+	border: solid 1px #ccc;
+	color: #bbb;
+	background: #ddd; /* Old browsers */
+	background: -moz-linear-gradient(top,  #eee 0%, #ddd 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#eee), color-stop(100%,#ddd)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top,  #eee 0%,#ddd 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top,  #eee 0%,#ddd 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top,  #eee 0%,#ddd 100%); /* IE10+ */
+	background: linear-gradient(to bottom,  #eee 0%,#ddd 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#eee', endColorstr='#ddd',GradientType=0 ); /* IE6-8 */
 	cursor: default;
+	-webkit-box-shadow: none;
+	-moz-box-shadow: none);
+	box-shadow: none;
 }
 
 .pluginBodyContainerBottom button.uptodateButton .icon, .pluginHeader button.uptodateButton .icon {

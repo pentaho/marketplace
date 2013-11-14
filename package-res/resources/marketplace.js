@@ -2008,7 +2008,7 @@ wd.marketplace.panels.marketplacePanel = function(spec){
     myself.stopOperation = function(operation, plugin, branch){
 
         if(operation == INSTALL){
-            var popupStatus = "Successfuly installed ",
+            var popupStatus = "Successfully installed ",
             popupContent = undefined,
             popupDetails = "Installed "+plugin.getPluginInfo().name +" with branch "+branch+((plugin.getPluginInfo().installationNotes) ? "<br/>"+plugin.getPluginInfo().installationNotes : "")+"<br/><br/>" +"<span style='font-weight: bold; font-size: 13px'>You must restart your server for changes to take effect</span>",
             cssClass = "popupInstall popupSuccess";

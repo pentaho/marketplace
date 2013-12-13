@@ -19,6 +19,7 @@ package org.pentaho.marketplace;
 
 import java.io.File;
 import java.io.FileReader;
+import java.io.IOException;
 import java.io.StringReader;
 import java.net.URLClassLoader;
 import java.util.Date;
@@ -171,7 +172,14 @@ public class MarketplaceService {
       IPluginManager pluginManager = PentahoSystem.get(IPluginManager.class, PentahoSessionHolder.getSession());
       ClassLoader cl = pluginManager.getClassLoader(pluginId);
       if (cl != null && cl instanceof URLClassLoader) {
-        Util.closeURLClassLoader((URLClassLoader)cl);
+        try {
+          URLClassLoader cl1 = (URLClassLoader) cl;
+          Util.closeURLClassLoader( cl1 );
+          cl1.close();
+        } catch ( IOException ioe ) {
+          logger.error( "Unable to close class loader for plugin. Will try uninstalling plugin anyway", ioe );
+        }
+
       }
     }
     
@@ -339,7 +347,7 @@ public class MarketplaceService {
         
         telemetryEvent.sendTelemetryRequest(TelemetryEventType.INSTALLATION, extraInfo);
         
-        reloadPlugins();
+
         
         return new StatusMessage("PLUGIN_INSTALLED", toInstall.getName() + " was successfully installed.  Please restart your BI Server. \n" + toInstall.getInstallationNotes());
     }

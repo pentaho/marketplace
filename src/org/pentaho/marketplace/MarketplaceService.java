@@ -170,14 +170,19 @@ public class MarketplaceService {
     
     private void closeClassLoader(String pluginId) {
       IPluginManager pluginManager = PentahoSystem.get(IPluginManager.class, PentahoSessionHolder.getSession());
-      ClassLoader cl = pluginManager.getClassLoader(pluginId);
+      ClassLoader cl = pluginManager.getClassLoader( pluginId );
       if (cl != null && cl instanceof URLClassLoader) {
         try {
           URLClassLoader cl1 = (URLClassLoader) cl;
           Util.closeURLClassLoader( cl1 );
           cl1.close();
         } catch ( IOException ioe ) {
-          logger.error( "Unable to close class loader for plugin. Will try uninstalling plugin anyway", ioe );
+          logger.error(  "Unable to close class loader for plugin. Will try uninstalling plugin anyway", ioe );
+        } catch ( Throwable  e ) {
+          if (e instanceof NoSuchMethodException) {
+            logger.debug( "Probably running in java 6 so close method on URLClassLoader is not available" );
+          } else
+            logger.error( "Error while closing class loader", e );
         }
 
       }

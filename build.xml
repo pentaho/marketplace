@@ -47,10 +47,9 @@
                 &lt;version>TRUNK-SNAPSHOT&lt;/version>
                 &lt;build_id>${sequential.build.id}&lt;/build_id>
                 &lt;name>Latest snapshot build&lt;/name>
-                &lt;package_url>http://ci.pentaho.com/job/marketplace-4.8/lastSuccessfulBuild/artifact/dist/marketplace-plugin-TRUNK-SNAPSHOT.zip&lt;/package_url>
-                &lt;description>The latest development snapshot build.&lt;/description>
-                &lt;max_parent_version>4.8&lt;/max_parent_version>
-                &lt;min_parent_version>1.0&lt;/min_parent_version>
+                &lt;package_url>http://ci.pentaho.com/job/marketplace/lastSuccessfulBuild/artifact/dist/marketplace-plugin-TRUNK-SNAPSHOT.zip&lt;/package_url>
+                &lt;description>Build for Pentaho 5.0&lt;/description>
+                &lt;min_parent_version>5.0&lt;/min_parent_version>
 		&lt;/version>	</echo>         
       
       </target>

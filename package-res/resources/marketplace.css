@@ -1108,17 +1108,18 @@ div.cafPopupContent {
 	margin-top: 5px;
 }
 .popupInstall.popupSuccess .popupInfoContainer .popupDetails {
-	height: 50px;
 	overflow-y: auto;
 	margin-top: 10px;
 }
 
-.popupInstall.popupSuccess .popupInfoContainer .popupDetails.noContent {
-	height: 90px;
+.popupDetails.noContent {
 	overflow-y: auto;
 	margin-top: 0px;
+	max-height: 250px;
+	margin-bottom: 40px;
 }
 .cafBasicPopupBottomContainer {
+	clear: both;
 	min-height: 45px;
 	height: 45px;
 }
@@ -1398,7 +1399,7 @@ button {
 	-webkit-border-radius: 4px;
 	height: 50px;
 	width: 220px;
-	font-size: 15px;
+	font-size: 11px;
 	font-weight: bold;
 	line-height: 49px;
 	border: solid 0px #ccc;

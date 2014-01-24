@@ -953,7 +953,12 @@ wd.marketplace.components.pluginBody = function(spec){
        
         var mainPluginContent = plugin.getPluginMainContent(),
         	version = ( mainPluginContent.installed) ? plugin.getInstalledVersion() : plugin.getDefaultVersion(),
-        	v = $.extend({},mainPluginContent,version);
+        	v = $.extend({},mainPluginContent,{
+					branch: version.branch , 
+					version: version.version, 
+					versionDescription: version.description, 
+					buildId: version.buildId}
+			);
         
         
         myself.selectVersion(v); 

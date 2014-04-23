@@ -16,3 +16,4 @@ build-res/javascript.build.js
 build-res/pentaho-js-build/
 build-res/requireCfg-raw.js
 build-res/requireCfg.js
+dev-lib

@@ -10,3 +10,9 @@ package-res/plugin.xml
 package-res/plugin.spring.xml
 processed-src/
 package-res/module-scripts/js-tests/test-main.js
+build-res/module-scripts/
+build-res/pentaho-js-build.zip
+build-res/javascript.build.js
+build-res/pentaho-js-build/
+build-res/requireCfg-raw.js
+build-res/requireCfg.js

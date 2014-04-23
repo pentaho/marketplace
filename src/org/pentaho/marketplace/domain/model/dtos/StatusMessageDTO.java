@@ -1,6 +1,9 @@
 package org.pentaho.marketplace.domain.model.dtos;
 
-public class StatusMessageDTO extends DTO {
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement
+public class StatusMessageDTO {
 
   //region Attributes
   public String code;

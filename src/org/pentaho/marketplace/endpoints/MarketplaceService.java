@@ -1,11 +1,11 @@
 package org.pentaho.marketplace.endpoints;
 
-import org.pentaho.marketplace.domain.model.dtos.UserDTO;
+import org.pentaho.marketplace.domain.model.dtos.PluginDTO;
+import org.pentaho.marketplace.domain.model.dtos.mappers.interfaces.IPluginDTOMapper;
+import org.pentaho.marketplace.domain.model.entities.interfaces.IPlugin;
 import org.pentaho.marketplace.domain.services.interfaces.IRDO;
-import org.springframework.beans.factory.annotation.Autowired;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
 import static javax.ws.rs.core.MediaType.*;
@@ -14,42 +14,31 @@ import static javax.ws.rs.core.MediaType.*;
 public class MarketplaceService {
 
   private IRDO RDO;
+  private IPluginDTOMapper pluginDTOMapper;
 
-  @Autowired
-  public MarketplaceService( IRDO rdo ) {
+  public MarketplaceService( IRDO rdo, IPluginDTOMapper pluginDTOMapper ) {
 
     //dependency obtained via constructor dependency injection from spring framework
     this.RDO = rdo;
+    this.pluginDTOMapper = pluginDTOMapper;
   }
 
   @GET
   @Path( "/hello" )
   @Produces( TEXT_PLAIN )
   public String hello() {
-    return "Hello World from Pentaho Service!";
+    return "Hello World from Marketplace!";
   }
 
   @GET
-  @Path( "/users" )
+  @Path( "/plugins" )
   @Produces( { APPLICATION_JSON, APPLICATION_XML } )
-  public Iterable<UserDTO> getUsers() {
+  public Iterable<PluginDTO> getPlugins() {
 
-    //get users from the domain model
-    Iterable<IUser> users = this.RDO.getUserService().getUsers();
+    //get plugins from the domain model
+    Iterable<IPlugin> plugins = this.RDO.getPluginService().getPlugins();
 
-    //transform users to DTOs for serialization
-    return new UserDTO().toDTOs( users );
-  }
-
-  @GET
-  @Path( "/user/{userName}" )
-  @Produces( { APPLICATION_JSON, APPLICATION_XML } )
-  public UserDTO getUser( @PathParam( "userName" ) String userName ) {
-
-    IUser user = this.RDO.getUserService().getUser( userName );
-
-    UserDTO userDTO = new UserDTO();
-    userDTO.fillDTO( user );
-    return userDTO;
+    //transform plugins to DTOs for serialization
+    return this.pluginDTOMapper.toDTOs( plugins );
   }
 }

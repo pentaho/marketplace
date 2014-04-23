@@ -1,6 +1,9 @@
 package org.pentaho.marketplace.domain.model.dtos;
 
-public class PluginVersionDTO extends DTO {
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement
+public class PluginVersionDTO {
 
   //region Attributes
   public String branch;

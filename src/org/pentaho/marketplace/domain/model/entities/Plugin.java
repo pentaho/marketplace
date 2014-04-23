@@ -3,6 +3,8 @@ package org.pentaho.marketplace.domain.model.entities;
 import org.pentaho.marketplace.domain.model.entities.interfaces.IPlugin;
 import org.pentaho.marketplace.domain.model.complexTypes.interfaces.IPluginVersion;
 
+import java.util.Collection;
+
 public class Plugin implements IPlugin {
 
   //region Attributes
@@ -20,7 +22,7 @@ public class Plugin implements IPlugin {
   private String installedBuildId;
   private String installationNotes;
   private boolean installed;
-  private Iterable<IPluginVersion> versions;
+  private Collection<IPluginVersion> versions;
   private String[] screenshots;
   private String dependencies;
   private String license;
@@ -168,12 +170,12 @@ public class Plugin implements IPlugin {
   }
 
   @Override
-  public Iterable<IPluginVersion> getVersions() {
+  public Collection<IPluginVersion> getVersions() {
     return this.versions;
   }
 
   @Override
-  public void setVersions( Iterable<IPluginVersion> value ) {
+  public void setVersions( Collection<IPluginVersion> value ) {
     this.versions = value;
   }
 

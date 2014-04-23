@@ -2,6 +2,8 @@ package org.pentaho.marketplace.domain.model.entities.interfaces;
 
 import org.pentaho.marketplace.domain.model.complexTypes.interfaces.IPluginVersion;
 
+import java.util.Collection;
+
 public interface IPlugin {
 
   //region Properties
@@ -77,9 +79,9 @@ public interface IPlugin {
   void setInstalled( boolean value );
 
   //versions
-  Iterable<IPluginVersion> getVersions();
+  Collection<IPluginVersion> getVersions();
 
-  void setVersions( Iterable<IPluginVersion> value );
+  void setVersions( Collection<IPluginVersion> value );
 
   //screenshots
   String[] getScreenshots();

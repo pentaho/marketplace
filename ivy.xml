@@ -36,6 +36,10 @@
 		<!-- Spring Framework -->
 		<dependency org="org.springframework" name="spring" rev="2.5.6" conf="default->default" transitive="false" />
 
-	</dependencies>
+    <!-- Apache -->
+    <dependency org="commons-lang" name="commons-lang" rev="2.4" transitive="false"/>
+    <dependency org="commons-io" name="commons-io" rev="1.4" transitive="false"/>
+
+  </dependencies>
 
 </ivy-module>

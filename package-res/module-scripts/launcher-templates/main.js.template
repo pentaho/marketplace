@@ -1,0 +1,8 @@
+requirejs.config({
+	baseUrl: './@js.source.dir@',
+	paths: {
+		jquery: '../@js.common-ui.dirpath.prefix@/@js.library.jquery@'
+	}
+});
+
+requirejs(["@js.module.script.app.name@"]);

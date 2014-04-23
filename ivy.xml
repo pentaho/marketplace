@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ivy-module version="2.0" xmlns:m="http://ant.apache.org/ivy/maven">
+	<info organisation="pentaho" module="${ivy.artifact.id}" revision="${project.revision}"/>
+
+	<configurations>
+		<conf name="default"/>
+		<conf name="test" visibility="private"/>
+		<conf name="js"/>
+	</configurations>
+
+	<publications>
+		<artifact name='${ivy.artifact.id}' type='jar' conf='default' />
+	</publications>
+
+	<!-- Marketplace-specific dependencies -->
+	<dependencies defaultconf="default->default">
+
+		<!-- generic JS dependency -->
+		<dependency org="pentaho" name="common-ui" rev="${dependency.common-ui.revision}" changing="true" transitive="false" conf="js->default" >
+			<artifact name="common-ui" type="zip" />
+		</dependency>
+
+		<!-- test dependencies -->
+		<dependency org="junit" name="junit" rev="4.11" conf="test->default"/>
+		
+		<!-- logging dependencies -->
+		<dependency org="commons-logging" name="commons-logging" rev="1.1" transitive="false"/>
+		
+		<!-- pentaho dependencies -->
+		<dependency org="pentaho" name="pentaho-platform-api" rev="${dependency.bi-platform.revision}" changing="true" transitive="false"/>
+		<dependency org="pentaho" name="pentaho-platform-core" rev="${dependency.bi-platform.revision}" changing="true" transitive="false"/>
+
+		<!-- jersey -->
+		<dependency org="com.sun.jersey" name="jersey-bundle" rev="1.16" conf="default->default" transitive="false"/>
+		
+		<!-- Spring Framework -->
+		<dependency org="org.springframework" name="spring" rev="2.5.6" conf="default->default" transitive="false" />
+
+	</dependencies>
+
+</ivy-module>

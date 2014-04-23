@@ -1,0 +1,78 @@
+package org.pentaho.marketplace.domain.model.dtos.mappers;
+
+import org.pentaho.marketplace.domain.model.dtos.StatusMessageDTO;
+import org.pentaho.marketplace.domain.model.dtos.mappers.interfaces.IStatusMessageDTOMapper;
+import org.pentaho.marketplace.domain.model.entities.interfaces.IStatusMessage;
+import org.pentaho.marketplace.domain.model.factories.interfaces.IStatusMessageFactory;
+
+import java.util.ArrayList;
+import java.util.Collection;
+
+public class StatusMessageDTOMapper implements IStatusMessageDTOMapper {
+
+  //region Attributes
+  IStatusMessageFactory statusMessageFactory;
+  //endregion
+
+  //region Constructors
+  public StatusMessageDTOMapper( IStatusMessageFactory statusMessageFactory ) {
+
+    //initialize dependencies
+    this.statusMessageFactory = statusMessageFactory;
+  }
+  //endregion
+
+  //region IStatusMessageDTOMapper
+  @Override
+  public IStatusMessage toEntity( StatusMessageDTO dto ) {
+
+    //get new statusMessage instance
+    IStatusMessage statusMessage = this.statusMessageFactory.create();
+
+    //fill the instance
+    statusMessage.setCode( dto.code );
+    statusMessage.setMessage( dto.message );
+
+    //return the instance
+    return statusMessage;
+  }
+
+  @Override
+  public StatusMessageDTO toDTO( IStatusMessage statusMessage ) {
+
+    //get new dto instance
+    StatusMessageDTO dto = new StatusMessageDTO();
+
+    //fill this dto's attributes
+    dto.code = statusMessage.getCode();
+    dto.message = statusMessage.getMessage();
+
+    //return the dto
+    return dto;
+  }
+
+  @Override
+  public Iterable<IStatusMessage> toEntities( Iterable<StatusMessageDTO> dtos ) {
+
+    Collection<IStatusMessage> statusMessages = new ArrayList<IStatusMessage>();
+
+    for ( StatusMessageDTO dto : dtos ) {
+      statusMessages.add( this.toEntity( dto ) );
+    }
+
+    return statusMessages;
+  }
+
+  @Override
+  public Iterable<StatusMessageDTO> toDTOs( Iterable<IStatusMessage> statusMessages ) {
+
+    Collection<StatusMessageDTO> statusMessageDTOs = new ArrayList<StatusMessageDTO>();
+
+    for ( IStatusMessage statusMessage : statusMessages ) {
+      statusMessageDTOs.add( this.toDTO( statusMessage ) );
+    }
+
+    return statusMessageDTOs;
+  }
+  //endregion
+}

@@ -1,5 +1,7 @@
 package org.pentaho.marketplace.domain.model.entities.interfaces;
 
+import org.pentaho.marketplace.domain.model.complexTypes.interfaces.IPluginVersion;
+
 public interface IPlugin {
 
   //region Properties

@@ -1,7 +1,9 @@
-package org.pentaho.marketplace.domain.model.entities;
+package org.pentaho.marketplace.domain.model.complexTypes;
 
-import org.pentaho.marketplace.domain.model.entities.interfaces.IPluginVersion;
+import org.pentaho.marketplace.domain.model.complexTypes.interfaces.IPluginVersion;
+import javax.xml.bind.annotation.XmlRootElement;
 
+@XmlRootElement
 public class PluginVersion implements IPluginVersion {
 
   //region Attributes

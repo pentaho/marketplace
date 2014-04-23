@@ -3,10 +3,6 @@ package org.pentaho.marketplace.tests.domain.dtos;
 import junit.framework.Assert;
 import org.junit.Test;
 import org.pentaho.marketplace.domain.model.dtos.UserDTO;
-import org.pentaho.marketplace.domain.model.factories.AddressFactory;
-import org.pentaho.marketplace.domain.model.factories.UserFactory;
-import org.pentaho.marketplace.domain.model.entities.interfaces.IAddress;
-import org.pentaho.marketplace.domain.model.entities.interfaces.IUser;
 
 public class UserDTOTest {
 

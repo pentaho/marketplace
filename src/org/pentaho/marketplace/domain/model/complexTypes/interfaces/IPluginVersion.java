@@ -1,4 +1,4 @@
-package org.pentaho.marketplace.domain.model.entities.interfaces;
+package org.pentaho.marketplace.domain.model.complexTypes.interfaces;
 
 public interface IPluginVersion {
 

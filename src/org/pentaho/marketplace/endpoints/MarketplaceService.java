@@ -1,7 +1,6 @@
 package org.pentaho.marketplace.endpoints;
 
 import org.pentaho.marketplace.domain.model.dtos.UserDTO;
-import org.pentaho.marketplace.domain.model.entities.interfaces.IUser;
 import org.pentaho.marketplace.domain.services.interfaces.IRDO;
 import org.springframework.beans.factory.annotation.Autowired;
 import javax.ws.rs.GET;

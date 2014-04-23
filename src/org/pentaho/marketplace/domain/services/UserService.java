@@ -1,9 +1,5 @@
 package org.pentaho.marketplace.domain.services;
 
-import org.pentaho.marketplace.domain.model.entities.interfaces.IAddress;
-import org.pentaho.marketplace.domain.model.factories.interfaces.IAddressFactory;
-import org.pentaho.marketplace.domain.model.factories.interfaces.IUserFactory;
-import org.pentaho.marketplace.domain.model.entities.interfaces.IUser;
 import org.pentaho.marketplace.domain.services.interfaces.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import java.util.ArrayList;

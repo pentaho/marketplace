@@ -36,7 +36,7 @@ package org.pentaho.helloworld.endpoints;
 import org.apache.commons.logging.Log;
 import org.pentaho.platform.engine.services.solution.BaseContentGenerator;
 
-public class PentahoHelloWorldContentGenerator extends BaseContentGenerator {
+public class MarketplaceContentGenerator extends BaseContentGenerator {
 
   public static final String ENCODING = "utf-8";
   private static final long serialVersionUID = 1L;

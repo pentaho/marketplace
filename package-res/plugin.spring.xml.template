@@ -9,7 +9,7 @@
 
   <context:annotation-config />
   <bean id="@jax-rs.bean.name@" class="org.pentaho.platform.web.servlet.JAXRSPluginServlet"/>
-  <bean id="@plugin.id@" class="org.pentaho.helloworld.endpoints.PentahoHelloWorldContentGenerator" scope="prototype"/>
+  <bean id="@plugin.id@" class="org.pentaho.marketplace.endpoints.MarketplaceContentGenerator" scope="prototype"/>
   <bean id="@plugin.id@.address-factory" class="org.pentaho.helloworld.domain.model.factories.AddressFactory"/>
   <bean id="@plugin.id@.user-factory" class="org.pentaho.helloworld.domain.model.factories.UserFactory">
 	<constructor-arg ref="@plugin.id@.address-factory"/>

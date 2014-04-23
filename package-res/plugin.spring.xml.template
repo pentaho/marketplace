@@ -10,17 +10,17 @@
   <context:annotation-config />
   <bean id="@jax-rs.bean.name@" class="org.pentaho.platform.web.servlet.JAXRSPluginServlet"/>
   <bean id="@plugin.id@" class="org.pentaho.marketplace.endpoints.MarketplaceContentGenerator" scope="prototype"/>
-  <bean id="@plugin.id@.address-factory" class="org.pentaho.helloworld.domain.model.factories.AddressFactory"/>
-  <bean id="@plugin.id@.user-factory" class="org.pentaho.helloworld.domain.model.factories.UserFactory">
+  <bean id="@plugin.id@.address-factory" class="org.pentaho.marketplace.domain.model.factories.AddressFactory"/>
+  <bean id="@plugin.id@.user-factory" class="org.pentaho.marketplace.domain.model.factories.UserFactory">
 	<constructor-arg ref="@plugin.id@.address-factory"/>
   </bean>
-  <bean id="@plugin.id@.user-service" class="org.pentaho.helloworld.domain.services.UserService">
+  <bean id="@plugin.id@.user-service" class="org.pentaho.marketplace.domain.services.UserService">
 	<constructor-arg ref="@plugin.id@.user-factory"/>
   </bean>
-  <bean id="@plugin.id@.rdo" class="org.pentaho.helloworld.domain.services.RDO">
+  <bean id="@plugin.id@.rdo" class="org.pentaho.marketplace.domain.services.RDO">
 	<constructor-arg ref="@plugin.id@.user-service"/>
   </bean>
-  <bean id="@plugin.id@.service-endpoint" class="org.pentaho.helloworld.endpoints.PentahoHelloWorldService">
+  <bean id="@plugin.id@.service-endpoint" class="org.pentaho.marketplace.endpoints.MarketplaceService">
 	<constructor-arg ref="@plugin.id@.rdo"/>
   </bean>
 </beans>

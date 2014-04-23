@@ -1,0 +1,15 @@
+({
+    appDir: "../@js.module.script.agg.dir@/@js.module.script.namespace@",
+    dir: "../@js.build.output.dir@/@js.module.script.namespace@",
+    
+	baseUrl: "./@js.source.dir@",
+	paths: {
+        jquery: 'empty:'
+    },
+	
+    modules: [
+        {
+            name: "../main",
+        }
+    ]
+})

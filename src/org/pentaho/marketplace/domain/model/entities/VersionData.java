@@ -163,17 +163,41 @@ public class VersionData implements IVersionData {
 
   @Override
   public boolean within( IVersionData min, IVersionData max ) {
-    return false;
+    // if min and max aren't specified, skip check
+    if ( min.getInfo().equals( "" ) && max.getInfo().equals( "" ) ) {
+      return true;
+    }
+
+    // see if min and max are equal to one another.  If so, make sure platform version is equal
+    // this allows for folks to specify specific -GA and -stable releases
+    if ( min.getInfo().equals( max.getInfo() ) ) {
+      return this.info.equals( min.getInfo() );
+    }
+
+    // do a major, minor, patch comparison
+    return ( this.compareTo( min ) <= 0 && this.compareTo( max ) >= 0 );
   }
 
   @Override
   public int compareTo( IVersionData versionData ) {
-    if ( versionData.getMajor() > this.major ) return 1;
-    if ( versionData.getMajor() < this.major ) return -1;
-    if ( versionData.getMinor() > this.minor ) return 1;
-    if ( versionData.getMinor() < this.minor ) return -1;
-    if ( versionData.getPatch() > this.patch ) return 1;
-    if ( versionData.getPatch() < this.patch ) return -1;
+    if ( versionData.getMajor() > this.major ) {
+      return 1;
+    }
+    if ( versionData.getMajor() < this.major ) {
+      return -1;
+    }
+    if ( versionData.getMinor() > this.minor ) {
+      return 1;
+    }
+    if ( versionData.getMinor() < this.minor ) {
+      return -1;
+    }
+    if ( versionData.getPatch() > this.patch ) {
+      return 1;
+    }
+    if ( versionData.getPatch() < this.patch ) {
+      return -1;
+    }
     return 0;
   }
   //endregion

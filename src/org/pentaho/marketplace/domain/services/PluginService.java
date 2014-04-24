@@ -7,6 +7,7 @@ import org.apache.commons.logging.LogFactory;
 import org.pentaho.marketplace.domain.model.complexTypes.interfaces.IPluginVersion;
 import org.pentaho.marketplace.domain.model.entities.interfaces.IPlugin;
 import org.pentaho.marketplace.domain.model.entities.interfaces.IStatusMessage;
+import org.pentaho.marketplace.domain.model.entities.interfaces.IVersionData;
 import org.pentaho.marketplace.domain.model.factories.interfaces.IPluginFactory;
 import org.pentaho.marketplace.domain.model.factories.interfaces.IPluginVersionFactory;
 import org.pentaho.marketplace.domain.model.factories.interfaces.IVersionDataFactory;
@@ -122,8 +123,11 @@ public class PluginService implements IPluginService {
     // replace the version of the xml url path with the current release version:
     VersionInfo versionInfo = VersionHelper.getVersionInfo( PentahoSystem.class );
     String v = versionInfo.getVersionNumber();
-    return this.versionDataFactory.create( v ).within( this.versionDataFactory.create( pv.getMinParentVersion() ),
-      this.versionDataFactory.create( pv.getMaxParentVersion() ) );
+    IVersionData pvMax = this.versionDataFactory.create( pv.getMaxParentVersion() );
+    IVersionData pvMin = this.versionDataFactory.create( pv.getMinParentVersion() );
+    IVersionData version = this.versionDataFactory.create( v );
+
+    return version.within( pvMin, pvMax );
   }
 
   protected String getElementChildValue( Element element, String child ) {

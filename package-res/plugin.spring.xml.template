@@ -36,11 +36,15 @@
   <!-- END: RDO -->
 
   <!-- START: DTO Mappers -->
-  <bean id="@plugin.id@.pluginVersion-mapper" class="org.pentaho.marketplace.domain.model.dtos.mappers.PluginVersionDTOMapper">
+  <bean id="@plugin.id@.statusMessage-mapper" class="org.pentaho.marketplace.endpoints.dtos.mappers.StatusMessageDTOMapper">
+    <constructor-arg ref="@plugin.id@.statusMessage-factory"/>
+  </bean>
+
+  <bean id="@plugin.id@.pluginVersion-mapper" class="org.pentaho.marketplace.endpoints.dtos.mappers.PluginVersionDTOMapper">
     <constructor-arg ref="@plugin.id@.pluginVersion-factory"/>
   </bean>
 
-  <bean id="@plugin.id@.plugin-mapper" class="org.pentaho.marketplace.domain.model.dtos.mappers.PluginDTOMapper">
+  <bean id="@plugin.id@.plugin-mapper" class="org.pentaho.marketplace.endpoints.dtos.mappers.PluginDTOMapper">
 	  <constructor-arg ref="@plugin.id@.plugin-factory"/>
 	  <constructor-arg ref="@plugin.id@.pluginVersion-mapper"/>
   </bean>
@@ -50,6 +54,7 @@
   <bean id="@plugin.id@.service-endpoint" class="org.pentaho.marketplace.endpoints.MarketplaceService">
 	  <constructor-arg ref="@plugin.id@.rdo"/>
 	  <constructor-arg ref="@plugin.id@.plugin-mapper"/>
+	  <constructor-arg ref="@plugin.id@.statusMessage-mapper"/>
   </bean>
   <!-- END: Service Endpoints -->
 </beans>

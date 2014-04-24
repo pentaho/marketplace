@@ -1,8 +1,8 @@
-package org.pentaho.marketplace.domain.model.dtos.mappers;
+package org.pentaho.marketplace.endpoints.dtos.mappers;
 
 import org.pentaho.marketplace.domain.model.complexTypes.interfaces.IPluginVersion;
-import org.pentaho.marketplace.domain.model.dtos.PluginVersionDTO;
-import org.pentaho.marketplace.domain.model.dtos.mappers.interfaces.IPluginVersionDTOMapper;
+import org.pentaho.marketplace.endpoints.dtos.PluginVersionDTO;
+import org.pentaho.marketplace.endpoints.dtos.mappers.interfaces.IPluginVersionDTOMapper;
 import org.pentaho.marketplace.domain.model.factories.interfaces.IPluginVersionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package org.pentaho.marketplace.domain.model.dtos.mappers.interfaces;
+package org.pentaho.marketplace.endpoints.dtos.mappers.interfaces;
 
 import java.util.Collection;
 

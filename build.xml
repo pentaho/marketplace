@@ -262,9 +262,12 @@
 
 		<!-- copy plugin.xml, plugin.spring.xml and settings.xml to stage dir -->
 		<copy todir="${approot.stage.dir}" overwrite="true">
-			<file name="${package.resdir}/plugin.xml" />
-			<file name="${package.resdir}/plugin.spring.xml" />
-			<file name="${package.resdir}/settings.xml" />
+			<fileset dir="${package.resdir}">
+				
+				<!-- include all xml files -->
+				<include name="*.xml" />
+				
+			</fileset>
 		</copy>
 
 	</target>

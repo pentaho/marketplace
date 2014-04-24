@@ -1,10 +1,10 @@
-package org.pentaho.marketplace.domain.model.dtos.mappers;
+package org.pentaho.marketplace.endpoints.dtos.mappers;
 
-import org.pentaho.marketplace.domain.model.dtos.StatusMessageDTO;
-import org.pentaho.marketplace.domain.model.dtos.mappers.interfaces.IStatusMessageDTOMapper;
+import org.pentaho.marketplace.endpoints.dtos.StatusMessageDTO;
+import org.pentaho.marketplace.endpoints.dtos.mappers.interfaces.IStatusMessageDTOMapper;
 import org.pentaho.marketplace.domain.model.entities.interfaces.IStatusMessage;
 import org.pentaho.marketplace.domain.model.factories.interfaces.IStatusMessageFactory;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -15,6 +15,7 @@ public class StatusMessageDTOMapper implements IStatusMessageDTOMapper {
   //endregion
 
   //region Constructors
+  @Autowired
   public StatusMessageDTOMapper( IStatusMessageFactory statusMessageFactory ) {
 
     //initialize dependencies

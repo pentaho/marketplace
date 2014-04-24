@@ -1,6 +1,6 @@
-<project name="Marketplace" basedir="." default="mega-dist" xmlns:ivy="antlib:org.apache.ivy.ant" > 
+<project name="${ivy.artifact.id}" basedir="." default="mega-dist" xmlns:ivy="antlib:org.apache.ivy.ant" > 
 	<description> 
-		This build file is used to create the Marketplace project and works with the subfloor.xml file. 
+		This build file is used to create the ${impl.title} project and works with the subfloor files. 
 	</description> 
 
 	<!--********************************************
@@ -260,10 +260,11 @@
 		<echo file="${approot.stage.dir}/version.xml"
 			  message="&lt;version branch='${project.stage}'  buildId='${sequential.build.id}'>${project.revision}&lt;/version>"/>
 
-		<!-- copy plugin.xml and plugin.spring.xml to stage dir -->
+		<!-- copy plugin.xml, plugin.spring.xml and settings.xml to stage dir -->
 		<copy todir="${approot.stage.dir}" overwrite="true">
 			<file name="${package.resdir}/plugin.xml" />
 			<file name="${package.resdir}/plugin.spring.xml" />
+			<file name="${package.resdir}/settings.xml" />
 		</copy>
 
 	</target>

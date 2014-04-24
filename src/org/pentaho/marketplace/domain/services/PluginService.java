@@ -16,6 +16,7 @@ import org.pentaho.platform.engine.core.system.PentahoSystem;
 import org.pentaho.platform.util.VersionHelper;
 import org.pentaho.platform.util.VersionInfo;
 import org.pentaho.platform.util.web.HttpUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -32,7 +33,6 @@ import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class PluginService implements IPluginService {
@@ -46,6 +46,7 @@ public class PluginService implements IPluginService {
   //endregion
 
   //region Constructors
+  @Autowired
   public PluginService( IPluginFactory pluginFactory, IPluginVersionFactory pluginVersionFactory,
                         IVersionDataFactory versionDataFactory ) {
 
@@ -61,34 +62,34 @@ public class PluginService implements IPluginService {
   //region Methods
   protected String discoverInstalledVersion( IPlugin plugin ) {
 
-    String versionPath = PentahoSystem.getApplicationContext(  ).getSolutionPath( "system/" + plugin.getId(  )
+    String versionPath = PentahoSystem.getApplicationContext().getSolutionPath( "system/" + plugin.getId()
       + "/version.xml" );
-    DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance(  );
+    DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
     FileReader reader = null;
     try {
       File file = new File( versionPath );
-      if ( !file.exists(  ) ) {
+      if ( !file.exists() ) {
         return "Unknown";
       }
-      DocumentBuilder db = dbf.newDocumentBuilder(  );
+      DocumentBuilder db = dbf.newDocumentBuilder();
       reader = new FileReader( versionPath );
       Document dom = db.parse( new InputSource( reader ) );
       NodeList versionElements = dom.getElementsByTagName( "version" );
-      if ( versionElements.getLength(  ) >= 1 ) {
+      if ( versionElements.getLength() >= 1 ) {
         Element versionElement = (Element) versionElements.item( 0 );
 
         plugin.setInstalledBuildId( versionElement.getAttribute( "buildId" ) );
         plugin.setInstalledBranch( versionElement.getAttribute( "branch" ) );
-        plugin.setInstalledVersion( versionElement.getTextContent(  ) );
+        plugin.setInstalledVersion( versionElement.getTextContent() );
 
-        return versionElement.getTextContent(  );
+        return versionElement.getTextContent();
       }
     } catch ( Exception e ) {
-      e.printStackTrace(  );
+      e.printStackTrace();
     } finally {
       try {
         if ( reader != null ) {
-          reader.close(  );
+          reader.close();
         }
       } catch ( Exception e ) {
         // do nothing
@@ -97,19 +98,18 @@ public class PluginService implements IPluginService {
     return "Unknown";
   }
 
-  private Collection<String> getInstalledPluginsFromFileSystem(  ) {
+  private Collection<String> getInstalledPluginsFromFileSystem() {
 
     Collection<String> plugins = new ArrayList<String>();
 
-    File systemDir = new File( PentahoSystem.getApplicationContext(  ).getSolutionPath( "system/" ) );
+    File systemDir = new File( PentahoSystem.getApplicationContext().getSolutionPath( "system/" ) );
 
     String[] dirs = systemDir.list( DirectoryFileFilter.INSTANCE );
 
     for ( int i = 0; i < dirs.length; i++ ) {
-      String dir = dirs[i];
-      if ( ( new File( systemDir.getAbsolutePath(  ) + File.separator + dir + File.separator
-        + "plugin.xml" ) ).isFile(  ) )
-      {
+      String dir = dirs[ i ];
+      if ( ( new File( systemDir.getAbsolutePath() + File.separator + dir + File.separator
+        + "plugin.xml" ) ).isFile() ) {
         plugins.add( dir );
       }
     }
@@ -153,7 +153,7 @@ public class PluginService implements IPluginService {
     return HttpUtil.getURLContent( site );
   }
 
-  protected Iterable<IPlugin> loadPluginsFromSite() {
+  protected Collection<IPlugin> loadPluginsFromSite() {
     String content = getMarketplaceSiteContent();
     //Sometimes this call fails. Second attemp is always succesfull
     if ( StringUtils.isEmpty( content ) ) {
@@ -246,8 +246,8 @@ public class PluginService implements IPluginService {
 
   //region IPluginService implementation
   @Override
-  public Iterable<IPlugin> getPlugins() {
-    Iterable<IPlugin> plugins = loadPluginsFromSite();
+  public Collection<IPlugin> getPlugins() {
+    Collection<IPlugin> plugins = loadPluginsFromSite();
 
 
     // There are 2 methods of doing this.

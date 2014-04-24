@@ -52,7 +52,7 @@ public class StatusMessageDTOMapper implements IStatusMessageDTOMapper {
   }
 
   @Override
-  public Iterable<IStatusMessage> toEntities( Iterable<StatusMessageDTO> dtos ) {
+  public Collection<IStatusMessage> toEntities( Collection<StatusMessageDTO> dtos ) {
 
     Collection<IStatusMessage> statusMessages = new ArrayList<IStatusMessage>();
 
@@ -64,7 +64,7 @@ public class StatusMessageDTOMapper implements IStatusMessageDTOMapper {
   }
 
   @Override
-  public Iterable<StatusMessageDTO> toDTOs( Iterable<IStatusMessage> statusMessages ) {
+  public Collection<StatusMessageDTO> toDTOs( Collection<IStatusMessage> statusMessages ) {
 
     Collection<StatusMessageDTO> statusMessageDTOs = new ArrayList<StatusMessageDTO>();
 

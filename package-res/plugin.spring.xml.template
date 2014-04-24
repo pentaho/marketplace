@@ -10,17 +10,46 @@
   <context:annotation-config />
   <bean id="@jax-rs.bean.name@" class="org.pentaho.platform.web.servlet.JAXRSPluginServlet"/>
   <bean id="@plugin.id@" class="org.pentaho.marketplace.endpoints.MarketplaceContentGenerator" scope="prototype"/>
-  <bean id="@plugin.id@.address-factory" class="org.pentaho.marketplace.domain.model.factories.AddressFactory"/>
-  <bean id="@plugin.id@.user-factory" class="org.pentaho.marketplace.domain.model.factories.UserFactory">
-	<constructor-arg ref="@plugin.id@.address-factory"/>
+
+  <!-- START: Domain Entity Factories -->
+  <bean id="@plugin.id@.plugin-factory" class="org.pentaho.marketplace.domain.model.factories.PluginFactory" />
+
+  <bean id="@plugin.id@.pluginVersion-factory" class="org.pentaho.marketplace.domain.model.factories.PluginVersionFactory" />
+
+  <bean id="@plugin.id@.statusMessage-factory" class="org.pentaho.marketplace.domain.model.factories.StatusMessageFactory" />
+
+  <bean id="@plugin.id@.versionData-factory" class="org.pentaho.marketplace.domain.model.factories.VersionDataFactory" />
+  <!-- END: Domain Entity Factories -->
+
+  <!-- START: Domain Services -->
+  <bean id="@plugin.id@.plugin-service" class="org.pentaho.marketplace.domain.services.PluginService">
+    <constructor-arg ref="@plugin.id@.plugin-factory"/>
+    <constructor-arg ref="@plugin.id@.pluginVersion-factory"/>
+    <constructor-arg ref="@plugin.id@.versionData-factory"/>
   </bean>
-  <bean id="@plugin.id@.user-service" class="org.pentaho.marketplace.domain.services.UserService">
-	<constructor-arg ref="@plugin.id@.user-factory"/>
-  </bean>
+  <!-- END: Domain Services -->
+
+  <!-- START: RDO -->
   <bean id="@plugin.id@.rdo" class="org.pentaho.marketplace.domain.services.RDO">
-	<constructor-arg ref="@plugin.id@.user-service"/>
+    <constructor-arg ref="@plugin.id@.plugin-service"/>
   </bean>
+  <!-- END: RDO -->
+
+  <!-- START: DTO Mappers -->
+  <bean id="@plugin.id@.pluginVersion-mapper" class="org.pentaho.marketplace.domain.model.dtos.mappers.PluginVersionDTOMapper">
+    <constructor-arg ref="@plugin.id@.pluginVersion-factory"/>
+  </bean>
+
+  <bean id="@plugin.id@.plugin-mapper" class="org.pentaho.marketplace.domain.model.dtos.mappers.PluginDTOMapper">
+	  <constructor-arg ref="@plugin.id@.plugin-factory"/>
+	  <constructor-arg ref="@plugin.id@.pluginVersion-mapper"/>
+  </bean>
+  <!-- END: DTO Mappers -->
+
+  <!-- START: Service Endpoints -->
   <bean id="@plugin.id@.service-endpoint" class="org.pentaho.marketplace.endpoints.MarketplaceService">
-	<constructor-arg ref="@plugin.id@.rdo"/>
+	  <constructor-arg ref="@plugin.id@.rdo"/>
+	  <constructor-arg ref="@plugin.id@.plugin-mapper"/>
   </bean>
+  <!-- END: Service Endpoints -->
 </beans>

@@ -4,6 +4,7 @@ import org.pentaho.marketplace.domain.model.complexTypes.interfaces.IPluginVersi
 import org.pentaho.marketplace.domain.model.dtos.PluginVersionDTO;
 import org.pentaho.marketplace.domain.model.dtos.mappers.interfaces.IPluginVersionDTOMapper;
 import org.pentaho.marketplace.domain.model.factories.interfaces.IPluginVersionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -14,6 +15,7 @@ public class PluginVersionDTOMapper implements IPluginVersionDTOMapper {
   //endregion
 
   //region Constructors
+  @Autowired
   public PluginVersionDTOMapper( IPluginVersionFactory pluginVersionFactory ) {
 
     //initialize dependencies
@@ -69,7 +71,7 @@ public class PluginVersionDTOMapper implements IPluginVersionDTOMapper {
   }
 
   @Override
-  public Iterable<IPluginVersion> toEntities( Iterable<PluginVersionDTO> dtos ) {
+  public Collection<IPluginVersion> toEntities( Collection<PluginVersionDTO> dtos ) {
 
     Collection<IPluginVersion> pluginVersions = new ArrayList<IPluginVersion>();
 
@@ -81,7 +83,7 @@ public class PluginVersionDTOMapper implements IPluginVersionDTOMapper {
   }
 
   @Override
-  public Iterable<PluginVersionDTO> toDTOs( Iterable<IPluginVersion> pluginVersions ) {
+  public Collection<PluginVersionDTO> toDTOs( Collection<IPluginVersion> pluginVersions ) {
 
     Collection<PluginVersionDTO> pluginVersionDTOs = new ArrayList<PluginVersionDTO>();
 

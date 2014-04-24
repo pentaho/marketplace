@@ -1,6 +1,7 @@
 package org.pentaho.marketplace.domain.model.dtos;
 
 import javax.xml.bind.annotation.XmlRootElement;
+import java.util.Collection;
 
 @XmlRootElement
 public class PluginDTO {
@@ -20,7 +21,7 @@ public class PluginDTO {
   public String installedBuildId;
   public String installationNotes;
   public boolean installed;
-  public Iterable<PluginVersionDTO> versions;
+  public Collection<PluginVersionDTO> versions;
   public String[] screenshots;
   public String dependencies;
   public String license;

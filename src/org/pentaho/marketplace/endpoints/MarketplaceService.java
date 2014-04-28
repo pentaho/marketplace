@@ -56,6 +56,7 @@ public class MarketplaceService {
   @GET
   @Path( "/plugins" )
   @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML } )
+  //public IterablePluginOperationResultDTO getPlugins() {
   public IterablePluginOperationResultDTO getPlugins() {
 
     //get plugins from the domain model

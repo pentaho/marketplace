@@ -16,7 +16,7 @@
 
   <bean id="@plugin.id@.pluginVersion-factory" class="org.pentaho.marketplace.domain.model.factories.PluginVersionFactory" />
 
-  <bean id="@plugin.id@.statusMessage-factory" class="org.pentaho.marketplace.domain.model.factories.StatusMessageFactory" />
+  <bean id="@plugin.id@.domainStatusMessage-factory" class="org.pentaho.marketplace.domain.model.factories.DomainStatusMessageFactory" />
 
   <bean id="@plugin.id@.versionData-factory" class="org.pentaho.marketplace.domain.model.factories.VersionDataFactory" />
   <!-- END: Domain Entity Factories -->
@@ -37,7 +37,7 @@
 
   <!-- START: DTO Mappers -->
   <bean id="@plugin.id@.statusMessage-mapper" class="org.pentaho.marketplace.endpoints.dtos.mappers.StatusMessageDTOMapper">
-    <constructor-arg ref="@plugin.id@.statusMessage-factory"/>
+    <constructor-arg ref="@plugin.id@.domainStatusMessage-factory"/>
   </bean>
 
   <bean id="@plugin.id@.pluginVersion-mapper" class="org.pentaho.marketplace.endpoints.dtos.mappers.PluginVersionDTOMapper">

@@ -1,9 +1,9 @@
 package org.pentaho.marketplace.endpoints.dtos.mappers;
 
+import org.pentaho.marketplace.domain.model.entities.interfaces.IDomainStatusMessage;
+import org.pentaho.marketplace.domain.model.factories.interfaces.IDomainStatusMessageFactory;
 import org.pentaho.marketplace.endpoints.dtos.responses.base.StatusMessageDTO;
 import org.pentaho.marketplace.endpoints.dtos.mappers.interfaces.IStatusMessageDTOMapper;
-import org.pentaho.marketplace.domain.model.entities.interfaces.IStatusMessage;
-import org.pentaho.marketplace.domain.model.factories.interfaces.IStatusMessageFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -12,24 +12,24 @@ import java.util.List;
 public class StatusMessageDTOMapper implements IStatusMessageDTOMapper {
 
   //region Attributes
-  IStatusMessageFactory statusMessageFactory;
+  IDomainStatusMessageFactory statusMessageFactory;
   //endregion
 
   //region Constructors
   @Autowired
-  public StatusMessageDTOMapper( IStatusMessageFactory statusMessageFactory ) {
+  public StatusMessageDTOMapper( IDomainStatusMessageFactory domainStatusMessageFactory ) {
 
     //initialize dependencies
-    this.statusMessageFactory = statusMessageFactory;
+    this.statusMessageFactory = domainStatusMessageFactory;
   }
   //endregion
 
   //region IStatusMessageDTOMapper
   @Override
-  public IStatusMessage toEntity( StatusMessageDTO dto ) {
+  public IDomainStatusMessage toEntity( StatusMessageDTO dto ) {
 
     //get new statusMessage instance
-    IStatusMessage statusMessage = this.statusMessageFactory.create();
+    IDomainStatusMessage statusMessage = this.statusMessageFactory.create();
 
     //fill the instance
     statusMessage.setCode( dto.code );
@@ -40,7 +40,7 @@ public class StatusMessageDTOMapper implements IStatusMessageDTOMapper {
   }
 
   @Override
-  public StatusMessageDTO toDTO( IStatusMessage statusMessage ) {
+  public StatusMessageDTO toDTO( IDomainStatusMessage statusMessage ) {
 
     //get new dto instance
     StatusMessageDTO dto = new StatusMessageDTO();
@@ -54,9 +54,9 @@ public class StatusMessageDTOMapper implements IStatusMessageDTOMapper {
   }
 
   @Override
-  public Collection<IStatusMessage> toEntities( List<StatusMessageDTO> dtos ) {
+  public Collection<IDomainStatusMessage> toEntities( List<StatusMessageDTO> dtos ) {
 
-    Collection<IStatusMessage> statusMessages = new ArrayList<IStatusMessage>();
+    Collection<IDomainStatusMessage> statusMessages = new ArrayList<IDomainStatusMessage>();
 
     for ( StatusMessageDTO dto : dtos ) {
       statusMessages.add( this.toEntity( dto ) );
@@ -66,11 +66,11 @@ public class StatusMessageDTOMapper implements IStatusMessageDTOMapper {
   }
 
   @Override
-  public List<StatusMessageDTO> toDTOs( Collection<IStatusMessage> statusMessages ) {
+  public List<StatusMessageDTO> toDTOs( Collection<IDomainStatusMessage> statusMessages ) {
 
     List<StatusMessageDTO> statusMessageDTOs = new ArrayList<StatusMessageDTO>();
 
-    for ( IStatusMessage statusMessage : statusMessages ) {
+    for ( IDomainStatusMessage statusMessage : statusMessages ) {
       statusMessageDTOs.add( this.toDTO( statusMessage ) );
     }
 

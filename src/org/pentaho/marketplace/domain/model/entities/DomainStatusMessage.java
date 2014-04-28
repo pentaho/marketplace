@@ -1,8 +1,8 @@
 package org.pentaho.marketplace.domain.model.entities;
 
-import org.pentaho.marketplace.domain.model.entities.interfaces.IStatusMessage;
+import org.pentaho.marketplace.domain.model.entities.interfaces.IDomainStatusMessage;
 
-public class StatusMessage implements IStatusMessage {
+public class DomainStatusMessage implements IDomainStatusMessage {
 
   //region Attributes
   private String code;

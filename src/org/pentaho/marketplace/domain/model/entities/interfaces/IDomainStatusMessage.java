@@ -1,6 +1,6 @@
 package org.pentaho.marketplace.domain.model.entities.interfaces;
 
-public interface IStatusMessage {
+public interface IDomainStatusMessage {
 
   //region Properties
 

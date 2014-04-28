@@ -1,11 +1,11 @@
 package org.pentaho.marketplace.endpoints;
 
+import org.pentaho.marketplace.domain.model.entities.interfaces.IDomainStatusMessage;
 import org.pentaho.marketplace.endpoints.dtos.responses.IterablePluginOperationResultDTO;
 import org.pentaho.marketplace.endpoints.dtos.responses.base.OperationResultDTO;
 import org.pentaho.marketplace.endpoints.dtos.responses.StringOperationResultDTO;
 import org.pentaho.marketplace.endpoints.dtos.mappers.interfaces.IPluginDTOMapper;
 import org.pentaho.marketplace.domain.model.entities.interfaces.IPlugin;
-import org.pentaho.marketplace.domain.model.entities.interfaces.IStatusMessage;
 import org.pentaho.marketplace.domain.services.interfaces.IRDO;
 import org.pentaho.marketplace.endpoints.dtos.mappers.interfaces.IStatusMessageDTOMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,7 +77,7 @@ public class MarketplaceService {
                                            @PathParam( "versionBranch" ) String versionBranch ) {
 
     //install plugin
-    IStatusMessage statusMessage = this.RDO.getPluginService().installPlugin( pluginId, versionBranch );
+    IDomainStatusMessage statusMessage = this.RDO.getPluginService().installPlugin( pluginId, versionBranch );
 
     //send installation string
     OperationResultDTO result = new OperationResultDTO();
@@ -91,7 +91,7 @@ public class MarketplaceService {
   public OperationResultDTO uninstallPlugin( @PathParam( "pluginId" ) String pluginId ) {
 
     //uninstall plugin
-    IStatusMessage statusMessage = this.RDO.getPluginService().uninstallPlugin( pluginId );
+    IDomainStatusMessage statusMessage = this.RDO.getPluginService().uninstallPlugin( pluginId );
 
     //send installation string
     OperationResultDTO result = new OperationResultDTO();

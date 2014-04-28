@@ -4,9 +4,9 @@ import org.apache.commons.io.filefilter.DirectoryFileFilter;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.pentaho.marketplace.domain.model.entities.interfaces.IDomainStatusMessage;
 import org.pentaho.marketplace.domain.model.entities.interfaces.IPluginVersion;
 import org.pentaho.marketplace.domain.model.entities.interfaces.IPlugin;
-import org.pentaho.marketplace.domain.model.entities.interfaces.IStatusMessage;
 import org.pentaho.marketplace.domain.model.entities.interfaces.IVersionData;
 import org.pentaho.marketplace.domain.model.factories.interfaces.IPluginFactory;
 import org.pentaho.marketplace.domain.model.factories.interfaces.IPluginVersionFactory;
@@ -283,12 +283,12 @@ public class PluginService implements IPluginService {
   }
 
   @Override
-  public IStatusMessage installPlugin( String pluginId, String versionBranch ) {
+  public IDomainStatusMessage installPlugin( String pluginId, String versionBranch ) {
     return null;
   }
 
   @Override
-  public IStatusMessage uninstallPlugin( String pluginId ) {
+  public IDomainStatusMessage uninstallPlugin( String pluginId ) {
     return null;
   }
   //endregion

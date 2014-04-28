@@ -1,6 +1,6 @@
 package org.pentaho.marketplace.endpoints.dtos.mappers;
 
-import org.pentaho.marketplace.endpoints.dtos.entities.StatusMessageDTO;
+import org.pentaho.marketplace.endpoints.dtos.responses.base.StatusMessageDTO;
 import org.pentaho.marketplace.endpoints.dtos.mappers.interfaces.IStatusMessageDTOMapper;
 import org.pentaho.marketplace.domain.model.entities.interfaces.IStatusMessage;
 import org.pentaho.marketplace.domain.model.factories.interfaces.IStatusMessageFactory;

@@ -1,9 +1,8 @@
 package org.pentaho.marketplace.endpoints;
 
-import org.pentaho.marketplace.endpoints.dtos.IterablePluginOperationResultDTO;
-import org.pentaho.marketplace.endpoints.dtos.OperationResultDTO;
-import org.pentaho.marketplace.endpoints.dtos.StringOperationResultDTO;
-import org.pentaho.marketplace.endpoints.dtos.entities.StatusMessageDTO;
+import org.pentaho.marketplace.endpoints.dtos.responses.IterablePluginOperationResultDTO;
+import org.pentaho.marketplace.endpoints.dtos.responses.base.OperationResultDTO;
+import org.pentaho.marketplace.endpoints.dtos.responses.StringOperationResultDTO;
 import org.pentaho.marketplace.endpoints.dtos.mappers.interfaces.IPluginDTOMapper;
 import org.pentaho.marketplace.domain.model.entities.interfaces.IPlugin;
 import org.pentaho.marketplace.domain.model.entities.interfaces.IStatusMessage;
@@ -37,25 +36,24 @@ public class MarketplaceService {
 
   @GET
   @Path( "/hello" )
-  @Produces( { MediaType.APPLICATION_JSON } )
+  @Produces( MediaType.APPLICATION_JSON )
   public StringOperationResultDTO hello() {
 
     //create response object
     StringOperationResultDTO result = new StringOperationResultDTO();
-    result.result = "Hello World from Marketplace!";
+    result.string = "Hello World from Marketplace!";
 
     //status message
-    result.statusMessage = new StatusMessageDTO();
     result.statusMessage.code = "OK_CODE";
     result.statusMessage.message = "OK_MESSAGE";
 
-    //return result
+    //return string
     return result;
   }
 
   @GET
   @Path( "/plugins" )
-  @Produces( { MediaType.APPLICATION_JSON } )
+  @Produces( MediaType.APPLICATION_JSON )
   public IterablePluginOperationResultDTO getPlugins() {
 
     //get plugins from the domain model
@@ -66,7 +64,6 @@ public class MarketplaceService {
     result.plugins = this.pluginDTOMapper.toDTOs( plugins );
 
     //status message
-    result.statusMessage = new StatusMessageDTO();
     result.statusMessage.code = "OK_CODE";
     result.statusMessage.message = "OK_MESSAGE";
 
@@ -75,14 +72,14 @@ public class MarketplaceService {
 
   @GET
   @Path( "/plugin/{pluginId}/{versionBranch}" )
-  @Produces( { MediaType.APPLICATION_JSON } )
+  @Produces( MediaType.APPLICATION_JSON )
   public OperationResultDTO installPlugin( @PathParam( "pluginId" ) String pluginId,
                                            @PathParam( "versionBranch" ) String versionBranch ) {
 
     //install plugin
     IStatusMessage statusMessage = this.RDO.getPluginService().installPlugin( pluginId, versionBranch );
 
-    //send installation result
+    //send installation string
     OperationResultDTO result = new OperationResultDTO();
     result.statusMessage = this.statusMessageDTOMapper.toDTO( statusMessage );
     return result;
@@ -90,13 +87,13 @@ public class MarketplaceService {
 
   @GET
   @Path( "/plugins/{pluginId}" )
-  @Produces( { MediaType.APPLICATION_JSON } )
+  @Produces( MediaType.APPLICATION_JSON )
   public OperationResultDTO uninstallPlugin( @PathParam( "pluginId" ) String pluginId ) {
 
     //uninstall plugin
     IStatusMessage statusMessage = this.RDO.getPluginService().uninstallPlugin( pluginId );
 
-    //send installation result
+    //send installation string
     OperationResultDTO result = new OperationResultDTO();
     result.statusMessage = this.statusMessageDTOMapper.toDTO( statusMessage );
     return result;

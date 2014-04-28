@@ -4,7 +4,7 @@ import org.apache.commons.io.filefilter.DirectoryFileFilter;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.pentaho.marketplace.domain.model.complexTypes.interfaces.IPluginVersion;
+import org.pentaho.marketplace.domain.model.entities.interfaces.IPluginVersion;
 import org.pentaho.marketplace.domain.model.entities.interfaces.IPlugin;
 import org.pentaho.marketplace.domain.model.entities.interfaces.IStatusMessage;
 import org.pentaho.marketplace.domain.model.entities.interfaces.IVersionData;

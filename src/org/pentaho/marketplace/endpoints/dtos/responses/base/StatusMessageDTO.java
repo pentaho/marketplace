@@ -1,4 +1,4 @@
-package org.pentaho.marketplace.endpoints.dtos.entities;
+package org.pentaho.marketplace.endpoints.dtos.responses.base;
 
 import javax.xml.bind.annotation.XmlRootElement;
 

@@ -1,7 +1,7 @@
 package org.pentaho.marketplace.domain.model.entities;
 
 import org.pentaho.marketplace.domain.model.entities.interfaces.IPlugin;
-import org.pentaho.marketplace.domain.model.complexTypes.interfaces.IPluginVersion;
+import org.pentaho.marketplace.domain.model.entities.interfaces.IPluginVersion;
 
 import java.util.Collection;
 

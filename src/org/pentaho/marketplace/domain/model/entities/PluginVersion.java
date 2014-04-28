@@ -1,6 +1,6 @@
-package org.pentaho.marketplace.domain.model.complexTypes;
+package org.pentaho.marketplace.domain.model.entities;
 
-import org.pentaho.marketplace.domain.model.complexTypes.interfaces.IPluginVersion;
+import org.pentaho.marketplace.domain.model.entities.interfaces.IPluginVersion;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement

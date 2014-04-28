@@ -1,8 +1,8 @@
 package org.pentaho.marketplace.domain.model.entities.interfaces;
 
 import org.pentaho.marketplace.domain.model.complexTypes.interfaces.IPluginVersion;
-
 import java.util.Collection;
+import java.util.List;
 
 public interface IPlugin {
 

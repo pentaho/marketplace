@@ -8,6 +8,7 @@ import org.pentaho.marketplace.domain.model.factories.interfaces.IPluginFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 public class PluginDTOMapper implements IPluginDTOMapper {
 
@@ -88,7 +89,7 @@ public class PluginDTOMapper implements IPluginDTOMapper {
   }
 
   @Override
-  public Collection<IPlugin> toEntities( Collection<PluginDTO> dtos ) {
+  public Collection<IPlugin> toEntities( List<PluginDTO> dtos ) {
 
     Collection<IPlugin> plugins = new ArrayList<IPlugin>();
 
@@ -100,9 +101,9 @@ public class PluginDTOMapper implements IPluginDTOMapper {
   }
 
   @Override
-  public Collection<PluginDTO> toDTOs( Collection<IPlugin> plugins ) {
+  public List<PluginDTO> toDTOs( Collection<IPlugin> plugins ) {
 
-    Collection<PluginDTO> pluginDTOs = new ArrayList<PluginDTO>();
+    List<PluginDTO> pluginDTOs = new ArrayList<PluginDTO>();
 
     for ( IPlugin plugin : plugins ) {
       pluginDTOs.add( this.toDTO( plugin ) );

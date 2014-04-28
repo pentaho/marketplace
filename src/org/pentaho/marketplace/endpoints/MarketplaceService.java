@@ -1,10 +1,8 @@
 package org.pentaho.marketplace.endpoints;
 
-import org.pentaho.marketplace.endpoints.dtos.GenericOperationResultDTO;
 import org.pentaho.marketplace.endpoints.dtos.IterablePluginOperationResultDTO;
 import org.pentaho.marketplace.endpoints.dtos.OperationResultDTO;
 import org.pentaho.marketplace.endpoints.dtos.StringOperationResultDTO;
-import org.pentaho.marketplace.endpoints.dtos.entities.PluginDTO;
 import org.pentaho.marketplace.endpoints.dtos.entities.StatusMessageDTO;
 import org.pentaho.marketplace.endpoints.dtos.mappers.interfaces.IPluginDTOMapper;
 import org.pentaho.marketplace.domain.model.entities.interfaces.IPlugin;
@@ -16,11 +14,8 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.core.GenericEntity;
-import javax.ws.rs.core.Response;
+import javax.ws.rs.core.MediaType;
 import java.util.Collection;
-
-import static javax.ws.rs.core.MediaType.*;
 
 @Path( "@plugin.java.rest.path.root@" )
 public class MarketplaceService {
@@ -42,7 +37,7 @@ public class MarketplaceService {
 
   @GET
   @Path( "/hello" )
-  @Produces( { APPLICATION_JSON, APPLICATION_XML } )
+  @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML } )
   public StringOperationResultDTO hello() {
 
     //create response object
@@ -60,7 +55,7 @@ public class MarketplaceService {
 
   @GET
   @Path( "/plugins" )
-  @Produces( { APPLICATION_JSON, APPLICATION_XML } )
+  @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML } )
   public IterablePluginOperationResultDTO getPlugins() {
 
     //get plugins from the domain model
@@ -75,13 +70,12 @@ public class MarketplaceService {
     result.statusMessageDTO.code = "OK_CODE";
     result.statusMessageDTO.message = "OK_MESSAGE";
 
-    //return result
     return result;
   }
 
   @GET
   @Path( "/plugin/{pluginId}/{versionBranch}" )
-  @Produces( { APPLICATION_JSON, APPLICATION_XML } )
+  @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML } )
   public OperationResultDTO installPlugin( @PathParam( "pluginId" ) String pluginId,
                                            @PathParam( "versionBranch" ) String versionBranch ) {
 
@@ -96,7 +90,7 @@ public class MarketplaceService {
 
   @GET
   @Path( "/plugins/{pluginId}" )
-  @Produces( { APPLICATION_JSON, APPLICATION_XML } )
+  @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML } )
   public OperationResultDTO uninstallPlugin( @PathParam( "pluginId" ) String pluginId ) {
 
     //uninstall plugin

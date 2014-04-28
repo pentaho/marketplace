@@ -7,6 +7,7 @@ import org.pentaho.marketplace.domain.model.factories.interfaces.IStatusMessageF
 import org.springframework.beans.factory.annotation.Autowired;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 public class StatusMessageDTOMapper implements IStatusMessageDTOMapper {
 
@@ -53,7 +54,7 @@ public class StatusMessageDTOMapper implements IStatusMessageDTOMapper {
   }
 
   @Override
-  public Collection<IStatusMessage> toEntities( Collection<StatusMessageDTO> dtos ) {
+  public Collection<IStatusMessage> toEntities( List<StatusMessageDTO> dtos ) {
 
     Collection<IStatusMessage> statusMessages = new ArrayList<IStatusMessage>();
 
@@ -65,9 +66,9 @@ public class StatusMessageDTOMapper implements IStatusMessageDTOMapper {
   }
 
   @Override
-  public Collection<StatusMessageDTO> toDTOs( Collection<IStatusMessage> statusMessages ) {
+  public List<StatusMessageDTO> toDTOs( Collection<IStatusMessage> statusMessages ) {
 
-    Collection<StatusMessageDTO> statusMessageDTOs = new ArrayList<StatusMessageDTO>();
+    List<StatusMessageDTO> statusMessageDTOs = new ArrayList<StatusMessageDTO>();
 
     for ( IStatusMessage statusMessage : statusMessages ) {
       statusMessageDTOs.add( this.toDTO( statusMessage ) );

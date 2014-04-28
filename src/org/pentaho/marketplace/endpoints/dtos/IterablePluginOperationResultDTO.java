@@ -7,5 +7,5 @@ import java.util.List;
 @XmlRootElement
 public class IterablePluginOperationResultDTO extends OperationResultDTO {
 
-  public List<PluginDTO> resultDTO;
+  public List<PluginDTO> plugins;
 }

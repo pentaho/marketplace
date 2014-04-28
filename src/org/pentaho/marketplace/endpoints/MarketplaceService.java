@@ -37,17 +37,17 @@ public class MarketplaceService {
 
   @GET
   @Path( "/hello" )
-  @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML } )
+  @Produces( { MediaType.APPLICATION_JSON } )
   public StringOperationResultDTO hello() {
 
     //create response object
     StringOperationResultDTO result = new StringOperationResultDTO();
-    result.resultDTO = "Hello World from Marketplace!";
+    result.result = "Hello World from Marketplace!";
 
     //status message
-    result.statusMessageDTO = new StatusMessageDTO();
-    result.statusMessageDTO.code = "OK_CODE";
-    result.statusMessageDTO.message = "OK_MESSAGE";
+    result.statusMessage = new StatusMessageDTO();
+    result.statusMessage.code = "OK_CODE";
+    result.statusMessage.message = "OK_MESSAGE";
 
     //return result
     return result;
@@ -55,8 +55,7 @@ public class MarketplaceService {
 
   @GET
   @Path( "/plugins" )
-  @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML } )
-  //public IterablePluginOperationResultDTO getPlugins() {
+  @Produces( { MediaType.APPLICATION_JSON } )
   public IterablePluginOperationResultDTO getPlugins() {
 
     //get plugins from the domain model
@@ -64,19 +63,19 @@ public class MarketplaceService {
 
     //transform plugins to DTOs for serialization
     IterablePluginOperationResultDTO result = new IterablePluginOperationResultDTO();
-    result.resultDTO = this.pluginDTOMapper.toDTOs( plugins );
+    result.plugins = this.pluginDTOMapper.toDTOs( plugins );
 
     //status message
-    result.statusMessageDTO = new StatusMessageDTO();
-    result.statusMessageDTO.code = "OK_CODE";
-    result.statusMessageDTO.message = "OK_MESSAGE";
+    result.statusMessage = new StatusMessageDTO();
+    result.statusMessage.code = "OK_CODE";
+    result.statusMessage.message = "OK_MESSAGE";
 
     return result;
   }
 
   @GET
   @Path( "/plugin/{pluginId}/{versionBranch}" )
-  @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML } )
+  @Produces( { MediaType.APPLICATION_JSON } )
   public OperationResultDTO installPlugin( @PathParam( "pluginId" ) String pluginId,
                                            @PathParam( "versionBranch" ) String versionBranch ) {
 
@@ -85,13 +84,13 @@ public class MarketplaceService {
 
     //send installation result
     OperationResultDTO result = new OperationResultDTO();
-    result.statusMessageDTO = this.statusMessageDTOMapper.toDTO( statusMessage );
+    result.statusMessage = this.statusMessageDTOMapper.toDTO( statusMessage );
     return result;
   }
 
   @GET
   @Path( "/plugins/{pluginId}" )
-  @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML } )
+  @Produces( { MediaType.APPLICATION_JSON } )
   public OperationResultDTO uninstallPlugin( @PathParam( "pluginId" ) String pluginId ) {
 
     //uninstall plugin
@@ -99,7 +98,7 @@ public class MarketplaceService {
 
     //send installation result
     OperationResultDTO result = new OperationResultDTO();
-    result.statusMessageDTO = this.statusMessageDTOMapper.toDTO( statusMessage );
+    result.statusMessage = this.statusMessageDTOMapper.toDTO( statusMessage );
     return result;
   }
 }

@@ -6,5 +6,5 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class OperationResultDTO {
 
-  public StatusMessageDTO statusMessageDTO;
+  public StatusMessageDTO statusMessage;
 }

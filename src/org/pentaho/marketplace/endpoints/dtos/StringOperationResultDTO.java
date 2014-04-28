@@ -5,5 +5,5 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class StringOperationResultDTO extends OperationResultDTO {
 
-  public String resultDTO;
+  public String result;
 }

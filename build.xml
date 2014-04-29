@@ -43,6 +43,12 @@
 	<!-- globalization -->
 	<property name="plugin.globalization.dir" value="lang/messages"/>
 	
+	<property name="js.module.script.base.dir" value="package-res"/>
+	<property name="js.module.script.folder.name" value="module-scripts"/>
+	
+	<!-- override: subfloor-js.js.module.script.dir, to maintain consistency -->
+	<property name="js.module.script.dir" value="${js.module.script.base.dir}/${js.module.script.folder.name}"/>
+	
 	<!--********************************************
 	**************** END: PROPERTIES ***************
 	*********************************************-->
@@ -249,6 +255,18 @@
 				
 				<!-- exclude launcher templates -->
 				<exclude name="**/${js.module.launcher.templates.dir}/**"/>
+			</fileset>
+			
+			<!-- also copy everything from package.resdir, except the JS dir and the config files -->
+			<fileset dir="${package.resdir}">
+			
+				<!-- exclude JS dir -->
+				<exclude name="**/${js.module.script.folder.name}/**" />
+				
+				<!-- exclude config files -->
+				<exclude name="*.xml" />
+				<exclude name="*.xml.template" />
+				
 			</fileset>
 
 		</copy>

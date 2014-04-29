@@ -2,9 +2,10 @@ package org.pentaho.marketplace.endpoints.dtos.mappers;
 
 import org.pentaho.marketplace.domain.model.entities.interfaces.IDomainStatusMessage;
 import org.pentaho.marketplace.domain.model.factories.interfaces.IDomainStatusMessageFactory;
-import org.pentaho.marketplace.endpoints.dtos.responses.base.StatusMessageDTO;
 import org.pentaho.marketplace.endpoints.dtos.mappers.interfaces.IStatusMessageDTOMapper;
+import org.pentaho.marketplace.endpoints.dtos.responses.base.StatusMessageDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;

@@ -208,5 +208,20 @@ public class Plugin implements IPlugin {
   public void setLicense( String value ) {
     this.license = value;
   }
+
+  @Override
+  public IPluginVersion getVersionByBranch( String branch ) {
+
+    if ( this.versions == null ) {
+      return null;
+    }
+
+    for ( IPluginVersion v : this.versions ) {
+      if ( branch != null && branch.equals( v.getBranch() ) ) {
+        return v;
+      }
+    }
+    return null;
+  }
   //endregion
 }

@@ -9,7 +9,7 @@ public class DomainStatusMessage implements IDomainStatusMessage {
   private String message;
   //endregion
 
-  //region IStatusMessage implementation
+  //region IDomainStatusMessage implementation
   @Override
   public String getCode() {
     return this.code;

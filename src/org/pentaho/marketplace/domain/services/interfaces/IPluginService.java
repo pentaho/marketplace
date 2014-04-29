@@ -8,6 +8,8 @@ import java.util.Collection;
 public interface IPluginService {
 
   Collection<IPlugin> getPlugins();
+
   IDomainStatusMessage installPlugin( String pluginId, String versionBranch );
+
   IDomainStatusMessage uninstallPlugin( String pluginId );
 }

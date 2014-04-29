@@ -97,4 +97,8 @@ public interface IPlugin {
   void setLicense( String value );
 
   //endregion
+
+  //region Methods
+  IPluginVersion getVersionByBranch( String branch );
+  //endregion
 }

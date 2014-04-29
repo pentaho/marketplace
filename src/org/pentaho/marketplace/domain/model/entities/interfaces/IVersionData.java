@@ -4,8 +4,11 @@ public interface IVersionData extends Comparable<IVersionData> {
 
   //region Properties
   int getMajor();
+
   int getMinor();
+
   int getPatch();
+
   String getInfo();
   //endregion
 

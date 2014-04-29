@@ -1,6 +1,7 @@
 package org.pentaho.marketplace.domain.model.entities;
 
 import org.pentaho.marketplace.domain.model.entities.interfaces.IPluginVersion;
+
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement

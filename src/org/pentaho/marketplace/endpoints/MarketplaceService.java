@@ -1,15 +1,18 @@
 package org.pentaho.marketplace.endpoints;
 
 import org.pentaho.marketplace.domain.model.entities.interfaces.IDomainStatusMessage;
-import org.pentaho.marketplace.endpoints.dtos.responses.IterablePluginOperationResultDTO;
-import org.pentaho.marketplace.endpoints.dtos.responses.base.OperationResultDTO;
-import org.pentaho.marketplace.endpoints.dtos.responses.StringOperationResultDTO;
-import org.pentaho.marketplace.endpoints.dtos.mappers.interfaces.IPluginDTOMapper;
 import org.pentaho.marketplace.domain.model.entities.interfaces.IPlugin;
 import org.pentaho.marketplace.domain.services.interfaces.IRDO;
+import org.pentaho.marketplace.endpoints.dtos.mappers.interfaces.IPluginDTOMapper;
 import org.pentaho.marketplace.endpoints.dtos.mappers.interfaces.IStatusMessageDTOMapper;
+import org.pentaho.marketplace.endpoints.dtos.responses.IterablePluginOperationResultDTO;
+import org.pentaho.marketplace.endpoints.dtos.responses.StringOperationResultDTO;
+import org.pentaho.marketplace.endpoints.dtos.responses.base.OperationResultDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -70,7 +73,7 @@ public class MarketplaceService {
     return result;
   }
 
-  @GET
+  @POST
   @Path( "/plugin/{pluginId}/{versionBranch}" )
   @Produces( MediaType.APPLICATION_JSON )
   public OperationResultDTO installPlugin( @PathParam( "pluginId" ) String pluginId,
@@ -85,8 +88,8 @@ public class MarketplaceService {
     return result;
   }
 
-  @GET
-  @Path( "/plugins/{pluginId}" )
+  @DELETE
+  @Path( "/plugin/{pluginId}" )
   @Produces( MediaType.APPLICATION_JSON )
   public OperationResultDTO uninstallPlugin( @PathParam( "pluginId" ) String pluginId ) {
 

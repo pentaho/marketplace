@@ -6,9 +6,17 @@ import org.pentaho.marketplace.domain.model.factories.interfaces.IDomainStatusMe
 
 public class DomainStatusMessageFactory implements IDomainStatusMessageFactory {
 
-  //region IStatusMessageFactory implementation
+  //region IDomainStatusMessageFactory implementation
   @Override public IDomainStatusMessage create() {
     return new DomainStatusMessage();
+  }
+
+  @Override public IDomainStatusMessage create( String code, String message ) {
+
+    IDomainStatusMessage domainStatusMessage = new DomainStatusMessage();
+    domainStatusMessage.setCode( code );
+    domainStatusMessage.setMessage( message );
+    return domainStatusMessage;
   }
   //endregion
 }

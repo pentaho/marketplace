@@ -26,6 +26,7 @@
     <constructor-arg ref="@plugin.id@.plugin-factory"/>
     <constructor-arg ref="@plugin.id@.pluginVersion-factory"/>
     <constructor-arg ref="@plugin.id@.versionData-factory"/>
+    <constructor-arg ref="@plugin.id@.domainStatusMessage-factory"/>
   </bean>
   <!-- END: Domain Services -->
 

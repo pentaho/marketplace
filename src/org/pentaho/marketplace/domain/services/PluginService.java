@@ -452,6 +452,8 @@ public class PluginService implements IPluginService {
       }
     } catch ( KettleException e ) {
       logger.error( e.getMessage(), e );
+      return this.domainStatusMessageFactory
+        .create( PluginService.FAIL_ERROR_CODE, "Failed to execute install, see log for details." );
     }
 
 

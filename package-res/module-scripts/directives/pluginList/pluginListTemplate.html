@@ -8,11 +8,7 @@
     <ul>
       <li data-ng-repeat="plugin in plugins"
           data-ng-click="onPluginClicked( plugin )">
-        <a href="{{pluginRoute}}/{{plugin.id}}">
-          {{plugin.name}}
-        </a>
-        -
-        <button data-ng-click="viewPluginDetail( plugin.id )">Get via function</button>
+        <div data-plugin-list-item plugin="plugin"></div>
       </li>
     </ul>
   </div>

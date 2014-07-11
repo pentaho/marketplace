@@ -15,7 +15,6 @@
         -->
 
         <script src="js/app.js"></script>
-        <script src="js/controllers/TestController.js"></script>
 
         <script src="js/services/navigationService.js"></script>
         <script src="js/services/dtoMapperService.js"></script>
@@ -26,6 +25,10 @@
         <script src="js/services/appService.js"></script>
         <script src="directives/pluginList/pluginListDirective.js"></script>
         <script src="directives/pluginList/pluginListController.js"></script>
+
+        <script src="directives/pluginListItem/pluginListItemDirective.js"></script>
+        <script src="directives/pluginListItem/pluginListItemController.js"></script>
+
         <script src="directives/pluginDetail/pluginDetailDirective.js"></script>
         <script src="directives/pluginDetail/PluginDetailController.js"></script>
 

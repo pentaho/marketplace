@@ -14,19 +14,17 @@
 'use strict';
 
 app.controller('pluginListController',
-    ['$scope', 'appService',
-    function ( $scope, appService ) {
+    ['$scope', 'appService', 'navigationService',
+      function ($scope, appService, navigationService) {
 
-        //get all plugins
-        appService.getPlugins().then (
-            function ( plugins ) {
-                $scope.plugins = plugins;
-            }
-        );
+      //gets plugins from directive
 
-        //get plugin count
-        $scope.getPluginCount = function ( plugins ) {
-            return plugins.length;
-        };
-    }
-]);
+        /*
+        $scope.viewPluginDetail = function ( pluginId ) {
+          //Have navigation controller handle the navigation
+          navigationService.getPluginRoute( pluginId );
+        }
+        */
+
+      }
+    ]);

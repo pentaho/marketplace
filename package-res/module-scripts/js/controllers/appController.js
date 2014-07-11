@@ -14,50 +14,27 @@
 'use strict';
 
 app.controller('appController',
-    ['$scope', 'appService', 'navigationService', '$routeParams',
-    function ($scope, appService, navigationService, $routeParams) {
+    ['$scope', 'appService', 'navigationService',
+    function ( $scope, appService, navigationService ) {
 
-        //VM initialization
-        $scope.hello = appService.getHello;
-        $scope.count = appService.getInitialCount;
+      $scope.pluginWasClicked = function ( plugin ) {
+        alert( "appController: Plugin " + plugin.name + " was clicked.");
+      }
 
-        //get all plugins
-        appService.getPlugins().then (
-            function ( plugins ) {
-                $scope.pluginList = plugins;
-            }
-        );
-
-        //get selected plugin
-        appService.getPlugin( $routeParams.pluginId ).then(
-            function ( plugin ) {
-                $scope.plugin = plugin;
-            }
-        );
-
-        //application logic
-        $scope.addCount = function () {
-            //call service layer to execute business logic
-            $scope.count = appService.addCount($scope.count);
-        };
-
-        //navigation
+      $scope.viewPluginDetail = function ( plugin ) {
+        navigationService.getPluginRoute( plugin.id );
+      }
 
         //constant navigation via navigation service
         $scope.pluginsRoute = navigationService.pluginsRoute;
         $scope.pluginRoute = navigationService.pluginRoute;
 
         //programmatic navigation via navigation service
-        $scope.getPluginsRoute = function() {
-
+        $scope.gotoPluginsRoute = function() {
             //Have navigation controller handle the navigation
-            navigationService.getPluginsRoute();
+            navigationService.gotoPluginsRoute();
         }
 
-        $scope.getPluginRoute = function(pluginId) {
 
-            //Have navigation controller handle the navigation
-            navigationService.getPluginRoute(pluginId);
-        }
     }
 ]);

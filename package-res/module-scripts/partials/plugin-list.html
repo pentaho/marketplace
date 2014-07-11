@@ -1,4 +1,15 @@
 <div>
-    <h1>Plugin List</h1>
-    <plugin-list plugins="plugins" plugin-route="pluginRoute" get-plugin-route="getPluginRoute" />
+    <!-- TODO: add tabs, filters, list/card view, refresh -->
+  <button data-ng-click="refreshPluginsFromServer()">Refresh</button>
+  <div name="filterBar">
+    <!-- TODO a directive or similar for filtering. Select does not allow nesting options. -->
+    <select data-ng-options="type.name group by type.group for type in pluginTypes">    </select>
+    <a data-ng-href="https://www.google.com/?#q=what+are+stages">What are stages?</a>
+
+  </div>
+
+  Installed: <input type="checkbox" data-ng-model="showOnlyInstalled">
+  <div plugin-list plugins="filteredPlugins" on-plugin-clicked="pluginWasClicked" />
+
+  <div>INFO BAR HERE</div>
 </div>

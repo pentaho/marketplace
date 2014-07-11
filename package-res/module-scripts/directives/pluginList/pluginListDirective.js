@@ -16,21 +16,24 @@
 app.directive('pluginList',
     function() {
         return {
-            restrict: 'E',
+            restrict: 'A', // 'A' must be used for IE8 compatibility
             replace: true, //replaces the custom directive element with the corresponding expanded HTML, to be HTML-compliant.
             templateUrl: 'directives/pluginList/pluginListTemplate.html',
             controller: 'pluginListController',
             //isolate scope
             scope: {
                 plugins: "=",
+                onPluginClicked: "=",
+                //pluginFilter: "="
                 //pluginRoute matches plugin-route in html template
-                pluginRoute: "=",
+                //pluginRoute: "=",
                 //getPluginRoute matches get-plugin-route in html template
                 //we could use a different name for the html attribute, using "=html-property" instead of "="
                 //'&' evaluates in the parent scope
                 //'@' evaluates as a string
                 //'=' evaluates in the isolate scope
-                getPluginRoute: "="
+                //getPluginRoute: "="
+                //onClick: "="
             }
         };
     }

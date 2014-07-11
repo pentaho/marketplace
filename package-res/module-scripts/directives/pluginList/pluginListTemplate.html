@@ -1,12 +1,20 @@
 <div>
-    <span data-ng-show="plugins">Plugin count: {{getPluginCount( plugins )}}</span>
+  <div data-ng-hide="plugins">
+    Getting Plugins. Please Wait.
+  </div>
+
+  <div data-ng-show="plugins">
+    <span>Plugin count: {{plugins.length}}</span>
     <ul>
-        <li data-ng-repeat="plugin in plugins">
-            <a href="{{pluginRoute}}/{{plugin.id}}">
-                {{plugin.name}}
-            </a>
-            -
-            <button data-ng-click="getPluginRoute(plugin.id)">Get via function</button>
-        </li>
+      <li data-ng-repeat="plugin in plugins"
+          data-ng-click="onPluginClicked( plugin )">
+        <a href="{{pluginRoute}}/{{plugin.id}}">
+          {{plugin.name}}
+        </a>
+        -
+        <button data-ng-click="viewPluginDetail( plugin.id )">Get via function</button>
+      </li>
     </ul>
+  </div>
+
 </div>

@@ -14,36 +14,14 @@
 'use strict';
 
 app.factory('appService',
-    [ '$resource',
-    function( $resource ) {
-
-        // TODO provide pluginDTO to plugin mapper as an angular service
-        var mapPlugin = function( pluginDTO ) {
-            var plugin = {};
-
-            plugin.id = pluginDTO.id;
-            plugin.name = pluginDTO.name;
-            plugin.image = pluginDTO.img;
-            plugin.smallImage = pluginDTO.small_img;
-            // description i8ln
-            plugin.description = pluginDTO.description;
-
-            return plugin;
-        }
+    [ '$resource', 'dtoMapperService',
+    function( $resource, dtoMapper ) {
 
         var pluginsPromise = null;
         var pluginsResource = $resource('/pentaho/plugin/marketplace/api/plugins');
 
         return {
-            //service methods and properties
-            getHello : "Hello World!",
-            getInitialCount: 0,
-            addCount: function( currentCount ) {
-                currentCount++;
-                return currentCount;
-            },
-
-            refreshPlugins: function() {
+            refreshPluginsFromServer: function() {
                 pluginsPromise = null;
                 return this.getPlugins();
             },
@@ -52,8 +30,7 @@ app.factory('appService',
                 if ( pluginsPromise == null ) {
                     pluginsPromise = pluginsResource.get().$promise.then(
                         function (data) {
-                            return _.map( data.plugins, function ( pluginDTO ) { return mapPlugin( pluginDTO ); } );
-                            return this.plugins;
+                            return _.map( data.plugins, dtoMapper.toPlugin );
                         });
                 }
 

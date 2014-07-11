@@ -15,9 +15,10 @@
 
 app.directive('pluginDetail', function() {
     return {
-        restrict: 'E',
+        restrict: 'A', // 'A' must be used for IE8 compatibility
         replace: true, //replaces the custom directive element with the corresponding expanded HTML, to be HTML-compliant.
         templateUrl: 'directives/pluginDetail/pluginDetailTemplate.html',
+        controller: 'PluginDetailController',
         //isolate scope
         scope: {
             plugin: "="

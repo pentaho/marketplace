@@ -13,25 +13,17 @@
 
 'use strict';
 
-app.factory('navigationService',
-    ['$location',
-    function ($location) {
-        var pluginsRouteConstant = "/plugins";
-        var pluginRouteConstant = "/plugin";
+app.controller( 'PluginDetailController',
+    ['$scope', '$routeParams', 'appService',
+      function ( $scope, $routeParams, appService ) {
 
-        return {
-            //navigation logic using contants
-            pluginsRoute: "#" + pluginsRouteConstant,
-            pluginRoute: "#" + pluginRouteConstant,
+        var pluginId = $routeParams.pluginId;
 
-            //programatic navigation logic
-            gotoPluginsRoute: function() {
-                $location.url(pluginsRouteConstant);
-            },
-
-            getPluginRoute: function( pluginId ) {
-                $location.url(pluginRouteConstant + "/" + pluginId);
+        //get all plugins
+        appService.getPlugin( pluginId ).then (
+            function ( plugin ) {
+              $scope.plugin = plugin;
             }
-        };
-    }
-]);
+        );
+      }
+    ]);

@@ -283,15 +283,17 @@ public class PluginService implements IPluginService {
         plugin.setName( getElementChildValue( element, "name" ) );
         plugin.setDescription( getElementChildValue( element, "description" ) );
 
-        plugin.setCompany( getElementChildValue( element, "author" ) );
-        plugin.setCompanyUrl( getElementChildValue( element, "author_url" ) );
-        plugin.setCompanyLogo( getElementChildValue( element, "author_logo" ) );
+        plugin.setAuthorName( getElementChildValue( element, "author" ) );
+        plugin.setAuthorUrl( getElementChildValue( element, "author_url" ) );
+        plugin.setAuthorLogo( getElementChildValue( element, "author_logo" ) );
         plugin.setImg( getElementChildValue( element, "img" ) );
 
         plugin.setSmallImg( getElementChildValue( element, "small_img" ) );
-        plugin.setLearnMoreUrl( getElementChildValue( element, "documentation_url" ) );
+        plugin.setDocumentationUrl( getElementChildValue( element, "documentation_url" ) );
         plugin.setInstallationNotes( getElementChildValue( element, "installation_notes" ) );
         plugin.setLicense( getElementChildValue( element, "license" ) );
+        plugin.setLicenseName( getElementChildValue( element, "license_name" ) );
+        plugin.setLicenseText( getElementChildValue( element, "license_text" ) );
         plugin.setDependencies( getElementChildValue( element, "dependencies" ) );
 
 
@@ -315,6 +317,8 @@ public class PluginService implements IPluginService {
             pv.setReleaseDate( getElementChildValue( versionElement, "releaseDate" ) );
             pv.setMinParentVersion( getElementChildValue( versionElement, "min_parent_version" ) );
             pv.setMaxParentVersion( getElementChildValue( versionElement, "max_parent_version" ) );
+            pv.setStageLane( getElementChildValue( versionElement, "stage_lane" ) );
+            pv.setStagePhase( getElementChildValue( versionElement, "stage_phase" ) );
 
             if ( withinParentVersion( pv ) ) {
               versions.add( pv );

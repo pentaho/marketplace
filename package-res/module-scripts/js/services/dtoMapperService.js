@@ -45,14 +45,16 @@ app.factory('dtoMapperService',
           plugin.name = pluginDTO.name;
           plugin.image = pluginDTO.img;
           plugin.smallImage = pluginDTO.small_img;
-          plugin.learnMoreUrl = pluginDTO.learnMoreUrl;
+          // TODO check this property with XSD
+          plugin.documentationUrl = pluginDTO.documentationUrl;
 
           // TODO description i8ln
           plugin.description = pluginDTO.description;
 
-          plugin.company = {};
-          plugin.company.url = pluginDTO.companyUrl;
-          plugin.company.logo = pluginDTO.companyLogo;
+          plugin.author = {};
+          plugin.author.name = pluginDTO.author;
+          plugin.author.siteUrl = pluginDTO.author_url;
+          plugin.author.logoUrl = pluginDTO.author_logo;
 
           // TODO change to function that checks for installed version info?
           plugin.isInstalled = (pluginDTO.installed.toUpperCase() === 'TRUE');
@@ -71,7 +73,15 @@ app.factory('dtoMapperService',
 
           // TODO check license on server DTO
           plugin.license = {};
-          plugin.license.name = pluginDTO.license;
+          plugin.license.name = pluginDTO.license_name;
+          // pluginDTO.license takes precedence over pluginDTO.license_name
+          if( pluginDTO.license !== null ||
+              pluginDTO.license !== undefined ) {
+            plugin.license.name = pluginDTO.license;
+          }
+          plugin.license.text = pluginDTO.license_text;
+
+
 
           plugin.versions = _.map( pluginDTO.versions, toVersion );
           return plugin;

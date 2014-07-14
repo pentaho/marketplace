@@ -11,11 +11,11 @@ public class PluginDTO {
   public String name;
   public String img;
   public String smallImg;
-  public String learnMoreUrl;
+  public String documentationUrl;
   public String description;
-  public String company;
-  public String companyUrl;
-  public String companyLogo;
+  public String authorName;
+  public String authorUrl;
+  public String authorLogo;
   public String installedBranch;
   public String installedVersion;
   public String installedBuildId;

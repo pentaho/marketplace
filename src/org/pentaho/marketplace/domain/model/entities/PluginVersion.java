@@ -19,6 +19,8 @@ public class PluginVersion implements IPluginVersion {
   private String releaseDate;
   private String minParentVersion;
   private String maxParentVersion;
+  private String stageLane;
+  private String stagePhase;
   //endregion
 
   //region IPluginVersion implementation
@@ -131,5 +133,11 @@ public class PluginVersion implements IPluginVersion {
   public void setMaxParentVersion( String value ) {
     this.maxParentVersion = value;
   }
+
+  @Override public String getStageLane() { return this.stageLane; }
+  @Override public void setStageLane( String value ) { this.stageLane = value; }
+
+  @Override public String getStagePhase() { return this.stagePhase; }
+  @Override public void setStagePhase( String value ) { this.stagePhase = value; }
   //endregion
 }

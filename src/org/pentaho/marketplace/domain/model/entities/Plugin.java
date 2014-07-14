@@ -12,11 +12,11 @@ public class Plugin implements IPlugin {
   private String name;
   private String img;
   private String smallImg;
-  private String learnMoreUrl;
+  private String documentationUrl;
   private String description;
-  private String company;
-  private String companyUrl;
-  private String companyLogo;
+  private String authorName;
+  private String authorUrl;
+  private String authorLogo;
   private String installedBranch;
   private String installedVersion;
   private String installedBuildId;
@@ -26,6 +26,8 @@ public class Plugin implements IPlugin {
   private String[] screenshots;
   private String dependencies;
   private String license;
+  private String licenseName;
+  private String licenseText;
   //endregion
 
   //region IPlugin implementation
@@ -70,13 +72,13 @@ public class Plugin implements IPlugin {
   }
 
   @Override
-  public String getLearnMoreUrl() {
-    return this.learnMoreUrl;
+  public String getDocumentationUrl() {
+    return this.documentationUrl;
   }
 
   @Override
-  public void setLearnMoreUrl( String value ) {
-    this.learnMoreUrl = value;
+  public void setDocumentationUrl( String value ) {
+    this.documentationUrl = value;
   }
 
   @Override
@@ -90,33 +92,33 @@ public class Plugin implements IPlugin {
   }
 
   @Override
-  public String getCompany() {
-    return this.company;
+  public String getAuthorName() {
+    return this.authorName;
   }
 
   @Override
-  public void setCompany( String value ) {
-    this.company = value;
+  public void setAuthorName( String value ) {
+    this.authorName = value;
   }
 
   @Override
-  public String getCompanyUrl() {
-    return this.companyUrl;
+  public String getAuthorUrl() {
+    return this.authorUrl;
   }
 
   @Override
-  public void setCompanyUrl( String value ) {
-    this.companyUrl = value;
+  public void setAuthorUrl( String value ) {
+    this.authorUrl = value;
   }
 
   @Override
-  public String getCompanyLogo() {
-    return this.companyLogo;
+  public String getAuthorLogo() {
+    return this.authorLogo;
   }
 
   @Override
-  public void setCompanyLogo( String value ) {
-    this.companyLogo = value;
+  public void setAuthorLogo( String value ) {
+    this.authorLogo = value;
   }
 
   @Override
@@ -208,6 +210,12 @@ public class Plugin implements IPlugin {
   public void setLicense( String value ) {
     this.license = value;
   }
+
+  @Override public String getLicenseName() { return this.licenseName; }
+  @Override public void setLicenseName( String value ) { this.licenseName = value; }
+
+  @Override public String getLicenseText() { return this.licenseText; }
+  @Override public void setLicenseText( String value ) { this.licenseText = value; }
 
   @Override
   public IPluginVersion getVersionByBranch( String branch ) {

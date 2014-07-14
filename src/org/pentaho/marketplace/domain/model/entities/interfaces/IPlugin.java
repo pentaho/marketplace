@@ -26,30 +26,26 @@ public interface IPlugin {
 
   void setSmallImg( String value );
 
-  //learnModeUrl
-  String getLearnMoreUrl();
-
-  void setLearnMoreUrl( String value );
+  //documentationUrl
+  String getDocumentationUrl();
+  void setDocumentationUrl( String value );
 
   //description
   String getDescription();
 
   void setDescription( String value );
 
-  //company
-  String getCompany();
+  //author
+  String getAuthorName();
+  void setAuthorName( String value );
 
-  void setCompany( String value );
+  //AuthorUrl
+  String getAuthorUrl();
+  void setAuthorUrl( String value );
 
-  //companyUrl
-  String getCompanyUrl();
-
-  void setCompanyUrl( String value );
-
-  //companyLogo
-  String getCompanyLogo();
-
-  void setCompanyLogo( String value );
+  //AuthorLogo
+  String getAuthorLogo();
+  void setAuthorLogo( String value );
 
   //installedBranch
   String getInstalledBranch();
@@ -95,6 +91,17 @@ public interface IPlugin {
   String getLicense();
 
   void setLicense( String value );
+
+  //license_name
+  String getLicenseName();
+  void setLicenseName( String value );
+
+  //licence_text
+  String getLicenseText();
+  void setLicenseText( String value );
+
+
+
 
   //endregion
 

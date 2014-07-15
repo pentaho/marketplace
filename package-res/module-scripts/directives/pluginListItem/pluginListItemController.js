@@ -22,11 +22,15 @@ app.controller('PluginListItemController',
         var installationStatus = plugin.getInstallationStatus();
         switch ( installationStatus ) {
           case Plugin.InstallationStatusEnum.notInstalled:
+            var versionToInstall = plugin.versions[0];
             // TODO i18n
             installButton.text = "Install";
             installButton.cssClass = "install";
             installButton.disabled = false;
-            installButton.onClick = function () { appService.installPlugin( plugin.id, plugin.versions[0].branch ) } ;
+            installButton.onClick = function () { appService.installPlugin( plugin.id, versionToInstall.branch ) } ;
+            // TODO i18n
+            versionToInstall.statusMessage= "Available:"
+            $scope.inContextPluginVersion = versionToInstall;
             break;
           case Plugin.InstallationStatusEnum.updateAvailable:
             // TODO i18n
@@ -34,6 +38,9 @@ app.controller('PluginListItemController',
             installButton.cssClass = "updateAvailable";
             installButton.disabled = false;
             installButton.onClick = function () { appService.installPlugin( plugin.id, plugin.getVersionToUpdate().branch ) } ;
+            // TODO i18n
+            plugin.installedVersion.statusMessage= "Installed:"
+            $scope.inContextPluginVersion = plugin.installedVersion;
             break;
           case Plugin.InstallationStatusEnum.upToDate:
           default:
@@ -42,6 +49,9 @@ app.controller('PluginListItemController',
             installButton.cssClass = "upToDate";
             installButton.disabled = true;
             installButton.onClick = function () {} ; // No operation
+            // TODO i18n
+            plugin.installedVersion.statusMessage= "Installed:"
+            $scope.inContextPluginVersion = plugin.installedVersion;
         }
 
         $scope.installButton = installButton;

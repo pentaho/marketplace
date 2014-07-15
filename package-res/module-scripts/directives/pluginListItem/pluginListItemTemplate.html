@@ -1,12 +1,24 @@
-<div>
-  <div>{{plugin.name}}</div>
-  <div>{{plugin.author.name}}</div>
-  <img ng-src="{{stageImageUrl}}">
+<div class="pluginListItem">
+  <div>
+    <div class="pluginName">{{plugin.name}}</div>
+    <div class="pluginAuthor">{{plugin.author.name}}</div>
+    <img ng-src="{{stageImageUrl}}">
+  </div>
 
-  <button data-ng-disabled="installButton.disabled"
-          data-ng-click="installButton.onClick()">
-    <span>{{installButton.text}}</span>
-    <span name="image" data-ng-class="installButton.cssClass"></span>
-  </button>
-  <!-- TODO add status + install/update button -->
+  <div>
+    <div>
+      <div>{{inContextPluginVersion.statusMessage}}</div>
+      <span>{{inContextPluginVersion.version}}</span>
+      <span data-ng-show="inContextPluginVersion.branch">({{inContextPluginVersion.branch}})</span>
+    </div>
+
+    <button data-ng-disabled="installButton.disabled"
+        data-ng-click="installButton.onClick()"
+        data-stop-event="click">
+      <span>{{installButton.text}}</span>
+      <span class="icon" data-ng-class="installButton.cssClass" ></span>
+    </button>
+  </div>
+
+
 </div>

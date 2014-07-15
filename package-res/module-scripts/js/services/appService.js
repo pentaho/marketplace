@@ -14,11 +14,13 @@
 'use strict';
 
 app.factory('appService',
-    [ '$resource', 'dtoMapperService',
-    function( $resource, dtoMapper ) {
+    [ '$http', 'dtoMapperService',
+    function( $http, dtoMapper ) {
 
+        var baseUrl = '/pentaho/plugin/marketplace/api'
+        var pluginsUrl =  baseUrl + '/plugins';
+        var installPluginBaseUrl = baseUrl + '/plugin';
         var pluginsPromise = null;
-        var pluginsResource = $resource('/pentaho/plugin/marketplace/api/plugins');
 
         return {
             refreshPluginsFromServer: function() {
@@ -28,9 +30,9 @@ app.factory('appService',
 
             getPlugins: function() {
                 if ( pluginsPromise == null ) {
-                    pluginsPromise = pluginsResource.get().$promise.then(
-                        function (data) {
-                            return _.map( data.plugins, dtoMapper.toPlugin );
+                    pluginsPromise = $http.get( pluginsUrl ).then(
+                        function ( response ) {
+                            return _.map( response.data.plugins, dtoMapper.toPlugin );
                         });
                 }
 
@@ -45,16 +47,24 @@ app.factory('appService',
                 );
             },
 
-          /*
-            installPluginFromVersion: function ( pluginVersion ) {
-              installPlugin( pluginVersion.)
-
-            },
-          */
-
             installPlugin: function ( pluginId, versionBranch ) {
-              // TODO
-              alert( "Tried to install plugin Id: " + pluginId + " branch: " + versionBranch );
+              return $http.post( installPluginBaseUrl + '/' + pluginId + '/' + versionBranch)
+                  .then( function ( response ) {
+                            alert("Install OK. plugin Id: " + pluginId + " branch: " + versionBranch)
+                         },
+                         function ( response ) {
+                           alert("Install NOT OK. plugin Id: " + pluginId + " branch: " + versionBranch)
+                         });
+            },
+
+            uninstallPlugin: function ( pluginId ) {
+              return $http.delete( installPluginBaseUrl + '/' + pluginId )
+                  .then( function ( response ) {
+                    alert("Uninstall OK. plugin Id: " + pluginId )
+                  },
+                  function ( response ) {
+                    alert("Uninstall NOT OK. plugin Id: " + pluginId )
+                  });
             }
         }
     }

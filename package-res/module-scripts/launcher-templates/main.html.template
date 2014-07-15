@@ -34,6 +34,8 @@
         <script src="directives/pluginDetail/pluginDetailDirective.js"></script>
         <script src="directives/pluginDetail/PluginDetailController.js"></script>
 
+        <script src="directives/stopEvent/stopEventDirective.js"></script>
+
     </head>
 
     <body >

@@ -26,12 +26,14 @@
 
 'use strict';
 
-app.factory('dtoMapperService',
-    [
-      function() {
 
-        function Plugin() {};
-        function PluginVersion () {};
+app.factory('dtoMapperService',
+    [ 'Plugin',
+      function( Plugin ) {
+
+        function PluginVersion () {
+
+        };
 
         function toPlugin( pluginDTO ) {
           // region TEMPORARY array transformation due to bug in server side serialization of single element collections
@@ -48,21 +50,21 @@ app.factory('dtoMapperService',
           // TODO check this property with XSD
           plugin.documentationUrl = pluginDTO.documentationUrl;
 
-          // TODO description i8ln
+          // TODO description i18n
           plugin.description = pluginDTO.description;
 
           plugin.author = {};
-          plugin.author.name = pluginDTO.author;
-          plugin.author.siteUrl = pluginDTO.author_url;
-          plugin.author.logoUrl = pluginDTO.author_logo;
+          plugin.author.name = pluginDTO.authorName;
+          plugin.author.siteUrl = pluginDTO.authorUrl;
+          plugin.author.logoUrl = pluginDTO.authorLogo;
 
           // TODO change to function that checks for installed version info?
           plugin.isInstalled = (pluginDTO.installed.toUpperCase() === 'TRUE');
 
-          plugin.installedVersionInfo = {};
-          plugin.installedVersionInfo.branch = pluginDTO.installedBranch;
-          plugin.installedVersionInfo.version = pluginDTO.installedVersion;
-          plugin.installedVersionInfo.buildId = pluginDTO.installedBuildId;
+          plugin.installedVersion = new PluginVersion();
+          plugin.installedVersion.branch = pluginDTO.installedBranch;
+          plugin.installedVersion.version = pluginDTO.installedVersion;
+          plugin.installedVersion.buildId = pluginDTO.installedBuildId;
 
           plugin.installationNotes = pluginDTO.installationNotes;
 
@@ -80,8 +82,6 @@ app.factory('dtoMapperService',
             plugin.license.name = pluginDTO.license;
           }
           plugin.license.text = pluginDTO.license_text;
-
-
 
           plugin.versions = _.map( pluginDTO.versions, toVersion );
           return plugin;

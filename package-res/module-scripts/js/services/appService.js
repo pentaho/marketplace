@@ -43,6 +43,18 @@ app.factory('appService',
                         return _.find( plugins, function ( plugin ) { return plugin.id === pluginId; } );
                     }
                 );
+            },
+
+          /*
+            installPluginFromVersion: function ( pluginVersion ) {
+              installPlugin( pluginVersion.)
+
+            },
+          */
+
+            installPlugin: function ( pluginId, versionBranch ) {
+              // TODO
+              alert( "Tried to install plugin Id: " + pluginId + " branch: " + versionBranch );
             }
         }
     }

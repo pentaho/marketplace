@@ -14,17 +14,37 @@
 'use strict';
 
 app.controller('PluginListItemController',
-    ['$scope',
-      function ( $scope ) {
+    ['$scope', 'appService', 'Plugin',
+      function ( $scope , appService, Plugin ) {
+        var installButton = {};
 
-        //gets plugins from directive
+        var plugin = $scope.plugin;
+        var installationStatus = plugin.getInstallationStatus();
+        switch ( installationStatus ) {
+          case Plugin.InstallationStatusEnum.notInstalled:
+            // TODO i18n
+            installButton.text = "Install";
+            installButton.cssClass = "install";
+            installButton.disabled = false;
+            installButton.onClick = function () { appService.installPlugin( plugin.id, plugin.versions[0].branch ) } ;
+            break;
+          case Plugin.InstallationStatusEnum.updateAvailable:
+            // TODO i18n
+            installButton.text = "Update";
+            installButton.cssClass = "updateAvailable";
+            installButton.disabled = false;
+            installButton.onClick = function () { appService.installPlugin( plugin.id, plugin.getVersionToUpdate().branch ) } ;
+            break;
+          case Plugin.InstallationStatusEnum.upToDate:
+          default:
+            // TODO i18n
+            installButton.text = "Up to Date";
+            installButton.cssClass = "upToDate";
+            installButton.disabled = true;
+            installButton.onClick = function () {} ; // No operation
+        }
 
-        /*
-         $scope.viewPluginDetail = function ( pluginId ) {
-         //Have navigation controller handle the navigation
-         navigationService.getPluginRoute( pluginId );
-         }
-         */
+        $scope.installButton = installButton;
 
       }
     ]);

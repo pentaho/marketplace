@@ -1,7 +1,12 @@
 <div>
   <div>{{plugin.name}}</div>
-  <div>{{plugin.author}}</div>
+  <div>{{plugin.author.name}}</div>
   <img ng-src="{{stageImageUrl}}">
 
+  <button data-ng-disabled="installButton.disabled"
+          data-ng-click="installButton.onClick()">
+    <span>{{installButton.text}}</span>
+    <span name="image" data-ng-class="installButton.cssClass"></span>
+  </button>
   <!-- TODO add status + install/update button -->
 </div>

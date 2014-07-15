@@ -22,6 +22,8 @@
         <script src="js/controllers/appController.js"></script>
         <script src="js/controllers/PluginListController.js"></script>
 
+        <script src="js/models/plugin.js"></script>
+
         <script src="js/services/appService.js"></script>
         <script src="directives/pluginList/pluginListDirective.js"></script>
         <script src="directives/pluginList/pluginListController.js"></script>

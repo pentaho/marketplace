@@ -14,16 +14,9 @@
 'use strict';
 
 app.controller( 'PluginDetailController',
-    ['$scope', '$routeParams', 'appService',
-      function ( $scope, $routeParams, appService ) {
+    ['$scope',
+      function ( $scope ) {
 
-        var pluginId = $routeParams.pluginId;
 
-        //get all plugins
-        appService.getPlugin( pluginId ).then (
-            function ( plugin ) {
-              $scope.plugin = plugin;
-            }
-        );
       }
     ]);

@@ -14,8 +14,8 @@
 'use strict';
 
 app.controller('PluginListController',
-    ['$scope', 'appService', 'navigationService',
-      function ( $scope, appService, navigationService ) {
+    ['$scope', 'appService', '$modal',
+      function ( $scope, appService, $modal ) {
 
         /**
          * Checks if a plugin passes all the conditions set in the view
@@ -48,7 +48,19 @@ app.controller('PluginListController',
 
 
         $scope.pluginWasClicked = function ( plugin ) {
-          alert( "appController: Plugin " + plugin.name + " was clicked.");
+          var modalScope = $scope.$new( true ); // create new isolate scope
+          modalScope.plugin = plugin;
+          var pluginDetailModal = $modal.open( {
+            templateUrl: 'directives/pluginDetail/pluginDetailTemplate.html',
+            controller: 'PluginDetailController',
+            scope: modalScope
+          });
+
+          // clean up created modal scope
+          pluginDetailModal.result.then(
+              function() { modalScope.$destroy(); },
+              function() { modalScope.$destroy(); }
+          );
         };
 
 

@@ -13,7 +13,7 @@
 
 'use strict';
 
-var app = angular.module('marketplace', ['ngResource', 'ngRoute']);
+var app = angular.module('marketplace', ['ngResource', 'ngRoute', 'ui.bootstrap']);
 
 app.config(['$routeProvider', function( $routeProvider ) {
 

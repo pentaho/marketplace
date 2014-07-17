@@ -14,8 +14,11 @@
 'use strict';
 
 define(
-    [ 'marketplace' ],
-    function ( app ) {
+    [
+      'marketplace',
+      'common-ui/underscore'
+    ],
+    function ( app, _ ) {
       console.log("Required services/appService.js");
 
       app.factory('appService',

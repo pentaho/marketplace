@@ -13,8 +13,12 @@
 
 'use strict';
 
-define( [ 'marketplace' ],
-    function ( app ) {
+define(
+    [
+      'marketplace',
+      'common-ui/underscore'
+    ],
+    function ( app, _ ) {
 
       console.log("Required controllers/PluginListController.js");
 

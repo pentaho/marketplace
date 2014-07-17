@@ -11,8 +11,12 @@
  * the license for the specific language governing your rights and limitations.
  */
 
-define( [ 'marketplace' ],
-    function ( app ) {
+define(
+    [
+      'marketplace',
+      'common-ui/underscore'
+    ],
+    function ( app, _ ) {
 
       console.log("Required models/plugin.js");
 

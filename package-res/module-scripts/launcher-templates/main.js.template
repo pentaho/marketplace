@@ -31,8 +31,6 @@ requirejs(
     ] ,
 
     function( angular, app) {
-      //var $html = angular.element(document.getElementsByTagName('html')[0]);
-
       angular.bootstrap( document, [ 'marketplace' ]);
     }
 );

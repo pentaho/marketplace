@@ -13,84 +13,94 @@
 
 'use strict';
 
-app.controller('PluginListController',
-    ['$scope', 'appService', '$modal',
-      function ( $scope, appService, $modal ) {
+define( [ 'marketplace' ],
+    function ( app ) {
 
-        /**
-         * Checks if a plugin passes all the conditions set in the view
-         * @param {Plugin} plugin
-         * @returns {Boolean} True if the plugin passes the filter
-         */
-        function pluginFilter ( plugin ) {
-          if ( $scope.showOnlyInstalled ) {
-            return plugin.isInstalled;
-          }
-          return true;
-        };
+      console.log("Required controllers/PluginListController.js");
 
-        function applyPluginFilter() {
-          appService.getPlugins().then( filterAndSetPlugins );
-        };
+      app.controller('PluginListController',
+          ['$scope', 'appService', '$modal',
+            function ( $scope, appService, $modal ) {
 
-        function filterAndSetPlugins ( plugins ) {
-          $scope.filteredPlugins = _.filter( plugins, pluginFilter );
-        }
+              /**
+               * Checks if a plugin passes all the conditions set in the view
+               * @param {Plugin} plugin
+               * @returns {Boolean} True if the plugin passes the filter
+               */
+              function pluginFilter ( plugin ) {
+                if ( $scope.showOnlyInstalled ) {
+                  return plugin.isInstalled;
+                }
+                return true;
+              };
 
-        /**
-         * Refreshes the plugin list from the server
-         */
-        $scope.refreshPluginsFromServer = function() {
-          $scope.filteredPlugins = null;
-          appService.refreshPluginsFromServer().then( filterAndSetPlugins );
-        };
+              function applyPluginFilter() {
+                appService.getPlugins().then( filterAndSetPlugins );
+              };
 
+              function filterAndSetPlugins ( plugins ) {
+                $scope.filteredPlugins = _.filter( plugins, pluginFilter );
+              }
 
-
-        $scope.pluginWasClicked = function ( plugin ) {
-          var modalScope = $scope.$new( true ); // create new isolate scope
-          modalScope.plugin = plugin;
-          var pluginDetailModal = $modal.open( {
-            templateUrl: 'directives/pluginDetail/pluginDetailTemplate.html',
-            controller: 'PluginDetailController',
-            scope: modalScope
-          });
-
-          // clean up created modal scope
-          pluginDetailModal.result.then(
-              function() { modalScope.$destroy(); },
-              function() { modalScope.$destroy(); }
-          );
-        };
+              /**
+               * Refreshes the plugin list from the server
+               */
+              $scope.refreshPluginsFromServer = function() {
+                $scope.filteredPlugins = null;
+                appService.refreshPluginsFromServer().then( filterAndSetPlugins );
+              };
 
 
 
+              $scope.pluginWasClicked = function ( plugin ) {
+                var modalScope = $scope.$new( true ); // create new isolate scope
+                modalScope.plugin = plugin;
+                var pluginDetailModal = $modal.open( {
+                  templateUrl: 'directives/pluginDetail/pluginDetailTemplate.html',
+                  controller: 'PluginDetailController',
+                  scope: modalScope
+                });
+
+                // clean up created modal scope
+                pluginDetailModal.result.then(
+                    function() { modalScope.$destroy(); },
+                    function() { modalScope.$destroy(); }
+                );
+              };
 
 
 
 
-        // todo get from service
-        $scope.pluginTypes = [
-          { name: 'Analysis', group: 'Apps'},
-          { name: 'Dashboards', group: 'Apps'},
-          { name: 'Reporting', group: 'Apps'},
-          { name: 'Lifecycle', group: 'Apps'},
-          { name: 'Admin', group: 'Apps'},
-          { name: 'Visualizations' },
-          { name: 'Themes'},
-          { name: 'Language Packs'}
-
-        ]
-
-        // initialize plugins
-        appService.getPlugins().then( filterAndSetPlugins );
-
-        // region Filters
-        $scope.showOnlyInstalled = false;
-        $scope.$watch( "showOnlyInstalled", applyPluginFilter );
-
-        // endregion
 
 
-      }
-    ]);
+
+              // todo get from service
+              $scope.pluginTypes = [
+                { name: 'Analysis', group: 'Apps'},
+                { name: 'Dashboards', group: 'Apps'},
+                { name: 'Reporting', group: 'Apps'},
+                { name: 'Lifecycle', group: 'Apps'},
+                { name: 'Admin', group: 'Apps'},
+                { name: 'Visualizations' },
+                { name: 'Themes'},
+                { name: 'Language Packs'}
+
+              ]
+
+              // initialize plugins
+              appService.getPlugins().then( filterAndSetPlugins );
+
+              // region Filters
+              $scope.showOnlyInstalled = false;
+              $scope.$watch( "showOnlyInstalled", applyPluginFilter );
+
+              // endregion
+
+
+            }
+          ]);
+
+
+    }
+);
+

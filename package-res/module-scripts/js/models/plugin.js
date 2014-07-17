@@ -11,57 +11,64 @@
  * the license for the specific language governing your rights and limitations.
  */
 
-app.factory('Plugin',
-    [
-      function () {
+define( [ 'marketplace' ],
+    function ( app ) {
 
-        function Plugin() {
+      console.log("Required models/plugin.js");
 
-        };
+      app.factory('Plugin',
+          [
+            function () {
 
-        Plugin.InstallationStatusEnum = {
-          notInstalled: "NOT_INSTALLED",
-          upToDate: "UP_TO_DATE",
-          updateAvailable: "UPDATE_AVAILABLE"
-        };
+              function Plugin() {
 
-        Plugin.prototype = {
-          getInstallationStatus: function () {
-            if (!this.isInstalled) {
-              return Plugin.InstallationStatusEnum.notInstalled;
-            }
+              };
 
-            // installed, up to date
-            if (this.isUpToDate()) {
-              return Plugin.InstallationStatusEnum.upToDate;
-            }
+              Plugin.InstallationStatusEnum = {
+                notInstalled: "NOT_INSTALLED",
+                upToDate: "UP_TO_DATE",
+                updateAvailable: "UPDATE_AVAILABLE"
+              };
 
-            // installed, update available
-            return Plugin.InstallationStatusEnum.updateAvailable;
-          },
+              Plugin.prototype = {
+                getInstallationStatus: function () {
+                  if (!this.isInstalled) {
+                    return Plugin.InstallationStatusEnum.notInstalled;
+                  }
 
-          isUpToDate: function () {
-            if (!this.isInstalled) {
-              return false;
-            }
+                  // installed, up to date
+                  if (this.isUpToDate()) {
+                    return Plugin.InstallationStatusEnum.upToDate;
+                  }
 
-            return this.getVersionToUpdate() === undefined;
-          },
-
-          getVersionToUpdate: function () {
-            return _.find(
-                this.versions,
-                function (version) {
-                  // can only compare to other versions with the same installed version branch
-                  this.installedVersion.branch === version.branch &&
-                  ( this.installedVersion.version !== version.version ||
-                      this.installedVersion.buildId != version.buildId )
+                  // installed, update available
+                  return Plugin.InstallationStatusEnum.updateAvailable;
                 },
-                this);
-          }
-        }
 
-        return Plugin;
-      }
+                isUpToDate: function () {
+                  if (!this.isInstalled) {
+                    return false;
+                  }
 
-    ]);
+                  return this.getVersionToUpdate() === undefined;
+                },
+
+                getVersionToUpdate: function () {
+                  return _.find(
+                      this.versions,
+                      function (version) {
+                        // can only compare to other versions with the same installed version branch
+                        this.installedVersion.branch === version.branch &&
+                        ( this.installedVersion.version !== version.version ||
+                            this.installedVersion.buildId != version.buildId )
+                      },
+                      this);
+                }
+              }
+
+              return Plugin;
+            }
+
+          ]);
+    }
+);

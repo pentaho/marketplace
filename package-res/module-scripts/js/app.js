@@ -13,47 +13,66 @@
 
 'use strict';
 
-var app = angular.module('marketplace', ['ngResource', 'ngRoute', 'ui.bootstrap']);
+define( [ 'common-ui/angular',
+          'common-ui/angular-route',
+          'common-ui/angular-ui-bootstrap' ],
 
-app.config(['$routeProvider', function( $routeProvider ) {
+    function ( angular, angularRoute, uiBootstrap ) {
 
-  $routeProvider.when('/',
-      {
-        templateUrl: 'partials/plugin-list.html',
-        controller: 'PluginListController'
-      });
+      console.log("Required app.js ");
 
-  /*
-  $routeProvider.when('/',
-  {
-      controller: 'appController'
-  });
+      // define application module
+      var app = angular.module( 'marketplace', [ 'ngRoute', 'ui.bootstrap'] );
 
-  $routeProvider.when('/plugins',
-      {
-          templateUrl: 'partials/plugin-list.html',
-          controller: 'appController'
-      });
+      app.config(['$routeProvider', function( $routeProvider ) {
 
-  $routeProvider.when('/plugin/:pluginId',
-      {
-          templateUrl: 'partials/plugin-detail.html',
-          controller: 'appController'
-      });
-*/
-    $routeProvider.otherwise(
-        {
-            redirectTo: '/'
-        });
-/*
-    $routeProvider.when("/", {
-        templateUrl: "partials/testView.html",
-        controller: "TestController"
-    });*/
-}]);
+        $routeProvider.when('/',
+            {
+              templateUrl: 'partials/plugin-list.html',
+              controller: 'PluginListController'
+            });
 
-//enable CORS in Angular http requests
-/*app.config(['$httpProvider', function($httpProvider) {
- $httpProvider.defaults.useXDomain = true;
- delete $httpProvider.defaults.headers.common['X-Requested-With'];
- }]);*/
+        /*
+         $routeProvider.when('/',
+         {
+         controller: 'appController'
+         });
+
+         $routeProvider.when('/plugins',
+         {
+         templateUrl: 'partials/plugin-list.html',
+         controller: 'appController'
+         });
+
+         $routeProvider.when('/plugin/:pluginId',
+         {
+         templateUrl: 'partials/plugin-detail.html',
+         controller: 'appController'
+         });
+         */
+
+
+        $routeProvider.otherwise(
+            {
+              redirectTo: '/'
+            });
+
+        /*
+         $routeProvider.when("/", {
+         templateUrl: "partials/testView.html",
+         controller: "TestController"
+         });
+         */
+
+      }]);
+
+      //enable CORS in Angular http requests
+      /*app.config(['$httpProvider', function($httpProvider) {
+       $httpProvider.defaults.useXDomain = true;
+       delete $httpProvider.defaults.headers.common['X-Requested-With'];
+       }]);*/
+
+      return app;
+    }
+);
+

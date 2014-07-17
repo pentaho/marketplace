@@ -13,18 +13,27 @@
 
 'use strict';
 
-app.controller('pluginListController',
-    ['$scope', 'appService', 'navigationService',
-      function ($scope, appService, navigationService) {
+define( [ 'marketplace' ],
+    function ( app ) {
 
-      //gets plugins from directive
+      console.log("Required pluginList/pluginListController.js");
 
-        /*
-        $scope.viewPluginDetail = function ( pluginId ) {
-          //Have navigation controller handle the navigation
-          navigationService.getPluginRoute( pluginId );
-        }
-        */
+      app.controller('pluginListController',
+          ['$scope', 'appService',
+            function ($scope, appService ) {
 
-      }
-    ]);
+              //gets plugins from directive
+
+              /*
+               $scope.viewPluginDetail = function ( pluginId ) {
+               //Have navigation controller handle the navigation
+               navigationService.getPluginRoute( pluginId );
+               }
+               */
+
+            }
+          ]);
+
+
+    }
+);

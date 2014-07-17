@@ -1,8 +1,39 @@
+/*
 requirejs.config({
 	baseUrl: './@js.source.dir@',
 	paths: {
 		jquery: '../@js.common-ui.dirpath.prefix@/@js.library.jquery@'
 	}
 });
+*/
 
-requirejs(["@js.module.script.app.name@"]);
+requirejs(
+    [
+      'common-ui/angular',
+      './@js.source.dir@/@js.module.script.app.name@',
+
+      './@js.source.dir@/controllers/PluginListController',
+      './@js.source.dir@/models/plugin',
+      './@js.source.dir@/services/appService',
+      './@js.source.dir@/services/dtoMapperService',
+
+
+      './directives/pluginDetail/pluginDetailController',
+      './directives/pluginDetail/pluginDetailDirective',
+      './directives/pluginList/pluginListController',
+      './directives/pluginList/pluginListDirective',
+      './directives/pluginListItem/PluginListItemController',
+      './directives/pluginListItem/PluginListItemDirective',
+      './directives/stopEvent/stopEventDirective',
+
+      'common-ui/underscore'
+
+    ] ,
+
+    function( angular, app) {
+      //var $html = angular.element(document.getElementsByTagName('html')[0]);
+
+      angular.bootstrap( document, [ 'marketplace' ]);
+    }
+);
+

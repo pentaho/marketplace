@@ -13,15 +13,19 @@
 
 'use strict';
 
-app.directive('pluginList',
-    function() {
-        return {
-            restrict: 'A', // 'A' must be used for IE8 compatibility
-            replace: true, //replaces the custom directive element with the corresponding expanded HTML, to be HTML-compliant.
-            templateUrl: 'directives/pluginList/pluginListTemplate.html',
-            controller: 'pluginListController',
-            //isolate scope
-            scope: {
+define( [ 'marketplace' ],
+    function ( app ) {
+      console.log("Required pluginList/pluginListDirective.js");
+
+      app.directive('pluginList',
+          function() {
+            return {
+              restrict: 'A', // 'A' must be used for IE8 compatibility
+              replace: true, //replaces the custom directive element with the corresponding expanded HTML, to be HTML-compliant.
+              templateUrl: 'directives/pluginList/pluginListTemplate.html',
+              //controller: 'pluginListController',
+              //isolate scope
+              scope: {
                 plugins: "=",
                 onPluginClicked: "=",
                 //pluginFilter: "="
@@ -34,7 +38,9 @@ app.directive('pluginList',
                 //'=' evaluates in the isolate scope
                 //getPluginRoute: "="
                 //onClick: "="
-            }
-        };
+              }
+            };
+          }
+      );
     }
 );

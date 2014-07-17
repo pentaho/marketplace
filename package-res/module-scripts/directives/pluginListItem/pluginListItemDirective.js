@@ -13,20 +13,27 @@
 
 'use strict';
 
-app.directive('pluginListItem',
-    function() {
-      return {
-        restrict: 'A', // 'A' must be used for IE8 compatibility
-        replace: true, //replaces the custom directive element with the corresponding expanded HTML, to be HTML-compliant.
-        templateUrl: 'directives/pluginListItem/pluginListItemTemplate.html',
-        controller: 'PluginListItemController',
-        //isolate scope
-        scope: {
-          //'&' evaluates in the parent scope
-          //'@' evaluates as a string
-          //'=' evaluates in the isolate scope
-          plugin: "="
-        }
-      };
+define( [ 'marketplace' ],
+    function ( app ) {
+      console.log("Required pluginListItem/pluginListItemDirective.js");
+
+      app.directive('pluginListItem',
+          function() {
+            return {
+              restrict: 'A', // 'A' must be used for IE8 compatibility
+              replace: true, //replaces the custom directive element with the corresponding expanded HTML, to be HTML-compliant.
+              templateUrl: 'directives/pluginListItem/pluginListItemTemplate.html',
+              controller: 'PluginListItemController',
+              //isolate scope
+              scope: {
+                //'&' evaluates in the parent scope
+                //'@' evaluates as a string
+                //'=' evaluates in the isolate scope
+                plugin: "="
+              }
+            };
+          }
+      );
+
     }
 );

@@ -11,20 +11,4 @@
  * the license for the specific language governing your rights and limitations.
  */
 
-'use strict';
-
-
-define( [ 'marketplace' ],
-    function ( app ) {
-
-      console.log("Required pluginDetail/pluginDetailController.js");
-
-      app.controller( 'PluginDetailController',
-          ['$scope',
-            function ( $scope ) {
-
-
-            }
-          ]);
-    }
-);
+requireCfg['paths']['marketplace'] = CONTEXT_PATH + 'content/marketplace/marketplace/js/app';

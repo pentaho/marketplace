@@ -5,6 +5,9 @@
 
         <!-- this is important, it provides theming and the base url -->
         <script type="text/javascript" src="webcontext.js?context=marketplace"></script>
+<!--
+      <link rel="stylesheet" href="css/marketplace.css">
+-->
 
 <!--
         <script src="../../common-ui/resources/web/angular/angular.js"></script>
@@ -46,9 +49,10 @@
 
     </head>
 
-    <body >
-        <h1>Marketplace</h1>
+    <body class="bootstrap admin-perspective" >
+        <div class="pentaho-fieldgroup-major">Marketplace</div>
         <div data-ng-view></div>
+
     </body>
     <script src="main.js"></script>
 

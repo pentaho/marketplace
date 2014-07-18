@@ -1,15 +1,37 @@
-<div>
-    <!-- TODO: add tabs, filters, list/card view, refresh -->
-  <button data-ng-click="refreshPluginsFromServer()">Refresh</button>
-  <div name="filterBar">
-    <!-- TODO a directive or similar for filtering. Select does not allow nesting options. -->
-    <select data-ng-options="type.name group by type.group for type in pluginTypes">    </select>
-    <a data-ng-href="https://www.google.com/?#q=what+are+stages">What are stages?</a>
+<div >
+
+  <div class="pentaho-tab-bar">
+
+    <div class="pentaho-tabWidget"
+         data-ng-click="selectTab( 'availableTab' )"
+         data-ng-class="{ 'pentaho-tabWidget-selected': isTabSelected(  'availableTab'  ) }" >
+      <div class="pentaho-tabWidgetLab"> Available </div>
+    </div>
+
+    <div class="pentaho-tabWidget"
+         data-ng-click="selectTab(  'installedTab' )"
+         data-ng-class="{ 'pentaho-tabWidget-selected': isTabSelected(  'installedTab' ) }" >
+      <div class="pentaho-tabWidgetLabel"> Installed </div>
+    </div>
+
+    <button class="pull-right" data-ng-click="refreshPluginsFromServer()">Refresh</button>
 
   </div>
 
-  Installed: <input type="checkbox" data-ng-model="showOnlyInstalled">
-  <div plugin-list plugins="filteredPlugins" on-plugin-clicked="pluginWasClicked" />
 
-  <div>INFO BAR HERE</div>
+    <div class="pentaho-tab-deck-panel">
+
+      <!-- TODO: add tabs, filters, list/card view, refresh -->
+      <div name="filterBar">
+        <!-- TODO a directive or similar for filtering. Select does not allow nesting options. -->
+        <select data-ng-options="type.name group by type.group for type in pluginTypes">    </select>
+        <a data-ng-href="https://www.google.com/?#q=what+are+stages">What are stages?</a>
+      </div>
+
+      <div plugin-list plugins="filteredPlugins" on-plugin-clicked="pluginWasClicked" />
+
+      <div>INFO BAR HERE</div>
+
+    </div>
+
 </div>

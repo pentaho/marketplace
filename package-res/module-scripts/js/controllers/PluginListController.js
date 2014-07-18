@@ -26,13 +26,16 @@ define(
           ['$scope', 'appService', '$modal',
             function ( $scope, appService, $modal ) {
 
+              var installedTab = 'installedTab';
+              var availableTab = 'availableTab';
+
               /**
                * Checks if a plugin passes all the conditions set in the view
                * @param {Plugin} plugin
                * @returns {Boolean} True if the plugin passes the filter
                */
               function pluginFilter ( plugin ) {
-                if ( $scope.showOnlyInstalled ) {
+                if ( $scope.isTabSelected( installedTab ) ) {
                   return plugin.isInstalled;
                 }
                 return true;
@@ -54,6 +57,13 @@ define(
                 appService.refreshPluginsFromServer().then( filterAndSetPlugins );
               };
 
+              $scope.selectTab = function ( tab ) {
+                $scope.selectedTab = tab;
+              };
+
+              $scope.isTabSelected = function ( tab ) {
+                return $scope.selectedTab == tab;
+              };
 
 
               $scope.pluginWasClicked = function ( plugin ) {
@@ -63,6 +73,7 @@ define(
                   templateUrl: 'directives/pluginDetail/pluginDetailTemplate.html',
                   controller: 'PluginDetailController',
                   scope: modalScope
+                  //windowClass: "pentaho-dialog"
                 });
 
                 // clean up created modal scope
@@ -71,10 +82,6 @@ define(
                     function() { modalScope.$destroy(); }
                 );
               };
-
-
-
-
 
 
 
@@ -91,15 +98,13 @@ define(
 
               ]
 
+
+              $scope.$watch( "selectedTab", applyPluginFilter );
+              $scope.selectTab( availableTab );
+
+
               // initialize plugins
               appService.getPlugins().then( filterAndSetPlugins );
-
-              // region Filters
-              $scope.showOnlyInstalled = false;
-              $scope.$watch( "showOnlyInstalled", applyPluginFilter );
-
-              // endregion
-
 
             }
           ]);

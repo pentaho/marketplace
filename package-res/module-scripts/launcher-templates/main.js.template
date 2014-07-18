@@ -24,6 +24,9 @@ requirejs(
       './directives/pluginList/pluginListDirective',
       './directives/pluginListItem/PluginListItemController',
       './directives/pluginListItem/PluginListItemDirective',
+      './directives/devStageIcon/DevStageIconController',
+      './directives/devStageIcon/devStageIconDirective',
+
       './directives/stopEvent/stopEventDirective',
 
       'common-ui/underscore'

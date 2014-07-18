@@ -79,6 +79,12 @@ define(
                 plugin.license.text = pluginDTO.license_text;
 
                 plugin.versions = _.map( pluginDTO.versions, toVersion );
+
+
+                // TODO: fill in development stage from DTO
+                plugin.devStage = {};
+                plugin.devStage.lane = ( Math.random() > 0.5 ) ? "community" : "customer";
+                plugin.devStage.level = Math.floor((Math.random() * 4) + 1);;
                 return plugin;
               };
 

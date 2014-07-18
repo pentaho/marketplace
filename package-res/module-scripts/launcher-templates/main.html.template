@@ -5,9 +5,8 @@
 
         <!-- this is important, it provides theming and the base url -->
         <script type="text/javascript" src="webcontext.js?context=marketplace"></script>
-<!--
-      <link rel="stylesheet" href="css/marketplace.css">
--->
+
+        <link rel="stylesheet" href="css/marketplace.css">
 
 <!--
         <script src="../../common-ui/resources/web/angular/angular.js"></script>

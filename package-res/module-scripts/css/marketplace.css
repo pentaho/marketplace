@@ -1,0 +1,91 @@
+/*
+ * Copyright 2002 - 2014 Webdetails, a Pentaho company.  All rights reserved.
+ *
+ * This software was developed by Webdetails and is provided under the terms
+ * of the Mozilla Public License, Version 2.0, or any later version. You may not use
+ * this file except in compliance with the license. If you need a copy of the license,
+ * please go to  http://mozilla.org/MPL/2.0/. The Initial Developer is Webdetails.
+ *
+ * Software distributed under the Mozilla Public License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or  implied. Please refer to
+ * the license for the specific language governing your rights and limitations.
+ */
+
+
+
+.dev-stage {
+  width: 32px;
+  height: 32px;
+  /* position: absolute; */
+  right: 13px;
+  bottom: 12px;
+  background-color: #FFFFFF;
+  border: none;
+  border-radius: 6px 0px 6px 0px;
+  background-position: center center;
+}
+
+.dev-stage-01 {
+  background-image: url(../img/dev-stage-01.svg);
+}
+.IE.IE8 .dev-stage-01,
+.no-svg .dev-stage-01 {
+  background-image: url(../img/dev-stage-01.png);
+}
+
+.dev-stage-02  {
+  background-image: url(../img/dev-stage-02.svg);
+}
+.IE.IE8 .dev-stage-02,
+.no-svg .dev-stage-02 {
+  background-image: url(../img/dev-stage-02.png);
+}
+
+.dev-stage-03 {
+  background-image: url(../img/dev-stage-03.svg);
+}
+.no-svg .dev-stage-03,
+.IE.IE8 .dev-stage-03 {
+  background-image: url(../img/dev-stage-03.png);
+}
+
+.dev-stage-04 {
+  background-image: url(../img/dev-stage-04.svg);
+}
+.IE.IE8 .dev-stage-04,
+.no-svg .dev-stage-04 {
+  background-image: url(../img/dev-stage-04.png);
+}
+
+
+.dev-stage-community-01 {
+  background-image: url(../img/dev-stage-community-01.svg);
+}
+.IE.IE8 .dev-stage-community-01,
+.no-svg .dev-stage-community-01 {
+  background-image: url(../img/dev-stage-community-01.png);
+}
+
+.dev-stage-community-02  {
+  background-image: url(../img/dev-stage-community-02.svg);
+}
+.IE.IE8 .dev-stage-community-02,
+.no-svg .dev-stage-community-02 {
+  background-image: url(../img/dev-stage-community-02.png);
+}
+
+.dev-stage-community-03 {
+  background-image: url(../img/dev-stage-community-03.svg);
+}
+.IE.IE8 .dev-stage-community-03,
+.no-svg .dev-stage-community-03 {
+  background-image: url(../img/dev-stage-community-03.png);
+}
+
+.dev-stage-community-04 {
+  background-image: url(../img/dev-stage-community-04.svg);
+}
+.IE.IE8 .dev-stage-community-04,
+.no-svg .dev-stage-community-04 {
+  background-image: url(../img/dev-stage-community-04.png);
+}

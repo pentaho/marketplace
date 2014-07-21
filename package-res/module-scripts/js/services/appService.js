@@ -25,7 +25,7 @@ define(
           [ '$http', 'dtoMapperService',
             function( $http, dtoMapper ) {
 
-              var baseUrl = '/pentaho/plugin/marketplace/api'
+              var baseUrl = '/pentaho/plugin/marketplace/api';
               var pluginsUrl =  baseUrl + '/plugins';
               var installPluginBaseUrl = baseUrl + '/plugin';
               var pluginsPromise = null;
@@ -41,7 +41,8 @@ define(
                     pluginsPromise = $http.get( pluginsUrl ).then(
                         function ( response ) {
                           return _.map( response.data.plugins, dtoMapper.toPlugin );
-                        });
+                        }
+                    );
                   }
 
                   return pluginsPromise
@@ -58,22 +59,24 @@ define(
                 installPlugin: function ( pluginId, versionBranch ) {
                   return $http.post( installPluginBaseUrl + '/' + pluginId + '/' + versionBranch)
                       .then( function ( response ) {
-                        alert("Install OK. plugin Id: " + pluginId + " branch: " + versionBranch)
+                        alert("Install OK. plugin Id: " + pluginId + " branch: " + versionBranch);
                       },
                       function ( response ) {
-                        alert("Install NOT OK. plugin Id: " + pluginId + " branch: " + versionBranch)
+                        alert("Install NOT OK. plugin Id: " + pluginId + " branch: " + versionBranch);
                       });
                 },
 
                 uninstallPlugin: function ( pluginId ) {
-                  return $http.delete( installPluginBaseUrl + '/' + pluginId )
+                  // Not using the shortcut method $http.delete because it does not work in IE8
+                  return $http( { method: 'DELETE', url: installPluginBaseUrl + '/' + pluginId } )
                       .then( function ( response ) {
-                        alert("Uninstall OK. plugin Id: " + pluginId )
+                        alert("Uninstall OK. plugin Id: " + pluginId );
                       },
                       function ( response ) {
-                        alert("Uninstall NOT OK. plugin Id: " + pluginId )
+                        alert("Uninstall NOT OK. plugin Id: " + pluginId );
                       });
                 }
+
               }
             }
           ]);

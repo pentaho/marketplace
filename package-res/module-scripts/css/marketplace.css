@@ -30,7 +30,11 @@
 }
 
 .icon.install {
-  background: url(../img/install_button.png) scroll -22px 0px no-repeat;
+  background: url(../img/install.svg) no-repeat;
+}
+.no-svg .icon.install,
+.IE.IE8 .icon.install{
+  background: url(../img/install.png) no-repeat;
 }
 
 

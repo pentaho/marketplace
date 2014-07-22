@@ -1,0 +1,49 @@
+<div>
+  {{selected}}
+  <div class="btn-group" dropdown is-open="status.isopen">
+    <button type="button" class="btn btn-primary dropdown-toggle" ng-disabled="disabled">
+      <!-- TODO i18n -->
+      Filter: {{selected}} <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu" role="menu">
+
+        <li data-ng-repeat-start="group in groups"
+            data-ng-click="toggleSelection(group)">
+          <a href="">
+            <input type="checkbox" ng-model="group.isSelected">
+            {{group.name}}
+          </a>
+        </li>
+        <li data-ng-repeat="option in group.options"
+            data-ng-click="toggleSelection(option)">
+          <a href="">
+            <input type="checkbox" ng-model="option.isSelected">
+            {{option.name}}
+          </a>
+        </li>
+        <li data-ng-repeat-end class="divider"></li>
+
+
+
+      <!--
+      <div data-ng-repeat="group in groups">
+        <li data-ng-click="toggleSelection(group)">
+            <a href="">
+              {{group.name}}
+            </a>
+            <input type="checkbox" ng-model="group.isSelected">
+        </li>
+        <li data-ng-repeat="option in group.options"
+            data-ng-click="toggleSelection(option)">
+          <a href="">
+            {{option.name}}
+          </a>
+          <input type="checkbox" ng-model="option.isSelected">
+        </li>
+        <li class="divider"></li>
+      </div>
+      -->
+
+    </ul>
+  </div>
+</div>

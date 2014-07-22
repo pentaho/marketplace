@@ -18,6 +18,9 @@ requirejs(
       './@js.source.dir@/services/dtoMapperService',
 
 
+      './directives/multiselectDropdown/multiselectDropdownController',
+      './directives/multiselectDropdown/multiselectDropdownDirective',
+
       './directives/pluginDetail/pluginDetailController',
       './directives/pluginDetail/pluginDetailDirective',
       './directives/pluginList/pluginListController',

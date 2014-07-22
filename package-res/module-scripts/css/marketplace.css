@@ -11,6 +11,69 @@
  * the license for the specific language governing your rights and limitations.
  */
 
+/* ==========================================================================
+   Install / Uninstall / Update  buttons
+   ========================================================================== */
+
+
+.pluginListItem button span {
+  float: left;
+}
+
+.pluginListItem button .icon {
+  height: 22px;
+  width: 22px;
+  /*display: inline-block;
+  float: right;
+  margin-right: 15px;
+  margin-top: 2px;*/
+}
+
+.icon.install {
+  background: url(../img/install_button.png) scroll -22px 0px no-repeat;
+}
+
+
+/* ==========================================================================
+   Plugin list
+   ========================================================================== */
+
+ul {
+  clear: both;
+  list-style-type: none;
+}
+
+li {
+  clear: both;
+}
+
+/* ==========================================================================
+   Plugin list item
+   ========================================================================== */
+
+.pluginListItem {
+  min-height: 50px;
+}
+
+
+.pluginListItem .pluginHeader,
+.pluginListItem .devStageIcon,
+.pluginListItem .pluginActionContainer {
+  display: inline;
+  float: left;
+}
+
+.pluginListItem .pluginActionContainer .pluginInfo,
+.pluginListItem .pluginActionContainer button {
+  display: inline;
+  float: left;
+}
+
+
+
+
+
+
 
 
 .dev-stage {

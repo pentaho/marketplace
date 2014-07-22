@@ -1,12 +1,16 @@
 <div class="pluginListItem">
-  <div>
+
+  <div class="pluginHeader">
     <div class="pluginName">{{plugin.name}}</div>
     <div class="pluginAuthor">{{plugin.author.name}}</div>
-    <div data-dev-stage-icon data-lane="plugin.devStage.lane" data-level="plugin.devStage.level" ></div>
   </div>
 
-  <div>
-    <div>
+  <div class="devStageIcon"
+       data-dev-stage-icon data-lane="plugin.devStage.lane" data-level="plugin.devStage.level" ></div>
+
+  <div class="pluginActionContainer">
+
+    <div class="pluginInfo">
       <div>{{inContextPluginVersion.statusMessage}}</div>
       <span>{{inContextPluginVersion.version}}</span>
       <span data-ng-show="inContextPluginVersion.branch">({{inContextPluginVersion.branch}})</span>

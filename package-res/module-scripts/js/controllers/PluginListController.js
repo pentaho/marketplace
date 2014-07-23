@@ -46,8 +46,11 @@ define(
               };
 
               function filterAndSetPlugins ( plugins ) {
-                $scope.filteredPlugins = _.filter( plugins, pluginFilter );
-              }
+                $scope.filteredPlugins = _.chain( plugins)
+                    .filter( pluginFilter )
+                    .sortBy( function ( plugin ) { return plugin.getInstallationStatus(); } )
+                    .value();
+              };
 
               /**
                * Refreshes the plugin list from the server
@@ -85,18 +88,30 @@ define(
 
 
 
-              // todo get from service
+              // TODO: get from service
               $scope.pluginTypes = [
-                { name: 'Analysis', group: 'Apps'},
-                { name: 'Dashboards', group: 'Apps'},
-                { name: 'Reporting', group: 'Apps'},
-                { name: 'Lifecycle', group: 'Apps'},
-                { name: 'Admin', group: 'Apps'},
-                { name: 'Visualizations' },
-                { name: 'Themes'},
-                { name: 'Language Packs'}
+                { name: 'Analysis', group: 'Apps' },
+                { name: 'Dashboards', group: 'Apps' },
+                { name: 'Reporting', group: 'Apps' },
+                { name: 'Lifecycle', group: 'Apps' },
+                { name: 'Admin', group: 'Apps' },
+                { name: 'Visualizations', group: 'Other' },
+                { name: 'Themes', group: 'Other' },
+                { name: 'Language Packs', group: 'Other' }
+              ];
 
-              ]
+              // TODO: i18n
+              // TODO: get from service
+              $scope.developmentStages = [
+                { lane: "Customer", level: 1, shortDescription: 'Development Phase' },
+                { lane: "Customer", level: 2, shortDescription: 'Snapshot Release' },
+                { lane: "Customer", level: 3, shortDescription: 'Limited Support' },
+                { lane: "Customer", level: 4, shortDescription: 'Production Release' },
+                { lane: "Community", level: 1, shortDescription: 'Development Phase' },
+                { lane: "Community", level: 2, shortDescription: 'Snapshot Release' },
+                { lane: "Community", level: 3, shortDescription: 'Stable Release' },
+                { lane: "Community", level: 4, shortDescription: 'Mature Release' }
+              ];
 
 
               $scope.$watch( "selectedTab", applyPluginFilter );

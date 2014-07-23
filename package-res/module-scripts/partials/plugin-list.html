@@ -1,6 +1,5 @@
 <div>
 
-  <div multiselect-dropdown></div>
 
   <div class="pentaho-tab-bar">
 
@@ -25,8 +24,9 @@
 
       <!-- TODO: add tabs, filters, list/card view, refresh -->
       <div name="filterBar">
-        <!-- TODO a directive or similar for filtering. Select does not allow nesting options. -->
-        <select data-ng-options="type.name group by type.group for type in pluginTypes">    </select>
+        <div multiselect-dropdown options="pluginTypes" group-by="group" display="name" select="name" selected="selectedTypes"></div>
+        <div multiselect-dropdown options="developmentStages" group-by="lane" display="shortDescription" select="shortDescription" selected="selectedStages"></div>
+
         <a data-ng-href="https://www.google.com/?#q=what+are+stages">What are stages?</a>
       </div>
 

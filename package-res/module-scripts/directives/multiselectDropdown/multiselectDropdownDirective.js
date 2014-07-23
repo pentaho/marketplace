@@ -42,6 +42,11 @@ define( [ 'marketplace' ],
                 //'&' evaluates in the parent scope
                 //'@' evaluates as a string
                 //'=' evaluates in the isolate scope
+                selected: '=',
+                options: '=',
+                groupBy: '@',
+                display: '@',
+                select: '@'
               }
             };
           }

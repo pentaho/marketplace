@@ -25,90 +25,78 @@ define(
           ['$scope',
             function ( $scope ) {
 
-              // todo get from service
-              var pluginTypes = [
-                { name: 'Analysis', group: 'Apps'},
-                { name: 'Dashboards', group: 'Apps'},
-                { name: 'Reporting', group: 'Apps'},
-                { name: 'Lifecycle', group: 'Apps'},
-                { name: 'Admin', group: 'Apps'},
-                { name: 'Visualizations', group: 'Other' },
-                { name: 'Themes', group: 'Other'},
-                { name: 'Language Packs', group: 'Other'}
-              ];
-
-              var groupBy = 'group';
-              var nameAttribute = 'name';
-
-              var typesGrouped = _.groupBy( pluginTypes, groupBy );
-
-              function Option( name, group,
+              function Option( name, selectionValue, group,
                                scope, selectedCollection ) {
-                var option = {
-                  name: name,
-                  isSelected: false,
-                  group: group
-                };
+                this.name = name;
+                this.isSelected = false;
+                this.selectionValue = selectionValue;
+                this.group = group;
+
+                var that = this;
 
                 // when an option is (de)selected, (remove)add it (from)to the selected model
-                scope.$watch( function() { return option.isSelected; },
+                scope.$watch(
+                    function() { return that.isSelected; },
                     function ( isSelectedNewValue ) {
                       if ( isSelectedNewValue ) {
-                        selectedCollection.push( option.name );
+                        selectedCollection.push( that.selectionValue );
                       }
                       else {
-                        var index = _.indexOf( selectedCollection, option.name );
+                        var index = _.indexOf( selectedCollection, that.selectionValue );
                         if ( index > -1 ) {
                           selectedCollection.splice( index, 1 );
                         }
                       }
 
-                      option.group.isSelected = _.all( group.options, function ( option ) { return option.isSelected; } );
-                    });
+                      that.group.isSelected = _.all( group.options, function ( option ) { return option.isSelected; } );
+                    }
+                );
 
-                return option;
               }
 
               function Group ( name, scope ) {
-                var group =  {
-                  name: name,
-                  isSelected: false,
-                  options: []
-                };
+                this.name = name;
+                this.isSelected = false;
+                this.options = [];
+
+                var that = this;
 
                 scope.$watch(
-                    function() { return group.isSelected; },
+                    function() { return that.isSelected; },
                     function ( isSelectedNewValue ) {
-                      _.each( group.options,
+                      _.each( that.options,
                           function ( option ) {
                             option.isSelected = isSelectedNewValue;
-                          });
-                      }
+                          }
+                      );
+                    }
                 );
-
-
-                return group;
               }
 
-              $scope.selected = [];
-              $scope.groups = _.map( typesGrouped,
-                  function ( options, groupName ) {
+
+              if ( !$scope.selected ) {
+                $scope.selected = [];
+              }
+
+              $scope.groups = _.chain( $scope.options )
+                  .groupBy( $scope.groupBy )
+                  .map( function ( options, groupName ) {
                     var group = new Group ( groupName, $scope );
                     group.options = _.map( options,
                           function ( option ) {
-                            return new Option( option[nameAttribute], group, $scope, $scope.selected );
+                            var name = $scope.display ? option[$scope.display] : option;
+                            var selectionValue = $scope.select ? option[$scope.select] : option;
+                            return new Option( name, selectionValue, group, $scope, $scope.selected );
                           });
                     return group;
-                  });
+                  })
+                  .value();
 
               $scope.toggleSelection = function ( selectable ) {
                 selectable.isSelected = !selectable.isSelected;
               }
 
             }
-
-
           ]);
-
     }
 );

@@ -24,8 +24,15 @@
 
       <!-- TODO: add tabs, filters, list/card view, refresh -->
       <div name="filterBar">
-        <div multiselect-dropdown options="pluginTypes" group-by="group" display="name" select="name" selected="selectedTypes"></div>
-        <div multiselect-dropdown options="developmentStages" group-by="lane" display="shortDescription" select="shortDescription" selected="selectedStages"></div>
+        <div data-multiselect-dropdown
+            data-selected-options="selectedTypes"  data-options="pluginTypes"
+            data-group-by="group" data-display="name" data-select="name" >
+
+        </div>
+        <div data-multiselect-dropdown
+            data-selected-options="selectedStages" data-options="developmentStages"
+            data-group-by="lane" data-display="shortDescription" data-select="shortDescription">
+        </div>
 
         <a data-ng-href="https://www.google.com/?#q=what+are+stages">What are stages?</a>
       </div>

@@ -37,15 +37,26 @@ define( [ 'marketplace' ],
               replace: true, //replaces the custom directive element with the corresponding expanded HTML, to be HTML-compliant.
               templateUrl: 'directives/multiselectDropdown/multiselectDropdownTemplate.html',
               controller: 'MultiselectDropdownController',
-              //isolate scope
               scope: {
-                //'&' evaluates in the parent scope
-                //'@' evaluates as a string
-                //'=' evaluates in the isolate scope
-                selected: '=',
+                /**
+                 * An array where the selected values will be placed.
+                 */
+                selectedOptions: '=',
+                /**
+                 * The source options for the multiselect.
+                 */
                 options: '=',
+                /**
+                 * The option attribute name by which the options will be grouped by
+                 */
                 groupBy: '@',
+                /**
+                 * The option attribute name which value will be used when displaying the options
+                 */
                 display: '@',
+                /**
+                 * The option attribute name which value will be used to fill in the selectedOptions array
+                 */
                 select: '@'
               }
             };

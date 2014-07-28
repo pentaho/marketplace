@@ -41,6 +41,7 @@ define(
                       if ( isSelectedNewValue ) {
                         selectedCollection.push( that.selectionValue );
                       }
+                      // Option was deselected
                       else {
                         var index = _.indexOf( selectedCollection, that.selectionValue );
                         if ( index > -1 ) {
@@ -48,34 +49,67 @@ define(
                         }
                       }
 
-                      that.group.isSelected = _.all( group.options, function ( option ) { return option.isSelected; } );
+                      // update group selection (ALL / SOME / NONE)
+                      that.group.updateSelected();
                     }
                 );
 
               }
 
               function Group ( name, scope ) {
-                this.name = name;
-                this.isSelected = false;
-                this.options = [];
-
                 var that = this;
+                that.name = name;
+                that.selected = Group.selectEnum.NONE;
+                that.options = [];
 
                 scope.$watch(
-                    function() { return that.isSelected; },
-                    function ( isSelectedNewValue ) {
-                      _.each( that.options,
-                          function ( option ) {
-                            option.isSelected = isSelectedNewValue;
-                          }
-                      );
+                    function() { return that.selected; },
+                    function ( selectedNewValue ) {
+                      switch ( selectedNewValue ) {
+                        case Group.selectEnum.ALL:
+                          _.each( that.options, function ( option ) { option.isSelected = true; } );
+                          break;
+                        case Group.selectEnum.NONE:
+                          _.each( that.options, function ( option ) { option.isSelected = false; } );
+                          break;
+                      }
                     }
                 );
               }
 
+              Group.selectEnum = {
+                ALL: "All",
+                SOME: "Some",
+                NONE: "None"
+              }
 
-              if ( !$scope.selected ) {
-                $scope.selected = [];
+              Group.prototype.updateSelected = function() {
+                var selected = Group.selectEnum.NONE;
+                if ( _.all( this.options, function ( option ) { return option.isSelected; } ) ) {
+                  selected = Group.selectEnum.ALL;
+                }
+                else if ( _.any( this.options, function ( option ) { return option.isSelected; } ) ) {
+                  selected = Group.selectEnum.SOME;
+                }
+
+                this.selected = selected;
+              }
+
+              Group.prototype.getCssClass = function () {
+                switch ( this.selected ) {
+                  case Group.selectEnum.ALL:
+                    return 'all-selected';
+                  case Group.selectEnum.SOME:
+                    return 'some-selected';
+                  case Group.selectEnum.NONE:
+                    return 'none-selected';
+                }
+              }
+
+
+
+              if ( !$scope.selectedOptions ) {
+                $scope.selectedOptions = [];
               }
 
               $scope.groups = _.chain( $scope.options )
@@ -86,7 +120,7 @@ define(
                           function ( option ) {
                             var name = $scope.display ? option[$scope.display] : option;
                             var selectionValue = $scope.select ? option[$scope.select] : option;
-                            return new Option( name, selectionValue, group, $scope, $scope.selected );
+                            return new Option( name, selectionValue, group, $scope, $scope.selectedOptions );
                           });
                     return group;
                   })
@@ -94,6 +128,18 @@ define(
 
               $scope.toggleSelection = function ( selectable ) {
                 selectable.isSelected = !selectable.isSelected;
+              }
+
+              $scope.groupClicked = function ( group ) {
+                switch ( group.selected ) {
+                  case Group.selectEnum.ALL:
+                    group.selected = Group.selectEnum.NONE;
+                    break;
+                  case Group.selectEnum.NONE:
+                  case Group.selectEnum.SOME:
+                    group.selected = Group.selectEnum.ALL;
+                    break;
+                }
               }
 
             }

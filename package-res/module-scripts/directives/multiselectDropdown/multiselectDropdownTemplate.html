@@ -1,26 +1,31 @@
-<div>
-  <div class="btn-group" dropdown is-open="status.isopen">
-    <button type="button" class="btn btn-primary dropdown-toggle" ng-disabled="disabled">
+<div class="multiselect">
+  <div class="btn-group" data-dropdown data-is-open="status.isopen">
+    <button class="btn btn-primary dropdown-toggle" type="button" ng-disabled="disabled">
       <!-- TODO i18n -->
-      Filter: {{selected}} <span class="caret"></span>
+      Filter: {{selectedOptions}} <span class="caret"></span>
     </button>
     <ul class="dropdown-menu" role="menu">
 
-        <li data-ng-repeat-start="group in groups"
-            data-ng-click="toggleSelection(group)">
+        <li class="group"
+            data-ng-repeat-start="group in groups"
+            data-ng-click="groupClicked( group )"
+            data-ng-class="group.getCssClass()">
           <a href="">
-            <input type="checkbox" ng-model="group.isSelected">
             {{group.name}}
           </a>
         </li>
-        <li data-ng-repeat="option in group.options"
-            data-ng-click="toggleSelection(option)">
+
+        <li class="option"
+            data-ng-repeat="option in group.options"
+            data-ng-click="toggleSelection(option)"
+            data-checked="{{option.isSelected}}">
           <a href="">
             <input type="checkbox" ng-model="option.isSelected">
             {{option.name}}
           </a>
         </li>
-        <li data-ng-repeat-end class="divider"></li>
+
+        <li class="divider" data-ng-repeat-end ></li>
 
     </ul>
   </div>

@@ -41,7 +41,7 @@ define( [ 'marketplace' ],
                 /**
                  * An array where the selected values will be placed.
                  */
-                selectedOptions: '=',
+                selectedOptionsValue: '=selectedOptions',
                 /**
                  * The source options for the multiselect.
                  */
@@ -55,7 +55,8 @@ define( [ 'marketplace' ],
                  */
                 display: '@',
                 /**
-                 * The option attribute name which value will be used to fill in the selectedOptions array
+                 * The option attribute name which value will be used to fill in the selectedOptions array.
+                 * If no value is specified the options itself will be used as the selected value.
                  */
                 select: '@'
               }

@@ -30,16 +30,49 @@ define(
               var availableTab = 'availableTab';
 
               /**
+               *
+               * @param plugin
+               * @returns {Boolean}
+               */
+              function filterInstalled ( plugin ) {
+                if ( !$scope.isTabSelected( installedTab ) ) {
+                  return true;
+                }
+
+                // if installed tab is selected only accept installed plugins
+                return plugin.isInstalled;;
+              };
+
+              /**
+               *
+               * @param plugin
+               * @returns {Boolean}
+               */
+              function filterStage ( plugin ) {
+                if ( $scope.selectedStages.length == 0 ) {
+                  return true;
+                }
+
+                // plugin is in one of the selected development stages
+                return _.any( $scope.selectedStages,
+                    function ( selectedStage ) {
+                      return ( selectedStage.lane == plugin.devStage.lane &&
+                          selectedStage.level == plugin.devStage.level );
+                    }
+                )
+              };
+
+
+              /**
                * Checks if a plugin passes all the conditions set in the view
                * @param {Plugin} plugin
                * @returns {Boolean} True if the plugin passes the filter
                */
               function pluginFilter ( plugin ) {
-                if ( $scope.isTabSelected( installedTab ) ) {
-                  return plugin.isInstalled;
-                }
-                return true;
+                return filterInstalled( plugin ) &&
+                  filterStage ( plugin );
               };
+
 
               function applyPluginFilter() {
                 appService.getPlugins().then( filterAndSetPlugins );
@@ -86,7 +119,15 @@ define(
                 );
               };
 
-
+              /*
+              appService.getPlugins().then( function ( plugins ) {
+                    $scope.pluginTypes = _.chain( plugins )
+                        .unique( function ( plugin ) { return plugin.type; } )
+                        .map( function ( plugin ) { return { name: plugin.type, group: plugin.type }; } )
+                        .value();
+                  }
+              );
+              */
 
               // TODO: get from service
               $scope.pluginTypes = [
@@ -103,19 +144,24 @@ define(
               // TODO: i18n
               // TODO: get from service
               $scope.developmentStages = [
-                { lane: "Customer", level: 1, shortDescription: 'Development Phase' },
-                { lane: "Customer", level: 2, shortDescription: 'Snapshot Release' },
-                { lane: "Customer", level: 3, shortDescription: 'Limited Support' },
-                { lane: "Customer", level: 4, shortDescription: 'Production Release' },
-                { lane: "Community", level: 1, shortDescription: 'Development Phase' },
-                { lane: "Community", level: 2, shortDescription: 'Snapshot Release' },
-                { lane: "Community", level: 3, shortDescription: 'Stable Release' },
-                { lane: "Community", level: 4, shortDescription: 'Mature Release' }
+                { lane: "customer", level: 1, shortDescription: 'Development Phase' },
+                { lane: "customer", level: 2, shortDescription: 'Snapshot Release' },
+                { lane: "customer", level: 3, shortDescription: 'Limited Support' },
+                { lane: "customer", level: 4, shortDescription: 'Production Release' },
+                { lane: "community", level: 1, shortDescription: 'Development Phase' },
+                { lane: "community", level: 2, shortDescription: 'Snapshot Release' },
+                { lane: "community", level: 3, shortDescription: 'Stable Release' },
+                { lane: "community", level: 4, shortDescription: 'Mature Release' }
               ];
 
 
               $scope.$watch( "selectedTab", applyPluginFilter );
               $scope.selectTab( availableTab );
+
+              $scope.selectedStages = [];
+              $scope.selectedTypes = [];
+
+              $scope.$watchCollection( "selectedStages", applyPluginFilter );
 
 
               // initialize plugins

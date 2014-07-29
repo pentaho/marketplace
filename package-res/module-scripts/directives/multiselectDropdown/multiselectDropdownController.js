@@ -26,7 +26,7 @@ define(
             function ( $scope ) {
 
               function Option( name, selectionValue, group,
-                               scope, selectedCollection ) {
+                               scope, selectedValues, selectedDisplays ) {
                 this.name = name;
                 this.isSelected = false;
                 this.selectionValue = selectionValue;
@@ -39,13 +39,16 @@ define(
                     function() { return that.isSelected; },
                     function ( isSelectedNewValue ) {
                       if ( isSelectedNewValue ) {
-                        selectedCollection.push( that.selectionValue );
+                        selectedValues.push( that.selectionValue );
+                        selectedDisplays.push( that.name );
                       }
                       // Option was deselected
                       else {
-                        var index = _.indexOf( selectedCollection, that.selectionValue );
+                        var index = _.indexOf( selectedValues, that.selectionValue );
                         if ( index > -1 ) {
-                          selectedCollection.splice( index, 1 );
+                          // these two arrays should be "synchronized"
+                          selectedValues.splice( index, 1 );
+                          selectedDisplays.splice( index, 1);
                         }
                       }
 
@@ -106,10 +109,15 @@ define(
                 }
               }
 
+              $scope.selectedOptionsDisplay = [];
 
-
-              if ( !$scope.selectedOptions ) {
-                $scope.selectedOptions = [];
+              $scope.getOptionsDisplayString = function () {
+                if ($scope.selectedOptionsDisplay.length == 0 ) {
+                  // TODO: i18n
+                  return "All";
+                }
+                
+                return $scope.selectedOptionsDisplay.join(', ');
               }
 
               $scope.groups = _.chain( $scope.options )
@@ -120,7 +128,7 @@ define(
                           function ( option ) {
                             var name = $scope.display ? option[$scope.display] : option;
                             var selectionValue = $scope.select ? option[$scope.select] : option;
-                            return new Option( name, selectionValue, group, $scope, $scope.selectedOptions );
+                            return new Option( name, selectionValue, group, $scope, $scope.selectedOptionsValue, $scope.selectedOptionsDisplay );
                           });
                     return group;
                   })

@@ -106,9 +106,8 @@ define(
                 var modalScope = $scope.$new( true ); // create new isolate scope
                 modalScope.plugin = plugin;
                 var pluginDetailModal = $modal.open( {
-                  templateUrl: 'directives/pluginDetail/pluginDetailTemplate.html',
-                  controller: 'PluginDetailController',
-                  scope: modalScope
+                  template: '<div data-plugin-detail data-plugin="plugin"></div>',
+                  scope: modalScope,
                   //windowClass: "pentaho-dialog"
                 });
 

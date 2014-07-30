@@ -1,5 +1,57 @@
-<ul>
-    <li>plugin id: {{plugin.id}}</li>
-    <li>name: {{plugin.name}}</li>
-    <li>description: {{plugin.description}}</li>
-</ul>
+<div class="pluginDetail">
+
+  <!-- TODO i18n on all "hardcoded" values -->
+  <div name="top">
+    <img data-ng-src="{{plugin.image}}" data-ng-show="plugin.image"/>
+    <div class="">{{plugin.name}}</div>
+    <div class="">{{plugin.author.name}}</div>
+
+    <select data-ng-model="selectedPluginVersion"
+            data-ng-options="(version.version + ' (' + version.branch + ')' ) for version in plugin.versions">
+    </select>
+    <button>Install/Update</button>
+    <button>Uninstall</button>
+  </div>
+
+  <div name="middle">
+    <div name="left">
+      <div>
+        <div class="sectionHeader">Information</div>
+
+        <div data-ng-repeat="info in pluginInformation">
+          <span>{{info.label}}:</span>
+          <a data-ng-if="info.hasUrl()" data-ng-href="{{info.url}}">{{info.description}}</a>
+          <span data-ng-if="!info.hasUrl()">{{info.description}}</span>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div name="right">
+
+      <div data-ng-show="plugin.description">
+        <div class="sectionHeader">Description:</div>
+        <div data-ng-bind-html="plugin.description"></div>
+      </div>
+
+      <div data-ng-show="plugin.screenshotUrls && plugin.screenshotUrls.length > 0">
+        <div>Screenshots:</div>
+        <div data-carousel data-interval="5000">
+          <div data-slide data-ng-repeat="screenshotUrl in plugin.screenshotUrls">
+            <img data-ng-src="{{screenshotUrl}}">
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div data-ng-show="plugin.devStage" name="bottom">
+    <div data-dev-stage-icon
+         data-lane="plugin.devStage.lane" data-level="plugin.devStage.level"></div>
+    <div> Insert dev stage title here </div>
+    <div> Insert dev stage description here </div>
+  </div>
+
+</div>

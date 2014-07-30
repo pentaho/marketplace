@@ -10,6 +10,9 @@ requirejs.config({
 requirejs(
     [
       'common-ui/angular',
+      'common-ui/angular-sanitize',
+      'common-ui/underscore',
+
       './@js.source.dir@/@js.module.script.app.name@',
 
       './@js.source.dir@/controllers/PluginListController',
@@ -30,9 +33,8 @@ requirejs(
       './directives/devStageIcon/DevStageIconController',
       './directives/devStageIcon/devStageIconDirective',
 
-      './directives/stopEvent/stopEventDirective',
+      './directives/stopEvent/stopEventDirective'
 
-      'common-ui/underscore'
 
     ] ,
 

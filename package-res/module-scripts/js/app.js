@@ -22,7 +22,7 @@ define( [ 'common-ui/angular',
       console.log("Required app.js ");
 
       // define application module
-      var app = angular.module( 'marketplace', [ 'ngRoute', 'ui.bootstrap'] );
+      var app = angular.module( 'marketplace', [ 'ngRoute', 'ui.bootstrap', 'ngSanitize' ] );
 
       app.config(['$routeProvider', function( $routeProvider ) {
 

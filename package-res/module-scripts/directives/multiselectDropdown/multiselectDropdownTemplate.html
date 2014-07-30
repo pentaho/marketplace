@@ -1,6 +1,6 @@
 <div class="multiselect">
     <div class="btn-group" data-dropdown data-is-open="status.isopen">
-      <button class="btn btn-primary dropdown-toggle" type="button" ng-disabled="disabled"
+      <button class="btn btn-primary dropdown-toggle" type="button" data-ng-disabled="disabled"
           data-popover="{{getOptionsDisplayString()}}" data-popover-popup-delay="500"
           data-popover-trigger="mouseenter" data-popover-placement="bottom">
 
@@ -23,7 +23,7 @@
               data-ng-click="toggleSelection(option)"
               data-checked="{{option.isSelected}}">
             <a href="">
-              <input type="checkbox" ng-model="option.isSelected">
+              <input type="checkbox" data-ng-model="option.isSelected">
               {{option.name}}
             </a>
           </li>

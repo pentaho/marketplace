@@ -68,6 +68,7 @@ define(
                       },
                       this);
                 }
+
               }
 
               return Plugin;

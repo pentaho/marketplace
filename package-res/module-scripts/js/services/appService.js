@@ -56,24 +56,34 @@ define(
                   );
                 },
 
-                installPlugin: function ( pluginId, versionBranch ) {
-                  return $http.post( installPluginBaseUrl + '/' + pluginId + '/' + versionBranch)
+                installPlugin: function ( plugin, version ) {
+                  console.log("Installing " + plugin.id + " " + version.branch );
+                  return $http.post( installPluginBaseUrl + '/' + plugin.id + '/' + version.branch)
                       .then( function ( response ) {
-                        alert("Install OK. plugin Id: " + pluginId + " branch: " + versionBranch);
+                        // TODO: verify in response if everything is actually ok
+                        console.log("Install OK. plugin Id: " + plugin.id + " branch: " + version.branch);
+                        plugin.isInstalled = true;
+                        plugin.installedVersion = version;
+
                       },
                       function ( response ) {
-                        alert("Install NOT OK. plugin Id: " + pluginId + " branch: " + versionBranch);
+                        console.log("Install NOT OK. plugin Id: " + plugin.id + " branch: " + version.branch);
                       });
                 },
 
-                uninstallPlugin: function ( pluginId ) {
+                uninstallPlugin: function ( plugin ) {
+                  // TODO: change to log when dialogs are handled
+                  alert("Uninstalling " + plugin.id );
                   // Not using the shortcut method $http.delete because it does not work in IE8
-                  return $http( { method: 'DELETE', url: installPluginBaseUrl + '/' + pluginId } )
+                  return $http( { method: 'DELETE', url: installPluginBaseUrl + '/' + plugin.id } )
                       .then( function ( response ) {
-                        alert("Uninstall OK. plugin Id: " + pluginId );
+                        // TODO: verify in response if everything is actually ok
+                        alert("Uninstall OK. plugin Id: " + plugin.id );
+                        plugin.isInstalled = false;
+                        plugin.installedVersion = undefined;
                       },
                       function ( response ) {
-                        alert("Uninstall NOT OK. plugin Id: " + pluginId );
+                        alert("Uninstall NOT OK. plugin Id: " + plugin.id );
                       });
                 }
 

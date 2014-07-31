@@ -87,12 +87,7 @@ define( [
 
               }
 
-              function uninstallPlugin ( plugin ) {
-                appService.uninstallPlugin( plugin.id );
-              }
-
-
-              $scope.uninstallPlugin = uninstallPlugin;
+              $scope.uninstallPlugin = appService.uninstallPlugin;
               $scope.pluginInformation = getPluginInformation( $scope.plugin );
 
               $scope.selectedPluginVersion = $scope.plugin.versions[0];

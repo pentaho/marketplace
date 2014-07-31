@@ -31,7 +31,7 @@ define( [ 'marketplace' ],
                   installButton.text = "Install";
                   installButton.cssClass = "install";
                   installButton.disabled = false;
-                  installButton.onClick = function () { appService.installPlugin( plugin.id, versionToInstall.branch ) } ;
+                  installButton.onClick = function () { appService.installPlugin( plugin, versionToInstall ) } ;
                   // TODO i18n
                   versionToInstall.statusMessage= "Available:"
                   $scope.inContextPluginVersion = versionToInstall;
@@ -41,7 +41,7 @@ define( [ 'marketplace' ],
                   installButton.text = "Update";
                   installButton.cssClass = "updateAvailable";
                   installButton.disabled = false;
-                  installButton.onClick = function () { appService.installPlugin( plugin.id, plugin.getVersionToUpdate().branch ) } ;
+                  installButton.onClick = function () { appService.installPlugin( plugin, plugin.getVersionToUpdate() ) } ;
                   // TODO i18n
                   plugin.installedVersion.statusMessage= "Installed:"
                   $scope.inContextPluginVersion = plugin.installedVersion;

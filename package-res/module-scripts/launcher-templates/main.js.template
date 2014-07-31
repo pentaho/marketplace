@@ -20,6 +20,8 @@ requirejs(
       './@js.source.dir@/services/appService',
       './@js.source.dir@/services/dtoMapperService',
 
+      './directives/installUpdateButton/installUpdateButtonController',
+      './directives/installUpdateButton/installUpdateButtonDirective',
 
       './directives/multiselectDropdown/multiselectDropdownController',
       './directives/multiselectDropdown/multiselectDropdownDirective',

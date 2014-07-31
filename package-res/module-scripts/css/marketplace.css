@@ -15,6 +15,37 @@
    Install / Uninstall / Update  buttons
    ========================================================================== */
 
+.installVersionButton .text {
+  float: left;
+}
+
+.installVersionButton .icon {
+  height: 22px;
+  width: 22px;
+}
+
+/* Install */
+.installVersionButton.install .icon{
+  background: url(../img/install.svg) no-repeat;
+}
+.no-svg .installVersionButton.install .icon,
+.IE.IE8 .installVersionButton.install .icon{
+  background: url(../img/install.png) no-repeat;
+}
+
+/* Update */
+.installVersionButton.update {
+  /* TODO: green coloring */
+}
+
+.installVersionButton.update .icon {
+  background: url(../img/update.svg) no-repeat;
+}
+.no-svg .installVersionButton.update .icon,
+.IE.IE8 .installVersionButton.update .icon{
+  background: url(../img/update.png) no-repeat;
+}
+
 
 .pluginListItem button span {
   float: left;
@@ -23,18 +54,22 @@
 .pluginListItem button .icon {
   height: 22px;
   width: 22px;
-  /*display: inline-block;
-  float: right;
-  margin-right: 15px;
-  margin-top: 2px;*/
 }
 
-.icon.install {
+.pluginListItem .icon.install {
   background: url(../img/install.svg) no-repeat;
 }
-.no-svg .icon.install,
-.IE.IE8 .icon.install{
+.no-svg .pluginListItem .icon.install,
+.IE.IE8 .pluginListItem .icon.install{
   background: url(../img/install.png) no-repeat;
+}
+
+.pluginListItem .icon.update {
+  background: url(../img/update.svg) no-repeat;
+}
+.no-svg .pluginListItem .icon.update,
+.IE.IE8 .pluginListItem .icon.update{
+  background: url(../img/update.png) no-repeat;
 }
 
 

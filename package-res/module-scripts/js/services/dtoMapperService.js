@@ -26,12 +26,8 @@ define(
           [ 'Plugin',
             function( Plugin ) {
 
-              function PluginVersion () {
-
-              };
-
               function toPlugin( pluginDTO ) {
-                // region TEMPORARY array transformation due to bug in server side serialization of single element collections
+                // region TODO: TEMPORARY array transformation due to bug in server side serialization of single element collections
                 pluginDTO.screenshots = toArray( pluginDTO.screenshots );
                 pluginDTO.versions = toArray( pluginDTO.versions );
                 // endregion
@@ -56,10 +52,22 @@ define(
                 // TODO change to function that checks for installed version info?
                 plugin.isInstalled = (pluginDTO.installed.toUpperCase() === 'TRUE');
 
-                plugin.installedVersion = new PluginVersion();
-                plugin.installedVersion.branch = pluginDTO.installedBranch;
-                plugin.installedVersion.version = pluginDTO.installedVersion;
-                plugin.installedVersion.buildId = pluginDTO.installedBuildId;
+                plugin.versions = _.map( pluginDTO.versions, toVersion );
+
+                var installedVersion = _.find( plugin.versions, function ( version ) {
+                  return version.branch == pluginDTO.installedBranch &&
+                      version.version == pluginDTO.installedVersion;// &&
+                      version.buildId == pluginDTO.installedBuildId;
+                } );
+                if ( installedVersion ) {
+                  plugin.installedVersion = installedVersion;
+                } else {
+                  plugin.installedVersion = new Plugin.Version();
+                  plugin.installedVersion.branch = pluginDTO.installedBranch;
+                  plugin.installedVersion.version = pluginDTO.installedVersion;
+                  plugin.installedVersion.buildId = pluginDTO.installedBuildId;
+                }
+
 
                 plugin.installationNotes = pluginDTO.installationNotes;
 
@@ -78,7 +86,6 @@ define(
                 }
                 plugin.license.text = pluginDTO.license_text;
 
-                plugin.versions = _.map( pluginDTO.versions, toVersion );
 
 
                 // TODO: fill in development stage from DTO
@@ -89,7 +96,7 @@ define(
               };
 
               function toVersion ( versionDTO ) {
-                var version = new PluginVersion();
+                var version = new Plugin.Version();
 
                 version.branch = versionDTO.branch;
                 version.version = versionDTO.version;

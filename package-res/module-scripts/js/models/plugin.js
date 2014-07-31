@@ -24,15 +24,7 @@ define(
           [
             function () {
 
-              function Plugin() {
-
-              };
-
-              Plugin.InstallationStatusEnum = {
-                notInstalled: "NOT_INSTALLED",
-                upToDate: "UP_TO_DATE",
-                updateAvailable: "UPDATE_AVAILABLE"
-              };
+              function Plugin() {};
 
               Plugin.prototype = {
                 getInstallationStatus: function () {
@@ -61,14 +53,41 @@ define(
                   return _.find(
                       this.versions,
                       function (version) {
-                        // can only compare to other versions with the same installed version branch
-                        this.installedVersion.branch === version.branch &&
-                        ( this.installedVersion.version !== version.version ||
-                            this.installedVersion.buildId != version.buildId )
-                      },
+                        return version.moreRecentThan( this.installedVersion ) },
                       this);
                 }
 
+              }
+
+              Plugin.InstallationStatusEnum = {
+                notInstalled: "NOT_INSTALLED",
+                upToDate: "UP_TO_DATE",
+                updateAvailable: "UPDATE_AVAILABLE"
+              };
+
+              Plugin.Version = function ( branch, version, buildId ) {
+                this.branch = branch;
+                this.version = version;
+                this.buildId = buildId;
+              };
+
+              Plugin.Version.prototype.equals = function ( version ) {
+                return version !== undefined && version !== null &&
+                    this.branch ==  version.branch &&
+                    this.version == version.version &&
+                    this.buildId == version.buildId;
+              }
+
+              Plugin.Version.prototype.moreRecentThan = function ( version ) {
+                if ( version === undefined || version === null ) {
+                  var exception = new Error("Invalid version to compare");
+                  exception.version = version;
+                  throw exception;
+                }
+
+                // TODO: at the moment a version is considered more recent if the version or buildId is different
+                return this.branch === version.branch &&
+                    ( this.version !== version.version || this.buildId !== version.buildId )
               }
 
               return Plugin;

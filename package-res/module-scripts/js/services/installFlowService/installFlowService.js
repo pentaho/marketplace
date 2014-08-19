@@ -24,6 +24,14 @@ define(
           [ 'appService', '$modal',
             function( appService, $modal ) {
 
+              function onOperationResult ( message, dialog, modalInstance ) {
+                dialog.body = message;
+                var okButton = dialog.buttons[0];
+                okButton.onClick = function() { modalInstance.close(); };
+                okButton.disabled = false;
+                dialog.buttons.splice( 1, 1); // remove cancel button
+              }
+
               function installPlugin( plugin, version ) {
                 // TODO: i18n
                 newDialogModal( "Install Plugin " + plugin.name, "Do you want to proceed?",
@@ -34,17 +42,10 @@ define(
                       okButton.disabled = true;
                       cancelButton.disabled = true;
                       appService.installPlugin(plugin, version).then(
-                          function () {
-                            scope.dialog.body = "Installation successful";
-                            okButton.onClick = function() { modalInstance.close(); };
-                            okButton.disabled = false;
-                            cancelButton.disabled = false;
-                          },
-                          function () {
-                            scope.dialog.body = "Installation Error";
-                            okButton.disabled = false;
-                            cancelButton.disabled = false;
-                          }
+                          // TODO: i18n
+                          function () { onOperationResult( "Installation successful", scope.dialog, modalInstance ) },
+                          // TODO: i18n
+                          function () { onOperationResult( "Installation Error", scope.dialog, modalInstance ) }
                       );
                     },
                     function ( scope, modalInstance ) { modalInstance.close() }
@@ -54,7 +55,21 @@ define(
               function updatePlugin( plugin, version ) {
                 // TODO: i18n
                 newDialogModal( "Update Plugin " + plugin.name, "Do you want to proceed?",
-                    function() { appService.installPlugin( plugin, version ); } );
+                    function( scope, modalInstance ) {
+                      scope.dialog.body = "Updating...";
+                      var okButton = scope.dialog.buttons[0];
+                      var cancelButton = scope.dialog.buttons[1];
+                      okButton.disabled = true;
+                      cancelButton.disabled = true;
+                      appService.installPlugin(plugin, version).then(
+                          // TODO: i18n
+                          function () { onOperationResult( "Plugin updated successfully", scope.dialog, modalInstance ) },
+                          // TODO: i18n
+                          function () { onOperationResult( "Error occurred when updating plugin", scope.dialog, modalInstance ) }
+                      );
+                    },
+                    function ( scope, modalInstance ) { modalInstance.close() }
+                );
               }
 
               function newDialogModal ( title, body, onOk, onCancel ) {

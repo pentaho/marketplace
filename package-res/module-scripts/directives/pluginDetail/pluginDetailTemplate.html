@@ -9,7 +9,9 @@
     <select data-ng-model="selectedPluginVersion"
             data-ng-options="(version.version + ' (' + version.branch + ')' ) for version in plugin.versions">
     </select>
-    <button data-install-update-button data-plugin="plugin" data-selected-version="selectedPluginVersion">Install/Update</button>
+    <button data-install-update-button data-plugin="plugin" data-selected-version="selectedPluginVersion"
+        data-allow-reinstall="true">
+    </button>
     <button class="pentaho-button" data-ng-click="uninstallPlugin(plugin)" data-ng-disabled="!plugin.isInstalled">Uninstall</button>
   </div>
 

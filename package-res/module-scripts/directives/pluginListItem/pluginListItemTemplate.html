@@ -11,18 +11,17 @@
   <div class="pluginActionContainer">
 
     <div class="pluginInfo">
-      <div>{{inContextPluginVersion.statusMessage}}</div>
-      <span>{{inContextPluginVersion.version}}</span>
-      <span data-ng-show="inContextPluginVersion.branch">({{inContextPluginVersion.branch}})</span>
+      <div>{{infoVersionStatusMessage}}</div>
+      <span>{{infoVersion.version}}</span>
+      <span data-ng-show="infoVersion.branch">({{infoVersion.branch}})</span>
     </div>
 
-    <button data-ng-disabled="installButton.disabled"
-        data-ng-click="installButton.onClick()"
-        data-stop-event="click"
-        class="pentaho-button">
-      <span>{{installButton.text}}</span>
-      <span class="icon" data-ng-class="installButton.cssClass" ></span>
+    <button data-install-update-button data-plugin="plugin"
+        data-selected-version="buttonVersion"
+        data-allow-reinstall="false"
+        data-stop-event="click">
     </button>
+
   </div>
 
 

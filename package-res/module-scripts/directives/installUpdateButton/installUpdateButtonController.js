@@ -41,14 +41,22 @@ define( [
 
                 if ( plugin.isInstalled ) {
                   if ( selectedVersion.equals( installedVersion ) ) {
-                    // TODO i18n
-                    button.text = "Reinstall";
-                    button.cssClass = "install";
-                    button.disabled = false;
-                    button.onClick = function () {
-                      installService.installPlugin( plugin, selectedVersion );
-                    };
-                    return;
+                    if( $scope.allowReinstall ) {
+                      // TODO i18n
+                      button.text = "Reinstall";
+                      button.cssClass = "install";
+                      button.disabled = false;
+                      button.onClick = function () { installService.installPlugin( plugin, selectedVersion ); };
+                      return;
+                    }
+                    else {
+                      // TODO i18n
+                      button.text = "Up to Date";
+                      button.cssClass = "upToDate";
+                      button.disabled = true;
+                      button.onClick = noOperation;
+                      return;
+                    }
                   }
                   else if ( selectedVersion.moreRecentThan( installedVersion ) ) {
                     // TODO: i18n

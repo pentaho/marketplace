@@ -18,47 +18,30 @@ define( [ 'marketplace' ],
       console.log("Required pluginListItem/PluginListItemController.js");
 
       app.controller('PluginListItemController',
-          ['$scope', 'appService', 'Plugin',
-            function ( $scope , appService, Plugin ) {
-              var installButton = {};
+          ['$scope',
+            function ( $scope ) {
 
+              var buttonVersion;
+              var infoVersion;
+              var statusMessage;
               var plugin = $scope.plugin;
-              var installationStatus = plugin.getInstallationStatus();
-              switch ( installationStatus ) {
-                case Plugin.InstallationStatusEnum.notInstalled:
-                  var versionToInstall = plugin.versions[0];
-                  // TODO i18n
-                  installButton.text = "Install";
-                  installButton.cssClass = "install";
-                  installButton.disabled = false;
-                  installButton.onClick = function () { appService.installPlugin( plugin, versionToInstall ) } ;
-                  // TODO i18n
-                  versionToInstall.statusMessage= "Available:"
-                  $scope.inContextPluginVersion = versionToInstall;
-                  break;
-                case Plugin.InstallationStatusEnum.updateAvailable:
-                  // TODO i18n
-                  installButton.text = "Update";
-                  installButton.cssClass = "updateAvailable";
-                  installButton.disabled = false;
-                  installButton.onClick = function () { appService.installPlugin( plugin, plugin.getVersionToUpdate() ) } ;
-                  // TODO i18n
-                  plugin.installedVersion.statusMessage= "Installed:"
-                  $scope.inContextPluginVersion = plugin.installedVersion;
-                  break;
-                case Plugin.InstallationStatusEnum.upToDate:
-                default:
-                  // TODO i18n
-                  installButton.text = "Up to Date";
-                  installButton.cssClass = "upToDate";
-                  installButton.disabled = true;
-                  installButton.onClick = function () {} ; // No operation
-                  // TODO i18n
-                  plugin.installedVersion.statusMessage= "Installed:"
-                  $scope.inContextPluginVersion = plugin.installedVersion;
+
+              if ( plugin.isInstalled ) {
+                buttonVersion = plugin.isUpToDate() ? plugin.installedVersion : plugin.getVersionToUpdate();
+                infoVersion = plugin.installedVersion;
+                // TODO i18n
+                statusMessage = "Installed:";
+              }
+              else {
+                buttonVersion = plugin.versions[0];
+                infoVersion = buttonVersion;
+                // TODO i18n
+                statusMessage = "Available:";
               }
 
-              $scope.installButton = installButton;
+              $scope.buttonVersion = buttonVersion;
+              $scope.infoVersion = infoVersion;
+              $scope.infoVersionStatusMessage= statusMessage;
 
             }
           ]);

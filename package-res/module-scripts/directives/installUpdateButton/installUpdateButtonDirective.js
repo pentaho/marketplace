@@ -27,7 +27,8 @@ define( [ 'marketplace' ],
           //isolate scope
           scope: {
             selectedVersion: "=",
-            plugin: "="
+            plugin: "=",
+            allowReinstall: "="
           }
         };
       });

@@ -20,28 +20,35 @@ define( [ 'marketplace' ],
       app.controller('PluginListItemController',
           ['$scope',
             function ( $scope ) {
-
-              var buttonVersion;
-              var infoVersion;
-              var statusMessage;
               var plugin = $scope.plugin;
 
-              if ( plugin.isInstalled ) {
-                buttonVersion = plugin.isUpToDate() ? plugin.installedVersion : plugin.getVersionToUpdate();
-                infoVersion = plugin.installedVersion;
-                // TODO i18n
-                statusMessage = "Installed:";
-              }
-              else {
-                buttonVersion = plugin.versions[0];
-                infoVersion = buttonVersion;
-                // TODO i18n
-                statusMessage = "Available:";
+              function updateItemInfo() {
+                var buttonVersion;
+                var infoVersion;
+                var statusMessage;
+
+                if ( plugin.isInstalled ) {
+                  buttonVersion = plugin.isUpToDate() ? plugin.installedVersion : plugin.getVersionToUpdate();
+                  infoVersion = plugin.installedVersion;
+                  // TODO i18n
+                  statusMessage = "Installed:";
+                }
+                else {
+                  buttonVersion = plugin.versions[0];
+                  infoVersion = buttonVersion;
+                  // TODO i18n
+                  statusMessage = "Available:";
+                }
+
+                $scope.buttonVersion = buttonVersion;
+                $scope.infoVersion = infoVersion;
+                $scope.infoVersionStatusMessage= statusMessage;
+
               }
 
-              $scope.buttonVersion = buttonVersion;
-              $scope.infoVersion = infoVersion;
-              $scope.infoVersionStatusMessage= statusMessage;
+              updateItemInfo();
+              $scope.$watch( function () { return plugin.installedVersion; },
+                  function () { updateItemInfo(); } );
 
             }
           ]);

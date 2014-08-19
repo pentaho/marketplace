@@ -17,7 +17,9 @@ requirejs(
 
       './@js.source.dir@/controllers/PluginListController',
       './@js.source.dir@/models/plugin',
+
       './@js.source.dir@/services/appService',
+      './@js.source.dir@/services/installFlowService/installFlowService',
       './@js.source.dir@/services/dtoMapperService',
 
       './directives/installUpdateButton/installUpdateButtonController',

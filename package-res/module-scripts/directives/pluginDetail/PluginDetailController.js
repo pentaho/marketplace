@@ -46,11 +46,11 @@ define( [
 
               Info.prototype.hasDescription = function () {
                 return !isEmptyString( this.description );
-              }
+              };
 
               Info.prototype.hasUrl = function () {
                 return !isEmptyString( this.url );
-              }
+              };
 
               function CreateInfo ( label, description, url ) {
                 return new Info( label,description, url );

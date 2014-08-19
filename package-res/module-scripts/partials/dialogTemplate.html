@@ -2,7 +2,8 @@
   <div class="title">{{dialog.title}}</div>
   <div class="body">{{dialog.body}}</div>
 
-  <button data-ng-repeat="button in dialog.buttons"
+  <button class="pentaho-button"
+          data-ng-repeat="button in dialog.buttons"
           data-ng-click="button.onClick()"
           data-ng-disabled="button.disabled">
     {{button.text}}

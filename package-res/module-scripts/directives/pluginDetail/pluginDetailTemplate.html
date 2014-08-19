@@ -12,7 +12,10 @@
     <button data-install-update-button data-plugin="plugin" data-selected-version="selectedPluginVersion"
         data-allow-reinstall="true">
     </button>
-    <button class="pentaho-button" data-ng-click="uninstallPlugin(plugin)" data-ng-disabled="!plugin.isInstalled">Uninstall</button>
+    <button class="pentaho-button uninstallButton" data-ng-click="uninstallPlugin(plugin)" data-ng-disabled="!plugin.isInstalled">
+      <span class="text">Uninstall</span>
+      <span class="icon"></span>
+    </button>
   </div>
 
   <div name="middle">

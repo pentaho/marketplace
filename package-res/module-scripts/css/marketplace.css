@@ -15,11 +15,12 @@
    Install / Uninstall / Update  buttons
    ========================================================================== */
 
-.installVersionButton .text {
+.installVersionButton .span {
   float: left;
 }
 
 .installVersionButton .icon {
+  display: inline-block;
   height: 22px;
   width: 22px;
 }
@@ -46,31 +47,22 @@
   background: url(../img/update.png) no-repeat;
 }
 
-
-.pluginListItem button span {
-  float: left;
+/* Uninstall */
+.uninstallButton {
+  /* TODO: green coloring */
 }
 
-.pluginListItem button .icon {
+.uninstallButton .icon {
+  display: inline-block;
   height: 22px;
   width: 22px;
+  background: url(../img/uninstall.svg) no-repeat;
+}
+.no-svg .uninstallButton .icon,
+.IE.IE8 .uninstallButton .icon{
+  background: url(../img/uninstall.png) no-repeat;
 }
 
-.pluginListItem .icon.install {
-  background: url(../img/install.svg) no-repeat;
-}
-.no-svg .pluginListItem .icon.install,
-.IE.IE8 .pluginListItem .icon.install{
-  background: url(../img/install.png) no-repeat;
-}
-
-.pluginListItem .icon.update {
-  background: url(../img/update.svg) no-repeat;
-}
-.no-svg .pluginListItem .icon.update,
-.IE.IE8 .pluginListItem .icon.update{
-  background: url(../img/update.png) no-repeat;
-}
 
 
 /* ==========================================================================

@@ -73,17 +73,17 @@ define(
 
                 uninstallPlugin: function ( plugin ) {
                   // TODO: change to log when dialogs are handled
-                  alert("Uninstalling " + plugin.id );
+                  console.log( "Uninstalling " + plugin.id );
                   // Not using the shortcut method $http.delete because it does not work in IE8
                   return $http( { method: 'DELETE', url: installPluginBaseUrl + '/' + plugin.id } )
                       .then( function ( response ) {
                         // TODO: verify in response if everything is actually ok
-                        alert("Uninstall OK. plugin Id: " + plugin.id );
+                        console.log( "Uninstall OK. plugin Id: " + plugin.id );
                         plugin.isInstalled = false;
                         plugin.installedVersion = undefined;
                       },
                       function ( response ) {
-                        alert("Uninstall NOT OK. plugin Id: " + plugin.id );
+                        console.log( "Uninstall NOT OK. plugin Id: " + plugin.id );
                       });
                 }
 

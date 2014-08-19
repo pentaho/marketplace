@@ -72,6 +72,31 @@ define(
                 );
               }
 
+              function uninstallPlugin( plugin ) {
+                if( !plugin.isInstalled ) {
+                  return;
+                }
+
+                // TODO: i18n
+                newDialogModal( "Uninstall Plugin " + plugin.name, "Do you want to proceed?",
+                    function( scope, modalInstance ) {
+                      scope.dialog.body = "Uninstalling...";
+                      var okButton = scope.dialog.buttons[0];
+                      var cancelButton = scope.dialog.buttons[1];
+                      okButton.disabled = true;
+                      cancelButton.disabled = true;
+                      appService.uninstallPlugin( plugin ).then(
+                          // TODO: i18n
+                          function () { onOperationResult( "Plugin uninstalled successfully", scope.dialog, modalInstance ) },
+                          // TODO: i18n
+                          function () { onOperationResult( "Error occurred when uninstalling plugin", scope.dialog, modalInstance ) }
+                      );
+                    },
+                    function ( scope, modalInstance ) { modalInstance.close() }
+                );
+              }
+
+
               function newDialogModal ( title, body, onOk, onCancel ) {
                 var dialogModal = $modal.open( {
                   templateUrl: 'partials/dialogTemplate.html',
@@ -105,7 +130,9 @@ define(
               return {
                 installPlugin: installPlugin,
 
-                updatePlugin: updatePlugin
+                updatePlugin: updatePlugin,
+
+                uninstallPlugin: uninstallPlugin
               }
 
             }

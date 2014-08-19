@@ -23,8 +23,8 @@ define( [
       console.log("Required pluginDetail/pluginDetailController.js");
 
       app.controller( 'PluginDetailController',
-          ['$scope', 'appService',
-            function ( $scope, appService ) {
+          ['$scope', 'installFlowService',
+            function ( $scope, installService ) {
               // Add trim to String if it is not defined
               if (!('trim' in String.prototype)) {
                 String.prototype.trim= function() {
@@ -87,7 +87,7 @@ define( [
 
               }
 
-              $scope.uninstallPlugin = appService.uninstallPlugin;
+              $scope.uninstallPlugin = installService.uninstallPlugin;
               $scope.pluginInformation = getPluginInformation( $scope.plugin );
 
               $scope.selectedPluginVersion = $scope.plugin.versions[0];

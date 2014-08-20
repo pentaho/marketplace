@@ -6,7 +6,7 @@
     <div class="pentaho-tabWidget"
          data-ng-click="selectTab( 'availableTab' )"
          data-ng-class="{ 'pentaho-tabWidget-selected': isTabSelected(  'availableTab'  ) }" >
-      <div class="pentaho-tabWidgetLab"> Available </div>
+      <div class="pentaho-tabWidgetLabel"> Available </div>
     </div>
 
     <div class="pentaho-tabWidget"
@@ -15,7 +15,7 @@
       <div class="pentaho-tabWidgetLabel"> Installed </div>
     </div>
 
-    <button class="pull-right" data-ng-click="refreshPluginsFromServer()">Refresh</button>
+    <button class="pull-right refreshButton" data-ng-click="refreshPluginsFromServer()" title="Refresh"></button>
 
   </div>
 
@@ -26,12 +26,11 @@
       <div class="filterBar">
 
         <div class="filterContainer">
-          <!--
-                  <div data-multiselect-dropdown
-                      data-selected-options="selectedTypes"  data-options="pluginTypes"
-                      data-group-by="group" data-display="name" data-select="name" >
-                  </div>
-          -->
+
+          <div data-multiselect-dropdown
+              data-selected-options="selectedTypes"  data-options="pluginTypes"
+              data-group-by="group" data-display="name" data-select="name" >
+          </div>
 
           <div data-multiselect-dropdown
               data-selected-options="selectedStages" data-options="developmentStages"
@@ -44,6 +43,8 @@
           <span class="icon info"></span>
           <a data-ng-href="https://www.google.com/?#q=what+are+stages">What are stages?</a>
         </div>
+
+        <div class="clear"></div>
 
       </div>
 

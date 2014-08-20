@@ -86,6 +86,44 @@ li {
   clear: both;
 }
 
+.bootstrap .filteredPluginsContainer {
+  margin-top: 20px;
+}
+
+.bootstrap .filteredPluginsContainer ul {
+  margin: 0;
+}
+
+.bootstrap .filteredPluginsContainer ul > li {
+  padding: 20px;
+  border-top: 1px solid #cbdde8;
+  color: #999999;
+}
+
+.bootstrap .filteredPluginsContainer ul > li:hover {
+  background: #c1d7e1;
+  cursor: pointer;
+}
+
+.bootstrap .filteredPluginsContainer ul > li:last-of-type {
+  border-bottom: 1px solid #cbdde8;
+}
+
+.bootstrap .filteredPluginsContainer ul > li .pluginName {
+  font-size: 16px;
+  margin-bottom: 2px;
+  color: #1973bc;
+}
+
+.bootstrap .filteredPluginsContainer ul > li .pluginAuthor {
+  font-size: 13px;
+  color: #7c7c7c;
+}
+
+.bootstrap .filteredPluginsContainer ul > li .infoVersionStatusMessage {
+  font-size: 13px;
+  font-weight: 800;
+}
 
 
 /* ==========================================================================
@@ -145,7 +183,7 @@ button.refreshButton {
   margin-right: 20px;
   background: #fff;
   border: 1px solid #cbdde8;
-  color: #26363d;
+  color: #7c7c7c;
   text-shadow: none;
   border-radius: 0;
   -webkit-box-shadow: inset 0px 0px 2px 0px rgba(243, 247, 250, 1);
@@ -192,7 +230,7 @@ button.refreshButton {
   clear: both;
   font-weight: normal;
   line-height: 20px;
-  color: #26363d;
+  color: #7c7c7c;
 }
 
 .bootstrap .filterBar .filterContainer .multiselect .dropdown-menu > li:first-child > a,
@@ -242,15 +280,13 @@ button.refreshButton {
 
 
 .dev-stage {
-  width: 32px;
+  width: 55px;
   height: 32px;
   /* position: absolute; */
-  right: 13px;
-  bottom: 12px;
-  background-color: #FFFFFF;
   border: none;
-  border-radius: 6px 0px 6px 0px;
   background-position: center center;
+  background-repeat: no-repeat;
+  border-right : 1px solid #cbdde8;
 }
 
 .dev-stage-01 {

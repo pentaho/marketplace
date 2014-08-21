@@ -30,6 +30,13 @@ define(
               var availableTab = 'availableTab';
 
               /**
+               * Functions that clear the listeners that refresh
+               * the filtered plugins whenever a plugin is installed / uninstalled
+               * @type {Array}
+               */
+              var pluginVersionWatcherUnregisterFunctions = [];
+
+              /**
                *
                * @param plugin
                * @returns {Boolean}
@@ -73,25 +80,44 @@ define(
                   filterStage ( plugin );
               };
 
-
               function applyPluginFilter() {
                 appService.getPlugins().then( filterAndSetPlugins );
               };
 
               function filterAndSetPlugins ( plugins ) {
-                $scope.filteredPlugins = _.chain( plugins)
+                $scope.filteredPlugins = _.chain( plugins )
                     .filter( pluginFilter )
                     .sortBy( function ( plugin ) { return plugin.getInstallationStatus(); } )
                     .value();
               };
+
+
 
               /**
                * Refreshes the plugin list from the server
                */
               $scope.refreshPluginsFromServer = function() {
                 $scope.filteredPlugins = null;
-                appService.refreshPluginsFromServer().then( filterAndSetPlugins );
+                appService.refreshPluginsFromServer().then( function ( plugins ) {
+                  // stop watching old plugin objects
+                  _.each( pluginVersionWatcherUnregisterFunctions, function ( stopWatching ) {
+                    stopWatching();
+                  } );
+                  pluginVersionWatcherUnregisterFunctions = [];
+
+                  // start watching new plugin objects
+                  _.each( plugins, function ( plugin ) {
+                    var stopWatching = $scope.$watch( function () { return plugin.installedVersion; },
+                                                      function () { filterAndSetPlugins( plugins ); } );
+                    pluginVersionWatcherUnregisterFunctions.push( stopWatching );
+                  } );
+
+                  // filter and set new plugins from server
+                  filterAndSetPlugins( plugins );
+                } );
+
               };
+
 
               $scope.selectTab = function ( tab ) {
                 $scope.selectedTab = tab;
@@ -163,8 +189,8 @@ define(
               $scope.$watchCollection( "selectedStages", applyPluginFilter );
 
 
-              // initialize plugins
-              appService.getPlugins().then( filterAndSetPlugins );
+              // Get plugins from server
+              $scope.refreshPluginsFromServer();
 
             }
           ]);

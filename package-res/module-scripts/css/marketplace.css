@@ -19,6 +19,24 @@
   clear: both;
 }
 
+/* new clearfix */
+.clearfix:after {
+  visibility: hidden;
+  display: block;
+  font-size: 0;
+  content: " ";
+  clear: both;
+  height: 0;
+  }
+* html .clearfix             { zoom: 1; } /* IE6 */
+*:first-child+html .clearfix { zoom: 1; } /* IE7 */
+
+.border-box {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
 /* ==========================================================================
    Install / Uninstall / Update  buttons
    ========================================================================== */
@@ -27,10 +45,13 @@
   float: left;
 }
 
-.installVersionButton .icon {
+.installVersionButton .icon,
+.uninstallButton .icon {
   display: inline-block;
-  height: 22px;
-  width: 22px;
+  height: 16px;
+  width: 16px;
+  top: 50%;
+  margin-top: -8px;
 }
 
 /* Install */
@@ -61,9 +82,6 @@
 }
 
 .uninstallButton .icon {
-  display: inline-block;
-  height: 22px;
-  width: 22px;
   background: url(../img/uninstall.svg) no-repeat;
 }
 .no-svg .uninstallButton .icon,
@@ -111,18 +129,26 @@ li {
 
 .bootstrap .filteredPluginsContainer ul > li .pluginName {
   font-size: 16px;
-  margin-bottom: 2px;
+  margin-bottom: 6px;
   color: #1973bc;
+  line-height: 16px;
 }
 
 .bootstrap .filteredPluginsContainer ul > li .pluginAuthor {
   font-size: 13px;
   color: #7c7c7c;
+  line-height: 13px;
+}
+
+.bootstrap .filteredPluginsContainer ul > li .pluginInfo {
+  font-size: 13px;
+  line-height: 13px;
+  padding-top: 2px;
 }
 
 .bootstrap .filteredPluginsContainer ul > li .infoVersionStatusMessage {
-  font-size: 13px;
   font-weight: 800;
+  margin-bottom: 5px;
 }
 
 
@@ -254,34 +280,55 @@ button.refreshButton {
    Plugin list item
    ========================================================================== */
 
-.pluginListItem {
-  min-height: 50px;
-}
-
-
 .pluginListItem .pluginHeader,
 .pluginListItem .devStageIcon,
 .pluginListItem .pluginActionContainer {
-  display: inline;
+  display: block;
   float: left;
 }
 
-.pluginListItem .pluginActionContainer .pluginInfo,
+.pluginListItem .pluginHeader {
+  width: 55.21%;
+}
+
+.pluginListItem .devStageIcon {
+  width: 6.88%;
+}
+
+.pluginListItem .pluginActionContainer {
+  width: 37.91%;
+  padding-left: 15px;
+}
+
+.pluginListItem .pluginActionContainer .pluginInfo {
+  display: block;
+  float: left;
+  width: 56.11%;
+}
+
 .pluginListItem .pluginActionContainer button {
-  display: inline;
-  float: left;
+  display: block;
+  float: right;
+  width: 43.89%;
+  text-align: left;
+  position: relative;
+  line-height: 32px;
+  padding: 0 14px;
+  margin-top: 1px;
 }
 
+.pluginListItem .pluginActionContainer button .icon {
+  position: absolute;
+  right: 10px;
+}
 
-
-
-
-
-
+/* ==========================================================================
+   Plugin list item - Development Stages icons
+   ========================================================================== */
 
 .dev-stage {
-  width: 55px;
-  height: 32px;
+  width: 100%;
+  height: 35px;
   /* position: absolute; */
   border: none;
   background-position: center center;
@@ -320,7 +367,6 @@ button.refreshButton {
 .no-svg .dev-stage-04 {
   background-image: url(../img/dev-stage-04.png);
 }
-
 
 .dev-stage-community-01 {
   background-image: url(../img/dev-stage-community-01.svg);

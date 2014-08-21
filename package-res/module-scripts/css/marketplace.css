@@ -45,6 +45,14 @@
   float: left;
 }
 
+.pentaho-button.installVersionButton,
+.pentaho-button.installVersionButton:hover,
+.pentaho-button.uninstallButton,
+.pentaho-button.uninstallButton:hover {
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+
 .pentaho-button.installVersionButton .icon,
 .pentaho-button.uninstallButton .icon {
   display: inline-block;
@@ -55,6 +63,33 @@
 }
 
 /* Install */
+.pentaho-button.installVersionButton.install {
+  border: 1px solid #006080;
+  background: #007297; /* Old browsers */
+  background: -moz-linear-gradient(top,  #007297 0%, #016585 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#007297), color-stop(100%,#016585)); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top,  #007297 0%,#016585 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top,  #007297 0%,#016585 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(top,  #007297 0%,#016585 100%); /* IE10+ */
+  background: linear-gradient(to bottom,  #007297 0%,#016585 100%); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#007297', endColorstr='#016585',GradientType=0 ); /* IE6-9 */
+}
+.pentaho-button.installVersionButton.install:hover {
+  background: #016585; /* Old browsers */
+  background: -moz-linear-gradient(top,  #016585 0%, #007297 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#016585), color-stop(100%,#007297)); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top,  #016585 0%,#007297 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top,  #016585 0%,#007297 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(top,  #016585 0%,#007297 100%); /* IE10+ */
+  background: linear-gradient(to bottom,  #016585 0%,#007297 100%); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#016585', endColorstr='#007297',GradientType=0 ); /* IE6-9 */
+}
+.pentaho-button.installVersionButton.install:active {
+  color: #fff;
+  -webkit-box-shadow: 0px 0px 3px 3px rgba(0,0,0,.1) inset;
+  box-shadow: 0px 0px 3px 3px rgba(0,0,0,.1) inset;
+}
+
 .pentaho-button.installVersionButton.install .icon{
   background: url(../img/install.svg) no-repeat;
 }
@@ -65,7 +100,30 @@
 
 /* Update */
 .pentaho-button.installVersionButton.update {
-  /* TODO: green coloring */
+  border: 1px solid #62ab3f;
+  background: #87be6b; /* Old browsers */
+  background: -moz-linear-gradient(top,  #87be6b 0%, #63ab3f 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#87be6b), color-stop(100%,#63ab3f)); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top,  #87be6b 0%,#63ab3f 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top,  #87be6b 0%,#63ab3f 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(top,  #87be6b 0%,#63ab3f 100%); /* IE10+ */
+  background: linear-gradient(to bottom,  #87be6b 0%,#63ab3f 100%); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#87be6b', endColorstr='#63ab3f',GradientType=0 ); /* IE6-9 */
+}
+.pentaho-button.installVersionButton.update:hover {
+  background: #63ab3f; /* Old browsers */
+  background: -moz-linear-gradient(top,  #63ab3f 0%, #87be6b 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#63ab3f), color-stop(100%,#87be6b)); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top,  #63ab3f 0%,#87be6b 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top,  #63ab3f 0%,#87be6b 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(top,  #63ab3f 0%,#87be6b 100%); /* IE10+ */
+  background: linear-gradient(to bottom,  #63ab3f 0%,#87be6b 100%); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#63ab3f', endColorstr='#87be6b',GradientType=0 ); /* IE6-9 */
+}
+.pentaho-button.installVersionButton.update:active {
+  color: #fff;
+  -webkit-box-shadow: 0px 0px 3px 3px rgba(0,0,0,.1) inset;
+  box-shadow: 0px 0px 3px 3px rgba(0,0,0,.1) inset;
 }
 
 .pentaho-button.installVersionButton.update .icon {
@@ -93,7 +151,30 @@
 
 /* Uninstall */
 .pentaho-button.uninstallButton {
-  /* TODO: green coloring */
+  border: 1px solid #006080;
+  background: #007297; /* Old browsers */
+  background: -moz-linear-gradient(top,  #007297 0%, #016585 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#007297), color-stop(100%,#016585)); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top,  #007297 0%,#016585 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top,  #007297 0%,#016585 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(top,  #007297 0%,#016585 100%); /* IE10+ */
+  background: linear-gradient(to bottom,  #007297 0%,#016585 100%); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#007297', endColorstr='#016585',GradientType=0 ); /* IE6-9 */
+}
+.pentaho-button.uninstallButton:hover {
+  background: #016585; /* Old browsers */
+  background: -moz-linear-gradient(top,  #016585 0%, #007297 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#016585), color-stop(100%,#007297)); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top,  #016585 0%,#007297 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top,  #016585 0%,#007297 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(top,  #016585 0%,#007297 100%); /* IE10+ */
+  background: linear-gradient(to bottom,  #016585 0%,#007297 100%); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#016585', endColorstr='#007297',GradientType=0 ); /* IE6-9 */
+}
+.pentaho-button.uninstallButton:active {
+  color: #fff;
+  -webkit-box-shadow: 0px 0px 3px 3px rgba(0,0,0,.1) inset;
+  box-shadow: 0px 0px 3px 3px rgba(0,0,0,.1) inset;
 }
 
 .pentaho-button.uninstallButton .icon {
@@ -134,7 +215,7 @@ li {
 }
 
 .bootstrap .filteredPluginsContainer ul > li:hover {
-  background: #c1d7e1;
+  background: #dce7ed;
   cursor: pointer;
 }
 
@@ -175,12 +256,18 @@ li {
 }
 
 .admin-perspective .pentaho-tabWidget {
-  padding: 6px 20px;
+  padding: 6px 20px;  
+  border: 1px solid transparent;
+  border-top: 4px solid transparent;
+  border-bottom: none;
 }
 
 .admin-perspective .pentaho-tabWidget-selected {
   position: relative;
   z-index: 1;
+  border: 1px solid #cbdde8;
+  border-top: 4px solid #f2ce17;
+  border-bottom: none;
 }
 
 button.refreshButton {
@@ -418,4 +505,59 @@ button.refreshButton {
 .IE.IE8 .dev-stage-community-04,
 .no-svg .dev-stage-community-04 {
   background-image: url(../img/dev-stage-community-04.png);
+}
+
+/* ==========================================================================
+   Info Bar
+   ========================================================================== */
+
+.infoBar {
+  padding: 20px;
+  background: #006d94;
+  border: 1px solid #4192af;
+  margin-top: 20px;
+  color: #fff;
+  cursor: pointer;
+}
+.infoBar:hover {
+  background: #007ba8;
+}
+
+.infoBar .infoBarHeader {
+  float: left;
+}
+
+.infoBar .infoBarHeader .infoBarTitle {
+  font-size: 16px;
+  margin-bottom: 6px;
+  line-height: 16px;
+}
+
+.infoBar .infoBarHeader .infoBarText {
+  font-size: 13px;
+  line-height: 13px;
+}
+
+.infoBar .infoBarFooter {
+  float: right;
+  line-height: 35px;
+  font-size: 16px; 
+  position: relative;
+  padding-right: 15px;
+}
+
+.infoBar .infoBarFooterText:after {
+  right: 0;
+  content: '';
+  width: 5px;
+  height: 9px;
+  background-image: url(../img/learn_more_arrow.svg);
+  position: absolute;
+  top: 50%;
+  margin-top: -5px;
+}
+
+.IE.IE8 .infoBar .infoBarFooterText:after,
+.no-svg .infoBar .infoBarFooterText:after {
+  background-image: url(../img/learn_more_arrow.png);
 }

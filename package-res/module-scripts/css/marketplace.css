@@ -15,6 +15,10 @@
    General Styles
    ========================================================================== */
 
+body {
+  padding: 50px 200px !important; /*for styling purposes. remove in the end*/
+}
+
 .clear {
   clear: both;
 }
@@ -520,6 +524,11 @@ button.refreshButton {
   -webkit-box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2);
   -moz-box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2);
   box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2);
+  font-size: 13px;
+  text-align: center;
+  color: #999999;
+  font-weight: 300;
+  max-width: 250px;
 }
 
 .bootstrap .devStageIcon .popover.top .arrow {
@@ -529,7 +538,7 @@ button.refreshButton {
   overflow: hidden;
   bottom: -20px;
   left: 50%;
-  margin-left: -10px;
+  margin-left: -8px;
 }
 
 .bootstrap .devStageIcon .popover.top .arrow:after {
@@ -545,6 +554,18 @@ button.refreshButton {
   -webkit-box-shadow: 3px 1px 3px -1px rgba(0,0,0,0.2);
   -moz-box-shadow: 3px 1px 3px -1px rgba(0,0,0,0.2);
   box-shadow: 3px 1px 3px -1px rgba(0,0,0,0.2);
+}
+
+.bootstrap .devStageIcon .popover h3.popover-title {
+  font-size: 14px;
+  border: none;
+  line-height: 14px;
+  padding-bottom: 0;
+  color: #333;
+}
+
+.bootstrap .devStageIcon .popover .popover-content {
+  padding: 4px 14px 9px;
 }
 
 /* ==========================================================================

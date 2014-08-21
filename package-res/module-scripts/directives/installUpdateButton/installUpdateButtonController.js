@@ -53,7 +53,8 @@ define( [
                       // TODO i18n
                       button.text = "Up to Date";
                       button.cssClass = "upToDate";
-                      button.disabled = true;
+                      // buttom must be enabled so that click event propagation may be stopped
+                      button.disabled = false;
                       button.onClick = noOperation;
                       return;
                     }

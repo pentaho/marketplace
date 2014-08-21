@@ -18,14 +18,14 @@ define( [ 'marketplace' ],
       console.log("Required devStageIcon/devStageIconController.js");
 
       app.controller('DevStageIconController',
-          ['$scope',
-            function ( $scope ) {
+          ['$scope', 'developmentStageService',
+            function ( $scope, devStages ) {
 
-              var laneTemplate = $scope.lane === "community" ? "community-" : "";
+              var laneTemplate = $scope.lane.toLowerCase() + "-";
               var levelTemplate = "0" + $scope.level;
               $scope.devStageClass = "dev-stage-" + laneTemplate + levelTemplate;
 
-              $scope.stageDescription = "This is a dummy description at the moment...";
+              $scope.stage = devStages.getStage( $scope.lane, $scope.level );
             }
           ]);
 

@@ -23,8 +23,8 @@ define(
       console.log("Required services/dtoMapperService.js");
 
       var service = app.factory( 'dtoMapperService',
-          [ 'Plugin',
-            function( Plugin ) {
+          [ 'Plugin', 'developmentStageService',
+            function( Plugin, devStages ) {
 
               function toPlugin( pluginDTO ) {
                 // region TODO: TEMPORARY array transformation due to bug in server side serialization of single element collections
@@ -87,11 +87,11 @@ define(
                 plugin.license.text = pluginDTO.license_text;
 
 
-
                 // TODO: fill in development stage from DTO
-                plugin.devStage = {};
-                plugin.devStage.lane = ( Math.random() > 0.5 ) ? "community" : "customer";
-                plugin.devStage.level = Math.floor((Math.random() * 4) + 1);;
+                var lanes = devStages.getLanes();
+                var lane = lanes[ Math.floor( Math.random() * lanes.length ) ];
+                var level = Math.floor((Math.random() * 4) + 1);
+                plugin.devStage = devStages.getStage( lane, level );
                 return plugin;
               };
 

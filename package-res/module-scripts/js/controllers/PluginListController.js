@@ -23,8 +23,8 @@ define(
       console.log("Required controllers/PluginListController.js");
 
       app.controller('PluginListController',
-          ['$scope', 'appService', '$modal',
-            function ( $scope, appService, $modal ) {
+          ['$scope', 'appService', '$modal', 'developmentStageService',
+            function ( $scope, appService, $modal, devStagesService ) {
 
               var installedTab = 'installedTab';
               var availableTab = 'availableTab';
@@ -167,18 +167,7 @@ define(
               ];
 
               // TODO: i18n
-              // TODO: get from service
-              $scope.developmentStages = [
-                { lane: "customer", level: 1, shortDescription: 'Development Phase' },
-                { lane: "customer", level: 2, shortDescription: 'Snapshot Release' },
-                { lane: "customer", level: 3, shortDescription: 'Limited Support' },
-                { lane: "customer", level: 4, shortDescription: 'Production Release' },
-                { lane: "community", level: 1, shortDescription: 'Development Phase' },
-                { lane: "community", level: 2, shortDescription: 'Snapshot Release' },
-                { lane: "community", level: 3, shortDescription: 'Stable Release' },
-                { lane: "community", level: 4, shortDescription: 'Mature Release' }
-              ];
-
+              $scope.developmentStages = devStagesService.getStages();
 
               $scope.$watch( "selectedTab", applyPluginFilter );
               $scope.selectTab( availableTab );

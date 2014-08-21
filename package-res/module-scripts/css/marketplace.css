@@ -41,12 +41,12 @@
    Install / Uninstall / Update  buttons
    ========================================================================== */
 
-.installVersionButton .span {
+.pentaho-button.installVersionButton .span {
   float: left;
 }
 
-.installVersionButton .icon,
-.uninstallButton .icon {
+.pentaho-button.installVersionButton .icon,
+.pentaho-button.uninstallButton .icon {
   display: inline-block;
   height: 16px;
   width: 16px;
@@ -55,37 +55,52 @@
 }
 
 /* Install */
-.installVersionButton.install .icon{
+.pentaho-button.installVersionButton.install .icon{
   background: url(../img/install.svg) no-repeat;
 }
-.no-svg .installVersionButton.install .icon,
-.IE.IE8 .installVersionButton.install .icon{
+.no-svg .pentaho-button.installVersionButton.install .icon,
+.IE.IE8 .pentaho-button.installVersionButton.install .icon{
   background: url(../img/install.png) no-repeat;
 }
 
 /* Update */
-.installVersionButton.update {
+.pentaho-button.installVersionButton.update {
   /* TODO: green coloring */
 }
 
-.installVersionButton.update .icon {
+.pentaho-button.installVersionButton.update .icon {
   background: url(../img/update.svg) no-repeat;
 }
-.no-svg .installVersionButton.update .icon,
-.IE.IE8 .installVersionButton.update .icon{
+.no-svg .pentaho-button.installVersionButton.update .icon,
+.IE.IE8 .pentaho-button.installVersionButton.update .icon{
   background: url(../img/update.png) no-repeat;
 }
 
+/* Up To Date */
+.pentaho-button.installVersionButton.upToDate {
+  border: 1px solid #cbdde8;
+  background: #ffffff;
+  color: #1973bc;
+}
+
+.pentaho-button.installVersionButton.upToDate .icon {
+  background: url(../img/uptodate.svg) no-repeat;
+}
+.no-svg .pentaho-button.installVersionButton.upToDate .icon,
+.IE.IE8 .pentaho-button.installVersionButton.upToDate .icon{
+  background: url(../img/uptodate.png) no-repeat;
+}
+
 /* Uninstall */
-.uninstallButton {
+.pentaho-button.uninstallButton {
   /* TODO: green coloring */
 }
 
-.uninstallButton .icon {
+.pentaho-button.uninstallButton .icon {
   background: url(../img/uninstall.svg) no-repeat;
 }
-.no-svg .uninstallButton .icon,
-.IE.IE8 .uninstallButton .icon{
+.no-svg .pentaho-button.uninstallButton .icon,
+.IE.IE8 .pentaho-button.uninstallButton .icon{
   background: url(../img/uninstall.png) no-repeat;
 }
 
@@ -177,6 +192,11 @@ button.refreshButton {
   background-repeat: no-repeat;
   width: 39px;
   height: 39px;
+}
+
+.IE.IE8 button.refreshButton,
+.no-svg button.refreshButton {
+  background-image: url(../img/refresh.png);
 }
 
 .bootstrap.admin-perspective .pentaho-tab-deck-panel {

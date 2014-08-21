@@ -36,10 +36,10 @@ define(
                 // TODO: i18n
                 newDialogModal(
                     function ( ) { return appService.installPlugin( plugin, version); },
-                    "Install Plugin " + plugin.name,
-                    "Do you want to proceed?",
-                    "Installing...",
-                    "Installation successful",
+                    "Do you want to install?",
+                    "You are about to install " + plugin.name + ". Do you want to proceed?",
+                    "Installing " + plugin.name + "...",
+                    "Plugin " + plugin.name + " installed successfully",
                     "Installation Error"
                 );
               }
@@ -48,11 +48,11 @@ define(
                 // TODO: i18n
                 newDialogModal(
                     function ( ) { return appService.installPlugin( plugin, version); },
-                    "Update Plugin " + plugin.name,
-                    "Do you want to proceed?",
-                    "Updating...",
-                    "Plugin updated successfully",
-                    "Error occurred when updating plugin"
+                    "Do you want update?",
+                    "You are about to update " + plugin.name + ". Do you want to proceed?",
+                    "Updating " + plugin.name + "...",
+                    "Plugin " + plugin.name + " updated successfully.",
+                    "Error occurred when updating plugin " + plugin.name + "."
                 );
               }
 
@@ -64,12 +64,11 @@ define(
                 // TODO: i18n
                 newDialogModal(
                     function ( ) { return appService.uninstallPlugin( plugin ); },
-                    "Uninstall Plugin " + plugin.name,
-                    "Do you want to proceed?",
-                    "Uninstalling...",
-                    "Plugin uninstalled successfully",
-                    "Error occurred when uninstalling plugin"
-                );
+                    "Do you want uninstall?",
+                    "You are about to uninstall " + plugin.name + ". Do you want to proceed?",
+                    "Uninstalling " + plugin.name + "...",
+                    "Plugin " + plugin.name + " uninstalled successfully.",
+                    "Error occurred when uninstalling plugin " + plugin.name + "."              );
               }
 
 

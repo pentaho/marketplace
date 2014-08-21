@@ -47,7 +47,7 @@ define(
                 }
 
                 // if installed tab is selected only accept installed plugins
-                return plugin.isInstalled;;
+                return plugin.isInstalled;
               };
 
               /**
@@ -98,6 +98,7 @@ define(
                */
               $scope.refreshPluginsFromServer = function() {
                 $scope.filteredPlugins = null;
+                $scope.isGettingPluginsFromServer = true;
                 appService.refreshPluginsFromServer().then( function ( plugins ) {
                   // stop watching old plugin objects
                   _.each( pluginVersionWatcherUnregisterFunctions, function ( stopWatching ) {
@@ -114,6 +115,7 @@ define(
 
                   // filter and set new plugins from server
                   filterAndSetPlugins( plugins );
+                  $scope.isGettingPluginsFromServer = false;
                 } );
 
               };

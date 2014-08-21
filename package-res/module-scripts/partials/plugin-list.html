@@ -46,6 +46,21 @@
 
       </div>
 
+      <div class="statusMessage">
+
+        <span data-ng-show="isGettingPluginsFromServer">
+          <!-- TODO i18n -->
+          Getting Plugins from server. Please Wait.
+        </span>
+
+        <span data-ng-show="!isGettingPluginsFromServer && filteredPlugins.length == 0">
+          <!-- TODO i18n -->
+          No plugin found that matched your criteria.
+        </span>
+
+      </div>
+
+
       <div plugin-list plugins="filteredPlugins" on-plugin-clicked="pluginWasClicked" class="filteredPluginsContainer"/>
 
       <div class="infoBar clearfix">

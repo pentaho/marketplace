@@ -443,36 +443,36 @@ button.refreshButton {
   border-right : 1px solid #cbdde8;
 }
 
-.dev-stage-01 {
-  background-image: url(../img/dev-stage-01.svg);
+.dev-stage-customer-01 {
+  background-image: url(../img/dev-stage-customer-01.svg);
 }
-.IE.IE8 .dev-stage-01,
-.no-svg .dev-stage-01 {
-  background-image: url(../img/dev-stage-01.png);
-}
-
-.dev-stage-02  {
-  background-image: url(../img/dev-stage-02.svg);
-}
-.IE.IE8 .dev-stage-02,
-.no-svg .dev-stage-02 {
-  background-image: url(../img/dev-stage-02.png);
+.IE.IE8 .dev-stage-customer-01,
+.no-svg .dev-stage-customer-01 {
+  background-image: url(../img/dev-stage-customer-01.png);
 }
 
-.dev-stage-03 {
-  background-image: url(../img/dev-stage-03.svg);
+.dev-stage-customer-02  {
+  background-image: url(../img/dev-stage-customer-02.svg);
 }
-.no-svg .dev-stage-03,
-.IE.IE8 .dev-stage-03 {
-  background-image: url(../img/dev-stage-03.png);
+.IE.IE8 .dev-stage-customer-02,
+.no-svg .dev-stage-customer-02 {
+  background-image: url(../img/dev-stage-customer-02.png);
 }
 
-.dev-stage-04 {
-  background-image: url(../img/dev-stage-04.svg);
+.dev-stage-customer-03 {
+  background-image: url(../img/dev-stage-customer-03.svg);
 }
-.IE.IE8 .dev-stage-04,
-.no-svg .dev-stage-04 {
-  background-image: url(../img/dev-stage-04.png);
+.no-svg .dev-stage-customer-03,
+.IE.IE8 .dev-stage-customer-03 {
+  background-image: url(../img/dev-stage-customer-03.png);
+}
+
+.dev-stage-customer-04 {
+  background-image: url(../img/dev-stage-customer-04.svg);
+}
+.IE.IE8 .dev-stage-customer-04,
+.no-svg .dev-stage-customer-04 {
+  background-image: url(../img/dev-stage-customer-04.png);
 }
 
 .dev-stage-community-01 {

@@ -15,8 +15,8 @@
    General Styles
    ========================================================================== */
 
-body {
-  padding: 50px 200px !important; /*for styling purposes. remove in the end*/
+html {
+  overflow-y: scroll;
 }
 
 .clear {

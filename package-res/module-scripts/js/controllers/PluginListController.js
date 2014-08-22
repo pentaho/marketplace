@@ -85,9 +85,16 @@ define(
               };
 
               function filterAndSetPlugins ( plugins ) {
+                function laneRank ( lane ) { return lane; }
+                function levelRank ( level ) { return 4 - level; }
+
                 $scope.filteredPlugins = _.chain( plugins )
                     .filter( pluginFilter )
-                    .sortBy( function ( plugin ) { return plugin.getInstallationStatus(); } )
+                    .sortBy( function ( plugin ) {
+                      return plugin.getInstallationStatus() +
+                          laneRank( plugin.devStage.lane ) +
+                          levelRank( plugin.devStage.level ) +
+                          plugin.name; } )
                     .value();
               };
 

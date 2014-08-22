@@ -15,6 +15,10 @@
    General Styles
    ========================================================================== */
 
+body.bootstrap {
+  font-family: OpenSansLight, sans-serif;
+}
+
 html {
   overflow-y: scroll;
 }
@@ -205,6 +209,21 @@ li {
   clear: both;
 }
 
+.bootstrap .statusMessage {
+  text-align: center;
+  font-size: 13px;
+  line-height: 15px;
+  color: #999999;
+}
+
+.bootstrap .statusMessage > div {
+  margin-bottom: 60px;
+}
+
+.bootstrap .statusMessage > div.statusMessageNoPlugins {
+  margin-top: 60px;
+}
+
 .bootstrap .filteredPluginsContainer {
   margin-top: 20px;
 }
@@ -230,26 +249,42 @@ li {
 
 .bootstrap .filteredPluginsContainer ul > li .pluginName {
   font-size: 16px;
-  margin-bottom: 6px;
+  padding-bottom: 4px;
   color: #1973bc;
   line-height: 16px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  width: 95%;
 }
 
 .bootstrap .filteredPluginsContainer ul > li .pluginAuthor {
   font-size: 13px;
   color: #7c7c7c;
-  line-height: 13px;
+  line-height: 15px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  width: 95%;
 }
 
 .bootstrap .filteredPluginsContainer ul > li .pluginInfo {
   font-size: 13px;
   line-height: 13px;
-  padding-top: 2px;
+  padding-top: 1px;
 }
 
 .bootstrap .filteredPluginsContainer ul > li .infoVersionStatusMessage {
   font-weight: 800;
   margin-bottom: 5px;
+}
+
+.bootstrap .filteredPluginsContainer ul > li .infoVersion {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  width: 95%;
+  white-space: nowrap;
+  line-height: 15px;
 }
 
 
@@ -310,6 +345,26 @@ button.refreshButton {
 .filterBar .stagesInfo {
   float: right;
   line-height: 28px;
+}
+
+.filterBar .stagesInfo a.stagesInfoLink {
+  position: relative;
+}
+
+.filterBar .stagesInfo a.stagesInfoLink:before {
+  content: '';
+  position: absolute;
+  width: 28px;
+  height: 28px;
+  background-image: url(../img/info.svg);
+  background-repeat: no-repeat;
+  background-position: center center;
+  margin-left: -28px;
+}
+
+.IE.IE8 .filterBar .stagesInfo a.stagesInfoLink:before,
+.no-svg .filterBar .stagesInfo a.stagesInfoLink:before {
+  background-image: url(../img/info.png);
 }
 
 .filterBar .filterContainer .multiselect {
@@ -621,4 +676,222 @@ button.refreshButton {
 .IE.IE8 .infoBar .infoBarFooterText:after,
 .no-svg .infoBar .infoBarFooterText:after {
   background-image: url(../img/learn_more_arrow.png);
+}
+
+/* ==========================================================================
+   Loading Plugins
+   ========================================================================== */
+
+#floatingBarsG {
+  position:relative;
+  width:25px;
+  height:31px;
+  margin: 40px auto 20px;
+}
+
+.blockG {
+  position:absolute;
+  background-color:#FFFFFF;
+  width:4px;
+  height:10px;
+  -moz-border-radius:4px 4px 0 0;
+  -moz-transform:scale(0.4);
+  -moz-animation-name:fadeG;
+  -moz-animation-duration:1.1199999999999999s;
+  -moz-animation-iteration-count:infinite;
+  -moz-animation-direction:linear;
+  -webkit-border-radius:4px 4px 0 0;
+  -webkit-transform:scale(0.4);
+  -webkit-animation-name:fadeG;
+  -webkit-animation-duration:1.1199999999999999s;
+  -webkit-animation-iteration-count:infinite;
+  -webkit-animation-direction:linear;
+  -ms-border-radius:4px 4px 0 0;
+  -ms-transform:scale(0.4);
+  -ms-animation-name:fadeG;
+  -ms-animation-duration:1.1199999999999999s;
+  -ms-animation-iteration-count:infinite;
+  -ms-animation-direction:linear;
+  -o-border-radius:4px 4px 0 0;
+  -o-transform:scale(0.4);
+  -o-animation-name:fadeG;
+  -o-animation-duration:1.1199999999999999s;
+  -o-animation-iteration-count:infinite;
+  -o-animation-direction:linear;
+  border-radius:4px 4px 0 0;
+  transform:scale(0.4);
+  animation-name:fadeG;
+  animation-duration:1.1199999999999999s;
+  animation-iteration-count:infinite;
+  animation-direction:linear;
+}
+
+#rotateG_01 {
+  left:0;
+  top:11px;
+  -moz-animation-delay:0.41999999999999993s;
+  -moz-transform:rotate(-90deg);
+  -webkit-animation-delay:0.41999999999999993s;
+  -webkit-transform:rotate(-90deg);
+  -ms-animation-delay:0.41999999999999993s;
+  -ms-transform:rotate(-90deg);
+  -o-animation-delay:0.41999999999999993s;
+  -o-transform:rotate(-90deg);
+  animation-delay:0.41999999999999993s;
+  transform:rotate(-90deg);
+}
+
+#rotateG_02 {
+  left:3px;
+  top:4px;
+  -moz-animation-delay:0.5599999999999999s;
+  -moz-transform:rotate(-45deg);
+  -webkit-animation-delay:0.5599999999999999s;
+  -webkit-transform:rotate(-45deg);
+  -ms-animation-delay:0.5599999999999999s;
+  -ms-transform:rotate(-45deg);
+  -o-animation-delay:0.5599999999999999s;
+  -o-transform:rotate(-45deg);
+  animation-delay:0.5599999999999999s;
+  transform:rotate(-45deg);
+}
+
+#rotateG_03 {
+  left:10px;
+  top:1px;
+  -moz-animation-delay:0.7s;
+  -moz-transform:rotate(0deg);
+  -webkit-animation-delay:0.7s;
+  -webkit-transform:rotate(0deg);
+  -ms-animation-delay:0.7s;
+  -ms-transform:rotate(0deg);
+  -o-animation-delay:0.7s;
+  -o-transform:rotate(0deg);
+  animation-delay:0.7s;
+  transform:rotate(0deg);
+}
+
+#rotateG_04 {
+  right:3px;
+  top:4px;
+  -moz-animation-delay:0.8399999999999999s;
+  -moz-transform:rotate(45deg);
+  -webkit-animation-delay:0.8399999999999999s;
+  -webkit-transform:rotate(45deg);
+  -ms-animation-delay:0.8399999999999999s;
+  -ms-transform:rotate(45deg);
+  -o-animation-delay:0.8399999999999999s;
+  -o-transform:rotate(45deg);
+  animation-delay:0.8399999999999999s;
+  transform:rotate(45deg);
+}
+
+#rotateG_05 {
+  right:0;
+  top:11px;
+  -moz-animation-delay:0.9799999999999999s;
+  -moz-transform:rotate(90deg);
+  -webkit-animation-delay:0.9799999999999999s;
+  -webkit-transform:rotate(90deg);
+  -ms-animation-delay:0.9799999999999999s;
+  -ms-transform:rotate(90deg);
+  -o-animation-delay:0.9799999999999999s;
+  -o-transform:rotate(90deg);
+  animation-delay:0.9799999999999999s;
+  transform:rotate(90deg);
+}
+
+#rotateG_06 {
+  right:3px;
+  bottom:3px;
+  -moz-animation-delay:1.1199999999999999s;
+  -moz-transform:rotate(135deg);
+  -webkit-animation-delay:1.1199999999999999s;
+  -webkit-transform:rotate(135deg);
+  -ms-animation-delay:1.1199999999999999s;
+  -ms-transform:rotate(135deg);
+  -o-animation-delay:1.1199999999999999s;
+  -o-transform:rotate(135deg);
+  animation-delay:1.1199999999999999s;
+  transform:rotate(135deg);
+}
+
+#rotateG_07 {
+  bottom:0;
+  left:10px;
+  -moz-animation-delay:1.26s;
+  -moz-transform:rotate(180deg);
+  -webkit-animation-delay:1.26s;
+  -webkit-transform:rotate(180deg);
+  -ms-animation-delay:1.26s;
+  -ms-transform:rotate(180deg);
+  -o-animation-delay:1.26s;
+  -o-transform:rotate(180deg);
+  animation-delay:1.26s;
+  transform:rotate(180deg);
+}
+
+#rotateG_08 {
+  left:3px;
+  bottom:3px;
+  -moz-animation-delay:1.4s;
+  -moz-transform:rotate(-135deg);
+  -webkit-animation-delay:1.4s;
+  -webkit-transform:rotate(-135deg);
+  -ms-animation-delay:1.4s;
+  -ms-transform:rotate(-135deg);
+  -o-animation-delay:1.4s;
+  -o-transform:rotate(-135deg);
+  animation-delay:1.4s;
+  transform:rotate(-135deg);
+}
+
+@-moz-keyframes fadeG {
+  0% {
+    background-color:#1168AF;
+  }
+
+  100% {
+    background-color:#FFFFFF;
+  }
+}
+
+@-webkit-keyframes fadeG {
+  0% {
+    background-color:#1168AF;
+  }
+
+  100% {
+    background-color:#FFFFFF;
+  }
+}
+
+@-ms-keyframes fadeG {
+  0% {
+    background-color:#1168AF;
+  }
+
+  100% {
+    background-color:#FFFFFF;
+  }
+}
+
+@-o-keyframes fadeG {
+  0% {
+    background-color:#1168AF;
+  }
+
+  100% {
+    background-color:#FFFFFF;
+  }
+}
+
+@keyframes fadeG {
+  0% {
+    background-color:#1168AF;
+  }
+
+  100% {
+    background-color:#FFFFFF;
+  }
 }

@@ -41,22 +41,32 @@
 
         <div class="stagesInfo">
           <span class="icon info"></span>
-          <a data-ng-href="https://www.google.com/?#q=what+are+stages">What are stages?</a>
+          <a data-ng-href="https://www.google.com/?#q=what+are+stages" class="stagesInfoLink">What are stages?</a>
         </div>
 
       </div>
 
       <div class="statusMessage">
 
-        <span data-ng-show="isGettingPluginsFromServer">
+        <div data-ng-show="isGettingPluginsFromServer">
           <!-- TODO i18n -->
-          Getting Plugins from server. Please Wait.
-        </span>
+          <div id="floatingBarsG">
+            <div class="blockG" id="rotateG_01"></div>
+            <div class="blockG" id="rotateG_02"></div>
+            <div class="blockG" id="rotateG_03"></div>
+            <div class="blockG" id="rotateG_04"></div>
+            <div class="blockG" id="rotateG_05"></div>
+            <div class="blockG" id="rotateG_06"></div>
+            <div class="blockG" id="rotateG_07"></div>
+            <div class="blockG" id="rotateG_08"></div>
+          </div>
+          <span>Getting Plugins from server. Please Wait.</span>
+        </div>
 
-        <span data-ng-show="!isGettingPluginsFromServer && filteredPlugins.length == 0">
+        <div data-ng-show="!isGettingPluginsFromServer && filteredPlugins.length == 0" class="statusMessageNoPlugins">
           <!-- TODO i18n -->
           No plugin found that matched your criteria.
-        </span>
+        </div>
 
       </div>
 

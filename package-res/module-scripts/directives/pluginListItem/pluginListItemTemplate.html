@@ -1,8 +1,8 @@
 <div class="pluginListItem clearfix">
 
   <div class="pluginHeader">
-    <div class="pluginName">{{plugin.name}}</div>
-    <div class="pluginAuthor">{{plugin.author.name}}</div>
+    <div class="pluginName" title="{{plugin.name}}">{{plugin.name}}</div>
+    <div class="pluginAuthor" title="{{plugin.author.name}}">{{plugin.author.name}}</div>
   </div>
 
   <div data-dev-stage-icon data-lane="plugin.devStage.lane" data-level="plugin.devStage.level" ></div>
@@ -11,8 +11,7 @@
 
     <div class="pluginInfo">
       <div class="infoVersionStatusMessage">{{infoVersionStatusMessage}}</div>
-      <span class="infoVersionVersion">{{infoVersion.version}}</span>
-      <span data-ng-show="infoVersion.branch" class="infoVersionBranch">({{infoVersion.branch}})</span>
+      <div class="infoVersion" title="{{infoVersion.version}} ({{infoVersion.branch}})">{{infoVersion.version}} ({{infoVersion.branch}})</div>
     </div>
 
     <button data-install-update-button data-plugin="plugin"

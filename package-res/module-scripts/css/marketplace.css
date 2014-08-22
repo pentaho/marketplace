@@ -14,6 +14,12 @@
 /* ==========================================================================
    General Styles
    ========================================================================== */
+@font-face {
+  font-family: 'OpenSansSemibold';
+  font-style: normal;
+  font-weight: 600;
+  src: local('Open Sans Semibold'), local('OpenSans-Semibold'), url(../font/opensans-semibold.woff2) format('woff2');
+}
 
 body.bootstrap {
   font-family: OpenSansLight, sans-serif;
@@ -59,6 +65,10 @@ html {
 .pentaho-button.uninstallButton:hover {
   -webkit-box-shadow: none;
   box-shadow: none;
+  text-align: left;
+  line-height: 32px;
+  padding: 0 14px;
+  position: relative;
 }
 
 .pentaho-button.installVersionButton .icon,
@@ -68,6 +78,8 @@ html {
   width: 16px;
   top: 50%;
   margin-top: -8px;
+  position: absolute;
+  right: 10px;
 }
 
 /* Install */
@@ -584,6 +596,7 @@ button.refreshButton {
   color: #999999;
   font-weight: 300;
   max-width: 250px;
+  line-height: 18px;
 }
 
 .bootstrap .devStageIcon .popover.top .arrow {
@@ -894,4 +907,217 @@ button.refreshButton {
   100% {
     background-color:#FFFFFF;
   }
+}
+
+/* ==========================================================================
+   Confirmation Dialog
+   ========================================================================== */
+
+body.bootstrap .modal.confirmationDialog {
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0;
+  background-color: #f5f6f8;
+  border: 1px solid #cbdde8;
+  -webkit-box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2);
+  -moz-box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2);
+  box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2);
+  padding: 20px;
+  width: 410px;
+  margin-left: -205px;
+}
+
+body.bootstrap .modal.confirmationDialog .dialog .title {
+  font-size: 16px;
+  padding-bottom: 20px;
+  color: #1973bc;
+  line-height: 16px;
+}
+
+body.bootstrap .modal.confirmationDialog .dialog .body {
+  font-size: 14px;
+  padding-bottom: 40px;
+  color: #999999;
+  line-height: 18px;
+}
+
+body.bootstrap .modal.confirmationDialog .dialog .buttonsContainer {
+  text-align: right;
+}
+
+body.bootstrap .modal.confirmationDialog .dialog .buttonsContainer button {
+  margin-left: 10px;
+}
+
+body.bootstrap .modal.confirmationDialog .dialog .buttonsContainer button:first-of-type {
+  min-width: 110px;
+}
+
+/* ==========================================================================
+   Plugin Detail Dialog
+   ========================================================================== */
+
+body.bootstrap .modal.pluginDetailDialog {
+  position: absolute;
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0;
+  background-color: #ffffff;
+  border: 1px solid #cbdde8;
+  padding: 20px;
+  -webkit-box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2);
+  -moz-box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2);
+  box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2);
+  width: 720px;
+  margin-left: -370px;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  font-size: 12px;
+  line-height: 18px;
+  font-family: OpenSansRegular, sans-serif;
+}
+
+
+body.bootstrap .modal.pluginDetailDialog .pluginDetail {
+  background-color: #ffffff;
+  border: 1px solid #cbdde8;
+  padding: 20px;
+  color: #26363d;
+}
+
+body.bootstrap .modal.pluginDetailDialog .pluginDetail b,
+body.bootstrap .modal.pluginDetailDialog .pluginDetail strong {
+  font-family: OpenSansSemibold, sans-serif;
+}
+
+body.bootstrap .modal.pluginDetailDialog .pluginDetail .pluginDetailLeft {
+  float: left;
+  width: 34.375%;
+  position: relative;
+}
+
+body.bootstrap .modal.pluginDetailDialog .pluginDetail .pluginDetailRight {
+  float: right;
+  width: 60.9375%;
+  position: relative;
+}
+
+body.bootstrap .modal.pluginDetailDialog .pluginDetail .pluginDetailTop .pluginDetailLeft,
+body.bootstrap .modal.pluginDetailDialog .pluginDetail .pluginDetailTop .pluginDetailRight {
+  height: 160px;
+}
+
+body.bootstrap .modal.pluginDetailDialog .pluginDetail .sectionHeader {
+  font-size: 13px;
+  line-height: 15px;
+  color: #1973bc;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #cbdde8;
+  margin-bottom: 20px;
+  margin-top: 25px;
+  font-family: OpenSansLight, sans-serif;
+}
+
+body.bootstrap .modal.pluginDetailDialog .pluginDetail .pluginInformationItem {
+  line-height: 18px;
+}
+
+body.bootstrap .modal.pluginDetailDialog .pluginDetail .pluginInformationItem .pluginInformationLeft {
+  font-family: OpenSansSemibold, sans-serif;
+  float: left;
+  width: 35%;
+}
+
+body.bootstrap .modal.pluginDetailDialog .pluginDetail .pluginInformationItem .pluginInformationRight {
+  float: right;
+  width: 52%;
+}
+
+body.bootstrap .modal.pluginDetailDialog .pluginDetail .pluginHeaderInfo .pluginName {
+  font-size: 16px;
+  padding-bottom: 4px;
+  color: #1973bc;
+  line-height: 16px;
+  margin-top: 35px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  width: 95%;  
+}
+
+body.bootstrap .modal.pluginDetailDialog .pluginDetail .pluginHeaderInfo .pluginAuthor {
+  font-size: 13px;
+  line-height: 15px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  width: 95%;
+}
+
+body.bootstrap .modal.pluginDetailDialog .pluginDetail .pluginDetailHeaderButtons button {
+  width: 130px;
+  margin-right: 10px;
+}
+
+body.bootstrap .modal.pluginDetailDialog .pluginDetail .pluginDetailHeaderButtons {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+}
+
+body.bootstrap .modal.pluginDetailDialog .pluginDetail .pluginDetailTop .pluginDetailLeft select {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  margin-bottom: 0;
+}
+
+body.bootstrap .modal.pluginDetailDialog .pluginDetail .pluginDetailTop .pluginDetailLeft .pluginImage {
+  text-align: center;
+  padding-top: 20px;
+  110
+}
+
+body.bootstrap .modal.pluginDetailDialog .pluginDetail .pluginDetailTop .pluginDetailLeft .pluginImage img {
+  max-width: 100%;
+  max-height: 90px;
+}
+
+body.bootstrap .modal.pluginDetailDialog .pluginDetail .pluginDetailBottom {
+  margin-top: 20px;
+  padding: 20px;
+  background: #f5f6f8;
+  border: 1px solid #cbdde8;
+}
+
+body.bootstrap .modal.pluginDetailDialog .pluginDetail .pluginDetailBottom > div {
+  float: left;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+body.bootstrap .modal.pluginDetailDialog .pluginDetail .pluginDetailBottom > div.devStageIcon {
+  width: 7.5%;
+}
+
+body.bootstrap .modal.pluginDetailDialog .pluginDetail .pluginDetailBottom > div.devStageIcon .dev-stage {
+  background-position: left center;
+  border-right: none;
+}
+
+body.bootstrap .modal.pluginDetailDialog .pluginDetail .pluginDetailBottom > div.devStageName {
+  font-size: 14px;
+  line-height: 35px;
+  font-family: OpenSansLight, sans-serif;
+  padding-right: 20px;
+  border-right: 1px solid #cbdde8;
+  width: 25.5%;
+}
+
+body.bootstrap .modal.pluginDetailDialog .pluginDetail .pluginDetailBottom > div.devStageDescription {
+  padding-left: 20px;
+  height: 35px;
+  width: 67%;
 }

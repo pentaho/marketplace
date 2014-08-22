@@ -1,62 +1,82 @@
 <div class="pluginDetail">
 
   <!-- TODO i18n on all "hardcoded" values -->
-  <div name="top">
-    <img data-ng-src="{{plugin.image}}" data-ng-show="plugin.image"/>
-    <div class="">{{plugin.name}}</div>
-    <div class="">{{plugin.author.name}}</div>
+  <div class="pluginDetailInfoContainer">
 
-    <select data-ng-model="selectedPluginVersion"
-            data-ng-options="(version.version + ' (' + version.branch + ')' ) for version in plugin.versions">
-    </select>
-    <button data-install-update-button data-plugin="plugin" data-selected-version="selectedPluginVersion"
-        data-allow-reinstall="true">
-    </button>
-    <button class="pentaho-button uninstallButton" data-ng-click="uninstallPlugin(plugin)" data-ng-disabled="!plugin.isInstalled">
-      <span class="text">Uninstall</span>
-      <span class="icon"></span>
-    </button>
-  </div>
+    <div class="pluginDetailTop clearfix">
+      <div class="pluginDetailLeft">
 
-  <div name="middle">
-    <div name="left">
-      <div>
+        <div class="pluginImage">
+          <img data-ng-src="{{plugin.image}}" data-ng-show="plugin.image"/>      
+        </div>
+
+        <select data-ng-model="selectedPluginVersion"
+                data-ng-options="(version.version + ' (' + version.branch + ')' ) for version in plugin.versions">
+        </select>
+        
+      </div>
+      <div class="pluginDetailRight">
+
+        <div class="pluginHeaderInfo">
+          <div class="pluginName">{{plugin.name}}</div>
+          <div class="pluginAuthor">{{plugin.author.name}}</div>
+        </div>     
+
+        <div class="pluginDetailHeaderButtons">
+          <button data-install-update-button data-plugin="plugin" data-selected-version="selectedPluginVersion"
+              data-allow-reinstall="true">
+          </button>
+          <button class="pentaho-button uninstallButton" data-ng-click="uninstallPlugin(plugin)" data-ng-disabled="!plugin.isInstalled">
+            <span class="text">Uninstall</span>
+            <span class="icon"></span>
+          </button>
+        </div>
+        
+      </div>
+    </div>
+
+    <div class="pluginDetailMiddle clearfix">
+      <div class="pluginDetailLeft">
+
         <div class="sectionHeader">Information</div>
 
-        <div data-ng-repeat="info in pluginInformation">
-          <span>{{info.label}}:</span>
-          <a data-ng-if="info.hasUrl()" data-ng-href="{{info.url}}">{{info.description}}</a>
-          <span data-ng-if="!info.hasUrl()">{{info.description}}</span>
+        <div data-ng-repeat="info in pluginInformation" class="pluginInformationItem clearfix">
+          <div class="pluginInformationLeft">
+            <span>{{info.label}}:</span>            
+          </div>
+          <div class="pluginInformationRight">
+            <a data-ng-if="info.hasUrl()" data-ng-href="{{info.url}}">{{info.description}}</a>
+            <span data-ng-if="!info.hasUrl()">{{info.description}}</span>            
+          </div>
+        </div>  
+
+      </div>
+      <div class="pluginDetailRight">
+
+        <div data-ng-show="plugin.description">
+          <div class="sectionHeader">Description</div>
+          <div data-ng-bind-html="plugin.description"></div>
         </div>
 
-      </div>
-
-    </div>
-
-    <div name="right">
-
-      <div data-ng-show="plugin.description">
-        <div class="sectionHeader">Description:</div>
-        <div data-ng-bind-html="plugin.description"></div>
-      </div>
-
-      <div data-ng-show="plugin.screenshotUrls && plugin.screenshotUrls.length > 0">
-        <div>Screenshots:</div>
-        <div data-carousel data-interval="5000">
-          <div data-slide data-ng-repeat="screenshotUrl in plugin.screenshotUrls">
-            <img data-ng-src="{{screenshotUrl}}">
+        <div data-ng-show="plugin.screenshotUrls && plugin.screenshotUrls.length > 0">
+          <div class="sectionHeader">Screenshots</div>
+          <div data-carousel data-interval="5000">
+            <div data-slide data-ng-repeat="screenshotUrl in plugin.screenshotUrls">
+              <img data-ng-src="{{screenshotUrl}}">
+            </div>
           </div>
         </div>
+        
       </div>
-
     </div>
+
   </div>
 
-  <div data-ng-show="plugin.devStage" name="bottom">
+  <div data-ng-show="plugin.devStage" class="pluginDetailBottom clearfix">
     <div data-dev-stage-icon
          data-lane="plugin.devStage.lane" data-level="plugin.devStage.level"></div>
-    <div>{{plugin.devStage.name}}</div>
-    <div>{{plugin.devStage.description}}</div>
+    <div class="devStageName">{{plugin.devStage.name}}</div>
+    <div class="devStageDescription">{{plugin.devStage.description}}</div>
   </div>
 
 </div>

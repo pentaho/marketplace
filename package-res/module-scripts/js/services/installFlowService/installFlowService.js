@@ -100,7 +100,7 @@ define(
                     onOk: function() { return onOk; },
                     onCancel: function() { return onCancel; }
                   },
-                  //windowClass: "pentaho-dialog"
+                  windowClass: "confirmationDialog"
                 });
 
                 return dialogModal;

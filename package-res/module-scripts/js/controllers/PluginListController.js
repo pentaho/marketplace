@@ -143,7 +143,7 @@ define(
                 var pluginDetailModal = $modal.open( {
                   template: '<div data-plugin-detail data-plugin="plugin"></div>',
                   scope: modalScope,
-                  //windowClass: "pentaho-dialog"
+                  windowClass: "pluginDetailDialog"
                 });
 
                 // clean up created modal scope

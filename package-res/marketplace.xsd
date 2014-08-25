@@ -379,7 +379,7 @@
   <xsd:simpleType name="developmentStageLane">
 
     <xsd:restriction base="xsd:normalizedString">
-      <xsd:enumeration value="Costumer"/>
+      <xsd:enumeration value="Customer"/>
       <xsd:enumeration value="Community"/>
     </xsd:restriction>
 

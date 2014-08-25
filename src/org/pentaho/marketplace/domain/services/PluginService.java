@@ -365,8 +365,8 @@ public class PluginService implements IPluginService {
    */
   private IDevelopmentStage getDevelopmentStage( Element versionElement ) {
     final String DEVELOPMENT_STAGE_ELEMENT_NAME = "developmentStage";
-    final String DEVELOPMENT_STAGE_LANE_ELEMENT_NAME = "developmentStageLane";
-    final String DEVELOPMENT_STAGE_PHASE_ELEMENT_NAME = "developmentPhaseLane";
+    final String DEVELOPMENT_STAGE_LANE_ELEMENT_NAME = "lane";
+    final String DEVELOPMENT_STAGE_PHASE_ELEMENT_NAME = "phase";
 
     NodeList list = versionElement.getElementsByTagName( DEVELOPMENT_STAGE_ELEMENT_NAME );
     if ( list.getLength() < 1 ) {

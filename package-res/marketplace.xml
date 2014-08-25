@@ -78,7 +78,7 @@
 				<description>Build for Pentaho 5.0</description>
 				<min_parent_version>5.0</min_parent_version>
         <developmentStage>
-          <lane>Costumer</lane>
+          <lane>Customer</lane>
           <phase>2</phase>
         </developmentStage>
 			</version>
@@ -123,7 +123,7 @@
 				<min_parent_version>1.0</min_parent_version>
 				<build_id/>
         <developmentStage>
-          <lane>Costumer</lane>
+          <lane>Customer</lane>
           <phase>2</phase>
         </developmentStage>
 			</version>
@@ -138,7 +138,7 @@
 				<max_parent_version>5.1.99</max_parent_version>
 				<build_id/>
         <developmentStage>
-          <lane>Costumer</lane>
+          <lane>Customer</lane>
           <phase>2</phase>
         </developmentStage>
 			</version>

@@ -20,8 +20,6 @@ public class PluginVersion implements IPluginVersion {
   private String releaseDate;
   private String minParentVersion;
   private String maxParentVersion;
-  private String stageLane;
-  private String stagePhase;
   private IDevelopmentStage developmentStage;
   //endregion
 

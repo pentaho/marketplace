@@ -63,10 +63,13 @@ define(
                 // plugin is in one of the selected development stages
                 return _.any( $scope.selectedStages,
                     function ( selectedStage ) {
-                      return ( selectedStage.lane == plugin.devStage.lane &&
-                          selectedStage.level == plugin.devStage.level );
+                      return _.any( plugin.versions, function ( version )  {
+                            return !version.devStage ||
+                                ( selectedStage.lane == version.devStage.lane &&
+                                  selectedStage.level == version.devStage.level );
+                      } );
                     }
-                )
+                );
               };
 
 
@@ -85,16 +88,9 @@ define(
               };
 
               function filterAndSetPlugins ( plugins ) {
-                function laneRank ( lane ) { return lane; }
-                function levelRank ( level ) { return 4 - level; }
 
                 $scope.filteredPlugins = _.chain( plugins )
                     .filter( pluginFilter )
-                    .sortBy( function ( plugin ) {
-                      return plugin.getInstallationStatus() +
-                          laneRank( plugin.devStage.lane ) +
-                          levelRank( plugin.devStage.level ) +
-                          plugin.name; } )
                     .value();
               };
 

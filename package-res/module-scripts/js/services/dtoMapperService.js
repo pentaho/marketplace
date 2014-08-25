@@ -86,12 +86,6 @@ define(
                 }
                 plugin.license.text = pluginDTO.license_text;
 
-
-                // TODO: fill in development stage from DTO
-                var lanes = devStages.getLanes();
-                var lane = lanes[ Math.floor( Math.random() * lanes.length ) ];
-                var level = Math.floor((Math.random() * 4) + 1);
-                plugin.devStage = devStages.getStage( lane, level );
                 return plugin;
               };
 
@@ -114,6 +108,16 @@ define(
                 version.compatiblePentahoVersion = {};
                 version.compatiblePentahoVersion.minimum = versionDTO.minParentVersion;
                 version.compatiblePentahoVersion.maximum = versionDTO.maxParentVersion;
+
+                // TODO: fill in development stage from DTO
+                /*
+                var lanes = devStages.getLanes();
+                var lane = lanes[ Math.floor( Math.random() * lanes.length ) ];
+                var level = Math.floor((Math.random() * 4) + 1);
+                */
+                var lane = versionDTO.developmentStageLane;
+                var phase = versionDTO.developlmentStagePhase;
+                version.devStage = devStages.getStage( lane, phase );
 
                 return version;
               };

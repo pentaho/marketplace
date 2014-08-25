@@ -21,11 +21,19 @@ define( [ 'marketplace' ],
           ['$scope', 'developmentStageService',
             function ( $scope, devStages ) {
 
-              var laneTemplate = $scope.lane.toLowerCase() + "-";
-              var levelTemplate = "0" + $scope.level;
-              $scope.devStageClass = "dev-stage-" + laneTemplate + levelTemplate;
+              function update() {
+                if ( $scope.lane && $scope.level ) {
+                  var laneTemplate = $scope.lane.toLowerCase() + "-";
+                  var levelTemplate = "0" + $scope.level;
+                  $scope.devStageClass = "dev-stage-" + laneTemplate + levelTemplate;
 
-              $scope.stage = devStages.getStage( $scope.lane, $scope.level );
+                  $scope.stage = devStages.getStage( $scope.lane, $scope.level );
+                }
+              }
+
+              $scope.$watch('lane',  update );
+              $scope.$watch('level', update );
+
             }
           ]);
 

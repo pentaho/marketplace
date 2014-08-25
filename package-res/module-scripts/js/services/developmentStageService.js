@@ -74,6 +74,9 @@ define(
               }
 
               function getStage( lane, level ) {
+                if ( !lane || !level ) {
+                  return undefined;
+                }
                 return developmentStages[lane][level];
               }
 

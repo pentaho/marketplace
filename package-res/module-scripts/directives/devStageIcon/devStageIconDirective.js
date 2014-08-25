@@ -30,7 +30,7 @@ define( [ 'marketplace' ],
                 //'@' evaluates as a string
                 //'=' evaluates in the isolate scope
                 lane: "=",
-                level: "=",
+                phase: "=",
                 enablePopupDescription: "="
               }
             };

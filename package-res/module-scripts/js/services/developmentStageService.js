@@ -38,14 +38,14 @@ define(
               /**
                *
                * @param lane
-               * @param level
+               * @param phase
                * @param name
                * @param description
                * @constructor
                */
-              function DevelopmentStage ( lane, level, name, description ) {
+              function DevelopmentStage ( lane, phase, name, description ) {
                 this.lane = lane;
-                this.level = level;
+                this.phase = phase;
 
                 // TODO: needs support for i18n
                 this.name = name;
@@ -57,7 +57,7 @@ define(
                 if( developmentStages[devStage.lane] === undefined ) {
                   developmentStages[devStage.lane] = [];
                 }
-                developmentStages[devStage.lane][devStage.level] = devStage;
+                developmentStages[devStage.lane][devStage.phase] = devStage;
               }
 
               // TODO: check if these should be obtained from metadata
@@ -73,11 +73,11 @@ define(
                 setDevelopmentStage( new DevelopmentStage( communityLane, 4, 'Mature Release', "Indicates a successfully adopted project in a mature state." ));
               }
 
-              function getStage( lane, level ) {
-                if ( !lane || !level ) {
+              function getStage( lane, phase ) {
+                if ( !lane || !phase ) {
                   return undefined;
                 }
-                return developmentStages[lane][level];
+                return developmentStages[lane][phase];
               }
 
               function getStages () {

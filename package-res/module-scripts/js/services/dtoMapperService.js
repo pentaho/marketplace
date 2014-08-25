@@ -109,9 +109,9 @@ define(
                 version.compatiblePentahoVersion.minimum = versionDTO.minParentVersion;
                 version.compatiblePentahoVersion.maximum = versionDTO.maxParentVersion;
 
-                // TODO: fill in development stage from DTO
 
                 /*
+                // Randomly create dev stages
                 var lanes = devStages.getLanes();
                 var lane = lanes[ Math.floor( Math.random() * lanes.length ) ];
                 var phase = Math.floor((Math.random() * 4) + 1);

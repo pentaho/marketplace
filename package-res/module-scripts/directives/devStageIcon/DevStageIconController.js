@@ -22,17 +22,17 @@ define( [ 'marketplace' ],
             function ( $scope, devStages ) {
 
               function update() {
-                if ( $scope.lane && $scope.level ) {
+                if ( $scope.lane && $scope.phase ) {
                   var laneTemplate = $scope.lane.toLowerCase() + "-";
-                  var levelTemplate = "0" + $scope.level;
-                  $scope.devStageClass = "dev-stage-" + laneTemplate + levelTemplate;
+                  var phaseTemplate = "0" + $scope.phase;
+                  $scope.devStageClass = "dev-stage-" + laneTemplate + phaseTemplate;
 
-                  $scope.stage = devStages.getStage( $scope.lane, $scope.level );
+                  $scope.stage = devStages.getStage( $scope.lane, $scope.phase );
                 }
               }
 
               $scope.$watch('lane',  update );
-              $scope.$watch('level', update );
+              $scope.$watch('phase', update );
 
             }
           ]);

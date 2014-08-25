@@ -64,9 +64,9 @@ define(
                 return _.any( $scope.selectedStages,
                     function ( selectedStage ) {
                       return _.any( plugin.versions, function ( version )  {
-                            return !version.devStage ||
-                                ( selectedStage.lane == version.devStage.lane &&
-                                  selectedStage.level == version.devStage.level );
+                            return version.devStage &&
+                                selectedStage.lane == version.devStage.lane &&
+                                selectedStage.phase == version.devStage.phase;
                       } );
                     }
                 );

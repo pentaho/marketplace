@@ -1,5 +1,7 @@
 package org.pentaho.marketplace.endpoints.dtos.mappers;
 
+import org.pentaho.marketplace.domain.model.entities.DevelopmentStage;
+import org.pentaho.marketplace.domain.model.entities.interfaces.IDevelopmentStage;
 import org.pentaho.marketplace.domain.model.entities.interfaces.IPluginVersion;
 import org.pentaho.marketplace.domain.model.factories.interfaces.IPluginVersionFactory;
 import org.pentaho.marketplace.endpoints.dtos.entities.PluginVersionDTO;
@@ -45,6 +47,10 @@ public class PluginVersionDTOMapper implements IPluginVersionDTOMapper {
     pluginVersion.setMinParentVersion( dto.minParentVersion );
     pluginVersion.setMaxParentVersion( dto.maxParentVersion );
 
+    // TODO: use factory for DI?
+    IDevelopmentStage devStage = new DevelopmentStage( dto.developmentStageLane, dto.developmentStagePhase );
+    pluginVersion.setDevelopmentStage( devStage );
+
     //return the instance
     return pluginVersion;
   }
@@ -67,6 +73,12 @@ public class PluginVersionDTOMapper implements IPluginVersionDTOMapper {
     dto.releaseDate = pluginVersion.getReleaseDate();
     dto.minParentVersion = pluginVersion.getMinParentVersion();
     dto.maxParentVersion = pluginVersion.getMaxParentVersion();
+
+    IDevelopmentStage devStage = pluginVersion.getDevelopmentStage();
+    if(  devStage != null ) {
+      dto.developmentStageLane = devStage.getLane();
+      dto.developmentStagePhase = devStage.getPhase();
+    }
 
     //return the dto
     return dto;

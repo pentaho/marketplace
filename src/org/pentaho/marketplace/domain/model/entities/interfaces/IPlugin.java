@@ -101,8 +101,6 @@ public interface IPlugin {
   void setLicenseText( String value );
 
 
-
-
   //endregion
 
   //region Methods

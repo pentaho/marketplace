@@ -9,6 +9,8 @@ import org.pentaho.di.core.exception.KettleException;
 import org.pentaho.di.core.logging.LogLevel;
 import org.pentaho.di.job.Job;
 import org.pentaho.di.job.JobMeta;
+import org.pentaho.marketplace.domain.model.entities.DevelopmentStage;
+import org.pentaho.marketplace.domain.model.entities.interfaces.IDevelopmentStage;
 import org.pentaho.marketplace.domain.model.entities.interfaces.IDomainStatusMessage;
 import org.pentaho.marketplace.domain.model.entities.interfaces.IPlugin;
 import org.pentaho.marketplace.domain.model.entities.interfaces.IPluginVersion;
@@ -74,6 +76,12 @@ public class PluginService implements IPluginService {
   private static final String PLUGIN_UNINSTALLED_CODE = "PLUGIN_UNINSTALLED";
   private static final String CLOSE_METHOD_NAME = "close";
   private static final String PLUGIN_NAME = "marketplace";
+
+  private static final String MARKETPLACE_ENTRIES_URL_FALLBACK = "https://raw.github.com/pentaho/marketplace-metadata/master/marketplace.xml";
+
+  // region XML
+  // endregion
+
   //endregion
 
   //region Attributes
@@ -251,9 +259,7 @@ public class PluginService implements IPluginService {
     }
 
     if ( site == null || "".equals( site ) ) {
-
-      site = "https://raw.github.com/pentaho/marketplace-metadata/master/marketplace.xml";
-
+      site = MARKETPLACE_ENTRIES_URL_FALLBACK;
     }
 
     return HttpUtil.getURLContent( site );
@@ -317,8 +323,7 @@ public class PluginService implements IPluginService {
             pv.setReleaseDate( getElementChildValue( versionElement, "releaseDate" ) );
             pv.setMinParentVersion( getElementChildValue( versionElement, "min_parent_version" ) );
             pv.setMaxParentVersion( getElementChildValue( versionElement, "max_parent_version" ) );
-            pv.setStageLane( getElementChildValue( versionElement, "stage_lane" ) );
-            pv.setStagePhase( getElementChildValue( versionElement, "stage_phase" ) );
+            pv.setDevelopmentStage( getDevelopmentStage( versionElement ) );
 
             if ( withinParentVersion( pv ) ) {
               versions.add( pv );
@@ -351,6 +356,30 @@ public class PluginService implements IPluginService {
       e.printStackTrace();
     }
     return null;
+  }
+
+  /**
+   * Parses the version element to get the development stage
+   * @param versionElement where the development stage element is contained
+   * @return
+   */
+  private IDevelopmentStage getDevelopmentStage( Element versionElement ) {
+    final String DEVELOPMENT_STAGE_ELEMENT_NAME = "developmentStage";
+    final String DEVELOPMENT_STAGE_LANE_ELEMENT_NAME = "developmentStageLane";
+    final String DEVELOPMENT_STAGE_PHASE_ELEMENT_NAME = "developmentPhaseLane";
+
+    NodeList list = versionElement.getElementsByTagName( DEVELOPMENT_STAGE_ELEMENT_NAME );
+    if ( list.getLength() < 1 ) {
+      // no development stage element found
+      return null;
+    }
+    Element devStageElement = (Element) list.item( 0 );
+
+    String lane = this.getElementChildValue( devStageElement, DEVELOPMENT_STAGE_LANE_ELEMENT_NAME );
+    String phase = this.getElementChildValue( devStageElement, DEVELOPMENT_STAGE_PHASE_ELEMENT_NAME );;
+
+    // TODO: switch to factory to allow DI?
+    return new DevelopmentStage( lane, phase );
   }
 
   private IDomainStatusMessage installPluginAux( String pluginId, String versionBranch )

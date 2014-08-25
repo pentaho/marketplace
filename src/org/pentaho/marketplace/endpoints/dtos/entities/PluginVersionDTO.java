@@ -17,5 +17,7 @@ public class PluginVersionDTO {
   public String releaseDate;
   public String minParentVersion;
   public String maxParentVersion;
+  public String developmentStageLane;
+  public String developmentStagePhase;
   //endregion
 }

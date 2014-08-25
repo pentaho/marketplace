@@ -241,6 +241,7 @@
                   </xsd:sequence>
                 </xsd:complexType>
               </xsd:element>
+
             </xsd:all>
           </xsd:complexType>
         </xsd:element>
@@ -347,16 +348,48 @@
     <xsd:all>
      <xsd:element name="branch" minOccurs="0" maxOccurs="1" type="xsd:normalizedString"/>
      <xsd:element name="version" minOccurs="0" maxOccurs="1" type="xsd:normalizedString"/>
+     <xsd:element name="build_id" minOccurs="0" maxOccurs="1" type="xsd:string"/>
+      <!-- TODO: make developmenStage element required (minOccurs = "1") -->
+     <xsd:element name="developmentStage" minOccurs="0" maxOccurs="1" type="developmentStage"/>
      <xsd:element name="name" minOccurs="0" maxOccurs="1" type="xsd:normalizedString"/>
      <xsd:element name="package_url" minOccurs="0" maxOccurs="1" type="xsd:anyURI"/>
      <xsd:element name="samples_url" minOccurs="0" maxOccurs="1" type="xsd:anyURI"/>
      <xsd:element name="source_url" minOccurs="0" maxOccurs="1" type="xsd:anyURI"/>
      <xsd:element name="description" minOccurs="0" maxOccurs="1" type="xsd:string"/>
-     <xsd:element name="build_id" minOccurs="0" maxOccurs="1" type="xsd:string"/>
      <xsd:element name="min_parent_version" minOccurs="0" maxOccurs="1" type="xsd:string"/>
      <xsd:element name="max_parent_version" minOccurs="0" maxOccurs="1" type="xsd:string"/>
      <xsd:element name="changelog" minOccurs="0" maxOccurs="1" type="xsd:string"/>
     </xsd:all>
   </xsd:complexType>
-   
+
+  <xsd:complexType name="developmentStage">
+    <xsd:annotation>
+      <xsd:documentation>
+        The stage of development the current version of the market entry is at.
+      </xsd:documentation>
+    </xsd:annotation>
+
+    <xsd:all>
+      <xsd:element name="lane" minOccurs="1" maxOccurs="1" type="developmentStageLane"/>
+      <xsd:element name="phase" minOccurs="1" maxOccurs="1" type="developmentStagePhase"/>
+    </xsd:all>
+
+  </xsd:complexType>
+
+  <xsd:simpleType name="developmentStageLane">
+
+    <xsd:restriction base="xsd:normalizedString">
+      <xsd:enumeration value="Costumer"/>
+      <xsd:enumeration value="Community"/>
+    </xsd:restriction>
+
+  </xsd:simpleType>
+
+  <xsd:simpleType name="developmentStagePhase">
+    <xsd:restriction base="xsd:unsignedInt">
+      <xsd:minInclusive value="1"/>
+      <xsd:maxInclusive value="4"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+
 </xsd:schema>

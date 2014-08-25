@@ -59,13 +59,9 @@ public interface IPluginVersion {
 
   void setMaxParentVersion( String value );
 
-  // stage lane
-  String getStageLane();
-  void setStageLane( String value );
-
-  // stage phase
-  String getStagePhase();
-  void setStagePhase( String value );
+  //development Stage
+  IDevelopmentStage getDevelopmentStage();
+  IPluginVersion setDevelopmentStage( IDevelopmentStage stage );
 
   //endregion
 }

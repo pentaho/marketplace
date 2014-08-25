@@ -1,5 +1,6 @@
 package org.pentaho.marketplace.domain.model.entities;
 
+import org.pentaho.marketplace.domain.model.entities.interfaces.IDevelopmentStage;
 import org.pentaho.marketplace.domain.model.entities.interfaces.IPluginVersion;
 
 import javax.xml.bind.annotation.XmlRootElement;
@@ -21,6 +22,7 @@ public class PluginVersion implements IPluginVersion {
   private String maxParentVersion;
   private String stageLane;
   private String stagePhase;
+  private IDevelopmentStage developmentStage;
   //endregion
 
   //region IPluginVersion implementation
@@ -134,10 +136,11 @@ public class PluginVersion implements IPluginVersion {
     this.maxParentVersion = value;
   }
 
-  @Override public String getStageLane() { return this.stageLane; }
-  @Override public void setStageLane( String value ) { this.stageLane = value; }
+  @Override public IDevelopmentStage getDevelopmentStage() { return this.developmentStage; }
+  @Override public PluginVersion setDevelopmentStage ( IDevelopmentStage stage ) {
+    this.developmentStage = stage;
+    return this;
+  }
 
-  @Override public String getStagePhase() { return this.stagePhase; }
-  @Override public void setStagePhase( String value ) { this.stagePhase = value; }
   //endregion
 }

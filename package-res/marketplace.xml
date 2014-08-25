@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<market>
+<market xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/graimundo/new-marketplace/master/package-res/marketplace.xsd">
 
 	<!-- ***************** -->
 	<!-- BA Server Plugins -->
@@ -63,6 +64,10 @@
 					build.</description>
 				<max_parent_version>4.9</max_parent_version>
 				<min_parent_version>1.0</min_parent_version>
+        <developmentStage>
+          <lane>Community</lane>
+          <phase>1</phase>
+        </developmentStage>
 			</version>
 			<version>
 				<branch>TRUNK</branch>
@@ -72,6 +77,10 @@
 				<package_url>http://ci.pentaho.com/job/marketplace/lastSuccessfulBuild/artifact/dist/marketplace-plugin-TRUNK-SNAPSHOT.zip</package_url>
 				<description>Build for Pentaho 5.0</description>
 				<min_parent_version>5.0</min_parent_version>
+        <developmentStage>
+          <lane>Costumer</lane>
+          <phase>2</phase>
+        </developmentStage>
 			</version>
 		</versions>
 		<screenshots>
@@ -81,6 +90,7 @@
 			<screenshot>https://raw2.github.com/pentaho/marketplace/master/marketplace-resources/marketplace-04.png</screenshot>
 			<screenshot>https://raw2.github.com/pentaho/marketplace/master/marketplace-resources/marketplace-05.png</screenshot>
 		</screenshots>
+
 	</market_entry>
 
 
@@ -209,12 +219,12 @@
 		</version>
 			<version>
         <branch>TRUNK</branch>
-		<version>TRUNK-SNAPSHOT</version>
-		<name>Trunk</name>
+		    <version>TRUNK-SNAPSHOT</version>
+		    <name>Trunk</name>
         <package_url>http://ci.pentaho.com/job/pentaho-cda/lastSuccessfulBuild/artifact/cda-pentaho5/dist/cda-TRUNK-SNAPSHOT.zip</package_url>
         <samples_url>http://ci.pentaho.com/job/pentaho-cda/lastSuccessfulBuild/artifact/cda-pentaho5/dist/cda-samples-TRUNK-SNAPSHOT.zip</samples_url>
         <description>Build for Pentaho 5.0</description>
-		<build_id>217</build_id>
+		    <build_id>217</build_id>
         <min_parent_version>5.0</min_parent_version>
 		</version>
 		</versions>
@@ -222,6 +232,7 @@
 			<screenshot>http://www.webdetails.pt/resources/marketplace-screenshots/cda/cda-01.png</screenshot>
 			<screenshot>http://www.webdetails.pt/resources/marketplace-screenshots/cda/cda-02.png</screenshot>
 		</screenshots>
+
 	</market_entry>
 
 
@@ -272,16 +283,20 @@
 
 
 			<version>
-            <branch>TRUNK</branch>
+        <branch>TRUNK</branch>
     		<version>TRUNK-SNAPSHOT</version>
 	    	<name>Trunk</name>
-            <package_url>http://ci.analytical-labs.com/job/Webdetails-CDE/lastSuccessfulBuild/artifact/cde-pentaho/dist/pentaho-cdf-dd-TRUNK-SNAPSHOT.zip</package_url>
-            <samples_url>http://ci.analytical-labs.com/job/Webdetails-CDE/lastSuccessfulBuild/artifact/cde-pentaho/dist/pentaho-cdf-dd-solution-TRUNK-SNAPSHOT.zip</samples_url>
-            <description>Trunk Snapshot. Get the latest, edgy, still work in progress features here...</description>
+        <package_url>http://ci.analytical-labs.com/job/Webdetails-CDE/lastSuccessfulBuild/artifact/cde-pentaho/dist/pentaho-cdf-dd-TRUNK-SNAPSHOT.zip</package_url>
+        <samples_url>http://ci.analytical-labs.com/job/Webdetails-CDE/lastSuccessfulBuild/artifact/cde-pentaho/dist/pentaho-cdf-dd-solution-TRUNK-SNAPSHOT.zip</samples_url>
+        <description>Trunk Snapshot. Get the latest, edgy, still work in progress features here...</description>
 		    <build_id>364</build_id>
-            <min_parent_version>1.0</min_parent_version>		
-	    	<max_parent_version>4.9</max_parent_version>        
-		    </version>
+        <min_parent_version>1.0</min_parent_version>
+	    	<max_parent_version>4.9</max_parent_version>
+        <developmentStage>
+          <lane>Community</lane>
+          <phase>1</phase>
+        </developmentStage>
+      </version>
 			<version>
                 <branch>TRUNK</branch>
                 <version>TRUNK-SNAPSHOT</version>
@@ -421,6 +436,7 @@
 			<screenshot>http://www.webdetails.pt/resources/marketplace-screenshots/sparkl/sparkl-2.png</screenshot>
 			<screenshot>http://www.webdetails.pt/resources/marketplace-screenshots/sparkl/sparkl-3.png</screenshot>
 		</screenshots>
+
 	</market_entry>
 
 	<market_entry>

@@ -1,11 +1,11 @@
 <div class="multiselect">
     <div class="btn-group" data-dropdown data-is-open="status.isopen">
       <button class="btn btn-primary dropdown-toggle" type="button" data-ng-disabled="disabled"
-          data-popover="{{getOptionsDisplayString()}}" data-popover-popup-delay="500"
+          data-popover="{{optionsDisplayString}}" data-popover-popup-delay="500"
           data-popover-trigger="mouseenter" data-popover-placement="bottom">
-
-        <!-- TODO i18n -->
-        Filter: {{getOptionsDisplayString()}} <span class="caret"></span>
+        <span>{{prefix}}</span>
+        <span>{{optionsDisplayString}}</span>
+        <span class="caret"></span>
       </button>
       <ul class="dropdown-menu" role="menu">
 
@@ -20,6 +20,7 @@
 
           <li class="option"
               data-ng-repeat="option in group.options"
+              data-ng-show="option.name"
               data-ng-click="toggleSelection(option)"
               data-checked="{{option.isSelected}}">
             <a href="">
@@ -28,7 +29,7 @@
             </a>
           </li>
 
-          <li class="divider" data-ng-repeat-end ></li>
+          <li class="divider" data-ng-show="useDivider" data-ng-repeat-end />
 
       </ul>
   </div>

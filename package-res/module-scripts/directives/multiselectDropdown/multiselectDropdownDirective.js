@@ -58,7 +58,16 @@ define( [ 'marketplace' ],
                  * The option attribute name which value will be used to fill in the selectedOptions array.
                  * If no value is specified the options itself will be used as the selected value.
                  */
-                select: '@'
+                select: '@',
+                /**
+                 * Whether or not to use a divider line between groups
+                 */
+                useDivider: '@',
+                /**
+                 * Text prefix to be used in the selection box
+                 */
+                prefix: '@'
+
               }
             };
           }

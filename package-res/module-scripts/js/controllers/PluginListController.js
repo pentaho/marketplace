@@ -146,6 +146,7 @@ define(
                 var categories = _.chain( plugins )
                     .map( function( plugin ) { return plugin.category; } )
                     .uniq( function ( category ) { return category.main + category.sub; } )
+                    .sortBy( function ( category ) { return category.main + category.sub; })
                     .value();
 
                 return categories;

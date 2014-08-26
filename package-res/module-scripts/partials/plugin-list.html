@@ -27,14 +27,18 @@
 
         <div class="filterContainer">
 
+          <!-- TODO i18n data-prefix -->
           <div data-multiselect-dropdown
               data-selected-options="selectedTypes"  data-options="pluginTypes"
-              data-group-by="main" data-display="sub" >
+              data-group-by="main" data-display="sub"
+              data-prefix="Type: ">
           </div>
 
+          <!-- TODO i18n data-prefix -->
           <div data-multiselect-dropdown
               data-selected-options="selectedStages" data-options="developmentStages"
-              data-group-by="lane" data-display="name" >
+              data-group-by="lane" data-display="name"
+              data-prefix="Stage: " data-use-divider="true">
           </div>
 
         </div>

@@ -109,30 +109,34 @@ define(
                 }
               }
 
-              $scope.selectedOptionsDisplay = [];
-
-              $scope.getOptionsDisplayString = function () {
-                if ($scope.selectedOptionsDisplay.length == 0 ) {
+              function getOptionsDisplayString ( selectedOptionsDisplay ) {
+                if (selectedOptionsDisplay.length == 0 ) {
                   // TODO: i18n
                   return "All";
                 }
-                
-                return $scope.selectedOptionsDisplay.join(', ');
+                return selectedOptionsDisplay.join(', ');
+              };
+
+              function getGroups ( scope, options, groupBy, display, select ) {
+                return _.chain( options )
+                    .groupBy( groupBy )
+                    .map( function ( options, groupName ) {
+                      var group = new Group ( groupName, scope );
+                      group.options = _.map( options,
+                          function ( option ) {
+                            var name = display ? option[display] : option;
+                            var selectionValue = select ? option[select] : option;
+                            // TODO: remove scope? => selectedOptionsValue, selectedOptionsDisplay
+                            return new Option( name, selectionValue, group, scope, scope.selectedOptionsValue, scope.selectedOptionsDisplay );
+                          });
+                      return group;
+                    })
+                    .value();
               }
 
-              $scope.groups = _.chain( $scope.options )
-                  .groupBy( $scope.groupBy )
-                  .map( function ( options, groupName ) {
-                    var group = new Group ( groupName, $scope );
-                    group.options = _.map( options,
-                          function ( option ) {
-                            var name = $scope.display ? option[$scope.display] : option;
-                            var selectionValue = $scope.select ? option[$scope.select] : option;
-                            return new Option( name, selectionValue, group, $scope, $scope.selectedOptionsValue, $scope.selectedOptionsDisplay );
-                          });
-                    return group;
-                  })
-                  .value();
+              $scope.selectedOptionsDisplay = [];
+
+              $scope.getOptionsDisplayString = function () { return getOptionsDisplayString( $scope.selectedOptionsDisplay ); };
 
               $scope.toggleSelection = function ( selectable ) {
                 selectable.isSelected = !selectable.isSelected;
@@ -149,6 +153,10 @@ define(
                     break;
                 }
               }
+
+              $scope.$watch( 'options', function () {
+                $scope.groups = getGroups( $scope, $scope.options, $scope.groupBy, $scope.display, $scope.select );
+              });
 
             }
           ]);

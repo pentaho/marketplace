@@ -86,6 +86,27 @@ define(
                 }
                 plugin.license.text = pluginDTO.license_text;
 
+                var categories = [
+                  { sub: 'Analysis', main: 'Apps' },
+                  { sub: 'Dashboards', main: 'Apps' },
+                  { sub: 'Reporting', main: 'Apps' },
+                  { sub: 'Lifecycle', main: 'Apps' },
+                  { sub: 'Admin', main: 'Apps' },
+                  { main: 'Visualizations' },
+                  { main: 'Themes' },
+                  { main: 'Language Packs' },
+                  { sub: 'Analysis', main: 'Apps' },
+                  { sub: 'Dashboards', main: 'Apps' },
+                  { sub: 'Reporting', main: 'Apps' },
+                  { sub: 'Lifecycle', main: 'Apps' },
+                  { sub: 'Admin', main: 'Apps' },
+                  { main: 'Visualizations' },
+                  { main: 'Themes' },
+                  { main: 'Language Packs' }
+                ];
+                
+                plugin.category = categories[ Math.floor( Math.random() * categories.length ) ];;
+                
                 return plugin;
               };
 

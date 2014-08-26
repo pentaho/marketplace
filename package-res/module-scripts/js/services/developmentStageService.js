@@ -81,7 +81,11 @@ define(
               }
 
               function getStages () {
-                return _.flatten( developmentStages );
+                return _.chain( developmentStages )
+                    .flatten()
+                    // IE8 requires that undefined and null values are explicitly removed
+                    .filter( function ( stage ) { return !(stage === undefined || stage === null); } )
+                    .value();
               }
 
               function getLanes () {

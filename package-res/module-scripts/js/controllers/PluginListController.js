@@ -72,6 +72,20 @@ define(
                 );
               };
 
+              function filterCategory ( plugin ) {
+                if ( $scope.selectedTypes.length == 0 ) {
+                  return true;
+                }
+
+                // plugin is in one of the selected development stages
+                return _.any( $scope.selectedTypes,
+                    function ( selectedType ) {
+                      return selectedType.main == plugin.category.main &&
+                          selectedType.sub == plugin.category.sub;
+                    }
+                );
+              }
+
 
               /**
                * Checks if a plugin passes all the conditions set in the view
@@ -80,7 +94,8 @@ define(
                */
               function pluginFilter ( plugin ) {
                 return filterInstalled( plugin ) &&
-                  filterStage ( plugin );
+                  filterStage ( plugin ) &&
+                  filterCategory( plugin );
               };
 
               function applyPluginFilter() {
@@ -94,34 +109,53 @@ define(
                     .value();
               };
 
+              function refreshPluginsFromServer () {
+                $scope.filteredPlugins = null;
+                $scope.isGettingPluginsFromServer = true;
+                appService.refreshPluginsFromServer().then( function ( plugins ) {
+                      updateRegistersForInstallStatusChanges( plugins );
+                      updateCategoryFilter( plugins );
+                      filterAndSetPlugins( plugins );
+                      $scope.isGettingPluginsFromServer = false;
+                    }
+                    // TODO: i18n
+                    //,function () { alert("Error getting plugins."); }
+                );
+              };
+
+              function updateRegistersForInstallStatusChanges ( newPlugins ) {
+                // stop watching old plugin objects
+                _.each( pluginVersionWatcherUnregisterFunctions, function ( stopWatching ) {
+                  stopWatching();
+                } );
+                pluginVersionWatcherUnregisterFunctions = [];
+
+                // start watching new plugin objects
+                _.each( newPlugins, function ( plugin ) {
+                  var stopWatching = $scope.$watch( function () { return plugin.installedVersion; },
+                      function () { filterAndSetPlugins( newPlugins ); } );
+                  pluginVersionWatcherUnregisterFunctions.push( stopWatching );
+                } );
+              };
+
+              function updateCategoryFilter( plugins ) {
+                $scope.pluginTypes = getCategories( plugins );
+              };
+
+              function getCategories ( plugins ) {
+                var categories = _.chain( plugins )
+                    .map( function( plugin ) { return plugin.category; } )
+                    .uniq( function ( category ) { return category.main + category.sub; } )
+                    .value();
+
+                return categories;
+              }
 
 
               /**
                * Refreshes the plugin list from the server
                */
-              $scope.refreshPluginsFromServer = function() {
-                $scope.filteredPlugins = null;
-                $scope.isGettingPluginsFromServer = true;
-                appService.refreshPluginsFromServer().then( function ( plugins ) {
-                  // stop watching old plugin objects
-                  _.each( pluginVersionWatcherUnregisterFunctions, function ( stopWatching ) {
-                    stopWatching();
-                  } );
-                  pluginVersionWatcherUnregisterFunctions = [];
-
-                  // start watching new plugin objects
-                  _.each( plugins, function ( plugin ) {
-                    var stopWatching = $scope.$watch( function () { return plugin.installedVersion; },
-                                                      function () { filterAndSetPlugins( plugins ); } );
-                    pluginVersionWatcherUnregisterFunctions.push( stopWatching );
-                  } );
-
-                  // filter and set new plugins from server
-                  filterAndSetPlugins( plugins );
-                  $scope.isGettingPluginsFromServer = false;
-                } );
-
-              };
+              $scope.refreshPluginsFromServer = refreshPluginsFromServer;
 
 
               $scope.selectTab = function ( tab ) {
@@ -150,15 +184,6 @@ define(
               };
 
               /*
-              appService.getPlugins().then( function ( plugins ) {
-                    $scope.pluginTypes = _.chain( plugins )
-                        .unique( function ( plugin ) { return plugin.type; } )
-                        .map( function ( plugin ) { return { name: plugin.type, group: plugin.type }; } )
-                        .value();
-                  }
-              );
-              */
-
               // TODO: get from service
               $scope.pluginTypes = [
                 { name: 'Analysis', group: 'Apps' },
@@ -170,21 +195,25 @@ define(
                 { name: 'Themes', group: 'Other' },
                 { name: 'Language Packs', group: 'Other' }
               ];
+              */
 
               // TODO: i18n
-              $scope.developmentStages = devStagesService.getStages();
+              $scope.$watchCollection( "selectedStages", applyPluginFilter );
+              $scope.$watchCollection( "selectedTypes", applyPluginFilter );
 
               $scope.$watch( "selectedTab", applyPluginFilter );
-              $scope.selectTab( availableTab );
 
               $scope.selectedStages = [];
-              $scope.selectedTypes = [];
+              $scope.developmentStages = devStagesService.getStages();
 
-              $scope.$watchCollection( "selectedStages", applyPluginFilter );
+              $scope.selectedTypes = [];
+              $scope.pluginTypes = [];
+
+              $scope.selectTab( availableTab );
 
 
               // Get plugins from server
-              $scope.refreshPluginsFromServer();
+              refreshPluginsFromServer();
 
             }
           ]);

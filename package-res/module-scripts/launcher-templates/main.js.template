@@ -38,7 +38,8 @@ requirejs(
       './directives/devStageIcon/DevStageIconController',
       './directives/devStageIcon/devStageIconDirective',
 
-      './directives/stopEvent/stopEventDirective'
+      './directives/stopEvent/stopEventDirective',
+      './directives/indeterminate/indeterminateDirective'
 
 
     ] ,

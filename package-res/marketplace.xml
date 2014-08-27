@@ -39,6 +39,13 @@
 	<market_entry>
 		<id>marketplace</id>
 		<type>Platform</type>
+    <category>
+      <parent>
+        <name>App</name>
+      </parent>
+      <name>Admin</name>
+    </category>
+
 		<img>http://pentaho.com/sites/all/themes/pentaho/_media/logo-pentaho.svg</img>
 		<small_img>http://www.webdetails.pt/ficheiros/mk_plugin.png</small_img>
 		<name>Pentaho Marketplace</name>
@@ -97,6 +104,13 @@
 	<market_entry>
 		<id>pentaho-cdf</id>
 		<type>Platform</type>
+    <category>
+      <parent>
+        <name>App</name>
+      </parent>
+      <name>Dashboards</name>
+    </category>
+
 		<img>http://www.webdetails.pt/ficheiros/cdf.png</img>
 		<small_img>http://www.webdetails.pt/ficheiros/cdf_plugin.png</small_img>
 		<name>Community Dashboards Framework</name>
@@ -183,6 +197,13 @@
 	<market_entry>
 		<id>cda</id>
 		<type>Platform</type>
+    <category>
+      <parent>
+        <name>Something Else</name>
+      </parent>
+      <name>CDA</name>
+    </category>
+
 		<img>http://www.webdetails.pt/ficheiros/cda.png</img>
 		<small_img>http://www.webdetails.pt/ficheiros/cda_plugin.png</small_img>
 		<name>Community Data Access</name>
@@ -255,6 +276,10 @@
 	<market_entry>
 		<id>pentaho-cdf-dd</id>
 		<type>Platform</type>
+    <category>
+      <name>Top Level CDE</name>
+    </category>
+
 		<img>http://www.webdetails.pt/ficheiros/cde.png</img>
 		<small_img>http://www.webdetails.pt/ficheiros/cde_plugin.png</small_img>
 		<name>Community Dashboard Editor</name>

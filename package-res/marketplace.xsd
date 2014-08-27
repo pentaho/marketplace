@@ -49,7 +49,16 @@
 
           <xsd:complexType>
             <xsd:all>
-            
+
+              <xsd:element name="category" minOccurs="1" maxOccurs="1" type="category">
+                <xsd:annotation>
+                  <xsd:documentation>
+                    At the moment a maximum of 2 levels of nesting are used for categorization.
+                  </xsd:documentation>
+                </xsd:annotation>
+              </xsd:element>
+
+
               <xsd:element name="id" minOccurs="1" maxOccurs="1" type="xsd:normalizedString">
                 <xsd:annotation>
                   <xsd:documentation>
@@ -349,8 +358,7 @@
      <xsd:element name="branch" minOccurs="0" maxOccurs="1" type="xsd:normalizedString"/>
      <xsd:element name="version" minOccurs="0" maxOccurs="1" type="xsd:normalizedString"/>
      <xsd:element name="build_id" minOccurs="0" maxOccurs="1" type="xsd:string"/>
-      <!-- TODO: make developmenStage element required (minOccurs = "1") -->
-     <xsd:element name="developmentStage" minOccurs="0" maxOccurs="1" type="developmentStage"/>
+     <xsd:element name="developmentStage" minOccurs="1" maxOccurs="1" type="developmentStage"/>
      <xsd:element name="name" minOccurs="0" maxOccurs="1" type="xsd:normalizedString"/>
      <xsd:element name="package_url" minOccurs="0" maxOccurs="1" type="xsd:anyURI"/>
      <xsd:element name="samples_url" minOccurs="0" maxOccurs="1" type="xsd:anyURI"/>
@@ -365,12 +373,14 @@
   <xsd:complexType name="developmentStage">
     <xsd:annotation>
       <xsd:documentation>
-        The stage of development the current version of the market entry is at.
+        The stage of development the version of the market entry is at.
       </xsd:documentation>
     </xsd:annotation>
 
     <xsd:all>
-      <xsd:element name="lane" minOccurs="1" maxOccurs="1" type="developmentStageLane"/>
+      <xsd:element name="lane" minOccurs="1" maxOccurs="1" type="developmentStageLane">
+
+      </xsd:element>
       <xsd:element name="phase" minOccurs="1" maxOccurs="1" type="developmentStagePhase"/>
     </xsd:all>
 
@@ -391,5 +401,12 @@
       <xsd:maxInclusive value="4"/>
     </xsd:restriction>
   </xsd:simpleType>
+
+  <xsd:complexType name="category">
+    <xsd:all>
+      <xsd:element name="parent" minOccurs="0" maxOccurs="1" type="category"/>
+      <xsd:element name="name" minOccurs="1" maxOccurs="1" type="xsd:normalizedString"/>
+    </xsd:all>
+  </xsd:complexType>
 
 </xsd:schema>

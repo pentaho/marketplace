@@ -217,9 +217,9 @@
     <type>Platform</type>
     <category>
       <parent>
-        <name>Something Else</name>
+        <name>App</name>
       </parent>
-      <name>CDA</name>
+      <name>Data</name>
     </category>
 
     <img>http://www.webdetails.pt/ficheiros/cda.png</img>
@@ -319,7 +319,10 @@
     <id>pentaho-cdf-dd</id>
     <type>Platform</type>
     <category>
-      <name>Top Level CDE</name>
+      <parent>
+        <name>App</name>
+      </parent>
+      <name>Dashboards</name>
     </category>
 
     <img>http://www.webdetails.pt/ficheiros/cde.png</img>
@@ -493,6 +496,13 @@
   <market_entry>
     <id>sparkl</id>
     <type>Platform</type>
+    <category>
+      <parent>
+        <name>App</name>
+      </parent>
+      <name>Dashboards</name>
+    </category>
+
     <img>http://www.webdetails.pt/ficheiros/sparkl2.png</img>
     <small_img>http://www.webdetails.pt/ficheiros/sparkl2.png</small_img>
     <name>Sparkl - Pentaho Application Builder</name>

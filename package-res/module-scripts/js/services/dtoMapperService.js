@@ -54,20 +54,7 @@ define(
 
                 plugin.versions = _.map( pluginDTO.versions, toVersion );
 
-                var installedVersion = _.find( plugin.versions, function ( version ) {
-                  return version.branch == pluginDTO.installedBranch &&
-                      version.version == pluginDTO.installedVersion;// &&
-                      version.buildId == pluginDTO.installedBuildId;
-                } );
-                if ( installedVersion ) {
-                  plugin.installedVersion = installedVersion;
-                } else {
-                  plugin.installedVersion = new Plugin.Version();
-                  plugin.installedVersion.branch = pluginDTO.installedBranch;
-                  plugin.installedVersion.version = pluginDTO.installedVersion;
-                  plugin.installedVersion.buildId = pluginDTO.installedBuildId;
-                }
-
+                plugin.installedVersion = getInstalledVersion( plugin.versions, pluginDTO );
 
                 plugin.installationNotes = pluginDTO.installationNotes;
 
@@ -86,32 +73,54 @@ define(
                 }
                 plugin.license.text = pluginDTO.license_text;
 
-                var categories = [
-                  { sub: 'Analysis', main: 'Apps' },
-                  { sub: 'Dashboards', main: 'Apps' },
-                  { sub: 'Reporting', main: 'Apps' },
-                  { sub: 'Lifecycle', main: 'Apps' },
-                  { sub: 'Admin', main: 'Apps' },
-                  { main: 'Visualizations' },
-                  { main: 'Themes' },
-                  { main: 'Language Packs' },
-                  { sub: 'Analysis', main: 'Apps' },
-                  { sub: 'Dashboards', main: 'Apps' },
-                  { sub: 'Reporting', main: 'Apps' },
-                  { sub: 'Lifecycle', main: 'Apps' },
-                  { sub: 'Admin', main: 'Apps' },
-                  { main: 'Visualizations' },
-                  { main: 'Themes' },
-                  { main: 'Language Packs' }
-                ];
-                
-                plugin.category = categories[ Math.floor( Math.random() * categories.length ) ];;
-                
+                //plugin.category = categories[ Math.floor( Math.random() * categories.length ) ];;
+                plugin.category = toCategory( pluginDTO.category );
+
                 return plugin;
               };
 
-              function toCategory ( categoryDTO ) {
+              function getInstalledVersion ( installableVersions, pluginDTO ) {
+                var installedVersion = _.find( installableVersions, function ( version ) {
+                  return version.branch == pluginDTO.installedBranch &&
+                      version.version == pluginDTO.installedVersion;
+                } );
+                if ( installedVersion ) {
+                  return installedVersion;
+                } else {
+                  installedVersion = new Plugin.Version();
+                  installedVersion.branch = pluginDTO.installedBranch;
+                  installedVersion.version = pluginDTO.installedVersion;
+                  installedVersion.buildId = pluginDTO.installedBuildId;
 
+                  // NOTE: Huge assumption here: if the installed version is not in
+                  // the installable versions list, assume that the devStage of the installed version
+                  // is the same as the installable version with the same branch
+                  var sameBranchVersion = _.find( installableVersions, function (version) {
+                    return version.branch == pluginDTO.installedBranch;
+                  });
+                  if ( sameBranchVersion ) {
+                    installedVersion.devStage = sameBranchVersion.devStage;
+                  }
+
+                  return installedVersion;
+                }
+              }
+
+              function Category( main, sub ) {
+                this.main = main;
+                this.sub = sub;
+              }
+
+              function toCategory ( categoryDTO ) {
+                if ( categoryDTO === null || categoryDTO === undefined ) {
+                  return undefined;
+                }
+
+                if ( categoryDTO.parentName === undefined ) {
+                  return new Category( categoryDTO.name );
+                }
+
+                return new Category( categoryDTO.parentName, categoryDTO.name );
               }
 
               function toVersion ( versionDTO ) {

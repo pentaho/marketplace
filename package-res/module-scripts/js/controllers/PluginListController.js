@@ -77,6 +77,11 @@ define(
                   return true;
                 }
 
+                // plugin does not have a category
+                if ( !plugin.category ) {
+                  return false;
+                }
+
                 // plugin is in one of the selected development stages
                 return _.any( $scope.selectedTypes,
                     function ( selectedType ) {
@@ -142,6 +147,7 @@ define(
 
               function getCategories ( plugins ) {
                 var categories = _.chain( plugins )
+                    .filter( function ( plugin ) { return plugin.category !== undefined && plugin.category !== null; } )
                     .map( function( plugin ) { return plugin.category; } )
                     .uniq( function ( category ) { return category.main + category.sub; } )
                     .sortBy( function ( category ) { return category.main + category.sub; })

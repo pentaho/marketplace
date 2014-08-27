@@ -1,5 +1,6 @@
 package org.pentaho.marketplace.domain.model.entities;
 
+import org.pentaho.marketplace.domain.model.entities.interfaces.ICategory;
 import org.pentaho.marketplace.domain.model.entities.interfaces.IPlugin;
 import org.pentaho.marketplace.domain.model.entities.interfaces.IPluginVersion;
 
@@ -28,6 +29,7 @@ public class Plugin implements IPlugin {
   private String license;
   private String licenseName;
   private String licenseText;
+  private ICategory category;
   //endregion
 
   //region IPlugin implementation
@@ -216,6 +218,9 @@ public class Plugin implements IPlugin {
 
   @Override public String getLicenseText() { return this.licenseText; }
   @Override public void setLicenseText( String value ) { this.licenseText = value; }
+
+  @Override public ICategory getCategory() { return this.category; }
+  @Override public void setCategory( ICategory category ) { this.category = category; }
 
   @Override
   public IPluginVersion getVersionByBranch( String branch ) {

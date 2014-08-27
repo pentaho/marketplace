@@ -110,6 +110,10 @@ define(
                 return plugin;
               };
 
+              function toCategory ( categoryDTO ) {
+
+              }
+
               function toVersion ( versionDTO ) {
                 var version = new Plugin.Version();
 
@@ -130,16 +134,19 @@ define(
                 version.compatiblePentahoVersion.minimum = versionDTO.minParentVersion;
                 version.compatiblePentahoVersion.maximum = versionDTO.maxParentVersion;
 
-
-                /*
-                // Randomly create dev stages
-                var lanes = devStages.getLanes();
-                var lane = lanes[ Math.floor( Math.random() * lanes.length ) ];
-                var phase = Math.floor((Math.random() * 4) + 1);
-                */
                 var lane = versionDTO.developmentStageLane;
                 var phase = versionDTO.developmentStagePhase;
+
                 version.devStage = devStages.getStage( lane, phase );
+
+                // TODO: remove temporary random generation
+                // if no devstage was found in the version, randomly generate one
+                if( version.devStage === undefined ) {
+                  var lanes = devStages.getLanes();
+                  lane = lanes[ Math.floor( Math.random() * lanes.length ) ];
+                  phase = Math.floor((Math.random() * 4) + 1);
+                  version.devStage = devStages.getStage( lane, phase );
+                }
 
                 return version;
               };

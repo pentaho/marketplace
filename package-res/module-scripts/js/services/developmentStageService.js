@@ -73,6 +73,12 @@ define(
                 setDevelopmentStage( new DevelopmentStage( communityLane, 4, 'Mature Release', "Indicates a successfully adopted project in a mature state." ));
               }
 
+              /**
+               * Gets the stage for the corresponding lane and phase
+               * @param lane
+               * @param phase
+               * @returns {*} Returns undefined if no Stage was found for the specified lane and phase
+               */
               function getStage( lane, phase ) {
                 if ( !lane || !phase ) {
                   return undefined;

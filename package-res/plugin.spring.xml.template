@@ -13,12 +13,10 @@
 
   <!-- START: Domain Entity Factories -->
   <bean id="@plugin.id@.plugin-factory" class="org.pentaho.marketplace.domain.model.factories.PluginFactory" />
-
   <bean id="@plugin.id@.pluginVersion-factory" class="org.pentaho.marketplace.domain.model.factories.PluginVersionFactory" />
-
   <bean id="@plugin.id@.domainStatusMessage-factory" class="org.pentaho.marketplace.domain.model.factories.DomainStatusMessageFactory" />
-
   <bean id="@plugin.id@.versionData-factory" class="org.pentaho.marketplace.domain.model.factories.VersionDataFactory" />
+  <bean id="@plugin.id@.category-factory" class="org.pentaho.marketplace.domain.model.factories.CategoryFactory" />
   <!-- END: Domain Entity Factories -->
 
   <!-- START: Domain Services -->
@@ -26,6 +24,7 @@
     <constructor-arg ref="@plugin.id@.plugin-factory"/>
     <constructor-arg ref="@plugin.id@.pluginVersion-factory"/>
     <constructor-arg ref="@plugin.id@.versionData-factory"/>
+    <constructor-arg ref="@plugin.id@.category-factory"/>
     <constructor-arg ref="@plugin.id@.domainStatusMessage-factory"/>
   </bean>
   <!-- END: Domain Services -->
@@ -45,9 +44,14 @@
     <constructor-arg ref="@plugin.id@.pluginVersion-factory"/>
   </bean>
 
+  <bean id="@plugin.id@.category-mapper" class="org.pentaho.marketplace.endpoints.dtos.mappers.CategoryDTOMapper">
+
+  </bean>
+
   <bean id="@plugin.id@.plugin-mapper" class="org.pentaho.marketplace.endpoints.dtos.mappers.PluginDTOMapper">
 	  <constructor-arg ref="@plugin.id@.plugin-factory"/>
 	  <constructor-arg ref="@plugin.id@.pluginVersion-mapper"/>
+    <constructor-arg ref="@plugin.id@.category-mapper"/>
   </bean>
   <!-- END: DTO Mappers -->
 

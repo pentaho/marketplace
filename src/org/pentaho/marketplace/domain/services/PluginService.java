@@ -10,11 +10,13 @@ import org.pentaho.di.core.logging.LogLevel;
 import org.pentaho.di.job.Job;
 import org.pentaho.di.job.JobMeta;
 import org.pentaho.marketplace.domain.model.entities.DevelopmentStage;
+import org.pentaho.marketplace.domain.model.entities.interfaces.ICategory;
 import org.pentaho.marketplace.domain.model.entities.interfaces.IDevelopmentStage;
 import org.pentaho.marketplace.domain.model.entities.interfaces.IDomainStatusMessage;
 import org.pentaho.marketplace.domain.model.entities.interfaces.IPlugin;
 import org.pentaho.marketplace.domain.model.entities.interfaces.IPluginVersion;
 import org.pentaho.marketplace.domain.model.entities.interfaces.IVersionData;
+import org.pentaho.marketplace.domain.model.factories.interfaces.ICategoryFactory;
 import org.pentaho.marketplace.domain.model.factories.interfaces.IDomainStatusMessageFactory;
 import org.pentaho.marketplace.domain.model.factories.interfaces.IPluginFactory;
 import org.pentaho.marketplace.domain.model.factories.interfaces.IPluginVersionFactory;
@@ -43,6 +45,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 import java.io.File;
 import java.io.FileReader;
@@ -90,6 +93,7 @@ public class PluginService implements IPluginService {
   private IPluginFactory pluginFactory;
   private IPluginVersionFactory pluginVersionFactory;
   private IVersionDataFactory versionDataFactory;
+  private ICategoryFactory categoryFactory;
   private IDomainStatusMessageFactory domainStatusMessageFactory;
   //endregion
 
@@ -98,12 +102,14 @@ public class PluginService implements IPluginService {
   public PluginService( IPluginFactory pluginFactory,
                         IPluginVersionFactory pluginVersionFactory,
                         IVersionDataFactory versionDataFactory,
+                        ICategoryFactory categoryFactory,
                         IDomainStatusMessageFactory domainStatusMessageFactory ) {
 
     //initialize dependencies
     this.pluginFactory = pluginFactory;
     this.pluginVersionFactory = pluginVersionFactory;
     this.versionDataFactory = versionDataFactory;
+    this.categoryFactory = categoryFactory;
     this.domainStatusMessageFactory = domainStatusMessageFactory;
 
     this.xpath = XPathFactory.newInstance().newXPath();
@@ -240,10 +246,11 @@ public class PluginService implements IPluginService {
     return version.within( pvMin, pvMax );
   }
 
-  private String getElementChildValue( Element element, String child ) {
-    NodeList list = element.getElementsByTagName( child );
-    if ( list.getLength() >= 1 ) {
-      return list.item( 0 ).getTextContent();
+  private String getElementChildValue( Element element, String child ) throws XPathExpressionException {
+    Element childElement = (Element) xpath.evaluate( child, element, XPathConstants.NODE );
+
+    if ( childElement != null ) {
+      return childElement.getTextContent();
     } else {
       return null;
     }
@@ -278,34 +285,34 @@ public class PluginService implements IPluginService {
       NodeList plugins = dom.getElementsByTagName( "market_entry" );
       Collection<IPlugin> pluginList = new ArrayList<IPlugin>();
       for ( int i = 0; i < plugins.getLength(); i++ ) {
-        Element element = (Element) plugins.item( i );
-        String type = getElementChildValue( element, "type" );
+        Element pluginElement = (Element) plugins.item( i );
+        String type = getElementChildValue( pluginElement, "type" );
         if ( !"Platform".equals( type ) ) {
           continue;
         }
 
         IPlugin plugin = this.pluginFactory.create();
-        plugin.setId( getElementChildValue( element, "id" ) );
-        plugin.setName( getElementChildValue( element, "name" ) );
-        plugin.setDescription( getElementChildValue( element, "description" ) );
+        plugin.setId( getElementChildValue( pluginElement, "id" ) );
+        plugin.setName( getElementChildValue( pluginElement, "name" ) );
+        plugin.setDescription( getElementChildValue( pluginElement, "description" ) );
 
-        plugin.setAuthorName( getElementChildValue( element, "author" ) );
-        plugin.setAuthorUrl( getElementChildValue( element, "author_url" ) );
-        plugin.setAuthorLogo( getElementChildValue( element, "author_logo" ) );
-        plugin.setImg( getElementChildValue( element, "img" ) );
+        plugin.setAuthorName( getElementChildValue( pluginElement, "author" ) );
+        plugin.setAuthorUrl( getElementChildValue( pluginElement, "author_url" ) );
+        plugin.setAuthorLogo( getElementChildValue( pluginElement, "author_logo" ) );
+        plugin.setImg( getElementChildValue( pluginElement, "img" ) );
 
-        plugin.setSmallImg( getElementChildValue( element, "small_img" ) );
-        plugin.setDocumentationUrl( getElementChildValue( element, "documentation_url" ) );
-        plugin.setInstallationNotes( getElementChildValue( element, "installation_notes" ) );
-        plugin.setLicense( getElementChildValue( element, "license" ) );
-        plugin.setLicenseName( getElementChildValue( element, "license_name" ) );
-        plugin.setLicenseText( getElementChildValue( element, "license_text" ) );
-        plugin.setDependencies( getElementChildValue( element, "dependencies" ) );
+        plugin.setSmallImg( getElementChildValue( pluginElement, "small_img" ) );
+        plugin.setDocumentationUrl( getElementChildValue( pluginElement, "documentation_url" ) );
+        plugin.setInstallationNotes( getElementChildValue( pluginElement, "installation_notes" ) );
+        plugin.setLicense( getElementChildValue( pluginElement, "license" ) );
+        plugin.setLicenseName( getElementChildValue( pluginElement, "license_name" ) );
+        plugin.setLicenseText( getElementChildValue( pluginElement, "license_text" ) );
+        plugin.setDependencies( getElementChildValue( pluginElement, "dependencies" ) );
+        plugin.setCategory( this.getCategory( pluginElement ) );
 
 
-        //NodeList availableVersions = element.getElementsByTagName( "version" );
         NodeList availableVersions =
-          (NodeList) this.xpath.evaluate( "versions/version", element, XPathConstants.NODESET );
+          (NodeList) this.xpath.evaluate( "versions/version", pluginElement, XPathConstants.NODESET );
 
         if ( availableVersions.getLength() > 0 ) {
           Collection<IPluginVersion> versions = new ArrayList<IPluginVersion>();
@@ -333,7 +340,7 @@ public class PluginService implements IPluginService {
           plugin.setVersions( versions );
         }
 
-        NodeList availableScreenshots = (NodeList) xpath.evaluate( "screenshots/screenshot", element,
+        NodeList availableScreenshots = (NodeList) xpath.evaluate( "screenshots/screenshot", pluginElement,
           XPathConstants.NODESET );
         if ( availableScreenshots.getLength() > 0 ) {
           String[] screenshots = new String[ availableScreenshots.getLength() ];
@@ -358,22 +365,48 @@ public class PluginService implements IPluginService {
     return null;
   }
 
+  private ICategory getCategory( Element pluginElement ) throws XPathExpressionException {
+    final String CATEGORY_ELEMENT_NAME = "category";
+
+    Element categoryElement = (Element) xpath.evaluate( CATEGORY_ELEMENT_NAME, pluginElement, XPathConstants.NODE );
+    if ( categoryElement == null ) {
+      return null;
+    }
+
+    return this.getCategoryFromCategoryElement( categoryElement );
+  }
+
+  private ICategory getCategoryFromCategoryElement( Element categoryElement )
+    throws XPathExpressionException {
+
+    final String PARENT_ELEMENT_NAME = "parent";
+    final String NAME_ELEMENT_NAME = "name";
+
+    ICategory parent = null;
+    Element parentElement = (Element) xpath.evaluate( PARENT_ELEMENT_NAME, categoryElement, XPathConstants.NODE );
+    if ( parentElement != null ) {
+      parent = getCategoryFromCategoryElement( parentElement );
+    }
+
+    String name = getElementChildValue( categoryElement, NAME_ELEMENT_NAME );
+    ICategory category = this.categoryFactory.create( name, parent );
+    return category;
+  }
+
   /**
    * Parses the version element to get the development stage
    * @param versionElement where the development stage element is contained
    * @return
    */
-  private IDevelopmentStage getDevelopmentStage( Element versionElement ) {
+  private IDevelopmentStage getDevelopmentStage( Element versionElement ) throws XPathExpressionException {
     final String DEVELOPMENT_STAGE_ELEMENT_NAME = "developmentStage";
     final String DEVELOPMENT_STAGE_LANE_ELEMENT_NAME = "lane";
     final String DEVELOPMENT_STAGE_PHASE_ELEMENT_NAME = "phase";
 
-    NodeList list = versionElement.getElementsByTagName( DEVELOPMENT_STAGE_ELEMENT_NAME );
-    if ( list.getLength() < 1 ) {
-      // no development stage element found
+    Element devStageElement = (Element) xpath.evaluate( DEVELOPMENT_STAGE_ELEMENT_NAME, versionElement, XPathConstants.NODE );
+    if ( devStageElement == null ) {
       return null;
     }
-    Element devStageElement = (Element) list.item( 0 );
 
     String lane = this.getElementChildValue( devStageElement, DEVELOPMENT_STAGE_LANE_ELEMENT_NAME );
     String phase = this.getElementChildValue( devStageElement, DEVELOPMENT_STAGE_PHASE_ELEMENT_NAME );;

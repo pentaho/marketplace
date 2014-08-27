@@ -8,22 +8,18 @@ public interface IPlugin {
 
   //id
   String getId();
-
   void setId( String value );
 
   //name
   String getName();
-
   void setName( String value );
 
   //img
   String getImg();
-
   void setImg( String value );
 
   //smallImg
   String getSmallImg();
-
   void setSmallImg( String value );
 
   //documentationUrl
@@ -32,7 +28,6 @@ public interface IPlugin {
 
   //description
   String getDescription();
-
   void setDescription( String value );
 
   //author
@@ -49,47 +44,38 @@ public interface IPlugin {
 
   //installedBranch
   String getInstalledBranch();
-
   void setInstalledBranch( String value );
 
   //installedVersion
   String getInstalledVersion();
-
   void setInstalledVersion( String value );
 
   //installedBuildId
   String getInstalledBuildId();
-
   void setInstalledBuildId( String value );
 
   //installationNotes
   String getInstallationNotes();
-
   void setInstallationNotes( String value );
 
   //installed
   boolean isInstalled();
-
   void setInstalled( boolean value );
 
   //versions
   Collection<IPluginVersion> getVersions();
-
   void setVersions( Collection<IPluginVersion> value );
 
   //screenshots
   String[] getScreenshots();
-
   void setScreenshots( String[] value );
 
   //dependencies
   String getDependencies();
-
   void setDependencies( String value );
 
   //license
   String getLicense();
-
   void setLicense( String value );
 
   //license_name
@@ -100,6 +86,9 @@ public interface IPlugin {
   String getLicenseText();
   void setLicenseText( String value );
 
+  // Category
+  ICategory getCategory();
+  void setCategory( ICategory category );
 
   //endregion
 

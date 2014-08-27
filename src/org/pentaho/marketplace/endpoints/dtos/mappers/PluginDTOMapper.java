@@ -3,6 +3,7 @@ package org.pentaho.marketplace.endpoints.dtos.mappers;
 import org.pentaho.marketplace.domain.model.entities.interfaces.IPlugin;
 import org.pentaho.marketplace.domain.model.factories.interfaces.IPluginFactory;
 import org.pentaho.marketplace.endpoints.dtos.entities.PluginDTO;
+import org.pentaho.marketplace.endpoints.dtos.mappers.interfaces.ICategoryDTOMapper;
 import org.pentaho.marketplace.endpoints.dtos.mappers.interfaces.IPluginDTOMapper;
 import org.pentaho.marketplace.endpoints.dtos.mappers.interfaces.IPluginVersionDTOMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,15 +17,19 @@ public class PluginDTOMapper implements IPluginDTOMapper {
   //region Attributes
   IPluginFactory pluginFactory;
   IPluginVersionDTOMapper pluginVersionDTOMapper;
+  ICategoryDTOMapper categoryDTOMapper;
   //endregion
 
   //region Constructors
   @Autowired
-  public PluginDTOMapper( IPluginFactory pluginFactory, IPluginVersionDTOMapper pluginVersionDTOMapper ) {
+  public PluginDTOMapper( IPluginFactory pluginFactory,
+                          IPluginVersionDTOMapper pluginVersionDTOMapper,
+                          ICategoryDTOMapper categoryDTOMapper) {
 
     //initialize dependencies
     this.pluginFactory = pluginFactory;
     this.pluginVersionDTOMapper = pluginVersionDTOMapper;
+    this.categoryDTOMapper = categoryDTOMapper;
   }
   //endregion
 
@@ -84,6 +89,7 @@ public class PluginDTOMapper implements IPluginDTOMapper {
     dto.screenshots = plugin.getScreenshots();
     dto.dependencies = plugin.getDependencies();
     dto.license = plugin.getLicense();
+    dto.category = this.categoryDTOMapper.toDTO( plugin.getCategory() );
 
     //return the dto
     return dto;

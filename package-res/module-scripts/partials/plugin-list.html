@@ -41,6 +41,8 @@
               data-prefix="Stage: " data-use-divider="true">
           </div>
 
+          <input placeholder="Search" data-ng-model="searchText" class="search">
+
         </div>
 
         <div class="stagesInfo">
@@ -75,7 +77,7 @@
       </div>
 
 
-      <div plugin-list plugins="filteredPlugins" on-plugin-clicked="pluginWasClicked" class="filteredPluginsContainer"/>
+      <div data-plugin-list data-plugins="filteredPlugins" data-on-plugin-clicked="pluginWasClicked" class="filteredPluginsContainer"/>
 
       <div class="infoBar clearfix">
         <div class="infoBarHeader">

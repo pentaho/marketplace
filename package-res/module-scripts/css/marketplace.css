@@ -51,6 +51,21 @@ html {
   box-sizing: border-box;
 }
 
+
+
+input.search {
+  background-image: url(../img/search.svg);
+  background-repeat: no-repeat;
+  background-position: right center;
+}
+
+.no-svg input.search,
+.IE.IE8 input.search {
+  background-image: url(../img/search.png);
+  background-repeat: no-repeat;
+  background-position: right center;
+}
+
 /* ==========================================================================
    Install / Uninstall / Update  buttons
    ========================================================================== */

@@ -23,8 +23,8 @@ define(
       console.log("Required controllers/PluginListController.js");
 
       app.controller('PluginListController',
-          ['$scope', 'appService', '$modal', 'developmentStageService',
-            function ( $scope, appService, $modal, devStagesService ) {
+          ['$scope', 'appService', '$modal', 'developmentStageService', '$filter',
+            function ( $scope, appService, $modal, devStagesService, $filter ) {
 
               var installedTab = 'installedTab';
               var availableTab = 'availableTab';
@@ -103,10 +103,8 @@ define(
               };
 
               function filterAndSetPlugins ( plugins ) {
-
-                $scope.filteredPlugins = _.chain( plugins )
-                    .filter( pluginFilter )
-                    .value();
+                var pluginsFromDropDown = $filter('filter')( plugins, pluginFilter );
+                $scope.filteredPlugins = $filter('filter')( pluginsFromDropDown, $scope.searchText );
               };
 
               function refreshPluginsFromServer () {
@@ -201,6 +199,7 @@ define(
               // TODO: i18n
               $scope.$watchCollection( "selectedStages", applyPluginFilter );
               $scope.$watchCollection( "selectedTypes", applyPluginFilter );
+              $scope.$watch( "searchText", applyPluginFilter );
 
               $scope.$watch( "selectedTab", applyPluginFilter );
 

@@ -221,6 +221,23 @@ input.search {
   background: url(../img/uninstall.png) no-repeat;
 }
 
+.pentaho-button.uninstallButton:disabled {
+  border: 1px solid #cbdde8;
+  background: #ffffff;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  color: #ccc;
+  cursor: default;
+}
+
+.pentaho-button.uninstallButton:disabled .icon {
+  background: url(../img/uninstall_disabled.svg) no-repeat;
+}
+.no-svg .pentaho-button.uninstallButton:disabled .icon,
+.IE.IE8 .pentaho-button.uninstallButton:disabled .icon {
+  background: url(../img/uninstall_disabled.png) no-repeat;
+}
+
 
 
 /* ==========================================================================

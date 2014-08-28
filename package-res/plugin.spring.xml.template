@@ -45,6 +45,7 @@
   </bean>
 
   <bean id="@plugin.id@.category-mapper" class="org.pentaho.marketplace.endpoints.dtos.mappers.CategoryDTOMapper">
+    <constructor-arg ref="@plugin.id@.category-factory"/>
 
   </bean>
 

@@ -17,12 +17,12 @@ public interface ICategory {
 
   /**
    *
-   * @return Gets the parent category. Returns null if it is a root category.
+   * @return Gets the parent category of this category. Returns null if it is a root category.
    */
   ICategory getParent();
 
   /**
-   *
+   * Sets the parent category of this category.
    * @param parent
    * @return Returns this
    */
@@ -31,7 +31,7 @@ public interface ICategory {
 
   /**
    *
-   * @return Gets the name of the category.
+   * @return Gets the name of this category.
    */
   String getName();
 

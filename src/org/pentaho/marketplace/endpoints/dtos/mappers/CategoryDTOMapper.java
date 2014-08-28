@@ -14,8 +14,10 @@
 package org.pentaho.marketplace.endpoints.dtos.mappers;
 
 import org.pentaho.marketplace.domain.model.entities.interfaces.ICategory;
+import org.pentaho.marketplace.domain.model.factories.interfaces.ICategoryFactory;
 import org.pentaho.marketplace.endpoints.dtos.entities.CategoryDTO;
 import org.pentaho.marketplace.endpoints.dtos.mappers.interfaces.ICategoryDTOMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -23,8 +25,26 @@ import java.util.List;
 
 public final class CategoryDTOMapper implements ICategoryDTOMapper {
 
+  // region Attributes
+  private ICategoryFactory categoryFactory;
+  // endregion
+
+  // region Constructors
+  @Autowired
+  public CategoryDTOMapper( ICategoryFactory categoryFactory ) {
+    this.categoryFactory = categoryFactory;
+  }
+  // endregion
+
+  // region Methods
   @Override public ICategory toEntity( CategoryDTO dto ) {
-    return null;
+    ICategory parent = null;
+    if ( dto.parentName != null ) {
+      parent = categoryFactory.create( dto.parentName );
+    }
+
+    ICategory category = this.categoryFactory.create( dto.name, parent );
+    return category;
   }
 
   @Override public CategoryDTO toDTO( ICategory category ) {
@@ -41,7 +61,13 @@ public final class CategoryDTOMapper implements ICategoryDTOMapper {
   }
 
   @Override public Collection<ICategory> toEntities( List<CategoryDTO> dtos ) {
-    return null;
+    List<ICategory> entities = new ArrayList<ICategory>();
+
+    for ( CategoryDTO dto : dtos ) {
+      entities.add( this.toEntity( dto ) );
+    }
+
+    return entities;
   }
 
   @Override public List<CategoryDTO> toDTOs( Collection<ICategory> categories ) {
@@ -53,4 +79,5 @@ public final class CategoryDTOMapper implements ICategoryDTOMapper {
 
     return dtos;
   }
+  // endregion
 }

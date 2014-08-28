@@ -156,6 +156,14 @@ define(
                 return categories;
               }
 
+              function openStagesInfoModal () {
+                var stagesInfoModal = $modal.open( {
+                  template: '<div data-stages-info/>',
+                  windowClass: "pluginDetailDialog"
+                });
+              }
+
+              $scope.onWhatAreStagesClicked = openStagesInfoModal;
 
               /**
                * Refreshes the plugin list from the server

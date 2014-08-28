@@ -576,6 +576,10 @@
   <market_entry>
     <id>d3ComponentLibrary</id>
     <type>Platform</type>
+    <category>
+      <name>Visualizations</name>
+    </category>
+
     <name>D3 Component Library</name>
     <description>
       This project holds d3 components to be used in Pentaho, both on Analyzer and on CTools dashboards.

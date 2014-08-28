@@ -31,7 +31,7 @@ define( [ 'marketplace' ],
                 //'=' evaluates in the isolate scope
                 lane: "=",
                 phase: "=",
-                enablePopupDescription: "="
+                disablePopup: "@"
               }
             };
           }

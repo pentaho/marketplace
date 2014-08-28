@@ -5,10 +5,13 @@
       {{lane.name}}
     </div>
 
-    <div class="stage" data-ng-repeat="stage in lane.stages">
-      <div data-dev-stage-icon data-lane="stage.lane" data-phase="stage.phase"></div>
-      <div class="name">{{stage.name}}</div>
-      <div class="description">{{stage.description}}</div>
+    <div class="stagesContainer">
+      <div class="stage" data-ng-repeat="stage in lane.stages">
+        <div data-dev-stage-icon data-lane="stage.lane" data-phase="stage.phase"
+            data-disable-popup="true"></div>
+        <div class="name">{{stage.name}}</div>
+        <div class="description">{{stage.description}}</div>
+      </div>
     </div>
 
   </div>

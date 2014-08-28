@@ -159,7 +159,7 @@ define(
               function openStagesInfoModal () {
                 var stagesInfoModal = $modal.open( {
                   template: '<div data-stages-info/>',
-                  windowClass: "pluginDetailDialog"
+                  windowClass: "stagesInfoDialog"
                 });
               }
 

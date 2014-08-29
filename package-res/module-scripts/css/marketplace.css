@@ -414,6 +414,15 @@ button.refreshButton {
   background-image: url(../img/info.png);
 }
 
+/* ==========================================================================
+   Plugin list item
+   ========================================================================== */
+
+.multiselect .group,
+.multiselect .option {
+  cursor: pointer;
+}
+
 .filterBar .filterContainer .multiselect {
   display: inline-block;
 }
@@ -956,6 +965,12 @@ button.refreshButton {
   border: 1px solid #cbdde8;
 }
 
+.bootstrap .modal .modal-header {
+  font-size: 16px;
+  color: #1973bc;
+  line-height: 16px;
+}
+
 .bootstrap .modal .modal-body {
   max-height: 600px;
 }
@@ -1155,7 +1170,6 @@ body.bootstrap .modal.pluginDetailDialog .pluginDetail .pluginDetailTop .pluginD
 body.bootstrap .modal.pluginDetailDialog .pluginDetail .pluginDetailTop .pluginDetailLeft .pluginImage {
   text-align: center;
   padding-top: 20px;
-  110
 }
 
 body.bootstrap .modal.pluginDetailDialog .pluginDetail .pluginDetailTop .pluginDetailLeft .pluginImage img {
@@ -1227,8 +1241,13 @@ body.bootstrap .modal.pluginDetailDialog .pluginDetail .pluginDetailBottom > div
   font-family: OpenSansRegular, sans-serif;
 }
 
+.bootstrap .modal.stagesInfoDialog .modal-header {
+  border: none;
+  padding-top: 20px;
+  padding-bottom: 0px;
+}
+
 .bootstrap .modal.stagesInfoDialog .stagesInfo {
-  border: 1px solid #cbdde8;
   padding: 20px;
   color: #26363d;
 }

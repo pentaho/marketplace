@@ -12,8 +12,9 @@
           <li class="group"
               data-ng-repeat-start="group in groups"
               data-ng-click="groupClicked( group )"
-              data-ng-class="group.getCssClass()">
-            <a href="">
+              data-ng-class="group.getCssClass()"
+              data-stop-event="click">
+            <a>
               <input type="checkbox"
                   data-ng-model="group.selected" data-ng-true-value="All" data-ng-false-value="None"
                   data-indeterminate="group.selected == 'Some'"
@@ -26,8 +27,9 @@
               data-ng-repeat="option in group.options"
               data-ng-show="option.name"
               data-ng-click="toggleSelection(option)"
-              data-checked="{{option.isSelected}}">
-            <a href="">
+              data-checked="{{option.isSelected}}"
+              data-stop-event="click">
+            <a>
               <input type="checkbox" data-ng-model="option.isSelected" data-stop-event="click">
               {{option.name}}
             </a>

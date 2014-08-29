@@ -157,8 +157,15 @@ define(
               }
 
               function openStagesInfoModal () {
+                function modalController( $scope, $modalInstance ) {
+                  $scope.closeModal = function () {
+                    $modalInstance.close();
+                  }
+                }
+
                 var stagesInfoModal = $modal.open( {
-                  template: '<div data-stages-info/>',
+                  templateUrl: 'partials/stagesInfoModal.html',
+                  controller: modalController,
                   windowClass: "stagesInfoDialog"
                 });
               }
@@ -185,7 +192,6 @@ define(
                 modalScope.plugin = plugin;
                 var pluginDetailModal = $modal.open( {
                   templateUrl: 'partials/pluginDetailModal.html',
-                  //template: '<div data-plugin-detail data-plugin="plugin"></div>',
                   scope: modalScope,
                   windowClass: "pluginDetailDialog",
                   size: 'lg'

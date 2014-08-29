@@ -415,7 +415,7 @@ button.refreshButton {
 }
 
 /* ==========================================================================
-   Plugin list item
+   Multiselect
    ========================================================================== */
 
 .multiselect .group,
@@ -498,6 +498,60 @@ button.refreshButton {
 .bootstrap .filterBar .filterContainer .multiselect .dropdown-submenu:hover > a,
 .bootstrap .filterBar .filterContainer .multiselect .dropdown-submenu:focus > a {
   background: #c1d7e1;
+}
+
+/* ==========================================================================
+   Multiselect Tooltip
+   ========================================================================== */
+
+.bootstrap .multiselect .popover {
+  background: #f5f6f8;
+  border: 1px solid #cbdde8;
+  border-radius: 0;
+  -webkit-box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2);
+  -moz-box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2);
+  box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2);
+  font-size: 13px;
+  text-align: center;
+  color: #999999;
+  font-weight: 300;
+  max-width: 250px;
+  line-height: 18px;
+}
+
+.bootstrap .multiselect .popover.bottom .arrow {
+  border: 0;
+  width: 20px;
+  height: 20px;
+  overflow: hidden;
+  top: -20px;
+}
+
+
+.bootstrap .multiselect .popover .arrow:after {
+  content: "";
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background: #f6f7f8;
+  border: 1px solid #cbdde8;
+  transform: translateY(15px) rotate(-45deg) ;
+  left: 12px;
+  -webkit-box-shadow: 3px 1px 3px -1px rgba(0,0,0,0.2);
+  -moz-box-shadow: 3px 1px 3px -1px rgba(0,0,0,0.2);
+  box-shadow: 3px 1px 3px -1px rgba(0,0,0,0.2);
+}
+
+.bootstrap .multiselect .popover .popover-title {
+  font-size: 14px;
+  border: none;
+  line-height: 14px;
+  padding-bottom: 0;
+  color: #333;
+}
+
+.bootstrap .multiselect .popover .popover-content {
+  padding: 4px 14px 9px;
 }
 
 /* ==========================================================================

@@ -241,7 +241,19 @@
 
 
 	<!-- START: override subfloor-pkg.assemble -->
-	<target name="assemble" depends="generate-plugin-config-file, generate-plugin-spring-config-file, assemble.init, assemble.copy-libs">
+	<!--<target name="assemble" depends="generate-plugin-config-file, generate-plugin-spring-config-file, assemble.init, assemble.copy-libs">-->
+	<target name="assemble" depends="generate-plugin-config-file, generate-plugin-spring-config-file, assemble.init">
+
+		<!-- copy libs to stage dir -->
+		<copy todir="${approot.stage.dir}/lib" overwrite="true">
+			<fileset dir="${basedir}/dist">
+				<include name="*.jar" />
+			</fileset>
+			<fileset dir="${basedir}/lib">
+				<include name="flexjson*.jar" />
+			</fileset>
+		</copy>
+			
 		<copy todir="${approot.stage.dir}" overwrite="true">
 
 			<!-- copy from script build output dir instead -->

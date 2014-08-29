@@ -45,7 +45,8 @@
 
         <div class="stagesInfo">
           <span class="icon info"></span>
-          <a class="stagesInfoLink" data-ng-click="onWhatAreStagesClicked()">What are stages?</a>
+          <!-- TODO: i18n -->
+          <a class="stagesInfoLink" href="" data-ng-click="onWhatAreStagesClicked()">What are stages?</a>
         </div>
 
       </div>
@@ -77,15 +78,17 @@
 
       <div data-plugin-list data-plugins="filteredPlugins" data-on-plugin-clicked="pluginWasClicked" class="filteredPluginsContainer"/>
 
-      <div class="infoBar clearfix">
-        <div class="infoBarHeader">
-          <div class="infoBarTitle">Contribute your Plugin Today</div>
-          <div class="infoBarText">All info to setup a new plugin.</div>
+      <a href="http://wiki.pentaho.com/display/ServerDoc2x/Developing+Plugins">
+        <div class="infoBar clearfix">
+          <div class="infoBarHeader">
+            <div class="infoBarTitle">Contribute your Plugin Today</div>
+            <div class="infoBarText">All info to setup a new plugin.</div>
+          </div>
+          <div class="infoBarFooter">
+            <div class="infoBarFooterText">Learn More</div>
+          </div>
         </div>
-        <div class="infoBarFooter">
-          <div class="infoBarFooterText">Learn More</div>
-        </div>
-      </div>
+      </a>
 
     </div>
 

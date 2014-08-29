@@ -51,7 +51,10 @@ html {
   box-sizing: border-box;
 }
 
-
+.wholeContainer {
+  max-width: 1200px;
+  margin: 5px auto 40px;
+}
 
 input.search {
   background-image: url(../img/search.svg);
@@ -946,6 +949,47 @@ button.refreshButton {
 }
 
 /* ==========================================================================
+   Generic Dialog
+   ========================================================================== */
+
+.bootstrap .modal .modal-container {
+  border: 1px solid #cbdde8;
+}
+
+.bootstrap .modal .modal-body {
+  max-height: 600px;
+}
+
+.bootstrap .modal .modal-container .closeButton {
+  position: absolute;
+  right: 20px;
+  top: 20px;
+  width: 20px;
+  height: 20px;
+  margin-right: 15px;
+  margin-top: 15px;
+  border: none;
+  background: none;
+  background-image: url(../img/close-details.svg);
+  background-position: center center;
+  background-size: 20px;
+  background-repeat: no-repeat;
+  z-index: 3000;
+}
+
+.no-svg .bootstrap .modal .modal-container .closeButton,
+.IE.IE8 .bootstrap .modal .modal-container .closeButton {
+  background-image: url(../img/close-details.png);
+}
+
+/* to stop background scroll with dialog */
+
+.overflowHidden {
+  overflow: hidden;
+}
+
+
+/* ==========================================================================
    Confirmation Dialog
    ========================================================================== */
 
@@ -994,7 +1038,7 @@ body.bootstrap .modal.confirmationDialog .dialog .buttonsContainer button:first-
    ========================================================================== */
 
 body.bootstrap .modal.pluginDetailDialog {
-  position: absolute;
+  /*position: absolute;*/
   -webkit-border-radius: 0;
   -moz-border-radius: 0;
   border-radius: 0;
@@ -1017,7 +1061,6 @@ body.bootstrap .modal.pluginDetailDialog {
 
 body.bootstrap .modal.pluginDetailDialog .pluginDetail {
   background-color: #ffffff;
-  border: 1px solid #cbdde8;
   padding: 20px;
   color: #26363d;
 }
@@ -1164,7 +1207,7 @@ body.bootstrap .modal.pluginDetailDialog .pluginDetail .pluginDetailBottom > div
 
 
 .bootstrap .modal.stagesInfoDialog {
-  position: absolute;
+  /*position: absolute;*/
   -webkit-border-radius: 0;
   -moz-border-radius: 0;
   border-radius: 0;

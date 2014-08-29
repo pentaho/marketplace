@@ -184,10 +184,16 @@ define(
                 var modalScope = $scope.$new( true ); // create new isolate scope
                 modalScope.plugin = plugin;
                 var pluginDetailModal = $modal.open( {
-                  template: '<div data-plugin-detail data-plugin="plugin"></div>',
+                  templateUrl: 'partials/pluginDetailModal.html',
+                  //template: '<div data-plugin-detail data-plugin="plugin"></div>',
                   scope: modalScope,
-                  windowClass: "pluginDetailDialog"
+                  windowClass: "pluginDetailDialog",
+                  size: 'lg'
                 });
+
+                modalScope.closeModal = function () {
+                  pluginDetailModal.close();
+                }
 
                 // clean up created modal scope
                 pluginDetailModal.result.then(

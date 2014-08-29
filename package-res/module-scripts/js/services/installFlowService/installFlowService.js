@@ -94,6 +94,7 @@ define(
                   templateUrl: 'partials/dialogTemplate.html',
                   controller: ModalInstanceCtrl,
                   backdrop: 'static',
+                  keyboard: false,
                   resolve: {
                     title: function() { return title; },
                     body: function() { return body; },

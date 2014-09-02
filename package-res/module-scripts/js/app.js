@@ -72,7 +72,10 @@ define( [ 'common-ui/angular',
 
         $translateProvider.useStaticFilesLoader({
           prefix: 'i18n/messages-',
-          suffix: '.json'
+          //suffix: '.json'
+          suffix: '.properties',
+          fileFormat: 'properties'
+
         });
         // TODO: SESSION_LOCALE AS INJECTED VARIABLE INSTEAD OF GLOBAL
         $translateProvider.preferredLanguage(SESSION_LOCALE)

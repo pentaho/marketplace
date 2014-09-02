@@ -519,6 +519,7 @@ button.refreshButton {
   line-height: 18px;
 }
 
+/*
 .bootstrap .multiselect .popover.bottom .arrow {
   border: 0;
   width: 20px;
@@ -541,6 +542,7 @@ button.refreshButton {
   -moz-box-shadow: 3px 1px 3px -1px rgba(0,0,0,0.2);
   box-shadow: 3px 1px 3px -1px rgba(0,0,0,0.2);
 }
+*/
 
 .bootstrap .multiselect .popover .popover-title {
   font-size: 14px;

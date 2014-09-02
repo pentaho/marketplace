@@ -15,14 +15,16 @@
 
 define( [ 'common-ui/angular',
           'common-ui/angular-route',
-          'common-ui/angular-ui-bootstrap' ],
+          'common-ui/angular-ui-bootstrap',
+          'angular-translate'
+    ],
 
     function ( angular, angularRoute, uiBootstrap ) {
 
       console.log("Required app.js ");
 
       // define application module
-      var app = angular.module( 'marketplace', [ 'ngRoute', 'ui.bootstrap', 'ngSanitize' ] );
+      var app = angular.module( 'marketplace', [ 'ngRoute', 'ui.bootstrap', 'ngSanitize', 'pascalprecht.translate' ] );
 
       app.config(['$routeProvider', function( $routeProvider ) {
 
@@ -63,6 +65,18 @@ define( [ 'common-ui/angular',
          controller: "TestController"
          });
          */
+
+      }]);
+
+      app.config(['$translateProvider', function ($translateProvider) {
+
+        $translateProvider.useStaticFilesLoader({
+          prefix: 'i18n/messages-',
+          suffix: '.json'
+        });
+        // TODO: SESSION_LOCALE AS INJECTED VARIABLE INSTEAD OF GLOBAL
+        $translateProvider.preferredLanguage(SESSION_LOCALE)
+            .fallbackLanguage('en');
 
       }]);
 

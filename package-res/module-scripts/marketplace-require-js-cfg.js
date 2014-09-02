@@ -12,3 +12,6 @@
  */
 
 requireCfg['paths']['marketplace'] = CONTEXT_PATH + 'content/marketplace/marketplace/js/app';
+requireCfg['paths']['angular-translate'] = CONTEXT_PATH + 'content/marketplace/marketplace/lib/angular-translate/angular-translate';
+
+requireCfg['shim']['angular-translate'] = ['common-ui/angular'];

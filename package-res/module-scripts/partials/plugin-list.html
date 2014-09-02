@@ -5,13 +5,13 @@
     <div class="pentaho-tabWidget"
          data-ng-click="selectTab( 'availableTab' )"
          data-ng-class="{ 'pentaho-tabWidget-selected': isTabSelected(  'availableTab'  ) }" >
-      <div class="pentaho-tabWidgetLabel"> Available </div>
+      <div class="pentaho-tabWidgetLabel"> {{ 'marketplace.tabs.available' | translate }} </div>
     </div>
 
     <div class="pentaho-tabWidget"
          data-ng-click="selectTab(  'installedTab' )"
          data-ng-class="{ 'pentaho-tabWidget-selected': isTabSelected(  'installedTab' ) }" >
-      <div class="pentaho-tabWidgetLabel"> Installed </div>
+      <div class="pentaho-tabWidgetLabel"> {{ 'marketplace.tabs.installed' | translate }} </div>
     </div>
 
     <button class="pull-right refreshButton" data-ng-click="refreshPluginsFromServer()" title="Refresh"></button>

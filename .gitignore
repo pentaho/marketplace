@@ -3,7 +3,7 @@ node_modules/
 js-lib/
 dist/
 test-lib/
-lib/
+/lib/
 package-res/module-scripts/main.html
 package-res/module-scripts/main.js
 package-res/plugin.xml

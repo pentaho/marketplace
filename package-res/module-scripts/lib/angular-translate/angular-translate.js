@@ -705,8 +705,11 @@ angular.module('pascalprecht.translate').provider('$translate', [
             $translate.use($translate.use());
           }
           if ($fallbackLanguage && $fallbackLanguage.length) {
+            var processAsyncResult = function (translation) {
+              translations(translation.key, translation.table);
+            };
             for (var i = 0, len = $fallbackLanguage.length; i < len; i++) {
-              langPromises[$fallbackLanguage[i]] = loadAsync($fallbackLanguage[i]);
+              langPromises[$fallbackLanguage[i]] = loadAsync($fallbackLanguage[i]).then(processAsyncResult);
             }
           }
         }

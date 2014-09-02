@@ -25,24 +25,24 @@ define( [ 'marketplace' ],
               function updateItemInfo() {
                 var buttonVersion;
                 var infoVersion;
-                var statusMessage;
+                var statusMessageId;
 
                 if ( plugin.isInstalled ) {
                   buttonVersion = plugin.isUpToDate() ? plugin.installedVersion : plugin.getVersionToUpdate();
                   infoVersion = plugin.installedVersion;
                   // TODO i18n
-                  statusMessage = "Installed:";
+                  statusMessageId = "marketplace.list.item.installationStatus.installed";
                 }
                 else {
                   buttonVersion = plugin.versions[0];
                   infoVersion = buttonVersion;
                   // TODO i18n
-                  statusMessage = "Available:";
+                  statusMessageId = "marketplace.list.item.installationStatus.available";
                 }
 
                 $scope.buttonVersion = buttonVersion;
                 $scope.infoVersion = infoVersion;
-                $scope.infoVersionStatusMessage= statusMessage;
+                $scope.infoVersionStatusMessageId= statusMessageId;
 
               }
 

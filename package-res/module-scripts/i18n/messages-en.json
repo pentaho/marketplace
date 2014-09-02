@@ -39,6 +39,15 @@
       "footer": {
         "text": "Learn More"
       }
+    },
+
+    "list": {
+      "item": {
+        "installationStatus": {
+          "installed": "@:marketplace.tab.installed",
+          "available": "@:marketplace.tab.available"
+        }
+      }
     }
 
 

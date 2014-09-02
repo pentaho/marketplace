@@ -23,8 +23,8 @@ define(
       console.log("Required services/developmentStageService.js");
 
       var service = app.factory( 'developmentStageService',
-          [
-            function ( ) {
+          [ '$translate',
+            function ( $translate ) {
 
               var customerLane = "Customer";
               var communityLane = "Community";
@@ -63,14 +63,32 @@ define(
               // TODO: check if these should be obtained from metadata
               // TODO: i18n
               function intializeDevelopmentStages() {
-                setDevelopmentStage( new DevelopmentStage( customerLane, 1, 'Development Phase', "Start up phase of an internal project. Usually a Labs experiment." ));
-                setDevelopmentStage( new DevelopmentStage( customerLane, 2, 'Snapshot Release', "Unstable and unsupported branch, not recommended for production use." ));
-                setDevelopmentStage( new DevelopmentStage( customerLane, 3, 'Limited Support', "Assistence given by Services Development with no contractual support for production environments." ));
-                setDevelopmentStage( new DevelopmentStage( customerLane, 4, 'Production Release', "Production release with PM assigned, fully supported as part of the Pentaho release cycle." ));
-                setDevelopmentStage( new DevelopmentStage( communityLane, 1, 'Development Phase', "Start up phase of an internal project. Usually a Labs experiment." ));
-                setDevelopmentStage( new DevelopmentStage( communityLane, 2, 'Snapshot Release', "Unstable and unsupported branch, not recommended for production use." ));
-                setDevelopmentStage( new DevelopmentStage( communityLane, 3, 'Stable Release', "Adoption is ramping up and product could be used in production environments." ));
-                setDevelopmentStage( new DevelopmentStage( communityLane, 4, 'Mature Release', "Indicates a successfully adopted project in a mature state." ));
+
+                function createStages ( numberOfStages, laneName, translationIdPrefix ) {
+                  for (var i = 1; i <= numberOfStages; i++) {
+                    var devStage = new DevelopmentStage(laneName, i);
+                    setDevelopmentStage(devStage);
+                    // capture stage variable
+                    (function (stage) {
+                      var name = $translate(translationIdPrefix + i + ".name")
+                          .then(function (name) {
+                            stage.name = name;
+                          });
+                      var description = $translate(translationIdPrefix + i + ".description")
+                          .then(function (description) {
+                            stage.description = description;
+                          });
+                    })(devStage);
+                  }
+                }
+
+                var translationKeyPrefix = "marketplace.devStage.stages";
+                var customerLanePrefix = translationKeyPrefix + ".customer.phase";
+                var communityLanePrefix = translationKeyPrefix + ".community.phase";
+
+                createStages( 4, customerLane, customerLanePrefix );
+                createStages( 4, communityLane, communityLanePrefix );
+
               }
 
               /**

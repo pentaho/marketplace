@@ -5,16 +5,16 @@
     <div class="pentaho-tabWidget"
          data-ng-click="selectTab( 'availableTab' )"
          data-ng-class="{ 'pentaho-tabWidget-selected': isTabSelected(  'availableTab'  ) }" >
-      <div class="pentaho-tabWidgetLabel"> {{ 'marketplace.tabs.available' | translate }} </div>
+      <div class="pentaho-tabWidgetLabel"> {{ 'marketplace.tab.available' | translate }} </div>
     </div>
 
     <div class="pentaho-tabWidget"
          data-ng-click="selectTab(  'installedTab' )"
          data-ng-class="{ 'pentaho-tabWidget-selected': isTabSelected(  'installedTab' ) }" >
-      <div class="pentaho-tabWidgetLabel"> {{ 'marketplace.tabs.installed' | translate }} </div>
+      <div class="pentaho-tabWidgetLabel"> {{ 'marketplace.tab.installed' | translate }} </div>
     </div>
 
-    <button class="pull-right refreshButton" data-ng-click="refreshPluginsFromServer()" title="Refresh"></button>
+    <button class="pull-right refreshButton" data-ng-click="refreshPluginsFromServer()" title="{{ 'marketplace.refreshButton.title' | translate }}"></button>
 
   </div>
 
@@ -25,28 +25,26 @@
 
         <div class="filterContainer">
 
-          <!-- TODO i18n data-prefix -->
           <div data-multiselect-dropdown
               data-selected-options="selectedTypes"  data-options="pluginTypes"
               data-group-by="main" data-display="sub"
-              data-prefix="Type: ">
+              data-prefix="{{ 'marketplace.filter.category.prefix' | translate }}">
           </div>
 
-          <!-- TODO i18n data-prefix -->
           <div data-multiselect-dropdown
               data-selected-options="selectedStages" data-options="developmentStages"
               data-group-by="lane" data-display="name"
-              data-prefix="Stage: " data-use-divider="true">
+              data-use-divider="true"
+              data-prefix="{{ 'marketplace.filter.devStage.prefix' | translate }}">
           </div>
 
-          <input placeholder="Search" data-ng-model="searchText" class="search">
+          <input placeholder="{{ 'marketplace.search.placeholder' | translate }}" data-ng-model="searchText" class="search">
 
         </div>
 
         <div class="stagesInfo">
           <span class="icon info"></span>
-          <!-- TODO: i18n -->
-          <a class="stagesInfoLink" href="" data-ng-click="onWhatAreStagesClicked()">What are stages?</a>
+          <a class="stagesInfoLink" href="" data-ng-click="onWhatAreStagesClicked()"> {{ 'marketplace.devStage.infoLinkText' | translate }}</a>
         </div>
 
       </div>
@@ -54,7 +52,6 @@
       <div class="statusMessage">
 
         <div data-ng-show="isGettingPluginsFromServer">
-          <!-- TODO i18n -->
           <div id="floatingBarsG">
             <div class="blockG" id="rotateG_01"></div>
             <div class="blockG" id="rotateG_02"></div>
@@ -65,27 +62,25 @@
             <div class="blockG" id="rotateG_07"></div>
             <div class="blockG" id="rotateG_08"></div>
           </div>
-          <span>Getting Plugins from server. Please Wait.</span>
+          <span>{{ 'marketplace.statusMessage.gettingPlugins' | translate }}</span>
         </div>
 
         <div data-ng-show="!isGettingPluginsFromServer && filteredPlugins.length == 0" class="statusMessageNoPlugins">
-          <!-- TODO i18n -->
-          No plugin found that matched your criteria.
+          {{ 'marketplace.statusMessage.noPluginMatch' | translate }}
         </div>
 
       </div>
-
 
       <div data-plugin-list data-plugins="filteredPlugins" data-on-plugin-clicked="pluginWasClicked" class="filteredPluginsContainer"/>
 
       <a href="http://wiki.pentaho.com/display/ServerDoc2x/Developing+Plugins">
         <div class="infoBar clearfix">
           <div class="infoBarHeader">
-            <div class="infoBarTitle">Contribute your Plugin Today</div>
-            <div class="infoBarText">All info to setup a new plugin.</div>
+            <div class="infoBarTitle">{{'marketplace.infoBar.header.title' | translate }}</div>
+            <div class="infoBarText">{{'marketplace.infoBar.header.text' | translate }}</div>
           </div>
           <div class="infoBarFooter">
-            <div class="infoBarFooterText">Learn More</div>
+            <div class="infoBarFooterText">{{'marketplace.infoBar.footer.text' | translate }}</div>
           </div>
         </div>
       </a>

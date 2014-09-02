@@ -1,8 +1,47 @@
 {
   "marketplace": {
-    "tabs": {
+    "tab": {
       "available": "Available",
       "installed": "Installed"
+    },
+
+    "refreshButton": {
+      "title": "Refresh"
+    },
+
+    "filter": {
+      "category": {
+        "prefix": "Type:"
+      },
+      "devStage": {
+        "prefix": "Stage:"
+      }
+    },
+
+    "search": {
+      "placeholder": "Search"
+    },
+
+    "devStage": {
+      "infoLinkText": "What are stages?"
+    },
+
+    "statusMessage": {
+      "gettingPlugins": "Getting Plugins from server. Please Wait.",
+      "noPluginMatch": "No plugin found that matched your criteria."
+    },
+
+    "infoBar": {
+      "header": {
+        "title": "Contribute your Plugin Today",
+        "text": "All info to setup a new plugin." 
+      },
+      "footer": {
+        "text": "Learn More"
+      }
     }
+
+
+
   }
 }

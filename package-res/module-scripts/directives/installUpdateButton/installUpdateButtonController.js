@@ -31,8 +31,7 @@ define( [
 
                 // No version selected to install or update
                 if ( !selectedVersion ) {
-                  // TODO: i18n
-                  button.text = "Invalid selected version";
+                  button.textId = "marketplace.installationButton.invalidMessage";
                   button.disabled = true;
                   button.cssClass = "invalid";
                   button.onClick = noOperation;
@@ -42,16 +41,14 @@ define( [
                 if ( plugin.isInstalled ) {
                   if ( selectedVersion.equals( installedVersion ) ) {
                     if( $scope.allowReinstall ) {
-                      // TODO i18n
-                      button.text = "Reinstall";
+                      button.textId = "marketplace.installationButton.reinstall";
                       button.cssClass = "install";
                       button.disabled = false;
                       button.onClick = function () { installService.installPlugin( plugin, selectedVersion ); };
                       return;
                     }
                     else {
-                      // TODO i18n
-                      button.text = "Up to Date";
+                      button.textId = "marketplace.installationButton.upToDate";
                       button.cssClass = "upToDate";
                       // buttom must be enabled so that click event propagation may be stopped
                       button.disabled = false;
@@ -60,8 +57,7 @@ define( [
                     }
                   }
                   else if ( selectedVersion.moreRecentThan( installedVersion ) ) {
-                    // TODO: i18n
-                    button.text = "Update";
+                    button.textId = "marketplace.installationButton.update";
                     button.cssClass = "update";
                     button.disabled = false;
                     button.onClick = function () {
@@ -71,8 +67,7 @@ define( [
                   }
                 }
 
-                // TODO: i18n
-                button.text = "Install";
+                button.textId = "marketplace.installationButton.install";
                 button.cssClass = "install";
                 button.disabled = false;
                 button.onClick = function () {

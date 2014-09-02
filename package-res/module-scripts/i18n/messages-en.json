@@ -34,7 +34,7 @@
     "infoBar": {
       "header": {
         "title": "Contribute your Plugin Today",
-        "text": "All info to setup a new plugin." 
+        "text": "All info to setup a new plugin."
       },
       "footer": {
         "text": "Learn More"
@@ -48,6 +48,15 @@
           "available": "@:marketplace.tab.available"
         }
       }
+    },
+
+    "installationButton": {
+      "upToDate": "Up to Date",
+      "update": "Update",
+      "install": "Install",
+      "reinstall": "Reinstall",
+      "uninstall": "Uninstall",
+      "invalidMessage": "Invalid selected version"
     }
 
 

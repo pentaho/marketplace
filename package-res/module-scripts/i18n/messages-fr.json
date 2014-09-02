@@ -48,8 +48,16 @@
           "available": "@:marketplace.tab.available"
         }
       }
-    }
+    },
 
+    "installationButton": {
+      "upToDate": "À jour",
+      "update": "Mise à jour",
+      "install": "Installer",
+      "reinstall": "Réinstaller",
+      "uninstall": "Désinstaller",
+      "invalidMessage": "Version non valide sélectionnée"
+    }
 
 
   }

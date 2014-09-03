@@ -1,6 +1,5 @@
 <div class="pluginDetail">
 
-  <!-- TODO i18n on all "hardcoded" values -->
   <div class="pluginDetailInfoContainer">
 
     <div class="pluginDetailTop clearfix">
@@ -27,7 +26,7 @@
               data-allow-reinstall="true">
           </button>
           <button class="pentaho-button uninstallButton" data-ng-click="uninstallPlugin(plugin)" data-ng-disabled="!plugin.isInstalled">
-            <span class="text">Uninstall</span>
+            <span class="text">{{ 'marketplace.installationButton.uninstall' | translate }}</span>
             <span class="icon"></span>
           </button>
         </div>
@@ -38,7 +37,7 @@
     <div class="pluginDetailMiddle clearfix">
       <div class="pluginDetailLeft">
 
-        <div class="sectionHeader">Information</div>
+        <div class="sectionHeader">{{ 'marketplace.pluginDetail.section.information.title' | translate }}</div>
 
         <div data-ng-repeat="info in pluginInformation" class="pluginInformationItem clearfix">
           <div class="pluginInformationLeft">
@@ -54,12 +53,12 @@
       <div class="pluginDetailRight">
 
         <div data-ng-if="plugin.description">
-          <div class="sectionHeader">Description</div>
+          <div class="sectionHeader">{{ 'marketplace.pluginDetail.section.description.title' | translate }}</div>
           <div data-ng-bind-html="plugin.description"></div>
         </div>
 
         <div data-ng-if="plugin.screenshotUrls && plugin.screenshotUrls.length > 0">
-          <div class="sectionHeader">Screenshots</div>
+          <div class="sectionHeader">{{ 'marketplace.pluginDetail.section.screenshots.title' | translate }}</div>
           <div data-carousel data-interval="5000">
             <div data-slide data-ng-repeat="screenshotUrl in plugin.screenshotUrls">
               <img data-ng-src="{{screenshotUrl}}">

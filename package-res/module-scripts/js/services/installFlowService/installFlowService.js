@@ -21,10 +21,10 @@ define(
       console.log("Required services/installFlowService/installFlowService.js");
 
       var installFlowService = app.factory( 'installFlowService',
-          [ 'appService', '$modal',
-            function( appService, $modal ) {
+          [ 'appService', '$modal', '$translate',
+            function( appService, $modal, $translate ) {
 
-              function onOperationResult ( message, dialog, modalInstance ) {
+              function onOperationResult ( message , dialog, modalInstance ) {
                 dialog.body = message;
                 var okButton = dialog.buttons[0];
                 okButton.onClick = function() { modalInstance.close(); };
@@ -33,26 +33,26 @@ define(
               }
 
               function installPlugin( plugin, version ) {
-                // TODO: i18n
                 newDialogModal(
                     function ( ) { return appService.installPlugin( plugin, version); },
-                    "Do you want to install?",
-                    "You are about to install " + plugin.name + ". Do you want to proceed?",
-                    "Installing " + plugin.name + "...",
-                    "Plugin " + plugin.name + " installed successfully",
-                    "Installation Error"
+                    'marketplace.installationDialog.title',
+                    'marketplace.installationDialog.confirmation',
+                    'marketplace.installationDialog.installing',
+                    'marketplace.installationDialog.success',
+                    'marketplace.installationDialog.error',
+                    plugin
                 );
               }
 
               function updatePlugin( plugin, version ) {
-                // TODO: i18n
                 newDialogModal(
                     function ( ) { return appService.installPlugin( plugin, version); },
-                    "Do you want update?",
-                    "You are about to update " + plugin.name + ". Do you want to proceed?",
-                    "Updating " + plugin.name + "...",
-                    "Plugin " + plugin.name + " updated successfully.",
-                    "Error occurred when updating plugin " + plugin.name + "."
+                    'marketplace.updateDialog.title',
+                    'marketplace.updateDialog.confirmation',
+                    'marketplace.updateDialog.installing',
+                    'marketplace.updateDialog.success',
+                    'marketplace.updateDialog.error',
+                    plugin
                 );
               }
 
@@ -61,30 +61,30 @@ define(
                   return;
                 }
 
-                // TODO: i18n
                 newDialogModal(
                     function ( ) { return appService.uninstallPlugin( plugin ); },
-                    "Do you want uninstall?",
-                    "You are about to uninstall " + plugin.name + ". Do you want to proceed?",
-                    "Uninstalling " + plugin.name + "...",
-                    "Plugin " + plugin.name + " uninstalled successfully.",
-                    "Error occurred when uninstalling plugin " + plugin.name + "."              );
+                    'marketplace.uninstallDialog.title',
+                    'marketplace.uninstallDialog.confirmation',
+                    'marketplace.uninstallDialog.installing',
+                    'marketplace.uninstallDialog.success',
+                    'marketplace.uninstallDialog.error',
+                    plugin
+                );
               }
 
-
-              function newDialogModal ( okAction, title, body, processingMessage, onSuccessMessage, onFailMessage  ) {
+              function newDialogModal ( okAction, titleId, bodyId, processingMessageId, onSuccessMessageId, onFailMessageId, plugin  ) {
                 function onOk ( scope, modalInstance ) {
-                  scope.dialog.body = processingMessage;
+                  scope.dialog.body = $translate.instant( processingMessageId, { pluginName: plugin.name } );
                   var okButton = scope.dialog.buttons[0];
                   var cancelButton = scope.dialog.buttons[1];
                   okButton.disabled = true;
                   cancelButton.disabled = true;
                   // install / update / uninstall plugin
                   okAction().then(
-                      // TODO: i18n
-                      function () { onOperationResult( onSuccessMessage, scope.dialog, modalInstance ) },
-                      // TODO: i18n
-                      function () { onOperationResult( onFailMessage, scope.dialog, modalInstance ) }
+                      function () { onOperationResult( $translate.instant( onSuccessMessageId, { pluginName: plugin.name } ),
+                          scope.dialog, modalInstance ) },
+                      function () { onOperationResult( $translate.instant( onFailMessageId, { pluginName: plugin.name } ),
+                          scope.dialog, modalInstance ) }
                   );
                 }
 
@@ -96,8 +96,8 @@ define(
                   backdrop: 'static',
                   keyboard: false,
                   resolve: {
-                    title: function() { return title; },
-                    body: function() { return body; },
+                    title: function() { return $translate.instant( titleId, { pluginName: plugin.name } ); },
+                    body: function() { return $translate.instant( bodyId, { pluginName: plugin.name } ); },
                     onOk: function() { return onOk; },
                     onCancel: function() { return onCancel; }
                   },
@@ -109,9 +109,8 @@ define(
 
               function ModalInstanceCtrl ( $scope, $modalInstance, title, body, onOk, onCancel ) {
                 var buttons = [];
-                // TODO: i18n
-                if( onOk ) { buttons.push( { text: "Ok", onClick: function() { onOk( $scope, $modalInstance ); } } ) };
-                if( onCancel ) { buttons.push (  { text: "Cancel", onClick: function() { onCancel( $scope, $modalInstance ); } })};
+                if( onOk ) { buttons.push( { text: $translate.instant( 'marketplace.okButton.text' ), onClick: function() { onOk( $scope, $modalInstance ); } } ) };
+                if( onCancel ) { buttons.push (  { text: $translate.instant( 'marketplace.cancelButton.text' ), onClick: function() { onCancel( $scope, $modalInstance ); } })};
 
                 $scope.dialog = {
                   title: title,

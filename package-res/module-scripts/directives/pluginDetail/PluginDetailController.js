@@ -23,8 +23,8 @@ define( [
       console.log("Required pluginDetail/pluginDetailController.js");
 
       app.controller( 'PluginDetailController',
-          ['$scope', 'installFlowService',
-            function ( $scope, installService ) {
+          ['$scope', 'installFlowService', '$translate',
+            function ( $scope, installService, $translate ) {
               // Add trim to String if it is not defined
               if (!('trim' in String.prototype)) {
                 String.prototype.trim= function() {
@@ -57,17 +57,20 @@ define( [
               }
 
 
-              // TODO: i18n for Info labels!
               function getPluginInformation( plugin ) {
                 var selectedVersion = $scope.selectedPluginVersion;
 
                 var versionInfo = [];
                 if ( selectedVersion ) {
                   versionInfo = [
-                    CreateInfo( "Branch", selectedVersion.branch),
-                    CreateInfo( "Version", selectedVersion.version),
-                    CreateInfo( "Build", selectedVersion.build),
-                    CreateInfo( "Release Date", selectedVersion.releaseDate ),
+                    CreateInfo( $translate.instant('marketplace.pluginDetail.section.information.branch'),
+                        selectedVersion.branch),
+                    CreateInfo( $translate.instant('marketplace.pluginDetail.section.information.version'),
+                        selectedVersion.version),
+                    CreateInfo( $translate.instant('marketplace.pluginDetail.section.information.build'),
+                        selectedVersion.build),
+                    CreateInfo( $translate.instant('marketplace.pluginDetail.section.information.releaseDate'),
+                        selectedVersion.releaseDate ),
                     // TODO: These infos aren't in the mock
                     // newInfo( "Name", selectedVersion.name ),
                     // newInfo( "Samples", "samples", selectedVersion.samplesDownloadUrl ),
@@ -77,9 +80,12 @@ define( [
                 }
 
                 var infos = [
-                    CreateInfo( "Developer", plugin.author.name, plugin.author.siteUrl ),
-                    CreateInfo( "License", plugin.license.name ),
-                    CreateInfo( "Dependencies", plugin.dependencies)
+                    CreateInfo( $translate.instant('marketplace.pluginDetail.section.information.developer'),
+                        plugin.author.name, plugin.author.siteUrl ),
+                    CreateInfo( $translate.instant('marketplace.pluginDetail.section.information.license'),
+                        plugin.license.name ),
+                    CreateInfo( $translate.instant('marketplace.pluginDetail.section.information.dependencies'),
+                        plugin.dependencies)
                 ];
 
                 // remove information with empty description as they should not be in the view

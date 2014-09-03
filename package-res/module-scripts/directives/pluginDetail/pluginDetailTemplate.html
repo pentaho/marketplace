@@ -53,12 +53,12 @@
       </div>
       <div class="pluginDetailRight">
 
-        <div data-ng-show="plugin.description">
+        <div data-ng-if="plugin.description">
           <div class="sectionHeader">Description</div>
           <div data-ng-bind-html="plugin.description"></div>
         </div>
 
-        <div data-ng-show="plugin.screenshotUrls && plugin.screenshotUrls.length > 0">
+        <div data-ng-if="plugin.screenshotUrls && plugin.screenshotUrls.length > 0">
           <div class="sectionHeader">Screenshots</div>
           <div data-carousel data-interval="5000">
             <div data-slide data-ng-repeat="screenshotUrl in plugin.screenshotUrls">
@@ -72,7 +72,7 @@
 
   </div>
 
-  <div data-ng-show="selectedPluginVersion.devStage" class="pluginDetailBottom clearfix">
+  <div data-ng-if="selectedPluginVersion.devStage" class="pluginDetailBottom clearfix">
     <div data-dev-stage-icon
          data-lane="selectedPluginVersion.devStage.lane"
          data-phase="selectedPluginVersion.devStage.phase"

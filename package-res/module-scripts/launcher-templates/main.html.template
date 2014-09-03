@@ -20,30 +20,3 @@
     <script src="main.js"></script>
 
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<!--
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>Hello World from Pentaho!</title>
-        <script data-main="main.js" src="@js.common-ui.dirpath.prefix@/common-ui/resources/web/require.js"></script>
-    </head>
-    <body>
-        <h1>Hello World from Pentaho!</h1>
-        <div id="result"></div>
-    </body>
-</html>
--->

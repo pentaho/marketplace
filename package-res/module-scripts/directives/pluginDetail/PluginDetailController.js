@@ -93,6 +93,19 @@ define( [
 
               }
 
+              function getDisagreeMailTranslationObject() {
+                var version = $scope.selectedPluginVersion;
+                return {
+                  stageLane:  version.devStage.lane,
+                  stagePhase: version.devStage.phase,
+                  versionBranch: version.branch,
+                  versionVersion: version.version,
+                  versionBuild: version.buildId,
+                  pluginName: $scope.plugin.name
+                }
+              }
+
+
               $scope.uninstallPlugin = installService.uninstallPlugin;
               $scope.pluginInformation = getPluginInformation( $scope.plugin );
 
@@ -101,6 +114,7 @@ define( [
               // update version info when a new version is selected
               $scope.$watch( 'selectedPluginVersion', function () {
                     $scope.pluginInformation = getPluginInformation( $scope.plugin );
+                    $scope.disagreeMailTranslationVars = getDisagreeMailTranslationObject();
                   }
               );
 

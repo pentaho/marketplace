@@ -208,21 +208,6 @@ define(
                 );
               };
 
-              /*
-              // TODO: get from service
-              $scope.pluginTypes = [
-                { name: 'Analysis', group: 'Apps' },
-                { name: 'Dashboards', group: 'Apps' },
-                { name: 'Reporting', group: 'Apps' },
-                { name: 'Lifecycle', group: 'Apps' },
-                { name: 'Admin', group: 'Apps' },
-                { name: 'Visualizations', group: 'Other' },
-                { name: 'Themes', group: 'Other' },
-                { name: 'Language Packs', group: 'Other' }
-              ];
-              */
-
-              // TODO: i18n
               $scope.$watchCollection( "selectedStages", applyPluginFilter );
               $scope.$watchCollection( "selectedTypes", applyPluginFilter );
               $scope.$watch( "searchText", applyPluginFilter );

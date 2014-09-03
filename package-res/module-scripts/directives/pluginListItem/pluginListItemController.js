@@ -30,13 +30,11 @@ define( [ 'marketplace' ],
                 if ( plugin.isInstalled ) {
                   buttonVersion = plugin.isUpToDate() ? plugin.installedVersion : plugin.getVersionToUpdate();
                   infoVersion = plugin.installedVersion;
-                  // TODO i18n
                   statusMessageId = "marketplace.list.item.installationStatus.installed";
                 }
                 else {
                   buttonVersion = plugin.versions[0];
                   infoVersion = buttonVersion;
-                  // TODO i18n
                   statusMessageId = "marketplace.list.item.installationStatus.available";
                 }
 

@@ -47,7 +47,6 @@ define(
                 this.lane = lane;
                 this.phase = phase;
 
-                // TODO: needs support for i18n
                 this.name = name;
                 this.description = description;
 
@@ -61,7 +60,6 @@ define(
               }
 
               // TODO: check if these should be obtained from metadata
-              // TODO: i18n
               function intializeDevelopmentStages() {
 
                 function createStages ( numberOfStages, laneName, translationIdPrefix ) {

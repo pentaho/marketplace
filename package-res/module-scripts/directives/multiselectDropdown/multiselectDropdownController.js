@@ -167,7 +167,14 @@ define(
                             var name = display ? option[display] : option;
                             var selectionValue = select ? option[select] : option;
                             // TODO: remove scope? => selectedOptionsValue
-                            return new Option( name, selectionValue, group, scope, scope.selectedOptionsValue );
+                            var newOption = new Option( name, selectionValue, group, scope, scope.selectedOptionsValue );
+                            // NOTE: this watch fixes translations issues in FireFox
+                            scope.$watch( function () { return display ? option[display] : option; },
+                                function ( newName ) {
+                                  newOption.name = newName;
+                                  updateOptionsDisplayString();
+                                });
+                            return newOption;
                           });
                       return group;
                     })

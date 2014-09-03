@@ -66,8 +66,19 @@ define( [ 'marketplace' ],
                 /**
                  * Text prefix to be used in the selection box
                  */
-                prefix: '@'
-
+                prefix: '@',
+                /**
+                 * Text that is shown when no option is selected
+                 */
+                noOptionSelected: '@',
+                /**
+                 * Text that is shown when all options are selected
+                 */
+                allOptionsSelected: '@',
+                /**
+                 * Text that delimits the options
+                 */
+                optionDelimiter: '@'
               }
             };
           }

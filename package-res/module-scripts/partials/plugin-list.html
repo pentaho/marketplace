@@ -28,14 +28,20 @@
           <div data-multiselect-dropdown
               data-selected-options="selectedTypes"  data-options="pluginTypes"
               data-group-by="main" data-display="sub"
-              data-prefix="{{ 'marketplace.filter.category.prefix' | translate }}">
+              data-prefix="{{ 'marketplace.filter.category.prefix' | translate }}"
+              data-no-option-selected="{{ 'marketplace.filter.category.noneSelected' | translate }}"
+              data-all-options-selected="{{ 'marketplace.filter.category.allSelected' | translate }}"
+              data-option-delimiter=", ">
           </div>
 
           <div data-multiselect-dropdown
               data-selected-options="selectedStages" data-options="developmentStages"
               data-group-by="lane" data-display="name"
               data-use-divider="true"
-              data-prefix="{{ 'marketplace.filter.devStage.prefix' | translate }}">
+              data-prefix="{{ 'marketplace.filter.devStage.prefix' | translate }}"
+              data-no-option-selected="{{ 'marketplace.filter.category.noneSelected' | translate }}"
+              data-all-options-selected="{{ 'marketplace.filter.category.allSelected' | translate }}"
+              data-option-delimiter=", ">
           </div>
 
           <input placeholder="{{ 'marketplace.search.placeholder' | translate }}" data-ng-model="searchText" class="search">

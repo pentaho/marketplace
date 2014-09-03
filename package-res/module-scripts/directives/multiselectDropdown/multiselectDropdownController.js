@@ -116,18 +116,22 @@ define(
 
 
               function getOptionsDisplayString ( groups ) {
+                if ( $scope.allOptionsSelected &&
+                    _.all( groups, function ( group ) { return group.selected === Group.selectEnum.ALL; }) ) {
+                  return $scope.allOptionsSelected;
+                }
+
+                if ( $scope.noOptionSelected &&
+                    _.all( groups, function ( group ) { return group.selected === Group.selectEnum.NONE }) ) {
+                  return $scope.noOptionSelected;
+                }
+
                 var selectedGroupsString =
                     _.chain( groups )
                         .map( function ( group ) { return getGroupDisplayString( group ); } )
                         .filter( function ( string ) { return string !== null && string !== undefined && string !== "" })
                         .value()
-                        .join(', ');
-
-                if (_.all( groups, function ( group ) { return group.selected === Group.selectEnum.ALL; }) ||
-                    _.all( groups, function ( group ) { return group.selected === Group.selectEnum.NONE }) ) {
-                  // TODO: i18n
-                  return "All";
-                }
+                        .join($scope.optionDelimiter);
 
                 return selectedGroupsString;
               };
@@ -146,7 +150,7 @@ define(
                     .map ( function ( option ) { return option.name; } )
                     .value();
 
-                return optionsDisplayStrings.join(', ')
+                return optionsDisplayStrings.join($scope.optionDelimiter)
               }
 
               function updateOptionsDisplayString () {

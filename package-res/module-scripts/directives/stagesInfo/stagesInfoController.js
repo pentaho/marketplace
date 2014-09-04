@@ -22,13 +22,7 @@ define( [ 'marketplace',
       app.controller('stagesInfoController',
           ['$scope', 'developmentStageService',
             function ( $scope, devStageService ) {
-              var devStages = devStageService.getStages();
-              var lanes = _.chain( devStages )
-                  .groupBy( function ( stage ) { return stage.lane; } )
-                  .map( function ( laneStages, laneName ) { return { name: laneName, stages: laneStages }; } )
-                  .value();
-
-              $scope.lanes = lanes;
+              $scope.lanes = devStageService.getLanes();
             }
           ]);
     }

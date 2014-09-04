@@ -164,12 +164,12 @@ define(
                       var group = new Group ( groupName, scope );
                       group.options = _.map( options,
                           function ( option ) {
-                            var name = display ? option[display] : option;
-                            var selectionValue = select ? option[select] : option;
+                            var name = getOptionDisplayName( option, display );
+                            var selectionValue = getOptionSelectValue( option, select );
                             // TODO: remove scope? => selectedOptionsValue
                             var newOption = new Option( name, selectionValue, group, scope, scope.selectedOptionsValue );
                             // NOTE: this watch fixes translations issues in FireFox
-                            scope.$watch( function () { return display ? option[display] : option; },
+                            scope.$watch( function () { return getOptionDisplayName( option, display ); },
                                 function ( newName ) {
                                   newOption.name = newName;
                                   updateOptionsDisplayString();
@@ -179,6 +179,14 @@ define(
                       return group;
                     })
                     .value();
+              }
+
+              function getOptionDisplayName( option, display ) {
+                return display ? option[display] : option;
+              }
+
+              function getOptionSelectValue( option, select ) {
+                return  select ? option[select] : option;
               }
 
               $scope.toggleSelection = function ( selectable ) {

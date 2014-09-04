@@ -65,7 +65,7 @@ define(
                     function ( selectedStage ) {
                       return _.any( plugin.versions, function ( version )  {
                             return version.devStage &&
-                                selectedStage.lane == version.devStage.lane &&
+                                selectedStage.lane.id == version.devStage.lane.id &&
                                 selectedStage.phase == version.devStage.phase;
                       } );
                     }
@@ -215,7 +215,13 @@ define(
               $scope.$watch( "selectedTab", applyPluginFilter );
 
               $scope.selectedStages = [];
-              $scope.developmentStages = devStagesService.getStages();
+              $scope.developmentStages = _.map( devStagesService.getStages(), function ( stage ) {
+                var filterStageOption = { lane: stage.lane.name, name: stage.name, stage: stage };
+                // NOTE: These watches are necessary because of translation issues in FireFox
+                $scope.$watch( function () { return stage.name; }, function () { filterStageOption.name = stage.name; } );
+                $scope.$watch( function () { return stage.lane.name; }, function () { filterStageOption.lane = stage.lane.name; } );
+                return filterStageOption;
+              });
 
               $scope.selectedTypes = [];
               $scope.pluginTypes = [];

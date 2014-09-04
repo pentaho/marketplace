@@ -154,7 +154,7 @@ define(
                   var lanes = devStages.getLanes();
                   lane = lanes[ Math.floor( Math.random() * lanes.length ) ];
                   phase = Math.floor((Math.random() * 4) + 1);
-                  version.devStage = devStages.getStage( lane, phase );
+                  version.devStage = devStages.getStage( lane.id, phase );
                 }
 
                 return version;

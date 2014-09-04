@@ -100,16 +100,40 @@ define(
               function pluginFilter ( plugin ) {
                 return filterInstalled( plugin ) &&
                   filterStage ( plugin ) &&
-                  filterCategory( plugin );
+                  filterCategory( plugin ) &&
+                  filterText(plugin, $scope.searchText );
               };
+
+              function contains ( string, subString ) {
+                return string ? string.toLowerCase().indexOf(subString.toLowerCase()) > -1 : false;
+              };
+
+              function filterText ( plugin, text ) {
+                if ( !text ) {
+                  return true;
+                }
+
+                return contains ( plugin.name, text ) ||
+                    contains( plugin.description, text ) ||
+                    contains( plugin.author.name, text ) ||
+                    contains( plugin.dependencies, text ) ||
+                    contains( plugin.license.name, text ) ||
+                    _.any( plugin.versions, function ( version ) {
+                      return contains( version.branch, text ) ||
+                          contains( version.version, text ) ||
+                          contains( version.buildId, text ) ||
+                          contains( version.name , text ) ||
+                          contains( version.description, text );
+                    });
+              };
+
 
               function applyPluginFilter() {
                 appService.getPlugins().then( filterAndSetPlugins );
               };
 
               function filterAndSetPlugins ( plugins ) {
-                var pluginsFromDropDown = $filter('filter')( plugins, pluginFilter );
-                $scope.filteredPlugins = $filter('filter')( pluginsFromDropDown, $scope.searchText );
+                $scope.filteredPlugins = $filter('filter')( plugins, pluginFilter );
               };
 
               function refreshPluginsFromServer () {
@@ -150,7 +174,7 @@ define(
                     .filter( function ( plugin ) { return plugin.category !== undefined && plugin.category !== null; } )
                     .map( function( plugin ) { return plugin.category; } )
                     .uniq( function ( category ) { return category.getId(); } )
-                    //.sortBy( function ( category ) { return category.getId(); })
+                    .sortBy( function ( category ) { return category.mainName + category.subName; })
                     .value();
 
                 return categories;

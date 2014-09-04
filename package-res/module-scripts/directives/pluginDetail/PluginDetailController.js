@@ -96,7 +96,7 @@ define( [
               function getDisagreeMailTranslationObject() {
                 var version = $scope.selectedPluginVersion;
                 return {
-                  stageLane:  version.devStage.lane,
+                  stageLane:  version.devStage.lane.name,
                   stagePhase: version.devStage.phase,
                   versionBranch: version.branch,
                   versionVersion: version.version,

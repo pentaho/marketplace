@@ -79,7 +79,9 @@
     <div class="devStageName">{{selectedPluginVersion.devStage.name}}</div>
     <div class="devStageDescription">{{selectedPluginVersion.devStage.description}}</div>
   </div>
-  <a class="pull-right" href="mailto:marketplace-feedback@pentaho.com?subject={{ 'marketplace.devStage.disagreeMail.subject' | translate:disagreeMailTranslationVars }}&body={{ 'marketplace.devStage.disagreeMail.body' | translate:disagreeMailTranslationVars }}">
+  <a class="pull-right"
+      data-ng-if="selectedPluginVersion.devStage"
+      href="mailto:marketplace-feedback@pentaho.com?subject={{ 'marketplace.devStage.disagreeMail.subject' | translate:disagreeMailTranslationVars }}&body={{ 'marketplace.devStage.disagreeMail.body' | translate:disagreeMailTranslationVars }}">
     {{ 'marketplace.devStage.disagreeMail.linkText' | translate }}
   </a>
 

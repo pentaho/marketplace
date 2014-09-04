@@ -165,17 +165,15 @@ define(
 
                 version.devStage = devStages.getStage( lane, phase );
 
-                // TODO: remove temporary random generation
-                // if no devstage was found in the version, randomly generate one
-                if( version.devStage === undefined ) {
-                  var lanes = devStages.getLanes();
-                  lane = lanes[ Math.floor( Math.random() * lanes.length ) ];
-                  phase = Math.floor((Math.random() * 4) + 1);
-                  version.devStage = devStages.getStage( lane.id, phase );
-                }
-
                 return version;
               };
+
+              function getRandomStage() {
+                var lanes = devStages.getLanes();
+                var lane = lanes[ Math.floor( Math.random() * lanes.length ) ];
+                var phase = Math.floor((Math.random() * 4) + 1);
+                return devStages.getStage( lane.id, phase );
+              }
 
               /**
                * This function only exists because of a "bug" on json serialization server side.

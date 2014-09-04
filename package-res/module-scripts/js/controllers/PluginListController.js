@@ -149,8 +149,8 @@ define(
                 var categories = _.chain( plugins )
                     .filter( function ( plugin ) { return plugin.category !== undefined && plugin.category !== null; } )
                     .map( function( plugin ) { return plugin.category; } )
-                    .uniq( function ( category ) { return category.main + category.sub; } )
-                    .sortBy( function ( category ) { return category.main + category.sub; })
+                    .uniq( function ( category ) { return category.getId(); } )
+                    //.sortBy( function ( category ) { return category.getId(); })
                     .value();
 
                 return categories;

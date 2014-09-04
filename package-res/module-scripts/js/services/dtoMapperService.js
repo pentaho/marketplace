@@ -23,8 +23,8 @@ define(
       console.log("Required services/dtoMapperService.js");
 
       var service = app.factory( 'dtoMapperService',
-          [ 'Plugin', 'developmentStageService',
-            function( Plugin, devStages ) {
+          [ 'Plugin', 'developmentStageService', '$translate',
+            function( Plugin, devStages, $translate ) {
 
               function toPlugin( pluginDTO ) {
                 // region TODO: TEMPORARY array transformation due to bug in server side serialization of single element collections
@@ -107,8 +107,25 @@ define(
               }
 
               function Category( main, sub ) {
-                this.main = main;
-                this.sub = sub;
+                var that = this;
+                that.main = main;
+                that.sub = sub;
+
+                $translate( 'marketplace.categories.' + main.toLowerCase() + '.name' )
+                    .then( function ( translatedName ) {
+                      that.mainName = translatedName;
+                    });
+
+                if ( sub ) {
+                  $translate( 'marketplace.categories.' + sub.toLowerCase() + '.name' )
+                      .then( function (translatedName ) {
+                        that.subName = translatedName;
+                      });
+                }
+              }
+
+              Category.prototype.getId = function () {
+                return this.main + this.sub;
               }
 
               function toCategory ( categoryDTO ) {

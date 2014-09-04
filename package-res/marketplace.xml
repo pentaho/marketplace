@@ -427,6 +427,11 @@
   <market_entry>
     <id>cgg</id>
     <type>Platform</type>
+
+    <category>
+      <name>Visualizations</name>
+    </category>
+
     <img>http://www.webdetails.pt/ficheiros/cgg.png</img>
     <small_img>http://www.webdetails.pt/ficheiros/cgg_plugin.png</small_img>
     <name>Community Graphics Generator</name>

@@ -81,14 +81,19 @@ define(
                   cancelButton.disabled = true;
                   // install / update / uninstall plugin
                   okAction().then(
-                      function () { onOperationResult( $translate.instant( onSuccessMessageId, { pluginName: plugin.name } ),
-                          scope.dialog, modalInstance ) },
-                      function () { onOperationResult( $translate.instant( onFailMessageId, { pluginName: plugin.name } ),
-                          scope.dialog, modalInstance ) }
+                      function () {
+                        var successMessage = $translate.instant( onSuccessMessageId, { pluginName: plugin.name } );
+                        onOperationResult( successMessage, scope.dialog, modalInstance );
+                      },
+                      function ( error ) {
+                        var errorMessage = $translate.instant( onFailMessageId, { pluginName: plugin.name } ) +
+                            "[ " + error.message + "]";
+                        onOperationResult( errorMessage, scope.dialog, modalInstance );
+                      }
                   );
                 }
 
-                function onCancel ( scope, modalInstance ) { modalInstance.close() }
+                function onCancel ( scope, modalInstance ) { modalInstance.close(); }
 
                 var dialogModal = $modal.open( {
                   templateUrl: 'partials/dialogTemplate.html',

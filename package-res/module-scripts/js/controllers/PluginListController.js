@@ -138,16 +138,21 @@ define(
 
               function refreshPluginsFromServer () {
                 $scope.filteredPlugins = null;
+                $scope.errorMessageId = null;
                 $scope.isGettingPluginsFromServer = true;
-                appService.refreshPluginsFromServer().then( function ( plugins ) {
+                appService.refreshPluginsFromServer()
+                    .then( function ( plugins ) {
                       updateRegistersForInstallStatusChanges( plugins );
                       updateCategoryFilter( plugins );
                       filterAndSetPlugins( plugins );
-                      $scope.isGettingPluginsFromServer = false;
                     }
-                    // TODO: i18n
-                    //,function () { alert("Error getting plugins."); }
-                );
+                    ,function () {
+                      $scope.errorMessageId = 'marketplace.errorMessages.failureGettingPlugins';
+                    })
+                    // Calling method this way for IE8 compatibilty because finnaly is a reserved word
+                    ['finally']( function () {
+                      $scope.isGettingPluginsFromServer = false;
+                    });
               };
 
               function updateRegistersForInstallStatusChanges ( newPlugins ) {

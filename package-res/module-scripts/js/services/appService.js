@@ -22,14 +22,17 @@ define(
       console.log("Required services/appService.js");
 
       app.factory('appService',
-          [ '$http', 'dtoMapperService',
-            function( $http, dtoMapper ) {
+          [ '$http', 'dtoMapperService', '$q',
+            function( $http, dtoMapper, $q ) {
 
               var baseUrl = '/pentaho/plugin/marketplace/api';
               var pluginsUrl =  baseUrl + '/plugins';
               var installPluginBaseUrl = baseUrl + '/plugin';
               var pluginsPromise = null;
 
+              function isResponseError( response ) {
+                return response.data.statusMessage.code.substring(0,5).toLowerCase() == 'error';
+              }
               return {
                 refreshPluginsFromServer: function() {
                   pluginsPromise = null;
@@ -40,6 +43,10 @@ define(
                   if ( pluginsPromise == null ) {
                     pluginsPromise = $http.get( pluginsUrl ).then(
                         function ( response ) {
+                          if ( isResponseError( response ) ) {
+                            console.log( "Failed getting plugins from server." );
+                            return $q.reject( response.data.statusMessage );
+                          }
                           return _.map( response.data.plugins, dtoMapper.toPlugin );
                         }
                     );
@@ -60,6 +67,10 @@ define(
                   console.log("Installing " + plugin.id + " " + version.branch );
                   return $http.post( installPluginBaseUrl + '/' + plugin.id + '/' + version.branch)
                       .then( function ( response ) {
+                        if ( isResponseError( response ) ) {
+                          console.log("Install NOT OK. plugin Id: " + plugin.id + " branch: " + version.branch);
+                          return $q.reject(response.data.statusMessage);
+                        }
                         // TODO: verify in response if everything is actually ok
                         console.log("Install OK. plugin Id: " + plugin.id + " branch: " + version.branch);
                         plugin.isInstalled = true;
@@ -68,6 +79,7 @@ define(
                       },
                       function ( response ) {
                         console.log("Install NOT OK. plugin Id: " + plugin.id + " branch: " + version.branch);
+                        return $q.reject( response );
                       });
                 },
 
@@ -77,6 +89,10 @@ define(
                   // Not using the shortcut method $http.delete because it does not work in IE8
                   return $http( { method: 'DELETE', url: installPluginBaseUrl + '/' + plugin.id } )
                       .then( function ( response ) {
+                        if ( isResponseError( response ) ) {
+                          console.log( "Uninstall NOT OK. plugin Id: " + plugin.id );
+                          return $q.reject(response.data.statusMessage);
+                        }
                         // TODO: verify in response if everything is actually ok
                         console.log( "Uninstall OK. plugin Id: " + plugin.id );
                         plugin.isInstalled = false;
@@ -84,6 +100,7 @@ define(
                       },
                       function ( response ) {
                         console.log( "Uninstall NOT OK. plugin Id: " + plugin.id );
+                        return $q.reject( response );
                       });
                 }
 

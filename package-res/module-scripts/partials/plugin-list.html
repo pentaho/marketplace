@@ -71,8 +71,12 @@
           <span>{{ 'marketplace.statusMessage.gettingPlugins' | translate }}</span>
         </div>
 
-        <div data-ng-show="!isGettingPluginsFromServer && filteredPlugins.length == 0" class="statusMessageNoPlugins">
+        <div data-ng-show="!isGettingPluginsFromServer && filteredPlugins.length == 0" class="message">
           {{ 'marketplace.statusMessage.noPluginMatch' | translate }}
+        </div>
+
+        <div data-ng-show="errorMessageId" class="message">
+          {{ errorMessageId | translate }}
         </div>
 
       </div>

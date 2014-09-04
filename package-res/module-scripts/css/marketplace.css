@@ -267,7 +267,7 @@ li {
   margin-bottom: 60px;
 }
 
-.bootstrap .statusMessage > div.statusMessageNoPlugins {
+.bootstrap .statusMessage > div.message {
   margin-top: 60px;
 }
 

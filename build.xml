@@ -1,4 +1,4 @@
-<project name="${ivy.artifact.id}" basedir="." default="mega-dist" xmlns:ivy="antlib:org.apache.ivy.ant" > 
+<project name="${ivy.artifact.id}" basedir="." default="default-dist" xmlns:ivy="antlib:org.apache.ivy.ant" > 
 	<description> 
 		This build file is used to create the ${impl.title} project and works with the subfloor files. 
 	</description> 
@@ -58,14 +58,26 @@
 	***************** START: TARGETS ***************
 	*********************************************-->
 	
-	<target name="mega-dist" depends="super-clean, super-dist"/>
+	<target name="default-dist" depends="clean-all, resolve, dist"/>
 	
-	<target name="super-clean" depends="clean-all, clean-js"/>
-	
-	<target name="super-dist" depends="resolve, resolve-js, build-js, dist"/>
+
+	<!-- START: override subfloor-pkg.dist -->
+	<target name="dist" depends="build-js, subfloor-pkg.dist"/>
+	<!-- END: override subfloor-pkg.dist -->
+
+
+	<!-- START: override subfloor.resolve -->
+	<target name="resolve" depends="subfloor.resolve, resolve-js"/>
+	<!-- END: override subfloor.resolve -->
+
+
+	<!-- START: override subfloor.clean-jars -->
+	<target name="clean-jars" depends="subfloor.clean-jars, subfloor-js.clean-js"/>
+	<!-- END: override subfloor.clean-jars -->
+
 
 	<!-- START: override subfloor.clean-all -->
-	<target name="clean-all" depends="subfloor.clean-all">
+	<target name="clean-all" depends="subfloor.clean-all, clean-js">
 
 		<!-- devlib.dir is not being deleted -->
 		<delete dir="${devlib.dir}"/>
@@ -537,7 +549,7 @@
 	
 	<target name="process-java-source-ant-tokens">
 	
-		<delete dir="${src.dir.processed}"/>
+		<!--<delete dir="${src.dir.processed}"/>-->
 		
 		<copy todir="${src.dir.processed}">
 			<fileset dir="${src.dir}"/>

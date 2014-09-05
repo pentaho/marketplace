@@ -143,6 +143,9 @@ define(
                 appService.refreshPluginsFromServer()
                     .then( function ( plugins ) {
                       updateRegistersForInstallStatusChanges( plugins );
+                      // TODO: move update to dev stage filter to init.
+                      // This update is here due to some Firefox issues with translation.
+                      updateDevStagesFilter();
                       updateCategoryFilter( plugins );
                       filterAndSetPlugins( plugins );
                     }
@@ -199,6 +202,16 @@ define(
                 });
               }
 
+              function updateDevStagesFilter () {
+                $scope.developmentStages = _.map( devStagesService.getStages(), function ( stage ) {
+                  var filterStageOption = { lane: stage.lane.name, name: stage.name, stage: stage };
+                  // NOTE: These watches are necessary because of translation issues in FireFox
+                  $scope.$watch( function () { return stage.name; }, function () { filterStageOption.name = stage.name; } );
+                  $scope.$watch( function () { return stage.lane.name; }, function () { filterStageOption.lane = stage.lane.name; } );
+                  return filterStageOption;
+                });
+              }
+
               $scope.onWhatAreStagesClicked = openStagesInfoModal;
 
               /**
@@ -244,13 +257,7 @@ define(
               $scope.$watch( "selectedTab", applyPluginFilter );
 
               $scope.selectedStages = [];
-              $scope.developmentStages = _.map( devStagesService.getStages(), function ( stage ) {
-                var filterStageOption = { lane: stage.lane.name, name: stage.name, stage: stage };
-                // NOTE: These watches are necessary because of translation issues in FireFox
-                $scope.$watch( function () { return stage.name; }, function () { filterStageOption.name = stage.name; } );
-                $scope.$watch( function () { return stage.lane.name; }, function () { filterStageOption.lane = stage.lane.name; } );
-                return filterStageOption;
-              });
+              $scope.developmentStages = [];
 
               $scope.selectedTypes = [];
               $scope.pluginTypes = [];

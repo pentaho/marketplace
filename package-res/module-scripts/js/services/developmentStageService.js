@@ -36,7 +36,7 @@ define(
                 this.name = name;
 
                 // associative map [phaseId: stage]
-                this.stages = [];
+                this.stages = {};
               }
 
               function createLane( laneId, laneNameId ) {
@@ -150,10 +150,11 @@ define(
               function getStages () {
                 return _.chain( lanes )
                     .map( function( lane ) { return lane.stages; } )
+                    .map( function (stages) { return _.flatten( stages ); })
                     .flatten()
                     // IE8 requires that undefined and null values are explicitly removed
                     .filter( function ( stage ) { return !(stage === undefined || stage === null); } )
-                    .value()
+                    .value();
               }
 
               function getLanes () {

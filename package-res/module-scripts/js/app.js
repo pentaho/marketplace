@@ -34,45 +34,17 @@ define( [ 'common-ui/angular',
               controller: 'PluginListController'
             });
 
-        /*
-         $routeProvider.when('/',
-         {
-         controller: 'appController'
-         });
-
-         $routeProvider.when('/plugins',
-         {
-         templateUrl: 'partials/plugin-list.html',
-         controller: 'appController'
-         });
-
-         $routeProvider.when('/plugin/:pluginId',
-         {
-         templateUrl: 'partials/plugin-detail.html',
-         controller: 'appController'
-         });
-         */
-
-
         $routeProvider.otherwise(
             {
               redirectTo: '/'
             });
-
-        /*
-         $routeProvider.when("/", {
-         templateUrl: "partials/testView.html",
-         controller: "TestController"
-         });
-         */
 
       }]);
 
       app.config(['$translateProvider', function ($translateProvider) {
 
         $translateProvider.useStaticFilesLoader({
-          prefix: 'i18n/messages-',
-          //suffix: '.json'
+          prefix: 'lang/messages_',
           suffix: '.properties',
           fileFormat: 'properties'
 

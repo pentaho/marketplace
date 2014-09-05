@@ -399,7 +399,7 @@ public class PluginService implements IPluginService {
    * @return
    */
   private IDevelopmentStage getDevelopmentStage( Element versionElement ) throws XPathExpressionException {
-    final String DEVELOPMENT_STAGE_ELEMENT_NAME = "developmentStage";
+    final String DEVELOPMENT_STAGE_ELEMENT_NAME = "development_stage";
     final String DEVELOPMENT_STAGE_LANE_ELEMENT_NAME = "lane";
     final String DEVELOPMENT_STAGE_PHASE_ELEMENT_NAME = "phase";
 

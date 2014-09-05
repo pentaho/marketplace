@@ -3,6 +3,7 @@
   <info organisation="pentaho" module="${ivy.artifact.id}" revision="${project.revision}" />
   <configurations>
     <conf name="default" />
+    <conf name="test" visibility="private"/>
   </configurations>
   
   <publications>

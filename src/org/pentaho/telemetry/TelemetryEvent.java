@@ -18,29 +18,29 @@
 package org.pentaho.telemetry;
 
 import flexjson.JSONSerializer;
+
 import java.io.Serializable;
 import java.util.Map;
-import java.util.concurrent.Delayed;
-import java.util.concurrent.TimeUnit;
 
- 
- /**
-  * Represents a telemetry event. Will be serialized to file system (to store
-  * before publishing) and to JSON on publish time
-  * @author pedrovale
-  */
+
+/**
+ * Represents a telemetry event. Will be serialized to file system (to store before publishing) and to JSON on publish
+ * time
+ *
+ * @author pedrovale
+ */
 public class TelemetryEvent implements Serializable {
 
   private String urlToCall;
-  private String pluginName, 
-          pluginVersion,
-          platformVersion;
+  private String pluginName,
+    pluginVersion,
+    platformVersion;
   private long eventTimestamp;
   private TelemetryHelper.TelemetryEventType eventType;
 
   private Map<String, String> extraInfo;
-  
-  public TelemetryEvent(ITelemetryDataProvider dataProvider) {
+
+  public TelemetryEvent( ITelemetryDataProvider dataProvider ) {
     this.urlToCall = dataProvider.getBaseUrl();
 
     this.eventType = dataProvider.getEventType();
@@ -51,10 +51,10 @@ public class TelemetryEvent implements Serializable {
     this.eventTimestamp = System.currentTimeMillis();
 
   }
-  
+
   public String encodeEvent() {
     JSONSerializer serializer = new JSONSerializer();
-    return serializer.deepSerialize(this);
+    return serializer.deepSerialize( this );
   }
 
   /**
@@ -67,7 +67,7 @@ public class TelemetryEvent implements Serializable {
   /**
    * @param urlToCall the urlToCall to set
    */
-  public void setUrlToCall(String urlToCall) {
+  public void setUrlToCall( String urlToCall ) {
     this.urlToCall = urlToCall;
   }
 
@@ -112,5 +112,5 @@ public class TelemetryEvent implements Serializable {
   public Map<String, String> getExtraInfo() {
     return extraInfo;
   }
-  
+
 }

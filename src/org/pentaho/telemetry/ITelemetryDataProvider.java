@@ -21,52 +21,50 @@ import java.util.Map;
 
 
 /**
- * Describes the interface that needs to be provided to TelemetryHelper in order
- * to guarantee that telemetry events are correctly published to a remote server
+ * Describes the interface that needs to be provided to TelemetryHelper in order to guarantee that telemetry events are
+ * correctly published to a remote server
+ *
  * @author pedrovale
  */
 public interface ITelemetryDataProvider {
-  
+
   /**
    * @return the platform version
    */
   public String getPlatformVersion();
-  
+
   /**
    * @return the plugin name that originated the telemetry event
    */
   public String getPluginName();
-  
+
   /**
    * @return the plugin version that originated the telemetry event
    */
   public String getPluginVersion();
-  
+
   /**
-   * @return Extra info to be published alongside the event. For instance, in the marketplace
-   * plugin, extra info is the name of the plugin being installed or uninstalled.
+   * @return Extra info to be published alongside the event. For instance, in the marketplace plugin, extra info is the
+   * name of the plugin being installed or uninstalled.
    */
-  
+
   public Map<String, String> getExtraInformation();
-  
+
   /**
-   * 
    * @return Event type to be published
    */
   public TelemetryHelper.TelemetryEventType getEventType();
 
   /**
-   * 
    * @return true if telemetry is enabled for this particular context
    */
   public boolean isTelemetryEnabled();
-  
-  
+
+
   /**
-   * 
    * @return the base url for telemetry events to be posted
    */
   public String getBaseUrl();
-  
-  
+
+
 }

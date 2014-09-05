@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:context="http://www.springframework.org/schema/context"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ws="http://jax-ws.dev.java.net/spring/core" xmlns:wss="http://jax-ws.dev.java.net/spring/servlet"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+                           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd
+                           http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.5.xsd
+                           http://jax-ws.dev.java.net/spring/core http://jax-ws.dev.java.net/spring/core.xsd
+                           http://jax-ws.dev.java.net/spring/servlet http://jax-ws.dev.java.net/spring/servlet.xsd">
+
+  <context:annotation-config />
+  <bean id="@jax-rs.bean.name@" class="org.pentaho.platform.web.servlet.JAXRSPluginServlet"/>
+  <bean id="@plugin.id@" class="org.pentaho.marketplace.endpoints.MarketplaceContentGenerator" scope="prototype"/>
+
+  <!-- START: Domain Entity Factories -->
+  <bean id="@plugin.id@.plugin-factory" class="org.pentaho.marketplace.domain.model.factories.PluginFactory" />
+  <bean id="@plugin.id@.pluginVersion-factory" class="org.pentaho.marketplace.domain.model.factories.PluginVersionFactory" />
+  <bean id="@plugin.id@.domainStatusMessage-factory" class="org.pentaho.marketplace.domain.model.factories.DomainStatusMessageFactory" />
+  <bean id="@plugin.id@.versionData-factory" class="org.pentaho.marketplace.domain.model.factories.VersionDataFactory" />
+  <bean id="@plugin.id@.category-factory" class="org.pentaho.marketplace.domain.model.factories.CategoryFactory" />
+  <!-- END: Domain Entity Factories -->
+
+  <!-- START: Domain Services -->
+  <bean id="@plugin.id@.plugin-service" class="org.pentaho.marketplace.domain.services.PluginService">
+    <constructor-arg ref="@plugin.id@.plugin-factory"/>
+    <constructor-arg ref="@plugin.id@.pluginVersion-factory"/>
+    <constructor-arg ref="@plugin.id@.versionData-factory"/>
+    <constructor-arg ref="@plugin.id@.category-factory"/>
+    <constructor-arg ref="@plugin.id@.domainStatusMessage-factory"/>
+  </bean>
+  <!-- END: Domain Services -->
+
+  <!-- START: RDO -->
+  <bean id="@plugin.id@.rdo" class="org.pentaho.marketplace.domain.services.RDO">
+    <constructor-arg ref="@plugin.id@.plugin-service"/>
+  </bean>
+  <!-- END: RDO -->
+
+  <!-- START: DTO Mappers -->
+  <bean id="@plugin.id@.statusMessage-mapper" class="org.pentaho.marketplace.endpoints.dtos.mappers.StatusMessageDTOMapper">
+    <constructor-arg ref="@plugin.id@.domainStatusMessage-factory"/>
+  </bean>
+
+  <bean id="@plugin.id@.pluginVersion-mapper" class="org.pentaho.marketplace.endpoints.dtos.mappers.PluginVersionDTOMapper">
+    <constructor-arg ref="@plugin.id@.pluginVersion-factory"/>
+  </bean>
+
+  <bean id="@plugin.id@.category-mapper" class="org.pentaho.marketplace.endpoints.dtos.mappers.CategoryDTOMapper">
+    <constructor-arg ref="@plugin.id@.category-factory"/>
+
+  </bean>
+
+  <bean id="@plugin.id@.plugin-mapper" class="org.pentaho.marketplace.endpoints.dtos.mappers.PluginDTOMapper">
+	  <constructor-arg ref="@plugin.id@.plugin-factory"/>
+	  <constructor-arg ref="@plugin.id@.pluginVersion-mapper"/>
+    <constructor-arg ref="@plugin.id@.category-mapper"/>
+  </bean>
+  <!-- END: DTO Mappers -->
+
+  <!-- START: Service Endpoints -->
+  <bean id="@plugin.id@.service-endpoint" class="org.pentaho.marketplace.endpoints.MarketplaceService">
+	  <constructor-arg ref="@plugin.id@.rdo"/>
+	  <constructor-arg ref="@plugin.id@.plugin-mapper"/>
+	  <constructor-arg ref="@plugin.id@.statusMessage-mapper"/>
+  </bean>
+  <!-- END: Service Endpoints -->
+</beans>

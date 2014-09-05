@@ -1,0 +1,25 @@
+<div class="pluginListItem clearfix">
+
+  <div class="pluginHeader">
+    <div class="pluginName" title="{{plugin.name}}">{{plugin.name}}</div>
+    <div class="pluginAuthor" title="{{plugin.author.name}}">{{plugin.author.name}}</div>
+  </div>
+
+  <div data-dev-stage-icon data-lane="infoVersion.devStage.lane.id" data-phase="infoVersion.devStage.phase" ></div>
+
+  <div class="pluginActionContainer clearfix border-box">
+
+    <div class="pluginInfo">
+      <div class="infoVersionStatusMessage">{{infoVersionStatusMessageId | translate }}</div>
+      <div class="infoVersion" title="{{infoVersion.version}} ({{infoVersion.branch}})">{{infoVersion.version}} ({{infoVersion.branch}})</div>
+    </div>
+
+    <button data-install-update-button data-plugin="plugin"
+        data-selected-version="buttonVersion"
+        data-allow-reinstall="false"
+        data-stop-event="click">
+    </button>
+
+  </div>
+
+</div>

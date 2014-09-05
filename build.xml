@@ -1,56 +1,567 @@
-<!--===========================================================================
-  This is the build file for the Pentaho Marketplace project.
+<project name="${ivy.artifact.id}" basedir="." default="default-dist" xmlns:ivy="antlib:org.apache.ivy.ant" > 
+	<description> 
+		This build file is used to create the ${impl.title} project and works with the subfloor files. 
+	</description> 
 
-  This build file will use the common_build.xml file as the default build
-  process and should only override the tasks that need to differ from
-  the common build file.
-
-  See build-res/subfloor-pkg.xml for more details
-============================================================================-->
-<project name="Pentaho Marketplace" basedir="." default="resolve-and-dist" xmlns:ivy="antlib:org.apache.ivy.ant">
-
-    <description>
-      This build file is used to create the Pentaho Marketplace Plugin
-      and works with the common_build.xml file.
-    </description>
-
-
- <property name="sequential.build.id"
-            value="1"
-            description="Property that controls the buildId on version.xml. Should be set by CI jobs" />
-
-  <!-- Import the subfloor-pkg.xml file which contains all the default tasks -->
-    <import file="build-res/subfloor-pkg.xml" />
-
-  <!-- override copying of libs, no need for plugin -->
-    <target name="assemble.copy-libs">
-        <copy todir="${approot.stage.dir}/lib">
-            <fileset file="${dist.dir}/${ivy.artifact.id}-${project.revision}.jar" />
-        </copy>
-        <copy todir="${approot.stage.dir}/lib">
-            <fileset file="${lib.dir}/flexjson-*.jar" />
-        </copy>
-    </target>
+	<!--********************************************
+	***************** START: IMPORTS ***************
+	*********************************************-->
 	
-    <target name="assemble" depends="subfloor-pkg.assemble">
-    <!-- Update the version.xml with the current version of this plugin -->
-        <replace file="${approot.stage.dir}/version.xml" token="@TRUNK@" value="${project.revision}"/>
-        <replace file="${approot.stage.dir}/version.xml" token="@BUILDID@" value="${sequential.build.id}"/>
-    </target>
+	<!-- other subfloors are imported by this one -->
+	<import file="build-res/subfloor-js.xml"/>
 	
-    <target name="resolve-and-dist" depends="resolve, dist"/>
+	<!--********************************************
+	****************** END: IMPORTS ****************
+	**********************************************-->
 	
-    <target name="install" depends="resolve-and-dist" description="Installs the plugin in the specified directory (${plugin.local.install.solutions.dir})">
-        <delete dir="${plugin.local.install.solutions.dir}/system/${ivy.artifact.id}"/>
-        <unzip src="dist/${package.id}-${project.revision}.zip" dest="${plugin.local.install.solutions.dir}/system"/>
-    </target>
-  
-  
-    <target name="install-plugin" depends="install"  description="Installs the plugin in the specified directory (${biserver.dir}) and signals the server to initialize it">
-  
-        <get src="http://127.0.0.1:8080/pentaho/Publish?publish=now&amp;class=org.pentaho.platform.plugin.services.pluginmgr.PluginAdapter&amp;userid=${plugin.local.install.user}&amp;password=${plugin.local.install.pass}" dest="${stage.dir}/blah.html"/>
-    </target>
-  
-  
+	
+	<!--********************************************
+	*************** START: PROPERTIES **************
+	*********************************************-->
+	
+	<!-- Default property values (can be customized by override using build.properties) -->
+	<property name="js.module.launcher.templates.dir" value="launcher-templates"/>
+	<property name="jax-rs.bean.name" value="api"/>
+	<property name="plugin.java.rest.path.root" value="/${plugin.id}/${jax-rs.bean.name}"/>
+	<property name="src.dir.processed" value="${basedir}/processed-src"/>
+	
+	<!-- added to add js-tests reports to the existing reports directory -->
+	<property name="js.testreports.dir" value="bin/reports/js-test"/>
+
+	<!-- added to enable local karma execution --> 
+	<property name="js.karma.dir.bin" value="node_modules/karma/bin/karma"/>
+	
+	<!-- JS app entry module name -->
+	<property name="js.module.script.app.name" value="app"/>
+
+	<!-- JS app source directory -->
+	<property name="js.source.dir" value="js"/>
+	
+	<!-- JS tests directory -->
+	<property name="js.tests.dir" value="js-tests"/>
+	
+	<!-- globalization -->
+	<property name="plugin.globalization.dir" value="lang/messages"/>
+	
+	<property name="js.module.script.base.dir" value="package-res"/>
+	<property name="js.module.script.folder.name" value="module-scripts"/>
+	
+	<!-- override: subfloor-js.js.module.script.dir, to maintain consistency -->
+	<property name="js.module.script.dir" value="${js.module.script.base.dir}/${js.module.script.folder.name}"/>
+	
+	<!--********************************************
+	**************** END: PROPERTIES ***************
+	*********************************************-->
+	
+	
+	<!--********************************************
+	***************** START: TARGETS ***************
+	*********************************************-->
+	
+	<target name="default-dist" depends="clean-all, resolve, dist"/>
+	
+
+	<!-- START: override subfloor-pkg.dist -->
+	<target name="dist" depends="build-js, subfloor-pkg.dist"/>
+	<!-- END: override subfloor-pkg.dist -->
+
+
+	<!-- START: override subfloor.resolve -->
+	<target name="resolve" depends="subfloor.resolve, resolve-js"/>
+	<!-- END: override subfloor.resolve -->
+
+
+	<!-- START: override subfloor.clean-jars -->
+	<target name="clean-jars" depends="subfloor.clean-jars, subfloor-js.clean-js"/>
+	<!-- END: override subfloor.clean-jars -->
+
+
+	<!-- START: override subfloor.clean-all -->
+	<target name="clean-all" depends="subfloor.clean-all, clean-js">
+
+		<!-- devlib.dir is not being deleted -->
+		<delete dir="${devlib.dir}"/>
+		
+		<!-- delete generated plugin.xml -->
+		<delete file="${package.resdir}/plugin.xml" />
+		
+		<!-- delete generated plugin.spring.xml -->
+		<delete file="${package.resdir}/plugin.spring.xml" />
+		
+		<!-- delete generated src.dir.processed -->
+		<delete dir="${src.dir.processed}"/>
+	</target>
+	<!-- END: override subfloor.clean-all -->
+
+
+	<!-- START: override subfloor-js.clean-js -->
+	<target name="clean-js" depends="subfloor-js.clean-js">
+
+		<!-- pentaho-js-build is not being deleted -->
+		<delete dir="build-res/pentaho-js-build"/>
+		<delete file="build-res/pentaho-js-build.zip"/>
+
+		<!-- requireCfg.js and requireCfg-raw.js are not being deleted -->
+		<delete file="build-res/requireCfg.js"/>
+		<delete file="build-res/requireCfg-raw.js"/>
+		
+		<!-- delete generated javascript.build.js -->
+		<delete file="${js.build.file}"/>
+		
+		<!-- delete generated karma.ci.conf.js -->
+		<delete file="${js.karma.ci.config}"/>
+		
+		<!-- delete generated main.html, main.js and test-main.js -->
+		<delete file="${js.module.script.dir}/main.html"/>
+		<delete file="${js.module.script.dir}/main.js"/>
+		<delete file="${js.module.script.dir}/${js.tests.dir}/test-main.js"/>
+		
+		<!-- delete js-tests reports directory -->
+		<delete dir="${js.testreports.dir}"/>
+		
+	</target>
+	<!-- END: override subfloor-js.clean-js -->
+
+
+	<!-- START: override subfloor-js.npm-install -->
+	<target name="npm-install" depends="npm-install-windows, npm-install-unix">
+		<echo message="I'm npm install!" />
+	</target>
+
+	<!-- Only run if there is a package.json file -->
+	<target name="npm-install-windows" depends="check-pentaho-js-build-downloaded" if="isWindows">
+		<echo message="I'm a WINDOWS!" />
+		<if>
+			<available file="package.json"/>
+			<then>
+				<exec executable="cmd">
+					<arg value="/c"/>
+					<arg value="npm"/>
+					<arg value="install"/>
+				</exec>
+			</then>
+			<else>
+				<echo>No package.json found, using the default</echo>
+				<exec executable="cmd">
+					<arg value="/c"/>
+					<arg value="npm"/>
+					<arg value="install"/>
+					<arg value="build-res/pentaho-js-build"/>
+				</exec>
+			</else>
+		</if>
+	</target>
+
+	<!-- Only run if there is a package.json file -->
+	<target name="npm-install-unix" depends="check-pentaho-js-build-downloaded" unless="isWindows">
+		<echo message="I'm a UNIX!" />
+		<if>
+			<available file="package.json"/>
+			<then>
+				<exec executable="npm">
+					<arg value="install"/>
+				</exec>
+			</then>
+			<else>
+				<echo>No package.json found, using the default</echo>
+				<exec executable="npm">
+					<arg value="install"/>
+					<arg value="build-res/pentaho-js-build"/>
+				</exec>
+			</else>
+		</if>
+	</target>
+	<!-- END: override subfloor-js.npm-install -->
+
+
+	<!-- START: override subfloor-js.test-js -->
+	<target name="test-js" depends="generate-karma-config-file, generate-js-test-launcher, test-js-windows, test-js-unix">
+		<echo message="I'm Test-JS!" />
+	</target>
+
+	<target name="test-js-windows" depends="install-antcontrib, npm-install" if="isWindows">
+		<echo message="I'm a WINDOWS!" />
+
+		<if>
+			<available file="${js.karma.ci.config}"/>
+			<then>
+				<!-- we have karma available, use it to run the tests -->
+				<exec executable="cmd">
+					<arg value="/c"/>
+					<arg value="node"/>
+					<arg value="${js.karma.dir.bin}"/>
+					<arg value="start"/>
+					<arg value="${js.karma.ci.config}"/>
+					<!-- if we are running via ant, then assume we must 'single-run' -->
+					<arg value="--single-run"/>
+				</exec>
+			</then>
+			<else>
+				<fail>There is no karma configuration file available (looking for: ${js.karma.ci.config})</fail>
+			</else>
+		</if>
+	</target>
+
+	<target name="test-js-unix" depends="install-antcontrib, npm-install" unless="isWindows">
+		<echo message="I'm a UNIX!" />
+
+		<if>
+			<available file="${js.karma.ci.config}"/>
+			<then>
+				<!-- we have karma available, use it to run the tests -->
+				<exec executable="node">
+					<arg value="${js.karma.dir.bin}"/>
+					<arg value="start"/>
+					<arg value="${js.karma.ci.config}"/>
+					<!-- if we are running via ant, then assume we must 'single-run' -->
+					<arg value="--single-run"/>
+				</exec>
+			</then>
+			<else>
+				<fail>There is no karma configuration file available (looking for: ${js.karma.ci.config})</fail>
+			</else>
+		</if>
+	</target>
+	<!-- END: override subfloor-js.test-js -->
+
+
+	<!-- START: override subfloor-js.resolve-js -->
+	<target name="resolve-js" depends="install-ivy, install-antcontrib">
+		<ivy:resolve file="ivy.xml" conf="js"/>
+		<ivy:retrieve conf="js" pattern="${js.lib.dir}/[module]-[revision](-[classifier]).[ext]"/>
+
+		<!-- js-libs where not being expanded -->
+		<if>
+			<available file="${js.lib.dir}"/>
+			<then>
+				<unzip dest="${js.expanded.lib.dir}" overwrite="true">
+					<fileset file="${js.lib.dir}/*.zip"/>
+					<patternset>
+						<exclude name="**/*.jar"/>
+						<exclude name="**/plugin*.xml"/>
+						<exclude name="**/settings.xml"/>
+						<exclude name="**/themes.xml"/>
+					</patternset>
+				</unzip>
+			</then>
+			<else>
+				<echo>No js libraries need expanding. ${js.lib.dir} does not exist.</echo>
+			</else>
+		</if>
+	</target>
+	<!-- END: override subfloor-js.resolve-js (same as yesterday's subfloor-js) -->
+
+
+	<!-- START: override subfloor-pkg.assemble -->
+	<!--<target name="assemble" depends="generate-plugin-config-file, generate-plugin-spring-config-file, assemble.init, assemble.copy-libs">-->
+	<target name="assemble" depends="generate-plugin-config-file, generate-plugin-spring-config-file, assemble.init">
+
+		<!-- copy libs to stage dir -->
+		<copy todir="${approot.stage.dir}/lib" overwrite="true">
+			<fileset dir="${basedir}/dist">
+				<include name="*.jar" />
+			</fileset>
+			<fileset dir="${basedir}/lib">
+				<include name="flexjson*.jar" />
+			</fileset>
+		</copy>
+			
+		<copy todir="${approot.stage.dir}" overwrite="true">
+
+			<!-- copy from script build output dir instead -->
+			<fileset dir="${js.build.output.dir}">
+				
+				<!-- exclude js-tests -->
+				<exclude name="**/${js.tests.dir}/**" />
+				
+				<!-- exclude build.txt generated by RequireJS -->
+				<exclude name="**/build.txt/**" />
+				
+				<!-- exclude launcher templates -->
+				<exclude name="**/${js.module.launcher.templates.dir}/**"/>
+			</fileset>
+			
+			<!-- also copy everything from package.resdir, except the JS dir and the config files -->
+			<fileset dir="${package.resdir}">
+			
+				<!-- exclude JS dir -->
+				<exclude name="**/${js.module.script.folder.name}/**" />
+				
+				<!-- exclude config files -->
+				<exclude name="*.xml" />
+				<exclude name="*.xml.template" />
+				
+			</fileset>
+
+		</copy>
+		<chmod perm="a+x" dir="${stage.dir}" includes="**/*.sh" />
+
+		<!-- create the version file -->
+		<tstamp/>
+		<property name="sequential.build.id" value="manual-${DSTAMP}"/>
+		<echo file="${approot.stage.dir}/version.xml"
+			  message="&lt;version branch='${project.stage}'  buildId='${sequential.build.id}'>${project.revision}&lt;/version>"/>
+
+		<!-- copy plugin.xml, plugin.spring.xml and settings.xml to stage dir -->
+		<copy todir="${approot.stage.dir}" overwrite="true">
+			<fileset dir="${package.resdir}">
+				
+				<!-- include all xml files -->
+				<include name="*.xml" />
+				
+			</fileset>
+		</copy>
+
+	</target>
+	<!-- END: override subfloor-pkg.assemble -->
+	
+	
+	<!-- START: override subfloor-js.build-js -->
+	<target name="build-js" depends="generate-js-build-file, generate-js-app-launcher-deploy, subfloor-js.build-js" />
+	<!-- END: override subfloor-js.build-js -->
+	
+	
+	<!-- START: override subfloor.compile.compile -->
+	<target name="compile.compile" depends="process-java-source-ant-tokens">
+		<antcall target="subfloor.compile.compile">
+			<param name="src.dir" value="${src.dir.processed}"/>
+		</antcall>
+	</target>
+	<!-- END: override subfloor.compile.compile -->
+	
+	
+	<!-- START: override subfloor.compile.res_copy -->
+	<target name="compile.res_copy" depends="process-java-source-ant-tokens">
+		<antcall target="subfloor.compile.res_copy">
+			<param name="src.dir" value="${src.dir.processed}"/>
+		</antcall>
+	</target>
+	<!-- END: override subfloor.compile.res_copy -->
+	
+	
+	<!-- START: override subfloor.compile.src_copy -->
+	<target name="compile.src_copy" depends="process-java-source-ant-tokens">
+		<antcall target="subfloor.compile.src_copy">
+			<param name="src.dir" value="${src.dir.processed}"/>
+		</antcall>
+	</target>
+	<!-- END: override subfloor.compile.src_copy -->
+	
+	
+	<!-- START: override subfloor.source.jar -->
+	<target name="source.jar" depends="process-java-source-ant-tokens">
+		<antcall target="subfloor.source.jar">
+			<param name="src.dir" value="${src.dir.processed}"/>
+		</antcall>
+	</target>
+	<!-- END: override subfloor.source.jar -->
+	
+	
+	<!-- START: override subfloor.source.zip -->
+	<target name="source.zip" depends="process-java-source-ant-tokens">
+		<antcall target="subfloor.source.zip">
+			<param name="src.dir" value="${src.dir.processed}"/>
+		</antcall>
+	</target>
+	<!-- END: override subfloor.source.zip -->
+	
+	
+	<!-- START: override subfloor.source.targz -->
+	<target name="source.targz" depends="process-java-source-ant-tokens">
+		<antcall target="subfloor.source.targz">
+			<param name="src.dir" value="${src.dir.processed}"/>
+		</antcall>
+	</target>
+	<!-- END: override subfloor.source.targz -->
+	
+	
+	<!-- START: override subfloor.javadoc -->
+	<target name="javadoc" depends="process-java-source-ant-tokens">
+		<antcall target="subfloor.javadoc">
+			<param name="src.dir" value="${src.dir.processed}"/>
+		</antcall>
+	</target>
+	<!-- END: override subfloor.javadoc -->
+	
+	
+	<!-- START: override subfloor.cobertura.xml-report -->
+	<target name="cobertura.xml-report" depends="process-java-source-ant-tokens">
+		<antcall target="subfloor.cobertura.xml-report">
+			<param name="src.dir" value="${src.dir.processed}"/>
+		</antcall>
+	</target>
+	<!-- END: override subfloor.cobertura.xml-report -->
+	
+	
+	<!-- START: override subfloor.cobertura.html-report -->
+	<target name="cobertura.html-report" depends="process-java-source-ant-tokens">
+		<antcall target="subfloor.cobertura.html-report">
+			<param name="src.dir" value="${src.dir.processed}"/>
+		</antcall>
+	</target>
+	<!-- END: override subfloor.cobertura.html-report -->
+	
+	
+	<!-- START: override subfloor.sonar -->
+	<target name="sonar" depends="process-java-source-ant-tokens">
+		<antcall target="subfloor.sonar">
+			<param name="src.dir" value="${src.dir.processed}"/>
+		</antcall>
+	</target>
+	<!-- END: override subfloor.sonar -->
+	
+
+	<target name="generate-js-build-file">
+		
+		<!-- generate javascript.build.js -->
+		<copy file="${js.build.file}.template" tofile="${js.build.file}" >
+			<filterchain>
+				<replacetokens>
+					<token key="js.module.script.agg.dir" value="${js.module.script.agg.dir}"/>
+					<token key="js.module.script.namespace" value="${js.module.script.namespace}"/>
+					<token key="js.source.dir" value="${js.source.dir}"/>
+					<token key="js.build.output.dir" value="${js.build.output.dir}"/>
+				</replacetokens>
+			</filterchain>
+		</copy>
+		
+	</target>
+	
+	
+	<target name="generate-karma-config-file">
+		
+		<!-- generate karma.ci.conf.js -->
+		<copy file="${js.karma.ci.config}.template" tofile="${js.karma.ci.config}" >
+			<filterchain>
+				<replacetokens>
+					<token key="js.module.script.dir" value="${js.module.script.dir}"/>
+					<token key="js.source.dir" value="${js.source.dir}"/>
+					<token key="js.expanded.lib.dir" value="${js.expanded.lib.dir}"/>
+					<token key="js.library.jquery" value="${js.library.jquery}"/>
+					<token key="js.tests.dir" value="${js.tests.dir}"/>
+					<token key="js.testreports.dir" value="${js.testreports.dir}"/>
+				</replacetokens>
+			</filterchain>
+		</copy>
+		
+	</target>
+	
+	
+	<target name="generate-plugin-config-file">
+		
+		<!-- generate plugin.xml -->
+		<copy file="${package.resdir}/plugin.xml.template" tofile="${package.resdir}/plugin.xml" >
+			<filterchain>
+				<replacetokens>
+					<token key="plugin.id" value="${plugin.id}"/>
+					<token key="js.module.script.namespace" value="${js.module.script.namespace}"/>
+					<token key="plugin.globalization.dir" value="${plugin.globalization.dir}"/>
+				</replacetokens>
+			</filterchain>
+		</copy>
+		
+	</target>
+	
+	
+	<target name="generate-plugin-spring-config-file">
+		
+		<!-- generate plugin.spring.xml -->
+		<copy file="${package.resdir}/plugin.spring.xml.template" tofile="${package.resdir}/plugin.spring.xml" >
+			<filterchain>
+				<replacetokens>
+					<token key="plugin.id" value="${plugin.id}"/>
+					<token key="jax-rs.bean.name" value="${jax-rs.bean.name}"/>
+				</replacetokens>
+			</filterchain>
+		</copy>
+		
+	</target>
+	
+	
+	<target name="gen-dev-js">
+		
+		<!-- generate main.html -->
+		<copy file="${js.module.script.dir}/${js.module.launcher.templates.dir}/main.html.template" tofile="${js.module.script.dir}/main.html" overwrite="true">
+			<filterchain>
+				<replacetokens>
+					<token key="js.common-ui.dirpath.prefix" value="../../${js.expanded.lib.dir}"/>
+				</replacetokens>
+			</filterchain>
+		</copy>
+		
+		<!-- generate main.js -->
+		<copy file="${js.module.script.dir}/${js.module.launcher.templates.dir}/main.js.template" tofile="${js.module.script.dir}/main.js" overwrite="true">
+			<filterchain>
+				<replacetokens>
+					<token key="js.common-ui.dirpath.prefix" value="../../${js.expanded.lib.dir}"/>
+					<token key="js.source.dir" value="${js.source.dir}"/>
+					<token key="js.module.script.app.name" value="${js.module.script.app.name}"/>
+					<token key="js.library.jquery" value="${js.library.jquery}"/>
+				</replacetokens>
+			</filterchain>
+		</copy>
+		
+	</target>
+	
+	
+	<target name="generate-js-app-launcher-deploy">
+		
+		<!-- generate main.html -->
+		<copy file="${js.module.script.dir}/${js.module.launcher.templates.dir}/main.html.template" tofile="${js.module.script.dir}/main.html" overwrite="true">
+			<filterchain>
+				<replacetokens>
+					<token key="js.common-ui.dirpath.prefix" value="../.."/>
+				</replacetokens>
+			</filterchain>
+		</copy>
+		
+		<!-- generate main.js -->
+		<copy file="${js.module.script.dir}/${js.module.launcher.templates.dir}/main.js.template" tofile="${js.module.script.dir}/main.js" overwrite="true">
+			<filterchain>
+				<replacetokens>
+					<token key="js.common-ui.dirpath.prefix" value="../.."/>
+					<token key="js.source.dir" value="${js.source.dir}"/>
+					<token key="js.module.script.app.name" value="${js.module.script.app.name}"/>
+					<token key="js.library.jquery" value="${js.library.jquery}"/>
+				</replacetokens>
+			</filterchain>
+		</copy>
+		
+	</target>
+	
+	
+	<target name="generate-js-test-launcher">
+		
+		<!-- generate test-main.js -->
+		<copy file="${js.module.script.dir}/${js.module.launcher.templates.dir}/test-main.js.template" tofile="${js.module.script.dir}/${js.tests.dir}/test-main.js" overwrite="true">
+			<filterchain>
+				<replacetokens>
+					<token key="js.common-ui.dirpath.prefix" value="../.."/>
+					<token key="js.source.dir" value="${js.source.dir}"/>
+					<token key="js.library.jquery" value="${js.library.jquery}"/>
+					<token key="js.module.script.dir" value="${js.module.script.dir}"/>
+				</replacetokens>
+			</filterchain>
+		</copy>
+		
+	</target>
+	
+	
+	<target name="process-java-source-ant-tokens">
+	
+		<!--<delete dir="${src.dir.processed}"/>-->
+		
+		<copy todir="${src.dir.processed}">
+			<fileset dir="${src.dir}"/>
+			<filterset>
+				<filter token="plugin.java.rest.path.root" value="${plugin.java.rest.path.root}"/>
+			</filterset>
+		</copy>
+		
+	</target>
+	
+	<!--********************************************
+	****************** END: TARGETS ****************
+	*********************************************-->
 
 </project>

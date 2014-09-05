@@ -17,16 +17,6 @@
 
 package org.pentaho.telemetry;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.util.Map;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.pentaho.platform.api.engine.IPluginResourceLoader;
@@ -40,66 +30,64 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
-
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import java.io.File;
+import java.io.FileReader;
+import java.util.Map;
 
 
 /**
- * Class that manages publishing telemetry events for BA server plugins.
- * Correct usage is:
- * <ol>
- * <li>create a new instance with the right plugin name</li>
- * <li>Call the <b>sendTelemetryRequest</b> method to publish events
- * </ol>
+ * Class that manages publishing telemetry events for BA server plugins. Correct usage is: <ol> <li>create a new
+ * instance with the right plugin name</li> <li>Call the <b>sendTelemetryRequest</b> method to publish events </ol>
+ *
  * @author pedrovale
  */
 public class BaPluginTelemetry {
 
-  private static Log logger = LogFactory.getLog(TelemetryHelper.class);
-  
-  private ITelemetryDataProvider baPluginTelemetryDataProvider;
-  final private String pluginName;
-  final private String pluginVersion;
+  private static Log logger = LogFactory.getLog( TelemetryHelper.class );
 
-  
-    /**
-   * The version information for the pentaho platform is in the core jar - that
-   * is the fallback position. The VersionHelper implementation however should be
-   * in a .jar file with correct manifest.
+  private ITelemetryDataProvider baPluginTelemetryDataProvider;
+  private final String pluginName;
+  private final String pluginVersion;
+
+
+  /**
+   * The version information for the pentaho platform is in the core jar - that is the fallback position. The
+   * VersionHelper implementation however should be in a .jar file with correct manifest.
    */
   protected static final VersionInfo versionInfo;
 
-  
+
   static {
     //
     // Allow override of product id information
     //
-    IVersionHelper versionHelper = PentahoSystem.get(IVersionHelper.class, null);
-    if (versionHelper != null) {
-      versionInfo = VersionHelper.getVersionInfo(versionHelper.getClass());
+    IVersionHelper versionHelper = PentahoSystem.get( IVersionHelper.class, null );
+    if ( versionHelper != null ) {
+      versionInfo = VersionHelper.getVersionInfo( versionHelper.getClass() );
     } else {
-      versionInfo = VersionHelper.getVersionInfo(PentahoSystem.class);
+      versionInfo = VersionHelper.getVersionInfo( PentahoSystem.class );
     }
-  }  
-  
-  
-  
-  public BaPluginTelemetry(final String pluginName) {
-    
-    this.pluginName = pluginName;
-    this.pluginVersion = getPluginVersion();       
   }
 
-  
-  
+
+  public BaPluginTelemetry( final String pluginName ) {
+
+    this.pluginName = pluginName;
+    this.pluginVersion = getPluginVersion();
+  }
+
+
   /**
    * Sends a new telemetry request regarding the plugin to a remote server
+   *
    * @param eventType - type of event to be published
    * @param extraInfo - Extra info to be included in the event
-   * @return <i>true</i> if the event was correctly published to the request queue, <i> false</i>
-   * otherwise
+   * @return <i>true</i> if the event was correctly published to the request queue, <i> false</i> otherwise
    */
-  public boolean sendTelemetryRequest(final TelemetryEventType eventType, 
-          final Map<String, String> extraInfo) {
+  public boolean sendTelemetryRequest( final TelemetryEventType eventType,
+                                       final Map<String, String> extraInfo ) {
     this.baPluginTelemetryDataProvider = new ITelemetryDataProvider() {
       @Override
       public String getPlatformVersion() {
@@ -131,80 +119,79 @@ public class BaPluginTelemetry {
         return isPluginTelemetryEnabled();
       }
 
-      
+
       @Override
       public String getBaseUrl() {
         return getTelemetryBaseUrlFromPlugin();
       }
-      
- 
+
+
     };
-   
+
     TelemetryHelper th = new TelemetryHelper();
-    th.setDataProvider(baPluginTelemetryDataProvider);
-    return th.publishTelemetryEvent();        
+    th.setDataProvider( baPluginTelemetryDataProvider );
+    return th.publishTelemetryEvent();
   }
-  
-  
-        
-  
+
+
   /**
    * Determines whether the current plugin is allowed to publish telemetry events
+   *
    * @return <i> true</i> if telemetry is enabled, <i>false</i> otherwise.
    */
-  public boolean isPluginTelemetryEnabled() {        
-    return Boolean.parseBoolean(PentahoSystem.getSystemSetting("telemetry", "true"));    
+  public boolean isPluginTelemetryEnabled() {
+    return Boolean.parseBoolean( PentahoSystem.getSystemSetting( "telemetry", "true" ) );
   }
-  
-  
+
+
   protected String getTelemetryBaseUrlFromPlugin() {
-    IPluginResourceLoader resLoader = PentahoSystem.get(IPluginResourceLoader.class, null);
+    IPluginResourceLoader resLoader = PentahoSystem.get( IPluginResourceLoader.class, null );
     String baseUrl = null;
     try {
-      baseUrl = resLoader.getPluginSetting(getClass(), "settings/telemetry-site"); //$NON-NLS-1$
-    } catch (Exception e) {
-      logger.debug("Error getting data access plugin settings", e);
+      baseUrl = resLoader.getPluginSetting( getClass(), "settings/telemetry-site" ); //$NON-NLS-1$
+    } catch ( Exception e ) {
+      logger.debug( "Error getting data access plugin settings", e );
     }
 
-    if (baseUrl == null || "".equals(baseUrl)) {      
-      logger.warn("Telemetry url is not set for plugin " + pluginName + ". Defaulting to a bogus local url");
+    if ( baseUrl == null || "".equals( baseUrl ) ) {
+      logger.warn( "Telemetry url is not set for plugin " + pluginName + ". Defaulting to a bogus local url" );
       baseUrl = "https://localhost:8080/pentaho/telemetry";
     }
 
     return baseUrl;
   }
-  
-  
-  
+
+
   private String getPluginVersion() {
-       String versionPath = PentahoSystem.getApplicationContext().getSolutionPath("system/" + this.pluginName + "/version.xml");
-        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-        FileReader reader = null;
-        try {
-            File file = new File(versionPath);
-            if (!file.exists()) {
-                return "Unknown";
-            }
-            DocumentBuilder db = dbf.newDocumentBuilder();
-            reader = new FileReader(versionPath);
-            Document dom = db.parse(new InputSource(reader));
-            NodeList versionElements = dom.getElementsByTagName("version");
-            if (versionElements.getLength() >= 1) {
-                Element versionElement = (Element) versionElements.item(0);
-                return versionElement.getAttribute("branch") + "-" + versionElement.getTextContent();                
-            }
-        } catch (Exception e) {
-            logger.error("Error while trying to read plugin version for " + pluginName, e);
-        } finally {
-            try {
-                if (reader != null) {
-                    reader.close();
-                }
-            } catch (Exception e) {
-            }
-        }
+    String versionPath =
+      PentahoSystem.getApplicationContext().getSolutionPath( "system/" + this.pluginName + "/version.xml" );
+    DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+    FileReader reader = null;
+    try {
+      File file = new File( versionPath );
+      if ( !file.exists() ) {
         return "Unknown";
+      }
+      DocumentBuilder db = dbf.newDocumentBuilder();
+      reader = new FileReader( versionPath );
+      Document dom = db.parse( new InputSource( reader ) );
+      NodeList versionElements = dom.getElementsByTagName( "version" );
+      if ( versionElements.getLength() >= 1 ) {
+        Element versionElement = (Element) versionElements.item( 0 );
+        return versionElement.getAttribute( "branch" ) + "-" + versionElement.getTextContent();
+      }
+    } catch ( Exception e ) {
+      logger.error( "Error while trying to read plugin version for " + pluginName, e );
+    } finally {
+      try {
+        if ( reader != null ) {
+          reader.close();
+        }
+      } catch ( Exception e ) {
+      }
+    }
+    return "Unknown";
   }
-  
-  
+
+
 }

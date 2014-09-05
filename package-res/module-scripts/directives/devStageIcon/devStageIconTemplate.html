@@ -1,0 +1,13 @@
+<div class="devStageIcon">
+
+  <div class="dev-stage" data-ng-if="!disablePopup"
+      data-ng-class="devStageClass"
+      data-popover-title="{{stage.name}}" data-popover="{{stage.description}}"
+      data-popover-trigger="mouseenter" data-popover-placement="top">
+  </div>
+
+  <div class="dev-stage" data-ng-if="disablePopup"
+      data-ng-class="devStageClass">
+  </div>
+
+</div>

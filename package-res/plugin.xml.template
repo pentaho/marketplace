@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin title="@plugin.id@">
+
+  <!--
+	<overlays>
+	    <overlay id="admin.perspective.overlay.ee"  resourcebundle="content/@plugin.id@/@js.module.script.namespace@/@plugin.globalization.dir@">	    	
+			<treechildren id="adminCatTreeChildren">
+			
+    			<treeitem id="@plugin.id@" container="true"
+						  command="mantleXulHandler.loadAdminContent('@plugin.id@', 'content/@plugin.id@/@js.module.script.namespace@/main.html')">
+	  				<treerow>
+	    				<treecell label="${title}" />
+		  			</treerow>	    
+				</treeitem>
+					
+			</treechildren>		
+	    </overlay>
+	</overlays>
+  -->
+
+	<static-paths>
+		<static-path url="/@plugin.id@/@js.module.script.namespace@" localFolder="@js.module.script.namespace@"/>
+	</static-paths>
+
+	<external-resources>
+      <file context="requirejs">content/@plugin.id@/@js.module.script.namespace@/@plugin.id@-require-js-cfg.js</file>
+    </external-resources>
+
+	<perspective id="@plugin.id@.perspective" title="${title}" layout-priority="-1"
+               resourcebundle="content/@plugin.id@/@js.module.script.namespace@/@plugin.globalization.dir@" content-url="content/@plugin.id@/@js.module.script.namespace@/main.html">
+	</perspective>
+
+</plugin>

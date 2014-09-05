@@ -1,0 +1,12 @@
+<div>
+
+  <div data-ng-show="plugins">
+    <ul>
+      <li data-ng-repeat="plugin in plugins"
+          data-ng-click="onPluginClicked( plugin )">
+        <div data-plugin-list-item plugin="plugin"></div>
+      </li>
+    </ul>
+  </div>
+
+</div>

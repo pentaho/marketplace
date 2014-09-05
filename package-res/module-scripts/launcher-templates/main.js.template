@@ -1,0 +1,54 @@
+/*
+requirejs.config({
+	baseUrl: './@js.source.dir@',
+	paths: {
+		jquery: '../@js.common-ui.dirpath.prefix@/@js.library.jquery@'
+	}
+});
+*/
+
+requirejs(
+    [
+      'common-ui/angular',
+      'common-ui/angular-sanitize',
+      'common-ui/underscore',
+
+      './@js.source.dir@/@js.module.script.app.name@',
+
+      './@js.source.dir@/controllers/PluginListController',
+      './@js.source.dir@/models/plugin',
+
+      './@js.source.dir@/services/appService',
+      './@js.source.dir@/services/installFlowService/installFlowService',
+      './@js.source.dir@/services/dtoMapperService',
+      './@js.source.dir@/services/developmentStageService',
+
+      './directives/installUpdateButton/installUpdateButtonController',
+      './directives/installUpdateButton/installUpdateButtonDirective',
+
+      './directives/multiselectDropdown/multiselectDropdownController',
+      './directives/multiselectDropdown/multiselectDropdownDirective',
+
+      './directives/stagesInfo/stagesInfoController',
+      './directives/stagesInfo/stagesInfoDirective',
+
+      './directives/pluginDetail/pluginDetailController',
+      './directives/pluginDetail/pluginDetailDirective',
+      './directives/pluginList/pluginListController',
+      './directives/pluginList/pluginListDirective',
+      './directives/pluginListItem/PluginListItemController',
+      './directives/pluginListItem/PluginListItemDirective',
+      './directives/devStageIcon/DevStageIconController',
+      './directives/devStageIcon/devStageIconDirective',
+
+      './directives/stopEvent/stopEventDirective',
+      './directives/indeterminate/indeterminateDirective'
+
+
+    ] ,
+
+    function( angular, app) {
+      angular.bootstrap( document, [ 'marketplace' ]);
+    }
+);
+

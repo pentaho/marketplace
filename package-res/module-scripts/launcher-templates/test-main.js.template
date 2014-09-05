@@ -1,0 +1,27 @@
+// This creates an array of all the files that Karma finds with a suffix of
+// Spec.js (eg utilsSpec.js) to be added to the Require JS config below
+var tests = [];
+
+for (var file in window.__karma__.files) {
+    if (window.__karma__.files.hasOwnProperty(file)) {
+        if(/Spec\.js$/.test(file)) {
+            tests.push(file);
+        }
+    }
+}
+
+requirejs.config({
+    
+	// Karma serves files from /base/<your-base-path>
+	baseUrl: '/base/@js.module.script.dir@/@js.source.dir@',
+	
+    paths: {
+		jquery: '../@js.common-ui.dirpath.prefix@/@js.library.jquery@'
+	},
+	
+	// ask Require.js to load these files (all our tests)
+    deps: tests,  
+
+	// start test run, once Require.js is done
+    callback: window.__karma__.start 
+});

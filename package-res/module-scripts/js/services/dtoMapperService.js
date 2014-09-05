@@ -109,17 +109,26 @@ define(
               function Category( main, sub ) {
                 var that = this;
                 that.main = main;
-                that.sub = sub;
+                that.mainName = main;
+                that.mainTranslateId = 'marketplace.categories.' + main.toLowerCase() + '.name';
 
-                $translate( 'marketplace.categories.' + main.toLowerCase() + '.name' )
+                $translate( that.mainTranslateId )
                     .then( function ( translatedName ) {
-                      that.mainName = translatedName;
+                      if ( translatedName != that.mainTranslateId ) {
+                        that.mainName = translatedName;
+                      }
                     });
 
-                if ( sub ) {
-                  $translate( 'marketplace.categories.' + sub.toLowerCase() + '.name' )
+                if( sub ) {
+                  that.sub = sub;
+                  that.subName = sub;
+                  that.subTranslateId = 'marketplace.categories.' + sub.toLowerCase() + '.name';
+
+                  $translate( that.subTranslateId )
                       .then( function (translatedName ) {
-                        that.subName = translatedName;
+                        if ( translatedName != that.subTranslateId ) {
+                          that.subName = translatedName;
+                        }
                       });
                 }
               }

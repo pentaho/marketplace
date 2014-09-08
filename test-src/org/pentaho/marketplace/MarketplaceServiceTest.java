@@ -23,7 +23,6 @@ import java.util.List;
 import org.apache.commons.io.IOUtils;
 import org.junit.Assert;
 import org.junit.Test;
-import org.pentaho.di.core.util.Assert;
 
 public class MarketplaceServiceTest {
 

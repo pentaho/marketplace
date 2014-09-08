@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<market>
+  <market_entry>
+    <id>cde</id>
+    <type>Platform</type>   
+    <img>wt_transparent.png</img>
+    <name>Community Dashboard Editor</name>
+    <documentation_url>http://cde.webdetails.org</documentation_url>
+    <description>The Community Dashboard Editor (CDE) is the outcome of real-world needs: It was born to greatly simplify the creation, edition and rendering of dashboards.
+
+CDE and the technology underneath (CDF, CDA and CCC) allows to develop and deploy dashboards in the Pentaho platform in a fast and effective way.
+    </description>
+    <author>WebDetails</author>
+    <author_url>http://webdetails.pt</author_url>
+    <versions>
+    	<version>
+    		<branch>RC</branch>
+    		<name>Release Candidate</name>
+			<package_url>http://www.webdetails.pt/RC/ficheiros/CDE-bundle-1.0-RC3.tar.bz2</package_url>
+			<samples_url>http://www.webdetails.pt/RC/ficheiros/CDE-bundle-1.0-RC3-samples.tar.bz2</samples_url>
+			<description>This is RC1 - pretty cool version but still not quite there</description>
+            <changelog>ChangeLog for RC</changelog>
+            <min_parent_version>0</min_parent_version>
+		    <max_parent_version>TRUNK-SNAPSHOT</max_parent_version>
+    	</version>
+    	<version>
+    		<branch>TRUNK</branch>
+    		<name>Trunk</name>
+			<package_url>http://www.webdetails.pt/TRUNK/ficheiros/CDE-bundle-1.0-RC3.tar.bz2</package_url>
+			<samples_url>http://www.webdetails.pt/TRUNK/ficheiros/CDE-bundle-1.0-RC3.tar.bz2</samples_url>
+			<description>Trunk Snapshot. Install at your own risk....</description>
+            <changelog>Change Log for TRUNK</changelog>
+            <build_id>135</build_id>
+            <min_parent_version>0</min_parent_version>
+		    <max_parent_version>TRUNK-SNAPSHOT</max_parent_version>
+    	</version>    	
+    </versions>
+  </market_entry>  
+</market>

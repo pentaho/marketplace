@@ -36,7 +36,7 @@ define( [ 'marketplace' ],
               restrict: 'A', // 'A' must be used for IE8 compatibility
               replace: true, //replaces the custom directive element with the corresponding expanded HTML, to be HTML-compliant.
               templateUrl: 'directives/multiselectDropdown/multiselectDropdownTemplate.html',
-              controller: 'MultiselectDropdownController',
+              controller: 'multiselectDropdownController',
               scope: {
                 /**
                  * An array where the selected values will be placed.

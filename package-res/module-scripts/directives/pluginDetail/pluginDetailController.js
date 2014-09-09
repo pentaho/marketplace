@@ -22,7 +22,7 @@ define( [
 
       console.log("Required pluginDetail/pluginDetailController.js");
 
-      app.controller( 'PluginDetailController',
+      app.controller( 'pluginDetailController',
           ['$scope', 'installFlowService', '$translate',
             function ( $scope, installService, $translate ) {
               // Add trim to String if it is not defined

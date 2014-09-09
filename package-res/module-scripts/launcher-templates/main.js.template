@@ -40,9 +40,9 @@ requirejs(
       './directives/pluginDetail/pluginDetailDirective',
       './directives/pluginList/pluginListController',
       './directives/pluginList/pluginListDirective',
-      './directives/pluginListItem/PluginListItemController',
-      './directives/pluginListItem/PluginListItemDirective',
-      './directives/devStageIcon/DevStageIconController',
+      './directives/pluginListItem/pluginListItemController',
+      './directives/pluginListItem/pluginListItemDirective',
+      './directives/devStageIcon/devStageIconController',
       './directives/devStageIcon/devStageIconDirective',
 
       './directives/stopEvent/stopEventDirective',

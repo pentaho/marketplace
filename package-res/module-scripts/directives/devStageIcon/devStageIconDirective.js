@@ -23,7 +23,7 @@ define( [ 'marketplace' ],
               restrict: 'A', // 'A' must be used for IE8 compatibility
               replace: true, //replaces the custom directive element with the corresponding expanded HTML, to be HTML-compliant.
               templateUrl: 'directives/devStageIcon/devStageIconTemplate.html',
-              controller: 'DevStageIconController',
+              controller: 'devStageIconController',
               //isolate scope
               scope: {
                 //'&' evaluates in the parent scope

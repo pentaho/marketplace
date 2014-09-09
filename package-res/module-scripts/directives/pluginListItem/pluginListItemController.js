@@ -15,9 +15,9 @@
 
 define( [ 'marketplace' ],
     function ( app ) {
-      console.log("Required pluginListItem/PluginListItemController.js");
+      console.log("Required pluginListItem/pluginListItemController.js");
 
-      app.controller('PluginListItemController',
+      app.controller('pluginListItemController',
           ['$scope',
             function ( $scope ) {
               var plugin = $scope.plugin;

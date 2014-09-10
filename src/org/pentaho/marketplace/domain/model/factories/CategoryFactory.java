@@ -32,30 +32,33 @@ public class CategoryFactory implements ICategoryFactory {
   }
 
   /**
-   * Creates a new category. If a category with the same name already exists returns the previously created category.
+   * Creates a new category. If category with the same name, in the parent namespace, already exists returns the previously created category.
+   * Root categories have no parent with the namespace defined in the Category factory.
    * @param name
    * @param parent
    * @return
    */
   @Override public ICategory create( String name, ICategory parent ) {
-    // if category with this name already exists
-    ICategory category = categories.get( name );
+    ICategory category = parent != null ? parent.getChildren().get( name ) : this.get( name );
+    // if category exists
     if ( category != null ) {
-      // category exists with null parent. Allow overwriting parent.
-      if ( category.getParent() == null ) {
-        category.setParent( parent );
-      }
       return category;
     }
 
     // a new category is being created
     category = new Category( name, parent );
-    categories.put( name, category );
+    // root category, store in factory namespace
+    if ( parent == null ) {
+      this.categories.put( name, category );
+    }
+    else {
+      parent.getChildren().put( name, category );
+    }
     return category;
   }
 
   /**
-   * Creates a new category. If a category with the same name already exists returns the previously created category.
+   * Creates a new root category. If a root category with the same name already exists returns the previously created category.
    * @param name
    * @return
    */

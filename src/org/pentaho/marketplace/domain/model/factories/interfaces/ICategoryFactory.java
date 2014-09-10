@@ -20,7 +20,7 @@ public interface ICategoryFactory {
   /**
    *
    * @param name The name of the category.
-   * @return Gets the category with the given name. Returns null if no category with the name has been created yet.
+   * @return Gets the root category with the given name. Returns null if no root category with the name has been created yet.
    */
   ICategory get( String name );
 

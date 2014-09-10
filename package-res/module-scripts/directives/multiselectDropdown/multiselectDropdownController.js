@@ -21,7 +21,7 @@ define(
     function ( app, _ ) {
       console.log("Required multiselectDropdown/multiselectDropdownController.js");
 
-      app.controller('MultiselectDropdownController',
+      app.controller('multiselectDropdownController',
           ['$scope',
             function ( $scope ) {
 

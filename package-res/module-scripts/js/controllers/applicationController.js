@@ -20,9 +20,9 @@ define(
     ],
     function ( app, _ ) {
 
-      console.log("Required controllers/PluginListController.js");
+      console.log("Required controllers/applicationController.js");
 
-      app.controller('PluginListController',
+      app.controller('applicationController',
           ['$scope', 'appService', '$modal', 'developmentStageService', '$filter',
             function ( $scope, appService, $modal, devStagesService, $filter ) {
 

@@ -19,7 +19,7 @@ requirejs(
 
       './@js.source.dir@/@js.module.script.app.name@',
 
-      './@js.source.dir@/controllers/PluginListController',
+      './@js.source.dir@/controllers/applicationController',
       './@js.source.dir@/models/plugin',
 
       './@js.source.dir@/services/appService',
@@ -40,9 +40,9 @@ requirejs(
       './directives/pluginDetail/pluginDetailDirective',
       './directives/pluginList/pluginListController',
       './directives/pluginList/pluginListDirective',
-      './directives/pluginListItem/PluginListItemController',
-      './directives/pluginListItem/PluginListItemDirective',
-      './directives/devStageIcon/DevStageIconController',
+      './directives/pluginListItem/pluginListItemController',
+      './directives/pluginListItem/pluginListItemDirective',
+      './directives/devStageIcon/devStageIconController',
       './directives/devStageIcon/devStageIconDirective',
 
       './directives/stopEvent/stopEventDirective',

@@ -23,7 +23,7 @@ define( [ 'marketplace' ],
               restrict: 'A', // 'A' must be used for IE8 compatibility
               replace: true, //replaces the custom directive element with the corresponding expanded HTML, to be HTML-compliant.
               templateUrl: 'directives/pluginListItem/pluginListItemTemplate.html',
-              controller: 'PluginListItemController',
+              controller: 'pluginListItemController',
               //isolate scope
               scope: {
                 //'&' evaluates in the parent scope

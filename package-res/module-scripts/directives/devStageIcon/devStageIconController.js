@@ -17,7 +17,7 @@ define( [ 'marketplace' ],
     function ( app ) {
       console.log("Required devStageIcon/devStageIconController.js");
 
-      app.controller('DevStageIconController',
+      app.controller('devStageIconController',
           ['$scope', 'developmentStageService',
             function ( $scope, devStages ) {
 

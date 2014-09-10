@@ -31,7 +31,7 @@ define( [ 'common-ui/angular',
         $routeProvider.when('/',
             {
               templateUrl: 'partials/plugin-list.html',
-              controller: 'PluginListController'
+              controller: 'applicationController'
             });
 
         $routeProvider.otherwise(

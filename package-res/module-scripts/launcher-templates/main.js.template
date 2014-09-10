@@ -19,7 +19,7 @@ requirejs(
 
       './@js.source.dir@/@js.module.script.app.name@',
 
-      './@js.source.dir@/controllers/PluginListController',
+      './@js.source.dir@/controllers/applicationController',
       './@js.source.dir@/models/plugin',
 
       './@js.source.dir@/services/appService',

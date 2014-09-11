@@ -1138,7 +1138,7 @@ body.bootstrap .modal.pluginDetailDialog {
   box-sizing: border-box;
   font-size: 12px;
   line-height: 18px;
-  font-family: OpenSansRegular, sans-serif;
+  font-family: OpenSansLight, sans-serif;
 }
 
 body.bootstrap .modal.pluginDetailDialog .modal-container {
@@ -1313,13 +1313,13 @@ body.bootstrap .modal.pluginDetailDialog .pluginDetail .pluginDetailBottom > div
   box-sizing: border-box;
   font-size: 12px;
   line-height: 18px;
-  font-family: OpenSansRegular, sans-serif;
+  font-family: OpenSansLight, sans-serif;
 }
 
 .bootstrap .modal.stagesInfoDialog .modal-header {
   border: none;
-  padding-top: 20px;
-  padding-bottom: 0px;
+  padding: 20px 20px 0px;
+  margin-bottom: -10px;
 }
 
 .bootstrap .modal.stagesInfoDialog .stagesInfo {
@@ -1344,19 +1344,38 @@ body.bootstrap .modal.pluginDetailDialog .pluginDetail .pluginDetailBottom > div
 
 .bootstrap .modal.stagesInfoDialog .stage {
   display: inline-block;
-  margin: 1em;
-  text-align: center;
-  vertical-align: top;
-  border-radius: 0;
-  color: #999999;
-  max-width: 270px;
+	margin: 1em 0;
+	text-align: left;
+	vertical-align: top;
+	border-radius: 0;
+	color: #999999;
+	width: 100%;
+	font-size: 13px;
 }
 
+.bootstrap .modal.stagesInfoDialog .stage .devStageIcon {
+	width: 55px;
+	float: left;
+}
 
-.bootstrap .modal.stagesInfoDialog .stage .name{
-  font-size: 13px;
+.bootstrap .modal.stagesInfoDialog .stage .devStageIcon .dev-stage {
+	background-position: left center;
+}
+
+.bootstrap .modal.stagesInfoDialog .stage .singleStageInfo {
+	display: block;
+	float: left;
+	max-width: 560px;
+}
+
+.bootstrap .modal.stagesInfoDialog .stage .name {
+  font-size: 14px;
   border: none;
-  line-height: 14px;
+  line-height: 16px;
   padding-bottom: 2px;
   color: #333;
+}
+
+.bootstrap .modal.stagesInfoDialog .lane:last-child {
+	padding-bottom: 10px;
 }

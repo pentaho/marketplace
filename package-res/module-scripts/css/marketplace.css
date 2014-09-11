@@ -1021,8 +1021,14 @@ button.refreshButton {
    Generic Dialog
    ========================================================================== */
 
+.bootstrap .modal {
+  max-height: 80%;
+}
+
 .bootstrap .modal .modal-container {
   border: 1px solid #cbdde8;
+  height: 100%;
+  overflow-y: auto;
 }
 
 .bootstrap .modal .modal-header {
@@ -1033,6 +1039,7 @@ button.refreshButton {
 
 .bootstrap .modal .modal-body {
   max-height: 600px;
+	overflow-y: initial;
 }
 
 .bootstrap .modal .modal-container .closeButton {
@@ -1113,6 +1120,7 @@ body.bootstrap .modal.confirmationDialog .dialog .buttonsContainer button:first-
    ========================================================================== */
 
 body.bootstrap .modal.pluginDetailDialog {
+	height: 3000px;
   /*position: absolute;*/
   -webkit-border-radius: 0;
   -moz-border-radius: 0;
@@ -1133,6 +1141,12 @@ body.bootstrap .modal.pluginDetailDialog {
   font-family: OpenSansRegular, sans-serif;
 }
 
+body.bootstrap .modal.pluginDetailDialog .modal-container {
+	padding-bottom: 20px;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
 
 body.bootstrap .modal.pluginDetailDialog .pluginDetail {
   background-color: #ffffff;
@@ -1281,6 +1295,7 @@ body.bootstrap .modal.pluginDetailDialog .pluginDetail .pluginDetailBottom > div
 
 
 .bootstrap .modal.stagesInfoDialog {
+	height: 3000px;
   /*position: absolute;*/
   -webkit-border-radius: 0;
   -moz-border-radius: 0;

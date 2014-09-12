@@ -13,13 +13,18 @@
 
 package org.pentaho.marketplace.domain.model.entities;
 
+import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.pentaho.marketplace.domain.model.entities.interfaces.ICategory;
+
+import java.util.Hashtable;
+import java.util.Map;
 
 public class Category implements ICategory {
 
   // region Attributes
   private final String name;
   private ICategory parent;
+  private Map<String, ICategory> children;
   // endregion
 
   // region Constructors
@@ -44,6 +49,15 @@ public class Category implements ICategory {
     return this;
   }
 
+  @Override public Map<String, ICategory> getChildren() {
+    // lazy creation
+    if ( this.children == null ) {
+      this.children = new Hashtable<String, ICategory>();
+    }
+
+    return this.children;
+  }
+
   @Override public String getName() {
     return this.name;
   }
@@ -52,4 +66,31 @@ public class Category implements ICategory {
     return "(Category - Name: " + this.getName() + "Parent: " + parent != null ? parent.getName() : "null" + ")";
   }
   // endregion
+
+  @Override public boolean equals( Object otherObj ) {
+    if ( otherObj == null ) {
+      return false;
+    }
+
+    if ( otherObj == this ) {
+      return true;
+    }
+
+    if ( !( otherObj instanceof ICategory ) ) {
+      return false;
+    }
+
+    ICategory otherCategory = (ICategory) otherObj;
+
+    return this.getName().equals( otherCategory.getName() )
+      && this.getParent() == null ? otherCategory.getParent() == null : this.getParent().equals( otherCategory.getParent() );
+  }
+
+  @Override public int hashCode() {
+    return new HashCodeBuilder( 23, 41 )
+      .append( this.getName() )
+      .append( this.getParent() )
+      .toHashCode();
+  }
+
 }

@@ -13,6 +13,8 @@
 
 package org.pentaho.marketplace.domain.model.entities.interfaces;
 
+import java.util.Map;
+
 public interface ICategory {
 
   /**
@@ -28,11 +30,16 @@ public interface ICategory {
    */
   ICategory setParent( ICategory parent );
 
-
   /**
    *
    * @return Gets the name of this category.
    */
   String getName();
+
+  /**
+   *
+   * @return Returns the children categories.
+   */
+  Map<String, ICategory> getChildren();
 
 }

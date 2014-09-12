@@ -9,10 +9,10 @@
           <img data-ng-src="{{plugin.image}}" data-ng-show="plugin.image"/>      
         </div>
 
-        <div class="btn-group" dropdown is-open="status.isopen">
+        <div class="btn-group versionSelectDropdown" dropdown is-open="status.isopen">
           <button type="button" class="btn btn-primary dropdown-toggle">
             <span class="multiselectButtonText">
-              {{ selectedPluginVersion.version + ' (' + selectedPluginVersion.branch + ')'}}
+              Version: {{ selectedPluginVersion.version + ' (' + selectedPluginVersion.branch + ')'}}
             </span>
             <span class="caret"></span>
           </button>

@@ -60,7 +60,7 @@ html {
   margin: 5px auto 40px;
 }
 
-input.search {
+.bootstrap input.search {
   background-image: url(../img/search.svg);
   background-repeat: no-repeat;
   background-position: right center;
@@ -68,13 +68,20 @@ input.search {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
+	font-size: 13px;
 }
 
-.no-svg input.search,
-.IE.IE8 input.search {
+.no-svg.bootstrap input.search,
+.IE.IE8.bootstrap input.search {
   background-image: url(../img/search.png);
   background-repeat: no-repeat;
   background-position: right center;
+}
+
+body.bootstrap .btn-group > .btn, 
+body.bootstrap .btn-group > .dropdown-menu, 
+body.bootstrap .btn-group > .popover {
+	font-size: 13px;
 }
 
 /* ==========================================================================
@@ -1255,13 +1262,6 @@ body.bootstrap .modal.pluginDetailDialog .pluginDetail .pluginDetailHeaderButton
   left: 0;
 }
 
-body.bootstrap .modal.pluginDetailDialog .pluginDetail .pluginDetailTop .pluginDetailLeft select {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  margin-bottom: 0;
-}
-
 body.bootstrap .modal.pluginDetailDialog .pluginDetail .pluginDetailTop .pluginDetailLeft .pluginImage {
   text-align: center;
   padding-top: 20px;
@@ -1340,6 +1340,92 @@ body.bootstrap .modal.pluginDetailDialog .pluginDescriptionContent blockquote p 
 	margin: 0 0 10px;
 	border: 0;
 	padding: 0;
+}
+
+/* ==========================================================================
+   Version Select Dropdown
+   ========================================================================== */
+
+body.bootstrap .modal.pluginDetailDialog .pluginDetail .pluginDetailTop .pluginDetailLeft .versionSelectDropdown {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  margin-bottom: 0;
+	width: 100%;
+}
+
+body.bootstrap .modal.pluginDetailDialog .pluginDetail .pluginDetailTop .pluginDetailLeft .versionSelectDropdown button.btn.btn-primary.dropdown-toggle {
+  width: 100%;
+  margin: 0;
+  background: #fff;
+  border: 1px solid #cbdde8;
+  color: #7c7c7c;
+  text-shadow: none;
+  border-radius: 0;
+  -webkit-box-shadow: inset 0px 0px 2px 0px rgba(243, 247, 250, 1);
+  -moz-box-shadow:    inset 0px 0px 2px 0px rgba(243, 247, 250, 1);
+  box-shadow:         inset 0px 0px 2px 0px rgba(243, 247, 250, 1);
+  text-align: left;
+  z-index: 1001;
+  padding: 4px 24px 4px 12px;
+}
+
+body.bootstrap .modal.pluginDetailDialog .pluginDetail .pluginDetailTop .pluginDetailLeft .versionSelectDropdown button.btn.btn-primary.dropdown-toggle .multiselectButtonText {
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	display: block;
+	max-width: 100%;	
+}
+
+body.bootstrap .modal.pluginDetailDialog .pluginDetail .pluginDetailTop .pluginDetailLeft .versionSelectDropdown button.btn.btn-primary.dropdown-toggle .caret {
+	border: none;
+	width: 12px;
+	height: 8px;
+	background-image: url(../img/more-less-options.svg);
+	background-position: 0 0;
+	background-repeat: no-repeat;
+	margin-top: -4px;
+	top: 50%;
+	position: absolute;
+	right: 10px;
+}
+
+body.bootstrap .modal.pluginDetailDialog .pluginDetail .pluginDetailTop .pluginDetailLeft .versionSelectDropdown.open button.btn.btn-primary.dropdown-toggle .caret {
+	background-position: 0 -8px;
+}
+
+body.bootstrap .modal.pluginDetailDialog .pluginDetail .pluginDetailTop .pluginDetailLeft .versionSelectDropdown .dropdown-menu {
+  background-color: #fff;
+  padding: 5px 0;
+  margin: -1px 0 0;
+  border: 1px solid #cbdde8;
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0;
+  -webkit-box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2);
+  -moz-box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2);
+  box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2);
+  min-width: 100%;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+body.bootstrap .modal.pluginDetailDialog .pluginDetail .pluginDetailTop .pluginDetailLeft .versionSelectDropdown .dropdown-menu > li > a {
+  padding: 3px 15px 3px 12px;
+  clear: both;
+  font-weight: normal;
+  line-height: 20px;
+  color: #7c7c7c;
+  cursor: pointer;
+}
+
+body.bootstrap .modal.pluginDetailDialog .pluginDetail .pluginDetailTop .pluginDetailLeft .versionSelectDropdown .dropdown-menu > li > a:hover,
+body.bootstrap .modal.pluginDetailDialog .pluginDetail .pluginDetailTop .pluginDetailLeft .versionSelectDropdown .dropdown-menu > li > a:focus,
+body.bootstrap .modal.pluginDetailDialog .pluginDetail .pluginDetailTop .pluginDetailLeft .versionSelectDropdown .dropdown-submenu:hover > a,
+body.bootstrap .modal.pluginDetailDialog .pluginDetail .pluginDetailTop .pluginDetailLeft .versionSelectDropdown .dropdown-submenu:focus > a {
+  background: #c1d7e1;
 }
 
 /* ==========================================================================

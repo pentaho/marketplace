@@ -1,0 +1,53 @@
+/*
+ * Copyright 2002 - 2014 Webdetails, a Pentaho company.  All rights reserved.
+ *
+ * This software was developed by Webdetails and is provided under the terms
+ * of the Mozilla Public License, Version 2.0, or any later version. You may not use
+ * this file except in compliance with the license. If you need a copy of the license,
+ * please go to  http://mozilla.org/MPL/2.0/. The Initial Developer is Webdetails.
+ *
+ * Software distributed under the Mozilla Public License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or  implied. Please refer to
+ * the license for the specific language governing your rights and limitations.
+ */
+
+'use strict';
+
+define( [ 'marketplace' ],
+    function ( app ) {
+      console.log("Required modalHeightDirective.js");
+
+      app.directive('modalHeight', ['$timeout',
+          function( timer ) {
+            return {
+              restrict: 'A',
+              link: function( scope, element, attrs ) {
+                function getVerticalPadAndBorder ( $element ) {
+                  return parseInt( $element.css('padding-top')) +
+                      parseInt( $element.css( 'padding-bottom' )) +
+                      parseInt( $element.css( 'border-top-width' )) +
+                      parseInt( $element.css( 'border-bottom-width' ));
+                }
+
+                function changeModalHeight() {
+                  var $modal = element.parents('.modal');
+                  var $modalBody = $modal.find('.modal-body');
+                  var $modalContainer = $modal.find('.modal-container');
+
+                  var modalHeight = $modalBody.height() +
+                      getVerticalPadAndBorder( $modal ) +
+                      getVerticalPadAndBorder( $modalBody ) +
+                      getVerticalPadAndBorder( $modalContainer );
+
+                  $modal.height( modalHeight );
+                }
+
+                // timer is necessary in order to run changeModalHeight after render
+                timer( changeModalHeight, 0 );
+              }
+            };
+          }]
+      );
+
+    }
+);

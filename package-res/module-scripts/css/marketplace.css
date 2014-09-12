@@ -736,7 +736,9 @@ button.refreshButton {
   height: 10px;
   background: #f6f7f8;
   border: 1px solid #cbdde8;
-  transform: rotate(45deg);
+	-webkit-transform: rotate(45deg);
+	-ms-transform: rotate(45deg);
+	transform: rotate(45deg);
   top: -6px;
   left: 12px;
   -webkit-box-shadow: 3px 1px 3px -1px rgba(0,0,0,0.2);

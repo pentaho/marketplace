@@ -80,8 +80,7 @@
     <div class="devStageDescription">{{selectedPluginVersion.devStage.description}}</div>
   </div>
   <a class="pull-right"
-      data-ng-if="selectedPluginVersion.devStage"
-      href="mailto:marketplace-feedback@pentaho.com?subject={{ 'marketplace.devStage.disagreeMail.subject' | translate:disagreeMailTranslationVars }}&body={{ 'marketplace.devStage.disagreeMail.body' | translate:disagreeMailTranslationVars }}">
+      href="mailto:marketplace-feedback@pentaho.com?subject={{ 'marketplace.devStage.disagreeMail.subject' | translate:disagreeMailTranslationVars | encodeURI }}">
     {{ 'marketplace.devStage.disagreeMail.linkText' | translate }}
   </a>
 

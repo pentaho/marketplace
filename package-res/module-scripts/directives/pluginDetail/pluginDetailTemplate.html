@@ -9,9 +9,24 @@
           <img data-ng-src="{{plugin.image}}" data-ng-show="plugin.image"/>      
         </div>
 
-        <select data-ng-model="selectedPluginVersion"
-                data-ng-options="(version.version + ' (' + version.branch + ')' ) for version in plugin.versions">
-        </select>
+        <div class="btn-group" dropdown is-open="status.isopen">
+          <button type="button" class="btn btn-primary dropdown-toggle">
+            <span class="multiselectButtonText">
+              {{ selectedPluginVersion.version + ' (' + selectedPluginVersion.branch + ')'}}
+            </span>
+            <span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu" role="menu">
+
+            <li data-ng-repeat="version in plugin.versions"
+                data-ng-click="selectVersion( version )">
+              <a>
+                {{ version.version + ' (' + version.branch + ')'}}
+              </a>
+            </li>
+
+          </ul>
+        </div>
         
       </div>
       <div class="pluginDetailRight">

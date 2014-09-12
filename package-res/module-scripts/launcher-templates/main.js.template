@@ -46,7 +46,9 @@ requirejs(
       './directives/devStageIcon/devStageIconDirective',
 
       './directives/stopEvent/stopEventDirective',
-      './directives/indeterminate/indeterminateDirective'
+      './directives/indeterminate/indeterminateDirective',
+      './directives/modalHeight/modalHeightDirective'
+
     ] ,
 
     function( angular ) {

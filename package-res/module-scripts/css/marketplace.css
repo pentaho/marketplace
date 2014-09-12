@@ -460,12 +460,20 @@ button.refreshButton {
 }
 
 .filterBar .filterContainer .multiselect button.btn.btn-primary.dropdown-toggle .caret {
-  border-top-color: #1973bc;
-  border-bottom-color: #1973bc;
-  right: 10px;
-  position: absolute;
-  top: 50%;
-  margin-top: -2px;
+	border: none;
+	width: 12px;
+	height: 8px;
+	background-image: url(../img/more-less-options.svg);
+	background-position: 0 0;
+	background-repeat: no-repeat;
+	margin-top: -4px;
+	top: 50%;
+	position: absolute;
+	right: 10px;
+}
+
+.filterBar .filterContainer .multiselect .open button.btn.btn-primary.dropdown-toggle .caret {
+	background-position: 0 -8px;
 }
 
 .bootstrap .filterBar .filterContainer .multiselect .dropdown-menu {

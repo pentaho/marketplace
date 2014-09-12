@@ -3,8 +3,10 @@
       <button class="btn btn-primary dropdown-toggle" type="button" data-ng-disabled="disabled"
           data-popover="{{optionsDisplayString}}" data-popover-popup-delay="500"
           data-popover-trigger="mouseenter" data-popover-placement="bottom">
-        <span>{{prefix}}</span>
-        <span>{{optionsDisplayString}}</span>
+        <span class="multiselectButtonText">
+          <span>{{prefix}}</span>
+          <span>{{optionsDisplayString}}</span>
+        </span>
         <span class="caret"></span>
       </button>
       <ul class="dropdown-menu" role="menu">

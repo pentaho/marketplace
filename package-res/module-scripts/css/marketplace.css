@@ -445,8 +445,14 @@ button.refreshButton {
   text-align: left;
   z-index: 1001;
   padding: 4px 24px 4px 12px;
-  text-overflow: ellipsis;
-  overflow: hidden;
+}
+
+.filterBar .filterContainer .multiselect button.btn.btn-primary.dropdown-toggle .multiselectButtonText {
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	display: block;
+	max-width: 135px;	
 }
 
 .filterBar .filterContainer .multiselect button.btn.btn-primary.dropdown-toggle .caret {
@@ -454,6 +460,8 @@ button.refreshButton {
   border-bottom-color: #1973bc;
   right: 10px;
   position: absolute;
+  top: 50%;
+  margin-top: -2px;
 }
 
 .bootstrap .filterBar .filterContainer .multiselect .dropdown-menu {
@@ -1377,5 +1385,5 @@ body.bootstrap .modal.pluginDetailDialog .pluginDetail .pluginDetailBottom > div
 }
 
 .bootstrap .modal.stagesInfoDialog .lane:last-child {
-	padding-bottom: 10px;
+	padding-bottom: 10px;	
 }

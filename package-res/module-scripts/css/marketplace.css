@@ -1310,6 +1310,38 @@ body.bootstrap .modal.pluginDetailDialog .pluginDetail .pluginDetailBottom > div
   width: 67%;
 }
 
+body.bootstrap .modal.pluginDetailDialog .pluginDescriptionContent * {
+	font-size: 12px;
+	line-height: 18px;
+	font-family: OpenSansLight, sans-serif;		
+	color: #26363d;
+	font-weight: normal;
+}
+
+body.bootstrap .modal.pluginDetailDialog .pluginDescriptionContent h1,
+body.bootstrap .modal.pluginDetailDialog .pluginDescriptionContent h2,
+body.bootstrap .modal.pluginDetailDialog .pluginDescriptionContent h3,
+body.bootstrap .modal.pluginDetailDialog .pluginDescriptionContent h4,
+body.bootstrap .modal.pluginDetailDialog .pluginDescriptionContent h5,
+body.bootstrap .modal.pluginDetailDialog .pluginDescriptionContent h6 {
+	font-size: 13px;
+	line-height: 18px;
+	font-family: OpenSansSemibold, sans-serif;		
+	color: #26363d;
+	margin: 0 0 10px;
+}
+
+body.bootstrap .modal.pluginDetailDialog .pluginDescriptionContent blockquote,
+body.bootstrap .modal.pluginDetailDialog .pluginDescriptionContent blockquote p {
+	font-size: 12px;
+	line-height: 18px;
+	font-family: OpenSansLight, sans-serif;		
+	color: #26363d;
+	margin: 0 0 10px;
+	border: 0;
+	padding: 0;
+}
+
 /* ==========================================================================
    Plugin Detail Dialog Carousel
    ========================================================================== */

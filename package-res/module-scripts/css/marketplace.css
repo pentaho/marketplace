@@ -255,12 +255,12 @@ input.search {
    Plugin list
    ========================================================================== */
 
-ul {
+.pentaho-tab-deck-panel ul {
   clear: both;
   list-style-type: none;
 }
 
-li {
+.pentaho-tab-deck-panel li {
   clear: both;
 }
 
@@ -1308,6 +1308,75 @@ body.bootstrap .modal.pluginDetailDialog .pluginDetail .pluginDetailBottom > div
   padding-left: 20px;
   height: 35px;
   width: 67%;
+}
+
+/* ==========================================================================
+   Plugin Detail Dialog Carousel
+   ========================================================================== */
+
+body.bootstrap .modal.pluginDetailDialog .pluginScreenshots .carousel {
+	margin-bottom: 30px;
+	height: 200px;
+	/*border: 1px solid #cbdde8;*/
+	/*padding: 10px;*/
+	/*border-top: none;*/
+	/*margin-top: -20px;*/
+}
+
+body.bootstrap .modal.pluginDetailDialog .pluginScreenshots .carousel .carousel-inner > .item {
+	height: 200px;
+}
+
+body.bootstrap .modal.pluginDetailDialog .pluginScreenshots .carousel .carousel-inner > .item > img {
+	max-height: 100%;
+
+  position : absolute;
+
+  top: 0 ;
+  right: 0 ;
+  bottom : 0 ;
+  left : 0 ;
+
+  margin : auto;
+}
+
+body.bootstrap .modal.pluginDetailDialog .pluginScreenshots .carousel-indicators {
+	position: absolute;
+	bottom: -30px;
+	left: 50%;
+	z-index: 15;
+	width: 60%;
+	margin-left: -30%;
+	padding-left: 0;
+	list-style: none;
+	text-align: center;
+	top: auto;
+	right: auto;
+}
+
+body.bootstrap .modal.pluginDetailDialog .pluginScreenshots  .carousel-indicators li {
+	display: inline-block;
+	width: 10px;
+	height: 10px;
+	margin: 1px 5px;
+	text-indent: -999px;
+	border: 1px solid #3d6480;
+	border-radius: 10px;
+	cursor: pointer;
+	background-color: #000 \9;
+	background-color: rgba(0,0,0,0);
+	float: none;
+}
+
+body.bootstrap .modal.pluginDetailDialog .pluginScreenshots  .carousel-indicators li.active {
+	margin: 0 4px;
+	width: 12px;
+	height: 12px;
+	background-color: #3d6480;
+}
+
+body.bootstrap .modal.pluginDetailDialog .pluginScreenshots  .carousel-control {
+	display: none;
 }
 
 /* ==========================================================================

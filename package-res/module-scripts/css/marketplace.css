@@ -543,6 +543,10 @@ button.refreshButton {
   line-height: 18px;
 }
 
+.bootstrap .multiselect .open .popover {
+  opacity: 0;
+}
+
 .bootstrap .multiselect .popover.bottom .arrow {
   border: 0;
   width: 20px;

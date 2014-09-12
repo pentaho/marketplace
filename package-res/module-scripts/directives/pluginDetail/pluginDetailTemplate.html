@@ -72,7 +72,7 @@
           <div data-ng-bind-html="plugin.description"></div>
         </div>
 
-        <div data-ng-if="plugin.screenshotUrls && plugin.screenshotUrls.length > 0">
+        <div data-ng-if="plugin.screenshotUrls && plugin.screenshotUrls.length > 0" class="pluginScreenshots">
           <div class="sectionHeader">{{ 'marketplace.pluginDetail.section.screenshots.title' | translate }}</div>
           <div data-carousel data-interval="5000">
             <div data-slide data-ng-repeat="screenshotUrl in plugin.screenshotUrls">

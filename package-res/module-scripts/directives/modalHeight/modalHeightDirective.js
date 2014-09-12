@@ -22,11 +22,9 @@ define( [ 'marketplace' ],
             return {
               restrict: 'A',
               link: function( scope, element, attrs ) {
-                function getVerticalPadAndBorder ( $element ) {
+                function getVerticalPad ( $element ) {
                   return parseInt( $element.css('padding-top')) +
-                      parseInt( $element.css( 'padding-bottom' )) +
-                      parseInt( $element.css( 'border-top-width' )) +
-                      parseInt( $element.css( 'border-bottom-width' ));
+                      parseInt( $element.css( 'padding-bottom' ));
                 }
 
                 function changeModalHeight() {
@@ -35,9 +33,8 @@ define( [ 'marketplace' ],
                   var $modalContainer = $modal.find('.modal-container');
 
                   var modalHeight = $modalBody.height() +
-                      getVerticalPadAndBorder( $modal ) +
-                      getVerticalPadAndBorder( $modalBody ) +
-                      getVerticalPadAndBorder( $modalContainer );
+                      getVerticalPad( $modalBody ) +
+                      getVerticalPad( $modalContainer );
 
                   $modal.height( modalHeight );
                 }

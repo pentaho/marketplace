@@ -64,6 +64,10 @@ input.search {
   background-image: url(../img/search.svg);
   background-repeat: no-repeat;
   background-position: right center;
+  padding: 4px 36px 4px 12px;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 .no-svg input.search,

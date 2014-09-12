@@ -61,6 +61,10 @@ define( [ 'common-ui/angular',
        delete $httpProvider.defaults.headers.common['X-Requested-With'];
        }]);*/
 
+      app.filter('encodeURI', function() {
+        return encodeURI;
+      } );
+
       return app;
     }
 );

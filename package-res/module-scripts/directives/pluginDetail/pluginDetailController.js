@@ -105,6 +105,11 @@ define( [
                 }
               }
 
+              function selectVersion( version ) {
+                $scope.selectedPluginVersion = version;
+              }
+
+              $scope.selectVersion = selectVersion;
 
               $scope.uninstallPlugin = installService.uninstallPlugin;
               $scope.pluginInformation = getPluginInformation( $scope.plugin );

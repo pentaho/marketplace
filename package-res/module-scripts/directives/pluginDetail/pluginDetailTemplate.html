@@ -9,9 +9,24 @@
           <img data-ng-src="{{plugin.image}}" data-ng-show="plugin.image"/>      
         </div>
 
-        <select data-ng-model="selectedPluginVersion"
-                data-ng-options="(version.version + ' (' + version.branch + ')' ) for version in plugin.versions">
-        </select>
+        <div class="btn-group versionSelectDropdown" dropdown is-open="status.isopen">
+          <button type="button" class="btn btn-primary dropdown-toggle">
+            <span class="multiselectButtonText">
+              Version: {{ selectedPluginVersion.version + ' (' + selectedPluginVersion.branch + ')'}}
+            </span>
+            <span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu" role="menu">
+
+            <li data-ng-repeat="version in plugin.versions"
+                data-ng-click="selectVersion( version )">
+              <a>
+                {{ version.version + ' (' + version.branch + ')'}}
+              </a>
+            </li>
+
+          </ul>
+        </div>
         
       </div>
       <div class="pluginDetailRight">
@@ -44,7 +59,7 @@
             <span>{{info.label}}:</span>            
           </div>
           <div class="pluginInformationRight">
-            <a data-ng-if="info.hasUrl()" data-ng-href="{{info.url}}">{{info.description}}</a>
+            <a data-ng-if="info.hasUrl()" data-ng-href="{{info.url}}" target="_blank">{{info.description}}</a>
             <span data-ng-if="!info.hasUrl()">{{info.description}}</span>            
           </div>
         </div>  
@@ -54,10 +69,10 @@
 
         <div data-ng-if="plugin.description">
           <div class="sectionHeader">{{ 'marketplace.pluginDetail.section.description.title' | translate }}</div>
-          <div data-ng-bind-html="plugin.description"></div>
+          <div data-ng-bind-html="plugin.description" class="pluginDescriptionContent"></div>
         </div>
 
-        <div data-ng-if="plugin.screenshotUrls && plugin.screenshotUrls.length > 0">
+        <div data-ng-if="plugin.screenshotUrls && plugin.screenshotUrls.length > 0" class="pluginScreenshots">
           <div class="sectionHeader">{{ 'marketplace.pluginDetail.section.screenshots.title' | translate }}</div>
           <div data-carousel data-interval="5000">
             <div data-slide data-ng-repeat="screenshotUrl in plugin.screenshotUrls">
@@ -80,8 +95,7 @@
     <div class="devStageDescription">{{selectedPluginVersion.devStage.description}}</div>
   </div>
   <a class="pull-right"
-      data-ng-if="selectedPluginVersion.devStage"
-      href="mailto:marketplace-feedback@pentaho.com?subject={{ 'marketplace.devStage.disagreeMail.subject' | translate:disagreeMailTranslationVars }}&body={{ 'marketplace.devStage.disagreeMail.body' | translate:disagreeMailTranslationVars }}">
+      href="mailto:marketplace-feedback@pentaho.com?subject={{ 'marketplace.devStage.disagreeMail.subject' | translate:disagreeMailTranslationVars | encodeURI }}">
     {{ 'marketplace.devStage.disagreeMail.linkText' | translate }}
   </a>
 

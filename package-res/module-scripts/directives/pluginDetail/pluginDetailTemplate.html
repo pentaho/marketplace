@@ -12,7 +12,7 @@
         <div class="btn-group versionSelectDropdown" dropdown is-open="status.isopen">
           <button type="button" class="btn btn-primary dropdown-toggle">
             <span class="multiselectButtonText">
-              Version: {{ selectedPluginVersion.version + ' (' + selectedPluginVersion.branch + ')'}}
+              {{ 'marketplace.versionSelect.prefix' | translate }}: {{ selectedPluginVersion.version + ' (' + selectedPluginVersion.branch + ')'}}
             </span>
             <span class="caret"></span>
           </button>

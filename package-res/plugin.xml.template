@@ -27,7 +27,8 @@
     </external-resources>
 
 	<perspective id="@plugin.id@.perspective" title="${title}" layout-priority="-1"
-               resourcebundle="content/@plugin.id@/@js.module.script.namespace@/@plugin.globalization.dir@" content-url="content/@plugin.id@/@js.module.script.namespace@/main.html">
+               resourcebundle="content/@plugin.id@/@js.module.script.namespace@/@plugin.globalization.dir@" content-url="content/@plugin.id@/@js.module.script.namespace@/main.html"
+               required-security-action="org.pentaho.security.administerSecurity">
 	</perspective>
 
 </plugin>

@@ -55,6 +55,14 @@ define( [ 'common-ui/angular',
 
       }]);
 
+      // Disabling history in order to work with Firefox. See [MARKET-184] for more info.
+      app.config( ['$provide', function ($provide){
+        $provide.decorator('$sniffer', ['$delegate', function ($delegate) {
+          $delegate.history = false;
+          return $delegate;
+        }]);
+      }]);
+
       //enable CORS in Angular http requests
       /*app.config(['$httpProvider', function($httpProvider) {
        $httpProvider.defaults.useXDomain = true;

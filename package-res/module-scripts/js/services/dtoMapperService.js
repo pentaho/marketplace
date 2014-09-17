@@ -23,8 +23,8 @@ define(
       console.log("Required services/dtoMapperService.js");
 
       var service = app.factory( 'dtoMapperService',
-          [ 'Plugin', 'developmentStageService', '$translate',
-            function( Plugin, devStages, $translate ) {
+          [ 'Plugin', 'developmentStageService', 'categoryService',
+            function( Plugin, devStages, categoryService ) {
 
               function toPlugin( pluginDTO ) {
                 // region TODO: TEMPORARY array transformation due to bug in server side serialization of single element collections
@@ -106,47 +106,16 @@ define(
                 }
               }
 
-              function Category( main, sub ) {
-                var that = this;
-                that.main = main;
-                that.mainName = main;
-                that.mainTranslateId = 'marketplace.categories.' + main.toLowerCase() + '.name';
-
-                $translate( that.mainTranslateId )
-                    .then( function ( translatedName ) {
-                      if ( translatedName != that.mainTranslateId ) {
-                        that.mainName = translatedName;
-                      }
-                    });
-
-                if( sub ) {
-                  that.sub = sub;
-                  that.subName = sub;
-                  that.subTranslateId = 'marketplace.categories.' + sub.toLowerCase() + '.name';
-
-                  $translate( that.subTranslateId )
-                      .then( function (translatedName ) {
-                        if ( translatedName != that.subTranslateId ) {
-                          that.subName = translatedName;
-                        }
-                      });
-                }
-              }
-
-              Category.prototype.getId = function () {
-                return this.main + this.sub;
-              }
-
               function toCategory ( categoryDTO ) {
                 if ( categoryDTO === null || categoryDTO === undefined ) {
                   return undefined;
                 }
 
                 if ( categoryDTO.parentName === undefined ) {
-                  return new Category( categoryDTO.name );
+                  return categoryService.getCategory( categoryDTO.name );
                 }
 
-                return new Category( categoryDTO.parentName, categoryDTO.name );
+                return categoryService.getCategory( categoryDTO.parentName, categoryDTO.name );
               }
 
               function toVersion ( versionDTO ) {

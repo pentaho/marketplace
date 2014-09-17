@@ -25,38 +25,44 @@ define(
           ['$scope',
             function ( $scope ) {
 
-              function Option( name, selectionValue, group,
-                               scope, selectedValues ) {
+              function Option( name, selectionValue, group ) {
                 this.name = name;
-                this.isSelected = false;
                 this.selectionValue = selectionValue;
                 this.group = group;
 
                 var that = this;
-
-                function onIsSelectedChange ( isSelectedNewValue ) {
-                  if ( isSelectedNewValue ) {
-                    selectedValues.push( that.selectionValue );
-                  }
-                  // Option was deselected
-                  else {
-                    var index = _.indexOf( selectedValues, that.selectionValue );
-                    if ( index > -1 ) {
-                      selectedValues.splice( index, 1 );
-                    }
-                  }
-
-                  // update group selection (ALL / SOME / NONE)
-                  that.group.updateSelected();
-                  updateOptionsDisplayString();
-                }
+                this.isSelected = _.any( $scope.selectedOptionsValue, function ( selectedOption ) {
+                  return _.isEqual( selectedOption, that.selectionValue );
+                });
 
                 // when an option is (de)selected, (remove)add it (from)to the selected model
-                that.stopWatching = scope.$watch(
+                this.stopWatching = $scope.$watch(
                     function() { return that.isSelected; },
-                    onIsSelectedChange
+                    function ( newValue ) {
+                      that.onSelectChanged( newValue );
+                    }
                 );
               }
+
+              Option.prototype.onSelectChanged = function ( newSelectedValue ) {
+                var that = this;
+                // Option was selected
+                if ( newSelectedValue &&
+                    !_.contains( $scope.selectedOptionsValue, that.selectionValue )) {
+                  $scope.selectedOptionsValue.push( this.selectionValue );
+                }
+
+                // Option was deselected
+                if ( !newSelectedValue ) {
+                  var index = _.indexOf( $scope.selectedOptionsValue, this.selectionValue );
+                  if (index > -1) {
+                    $scope.selectedOptionsValue.splice(index, 1);
+                  }
+                }
+
+                this.group.updateSelected();
+                updateOptionsDisplayString();
+              };
 
               function Group ( name, scope ) {
                 var that = this;
@@ -67,15 +73,7 @@ define(
                 that.watchDeregistrationFunction = scope.$watch(
                     function() { return that.selected; },
                     function ( selectedNewValue ) {
-                      switch ( selectedNewValue ) {
-                        case Group.selectEnum.ALL:
-                          _.each( that.options, function ( option ) { option.isSelected = true; } );
-                          break;
-                        case Group.selectEnum.NONE:
-                          _.each( that.options, function ( option ) { option.isSelected = false; } );
-                          break;
-                      }
-                      updateOptionsDisplayString();
+                      that.onSelectChanged( selectedNewValue );
                     }
                 );
               }
@@ -84,7 +82,18 @@ define(
                 ALL: "All",
                 SOME: "Some",
                 NONE: "None"
-              }
+              };
+
+              Group.prototype.onSelectChanged = function ( selectEnum ) {
+                switch ( selectEnum ) {
+                  case Group.selectEnum.ALL:
+                    _.each( this.options, function ( option ) { option.isSelected = true; });
+                    break;
+                  case Group.selectEnum.NONE:
+                    _.each( this.options, function ( option ) { option.isSelected = false; });
+                }
+                updateOptionsDisplayString();
+              };
 
               Group.prototype.updateSelected = function() {
                 var selected = Group.selectEnum.NONE;
@@ -96,7 +105,7 @@ define(
                 }
 
                 this.selected = selected;
-              }
+              };
 
               Group.prototype.getCssClass = function () {
                 switch ( this.selected ) {
@@ -107,13 +116,13 @@ define(
                   case Group.selectEnum.NONE:
                     return 'none-selected';
                 }
-              }
+              };
 
               Group.prototype.stopWatching = function () {
+                // clean up event handlers to allow GC
                 this.watchDeregistrationFunction();
                 _.each( this.options, function ( option ) { option.stopWatching(); } );
               };
-
 
               function getOptionsDisplayString ( groups ) {
                 if ( $scope.allOptionsSelected &&
@@ -134,7 +143,7 @@ define(
                         .join($scope.optionDelimiter);
 
                 return selectedGroupsString;
-              };
+              }
 
               function getGroupDisplayString ( group ) {
                 if ( group.selected === Group.selectEnum.NONE ) {
@@ -189,9 +198,29 @@ define(
                 return  select ? option[select] : option;
               }
 
+              function updateOptionsWithPreSelectedValues () {
+                // if anything is selected
+                if ( $scope.selectedOptionsValue.length > 0 ) {
+                  var options = _.chain( $scope.groups )
+                      .map( function ( group ) { return group.options; } )
+                      .flatten()
+                      .value();
+
+                  // get options that are ("preSelected") in the selectedOptionsValue
+                  var selectedOptions = _.filter( options, function ( option ) {
+                    return _.any( $scope.selectedOptionsValue, function ( selectedOption ) {
+                      return _.isEqual( selectedOption, option.selectionValue );
+                    })});
+
+                  _.each( selectedOptions, function ( option ) {
+                    option.isSelected = true;
+                  } );
+                }
+              }
+
               $scope.toggleSelection = function ( selectable ) {
                 selectable.isSelected = !selectable.isSelected;
-              }
+              };
 
               $scope.groupClicked = function ( group ) {
                 switch ( group.selected ) {
@@ -203,7 +232,7 @@ define(
                     group.selected = Group.selectEnum.ALL;
                     break;
                 }
-              }
+              };
 
               $scope.$watch( 'options', function () {
                 _.each( $scope.groups, function ( group ) { group.stopWatching(); } );

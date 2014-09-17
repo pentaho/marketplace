@@ -1375,7 +1375,7 @@ body.bootstrap .modal.pluginDetailDialog .pluginDetail .pluginDetailTop .pluginD
 	overflow: hidden;
 	text-overflow: ellipsis;
 	display: block;
-	max-width: 100%;	
+	max-width: 165px;	
 }
 
 body.bootstrap .modal.pluginDetailDialog .pluginDetail .pluginDetailTop .pluginDetailLeft .versionSelectDropdown button.btn.btn-primary.dropdown-toggle .caret {

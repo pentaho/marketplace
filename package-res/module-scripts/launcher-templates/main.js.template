@@ -26,6 +26,7 @@ requirejs(
       './@js.source.dir@/services/installFlowService/installFlowService',
       './@js.source.dir@/services/dtoMapperService',
       './@js.source.dir@/services/developmentStageService',
+      './@js.source.dir@/services/categoryService',
 
       './directives/installUpdateButton/installUpdateButtonController',
       './directives/installUpdateButton/installUpdateButtonDirective',

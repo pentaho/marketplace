@@ -24,7 +24,7 @@ define(
           [
             function () {
 
-              function Plugin() {};
+              function Plugin() {}
 
               Plugin.prototype = {
                 getInstallationStatus: function () {
@@ -57,7 +57,7 @@ define(
                       this);
                 }
 
-              }
+              };
 
               Plugin.InstallationStatusEnum = {
                 notInstalled: "NOT_INSTALLED",
@@ -76,8 +76,9 @@ define(
                     this.branch ==  version.branch &&
                     this.version == version.version &&
                     this.buildId == version.buildId;
-              }
+              };
 
+              // TODO: this function has many assumptions that must be reviewed in a later version
               Plugin.Version.prototype.moreRecentThan = function ( version ) {
                 if ( version === undefined || version === null ) {
                   var exception = new Error("Invalid version to compare");
@@ -85,10 +86,28 @@ define(
                   throw exception;
                 }
 
-                // TODO: at the moment a version is considered more recent if the version or buildId is different
-                return this.branch === version.branch &&
-                    ( this.version !== version.version || this.buildId !== version.buildId )
-              }
+                if( this.branch !== version.branch ) { return false; }
+
+                if ( this.version !== version.version ) { return true; }
+
+                // same branch and version
+                return this.buildIdMoreRecentThan( version.buildId );
+              };
+
+              // TODO: this function must be reviewed in a later version
+              Plugin.Version.prototype.buildIdMoreRecentThan = function ( buildId ) {
+                if ( this.buildId ) {
+                  return this.buildId !== buildId;
+                }
+
+                // if this.build is undefined/null/"" then the buildId is the lowest
+                return false;
+              };
+
+              Plugin.Version.prototype.clone = function () {
+                // TODO: change to a clone that returns Plugin.Version type
+                return _.clone( this );
+              };
 
               return Plugin;
             }

@@ -28,11 +28,18 @@ define(
 
               var categories = {};
 
+              function categoryIdToTranslationId( categoryId ) {
+                return 'marketplace.categories.' +
+                       // whitespaces => _
+                       categoryId.toLowerCase().replace(/ /g,"_") +
+                       '.name';
+              }
+
               function Category( main, sub ) {
                 var that = this;
                 that.main = main;
                 that.mainName = main;
-                that.mainTranslateId = 'marketplace.categories.' + main.toLowerCase() + '.name';
+                that.mainTranslateId = categoryIdToTranslationId( main );
 
                 $translate( that.mainTranslateId )
                     .then( function ( translatedName ) {
@@ -44,7 +51,7 @@ define(
                 if( sub ) {
                   that.sub = sub;
                   that.subName = sub;
-                  that.subTranslateId = 'marketplace.categories.' + sub.toLowerCase() + '.name';
+                  that.subTranslateId = categoryIdToTranslationId( sub );
 
                   $translate( that.subTranslateId )
                       .then( function (translatedName ) {

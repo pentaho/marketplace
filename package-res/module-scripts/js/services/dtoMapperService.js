@@ -84,9 +84,17 @@ define(
                   return version.branch == pluginDTO.installedBranch &&
                       version.version == pluginDTO.installedVersion;
                 } );
+
+                // if there is an installable version with same branch and version
+                // use it as the installed version maintaining the build id from the DTO
                 if ( installedVersion ) {
-                  return installedVersion;
-                } else {
+                  var cloneInstalledVersion = installedVersion.clone();
+                  cloneInstalledVersion.buildId = pluginDTO.installedBuildId;
+
+                  return cloneInstalledVersion;
+                }
+                // otherwise create new version
+                else {
                   installedVersion = new Plugin.Version();
                   installedVersion.branch = pluginDTO.installedBranch;
                   installedVersion.version = pluginDTO.installedVersion;

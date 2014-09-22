@@ -94,7 +94,10 @@ html {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
-	font-size: 13px;
+	font-size: 13px;  
+  border: 1px solid #cbdde8;
+  height: 30px;
+  margin: 0;
 }
 
 .no-svg.bootstrap input.search,

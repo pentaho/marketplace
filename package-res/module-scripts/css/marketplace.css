@@ -113,6 +113,10 @@ body.bootstrap .btn-group > .popover {
 	font-size: 13px;
 }
 
+button {
+  filter: none;
+}
+
 /* ==========================================================================
    Install / Uninstall / Update  buttons
    ========================================================================== */
@@ -484,7 +488,8 @@ button.refreshButton {
   box-shadow:         inset 0px 0px 2px 0px rgba(243, 247, 250, 1);
   text-align: left;
   z-index: 1001;
-  padding: 4px 24px 4px 12px;
+  padding: 4px 24px 4px 12px;  
+  filter: none;
   font-family: 'Open Sans', sans-serif;
   font-weight: 400;
 }
@@ -497,17 +502,29 @@ button.refreshButton {
 	max-width: 135px;	
 }
 
+.filterBar .filterContainer .multiselect button.btn.btn-primary.dropdown-toggle:active .multiselectButtonText,
+.filterBar .filterContainer .multiselect button.btn.btn-primary.dropdown-toggle:focus .multiselectButtonText {
+    position:relative;
+    top: 0;
+    left: 0;
+}
+
 .filterBar .filterContainer .multiselect button.btn.btn-primary.dropdown-toggle .caret {
-	border: none;
-	width: 12px;
-	height: 8px;
-	background-image: url(../img/more-less-options.svg);
-	background-position: 0 0;
-	background-repeat: no-repeat;
-	margin-top: -4px;
-	top: 50%;
-	position: absolute;
-	right: 10px;
+  border: none;
+  width: 12px;
+  height: 8px;
+  background-image: url(../img/more-less-options.svg);
+  background-position: 0 0;
+  background-repeat: no-repeat;
+  margin-top: -4px;
+  top: 50%;
+  position: absolute;
+  right: 10px;
+}
+
+.no-svg .filterBar .filterContainer .multiselect button.btn.btn-primary.dropdown-toggle .caret,
+.IE.IE8 .filterBar .filterContainer .multiselect button.btn.btn-primary.dropdown-toggle .caret {
+  background-image: url(../img/more-less-options.png);
 }
 
 .filterBar .filterContainer .multiselect .open button.btn.btn-primary.dropdown-toggle .caret {
@@ -559,6 +576,7 @@ button.refreshButton {
 .bootstrap .filterBar .filterContainer .multiselect .dropdown-menu > li > a:focus,
 .bootstrap .filterBar .filterContainer .multiselect .dropdown-submenu:hover > a,
 .bootstrap .filterBar .filterContainer .multiselect .dropdown-submenu:focus > a {
+  filter: none;
   background: #c1d7e1;
 }
 
@@ -581,8 +599,12 @@ button.refreshButton {
   line-height: 18px;
 }
 
-.bootstrap .multiselect .open .popover {
-  opacity: 0;
+.bootstrap .multiselect .open .popover {  
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)"; /* IE 8 */  
+  filter: alpha(opacity=0); /* IE 5-7 */  
+  -moz-opacity: 0; /* Netscape */  
+  -khtml-opacity: 0; /* Safari 1.x */  
+  opacity: 0; /* Good browsers */
 }
 
 .bootstrap .multiselect .popover.bottom .arrow {
@@ -610,6 +632,37 @@ button.refreshButton {
   -webkit-box-shadow: 3px -3px 3px -1px rgba(0,0,0,0.2);
   -moz-box-shadow: 3px -3px 3px -1px rgba(0,0,0,0.2);
   box-shadow: 3px -3px 3px -1px rgba(0,0,0,0.2);
+}
+
+.IE.IE8.bootstrap .multiselect .popover.bottom .arrow {
+  border: 0;
+  width: 100%;
+  height: 5px;
+  overflow: visible;
+  top: -5px;
+  left: 0;
+  margin-left: 0;
+  position: absolute;
+}
+
+.IE.IE8.bootstrap .multiselect .popover.bottom .arrow:after {
+  content: "";
+  position: relative;
+  width: 10px;
+  height: 5px;
+  -webkit-transform: rotate(0deg);
+  -ms-transform: rotate(0deg);
+  transform: rotate(0deg);
+  top: 0;
+  left: 50%;
+  margin-left: -5px;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+  background: url(../img/tooltip-arrow-up.png);
+  background-repeat: no-repeat;
+  background-position: center;
+  border: none;
 }
 
 .bootstrap .multiselect .popover .popover-title {
@@ -796,6 +849,38 @@ button.refreshButton {
   -webkit-box-shadow: 3px 1px 3px -1px rgba(0,0,0,0.2);
   -moz-box-shadow: 3px 1px 3px -1px rgba(0,0,0,0.2);
   box-shadow: 3px 1px 3px -1px rgba(0,0,0,0.2);
+}
+
+
+.IE.IE8.bootstrap .devStageIcon .popover.top .arrow {
+  border: 0;
+  width: 100%;
+  height: 5px;
+  overflow: visible;
+  bottom: -5px;
+  left: 0;
+  margin-left: 0;
+  position: absolute;
+}
+
+.IE.IE8.bootstrap .devStageIcon .popover.top .arrow:after {
+  content: "";
+  position: relative;
+  width: 10px;
+  height: 5px;
+  -webkit-transform: rotate(0deg);
+  -ms-transform: rotate(0deg);
+  transform: rotate(0deg);
+  top: 0;
+  left: 50%;
+  margin-left: -5px;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+  background: url(../img/tooltip-arrow-down.png);
+  background-repeat: no-repeat;
+  background-position: center;
+  border: none;
 }
 
 .bootstrap .devStageIcon .popover h3.popover-title {
@@ -1399,6 +1484,7 @@ body.bootstrap .modal.pluginDetailDialog .pluginDetail .pluginDetailTop .pluginD
   text-align: left;
   z-index: 1001;
   padding: 4px 24px 4px 12px;
+  filter: none;
   font-family: 'Open Sans', sans-serif;
   font-weight: 400;
 }
@@ -1409,6 +1495,13 @@ body.bootstrap .modal.pluginDetailDialog .pluginDetail .pluginDetailTop .pluginD
 	text-overflow: ellipsis;
 	display: block;
 	max-width: 165px;	
+}
+
+body.bootstrap .modal.pluginDetailDialog .pluginDetail .pluginDetailTop .pluginDetailLeft .versionSelectDropdown button.btn.btn-primary.dropdown-toggle:active .multiselectButtonText,
+body.bootstrap .modal.pluginDetailDialog .pluginDetail .pluginDetailTop .pluginDetailLeft .versionSelectDropdown button.btn.btn-primary.dropdown-toggle:focus .multiselectButtonText {
+    position:relative;
+    top: 0;
+    left: 0;
 }
 
 body.bootstrap .modal.pluginDetailDialog .pluginDetail .pluginDetailTop .pluginDetailLeft .versionSelectDropdown button.btn.btn-primary.dropdown-toggle .caret {
@@ -1422,6 +1515,11 @@ body.bootstrap .modal.pluginDetailDialog .pluginDetail .pluginDetailTop .pluginD
 	top: 50%;
 	position: absolute;
 	right: 10px;
+}
+
+body.bootstrap.no-svg .modal.pluginDetailDialog .pluginDetail .pluginDetailTop .pluginDetailLeft .versionSelectDropdown button.btn.btn-primary.dropdown-toggle .caret,
+body.bootstrap.IE.IE8 .modal.pluginDetailDialog .pluginDetail .pluginDetailTop .pluginDetailLeft .versionSelectDropdown button.btn.btn-primary.dropdown-toggle .caret {
+  background-image: url(../img/more-less-options.png);
 }
 
 body.bootstrap .modal.pluginDetailDialog .pluginDetail .pluginDetailTop .pluginDetailLeft .versionSelectDropdown.open button.btn.btn-primary.dropdown-toggle .caret {
@@ -1458,6 +1556,7 @@ body.bootstrap .modal.pluginDetailDialog .pluginDetail .pluginDetailTop .pluginD
 body.bootstrap .modal.pluginDetailDialog .pluginDetail .pluginDetailTop .pluginDetailLeft .versionSelectDropdown .dropdown-menu > li > a:focus,
 body.bootstrap .modal.pluginDetailDialog .pluginDetail .pluginDetailTop .pluginDetailLeft .versionSelectDropdown .dropdown-submenu:hover > a,
 body.bootstrap .modal.pluginDetailDialog .pluginDetail .pluginDetailTop .pluginDetailLeft .versionSelectDropdown .dropdown-submenu:focus > a {
+  filter: none;
   background: #c1d7e1;
 }
 

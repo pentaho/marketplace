@@ -1094,8 +1094,8 @@ button.refreshButton {
   z-index: 3000;
 }
 
-.no-svg .bootstrap .modal .modal-container .closeButton,
-.IE.IE8 .bootstrap .modal .modal-container .closeButton {
+.no-svg.bootstrap .modal .modal-container .closeButton,
+.IE.IE8.bootstrap .modal .modal-container .closeButton {
   background-image: url(../img/close-details.png);
 }
 

@@ -304,6 +304,12 @@ button {
   clear: both;
 }
 
+.pentaho-tabWidget-selected .pentaho-tabWidgetLabel,
+.pentaho-tabWidget .pentaho-tabWidgetLabel {
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 300;
+}
+
 .bootstrap .statusMessage {
   text-align: center;
   font-size: 13px;
@@ -425,10 +431,6 @@ button.refreshButton {
   border: 1px solid #cbdde8;
   margin-top: -2px;
   padding: 21px 20px 20px;
-}
-
-.bootstrap.admin-perspective.IE.IE8 .pentaho-tab-deck-panel {
-  margin-top: -6px;
 }
 
 .filterBar {

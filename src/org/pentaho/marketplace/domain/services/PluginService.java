@@ -69,14 +69,22 @@ public class PluginService implements IPluginService {
   //endregion
 
   //region Constants
+
+  // region Message codes
+
+  // Error messages codes should begin with ERROR
+
   private static final String UNAUTHORIZED_ACCESS_MESSAGE =
     "Unauthorized Access. Your Pentaho roles do not allow you to make changes to plugins.";
   private static final String UNAUTHORIZED_ACCESS_ERROR_CODE =
     "ERROR_0002_UNAUTHORIZED_ACCESS";
-  private static final String NO_PLUGIN_ERROR_CODE = "NO_PLUGIN";
-  private static final String FAIL_ERROR_CODE = "FAIL";
+  private static final String NO_PLUGIN_ERROR_CODE = "ERROR_0001_NO_PLUGIN";
+  private static final String FAIL_ERROR_CODE = "ERROR_0003_FAIL";
   private static final String PLUGIN_INSTALLED_CODE = "PLUGIN_INSTALLED";
   private static final String PLUGIN_UNINSTALLED_CODE = "PLUGIN_UNINSTALLED";
+
+  // endregion
+
   private static final String CLOSE_METHOD_NAME = "close";
   private static final String PLUGIN_NAME = "marketplace";
 

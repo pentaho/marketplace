@@ -28,6 +28,7 @@ define( [ 'marketplace' ],
                 }
 
                 function changeModalHeight() {
+                  var $body = $('body');
                   var $modal = element.parents('.modal');
                   var $modalBody = $modal.find('.modal-body');
                   var $modalContainer = $modal.find('.modal-container');
@@ -37,6 +38,11 @@ define( [ 'marketplace' ],
                       getVerticalPad( $modalContainer );
 
                   $modal.height( modalHeight );
+
+                  if($body.hasClass('IE8')) {
+                    var finalModalHeight = $modal.height();
+                    $modalContainer.height(finalModalHeight);
+                  }
                 }
 
                 // timer is necessary in order to run changeModalHeight after render

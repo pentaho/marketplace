@@ -10,6 +10,7 @@
 
 	<publications>
 		<artifact name='${ivy.artifact.id}' type='jar' conf='default' />
+		<artifact name="${ivy.artifact.id}" type="zip" conf="default" />
 	</publications>
 
 	<!-- Marketplace-specific dependencies -->

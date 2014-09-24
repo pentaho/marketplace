@@ -50,6 +50,21 @@ define( [ 'marketplace' ],
                     var finalModalHeight = $modal.height();
                     $modalContainer.height(finalModalHeight);
                     $modalContainer.css('max-height', '100%');
+
+                    $(window).resize(function() {
+                      var viewportHeight = $(window).height();
+                      var availableViewportHeight = viewportHeight * 0.8;
+                    
+                      if(parseInt(modalHeight) > parseInt(availableViewportHeight)) {
+                        $modal.css( 'height', availableViewportHeight );
+                      } else {
+                        $modal.css( 'height', modalHeight );                        
+                      }
+
+                      var finalModalHeight = $modal.height();
+                      $modalContainer.height(finalModalHeight);
+                      $modalContainer.css('max-height', '100%');
+                    });
                   }
                 }
 

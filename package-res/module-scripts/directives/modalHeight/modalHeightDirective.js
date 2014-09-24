@@ -40,8 +40,16 @@ define( [ 'marketplace' ],
                   $modal.height( modalHeight );
 
                   if($body.hasClass('IE8')) {
+                    var viewportHeight = $(window).height();
+                    var availableViewportHeight = viewportHeight * 0.8;
+                    
+                    if(parseInt(modalHeight) > parseInt(availableViewportHeight)) {
+                      $modal.css( 'height', availableViewportHeight );
+                    }
+
                     var finalModalHeight = $modal.height();
                     $modalContainer.height(finalModalHeight);
+                    $modalContainer.css('max-height', '100%');
                   }
                 }
 

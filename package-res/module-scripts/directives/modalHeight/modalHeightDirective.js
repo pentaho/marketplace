@@ -13,34 +13,72 @@
 
 'use strict';
 
-define( [ 'marketplace' ],
-    function ( app ) {
+define( [
+      'marketplace',
+      'common-ui/angular'
+    ],
+    function ( app, angular ) {
       console.log("Required modalHeightDirective.js");
 
-      app.directive('modalHeight', ['$timeout',
-          function( timer ) {
+      app.directive('modalHeight', ['$timeout', '$window',
+          function( timer, window ) {
             return {
               restrict: 'A',
               link: function( scope, element, attrs ) {
+
                 function getVerticalPad ( $element ) {
                   return parseInt( $element.css('padding-top')) +
                       parseInt( $element.css( 'padding-bottom' ));
                 }
 
                 function changeModalHeight() {
-                  var $modal = element.parents('.modal');
-                  var $modalBody = $modal.find('.modal-body');
-                  var $modalContainer = $modal.find('.modal-container');
-
-                  var modalHeight = $modalBody.height() +
+                  var modalHeight = parseInt( $modalBody.height() ) +
                       getVerticalPad( $modalBody ) +
                       getVerticalPad( $modalContainer );
 
                   $modal.height( modalHeight );
                 }
 
-                // timer is necessary in order to run changeModalHeight after render
-                timer( changeModalHeight, 0 );
+                function isBrowserIE8 () {
+                  return element.parents('body').hasClass('IE8');
+                }
+
+                function changeModalHeightIE8 () {
+                  var modalHeight = parseInt( $modalBody.height() )+
+                      getVerticalPad( $modalBody ) +
+                      getVerticalPad( $modalContainer );
+
+                  var viewportHeight = $window.height();
+                  var availableViewportHeight = viewportHeight * 0.8;
+
+                  var finalModalHeight = $modal.height();
+                  if( modalHeight > availableViewportHeight ) {
+                    finalModalHeight = availableViewportHeight;
+                  } else {
+                    finalModalHeight = modalHeight;
+                  }
+
+                  $modal.css('height', finalModalHeight );
+                  $modalContainer.css('height', finalModalHeight );
+                  $modalContainer.css('max-height', '100%');
+                }
+
+
+                // Controller Logic
+                var $modal = element.parents('.modal');
+                var $modalBody = $modal.find('.modal-body');
+                var $modalContainer = $modal.find('.modal-container');
+                var $window = angular.element( window );
+
+                if ( isBrowserIE8() ) {
+                  $window.resize( changeModalHeightIE8 );
+                  // timer is necessary in order to run changeModalHeight after render
+                  timer( changeModalHeightIE8, 0 );
+                }
+                else {
+                  // timer is necessary in order to run changeModalHeight after render
+                  timer( changeModalHeight, 0 );
+                }
               }
             };
           }]

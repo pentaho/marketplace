@@ -1619,7 +1619,7 @@ body.bootstrap .modal.pluginDetailDialog .pluginScreenshots  .carousel-indicator
 	border: 1px solid #3d6480;
 	border-radius: 10px;
 	cursor: pointer;
-	background-color: #000 \9;
+	background-color: #fff \9;
 	background-color: rgba(0,0,0,0);
 	float: none;
 }

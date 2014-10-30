@@ -34,7 +34,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 
-public class XmlSerializer {
+public class MarketplaceXmlSerializer {
 
   // region constants
   private static final String[] EMPTY_STRING_ARRAY = new String[0];
@@ -49,7 +49,7 @@ public class XmlSerializer {
   private XPath xpath;
   // endregion
 
-  public XmlSerializer( IPluginFactory pluginFactory,
+  public MarketplaceXmlSerializer( IPluginFactory pluginFactory,
                         IPluginVersionFactory pluginVersionFactory,
                         IVersionDataFactory versionDataFactory,
                         ICategoryFactory categoryFactory ) {

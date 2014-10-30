@@ -1,42 +1,48 @@
 package org.pentaho.marketplace.domain.services;
 
 import org.apache.commons.io.filefilter.DirectoryFileFilter;
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+
 import org.pentaho.di.core.Result;
 import org.pentaho.di.core.exception.KettleException;
+import org.pentaho.di.core.exception.KettleXMLException;
 import org.pentaho.di.core.logging.LogLevel;
+import org.pentaho.di.core.parameters.UnknownParamException;
 import org.pentaho.di.job.Job;
 import org.pentaho.di.job.JobMeta;
+
 import org.pentaho.marketplace.domain.model.entities.interfaces.IDomainStatusMessage;
 import org.pentaho.marketplace.domain.model.entities.interfaces.IPlugin;
 import org.pentaho.marketplace.domain.model.entities.interfaces.IPluginVersion;
 import org.pentaho.marketplace.domain.model.entities.interfaces.IVersionData;
-import org.pentaho.marketplace.domain.model.entities.serialization.XmlSerializer;
+import org.pentaho.marketplace.domain.model.entities.serialization.MarketplaceXmlSerializer;
 import org.pentaho.marketplace.domain.model.factories.interfaces.ICategoryFactory;
 import org.pentaho.marketplace.domain.model.factories.interfaces.IDomainStatusMessageFactory;
 import org.pentaho.marketplace.domain.model.factories.interfaces.IPluginFactory;
 import org.pentaho.marketplace.domain.model.factories.interfaces.IPluginVersionFactory;
 import org.pentaho.marketplace.domain.model.factories.interfaces.IVersionDataFactory;
 import org.pentaho.marketplace.domain.services.helpers.Util;
+import org.pentaho.marketplace.domain.services.interfaces.IPluginProvider;
 import org.pentaho.marketplace.domain.services.interfaces.IPluginService;
+
+import org.pentaho.platform.api.engine.IApplicationContext;
 import org.pentaho.platform.api.engine.IPluginManager;
 import org.pentaho.platform.api.engine.IPluginResourceLoader;
+import org.pentaho.platform.api.engine.ISecurityHelper;
 import org.pentaho.platform.engine.core.system.PentahoSessionHolder;
 import org.pentaho.platform.engine.core.system.PentahoSystem;
 import org.pentaho.platform.engine.security.SecurityHelper;
 import org.pentaho.platform.util.VersionHelper;
 import org.pentaho.platform.util.VersionInfo;
-import org.pentaho.platform.util.web.HttpUtil;
+
 import org.pentaho.telemetry.BaPluginTelemetry;
 import org.pentaho.telemetry.TelemetryHelper;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.Authentication;
 import org.springframework.security.GrantedAuthority;
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -44,13 +50,16 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.StringReader;
 import java.lang.reflect.Method;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.Map;
 
 public class PluginService implements IPluginService {
@@ -69,9 +78,9 @@ public class PluginService implements IPluginService {
   // Error messages codes should begin with ERROR
 
   private static final String UNAUTHORIZED_ACCESS_MESSAGE =
-    "Unauthorized Access. Your Pentaho roles do not allow you to make changes to plugins.";
+      "Unauthorized Access. Your Pentaho roles do not allow you to make changes to plugins.";
   private static final String UNAUTHORIZED_ACCESS_ERROR_CODE =
-    "ERROR_0002_UNAUTHORIZED_ACCESS";
+      "ERROR_0002_UNAUTHORIZED_ACCESS";
   private static final String NO_PLUGIN_ERROR_CODE = "ERROR_0001_NO_PLUGIN";
   private static final String FAIL_ERROR_CODE = "ERROR_0003_FAIL";
   private static final String PLUGIN_INSTALLED_CODE = "PLUGIN_INSTALLED";
@@ -88,20 +97,50 @@ public class PluginService implements IPluginService {
 
   //region Attributes
   private Log logger = LogFactory.getLog( this.getClass() );
-  private IPluginFactory pluginFactory;
-  private IPluginVersionFactory pluginVersionFactory;
   private IVersionDataFactory versionDataFactory;
-  private ICategoryFactory categoryFactory;
   private IDomainStatusMessageFactory domainStatusMessageFactory;
 
-  public XmlSerializer getXmlSerializer() {
+  public MarketplaceXmlSerializer getXmlSerializer() {
     return this.xmlPluginsSerializer;
   }
-  protected PluginService setXmlSerializer( XmlSerializer serializer ) {
+  protected PluginService setXmlSerializer( MarketplaceXmlSerializer serializer ) {
     this.xmlPluginsSerializer = serializer;
     return this;
   }
-  private XmlSerializer xmlPluginsSerializer;
+  private MarketplaceXmlSerializer xmlPluginsSerializer;
+
+  public ISecurityHelper getSecurityHelper() {
+    return this.securityHelper;
+  }
+  protected PluginService setSecurityHelper( ISecurityHelper securityHelper ) {
+    this.securityHelper = securityHelper;
+    return this;
+  }
+  private ISecurityHelper securityHelper;
+
+  private DocumentBuilderFactory getDocumentBuilderFactory() {
+    return this.documentBuilderFactory;
+  }
+  protected PluginService setDocumentBuilderFactory( DocumentBuilderFactory factory ) {
+    this.documentBuilderFactory = factory;
+    return this;
+  }
+  private DocumentBuilderFactory documentBuilderFactory;
+
+
+  public IPluginProvider getMetadataPluginsProvider() {
+    return this.metadataPluginsProvider;
+  }
+  protected PluginService setMetadataPluginsProvider( IPluginProvider provider ) {
+    this.metadataPluginsProvider = provider;
+    return this;
+  }
+  IPluginProvider metadataPluginsProvider;
+
+  // TODO: see if there is a better way to encapsulate this
+  protected IApplicationContext getApplicationContext() {
+    return PentahoSystem.getApplicationContext();
+  }
   //endregion
 
   //region Constructors
@@ -113,14 +152,21 @@ public class PluginService implements IPluginService {
                         IDomainStatusMessageFactory domainStatusMessageFactory ) {
 
     //initialize dependencies
-    this.pluginFactory = pluginFactory;
-    this.pluginVersionFactory = pluginVersionFactory;
     this.versionDataFactory = versionDataFactory;
-    this.categoryFactory = categoryFactory;
     this.domainStatusMessageFactory = domainStatusMessageFactory;
 
     // TODO: use DI for this
-    this.xmlPluginsSerializer = new XmlSerializer( pluginFactory, pluginVersionFactory, versionDataFactory, categoryFactory  );
+    MarketplaceXmlSerializer serializer = new MarketplaceXmlSerializer( pluginFactory, pluginVersionFactory, versionDataFactory, categoryFactory  );
+    this.setXmlSerializer( serializer );
+
+    // TODO: use DI for this
+    RemoteMetadataPluginProvider metadataPluginProvider = new RemoteMetadataPluginProvider( serializer );
+    metadataPluginProvider.setMetadataUrl( this.getMetadataUrl() );
+    this.setMetadataPluginsProvider( metadataPluginProvider );
+
+    this.setSecurityHelper( SecurityHelper.getInstance() );
+
+    this.setDocumentBuilderFactory( DocumentBuilderFactory.newInstance() );
 
   }
   //endregion
@@ -148,8 +194,7 @@ public class PluginService implements IPluginService {
   }
 
   private boolean hasMarketplacePermission() {
-
-    Authentication auth = SecurityHelper.getInstance().getAuthentication( PentahoSessionHolder.getSession(), true );
+    Authentication auth = this.getSecurityHelper().getAuthentication( PentahoSessionHolder.getSession(), true );
     IPluginResourceLoader resLoader = PentahoSystem.get( IPluginResourceLoader.class, null );
     String roles = null;
     String users = null;
@@ -163,7 +208,7 @@ public class PluginService implements IPluginService {
 
     if ( roles == null ) {
       // If it's true, we'll just check if the user is admin
-      return SecurityHelper.getInstance().isPentahoAdministrator( PentahoSessionHolder.getSession() );
+      return this.getSecurityHelper().isPentahoAdministrator( PentahoSessionHolder.getSession() );
     }
 
     String[] roleArr = roles.split( "," ); //$NON-NLS-1$
@@ -186,11 +231,10 @@ public class PluginService implements IPluginService {
     return false;
   }
 
-
   private IPluginVersion getInstalledPluginVersion( String pluginFolderName ) {
-    String versionPath = PentahoSystem.getApplicationContext().getSolutionPath( "system/" + pluginFolderName
+    String versionPath = this.getApplicationContext().getSolutionPath( "system/" + pluginFolderName
       + "/version.xml" );
-    DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+    DocumentBuilderFactory dbf = this.getDocumentBuilderFactory();
     FileReader reader = null;
     try {
       File file = new File( versionPath );
@@ -218,18 +262,17 @@ public class PluginService implements IPluginService {
     return null;
   }
 
-  private Collection<String> getInstalledPluginsFromFileSystem() {
+  private Collection<String> getInstalledPluginIdsFromFileSystem() {
 
     Collection<String> plugins = new ArrayList<String>();
 
-    File systemDir = new File( PentahoSystem.getApplicationContext().getSolutionPath( "system/" ) );
+    File systemDir = new File( this.getApplicationContext().getSolutionPath( "system/" ) );
 
     String[] dirs = systemDir.list( DirectoryFileFilter.INSTANCE );
 
-    for ( int i = 0; i < dirs.length; i++ ) {
-      String dir = dirs[ i ];
+    for ( String dir : dirs ) {
       if ( ( new File( systemDir.getAbsolutePath() + File.separator + dir + File.separator
-        + "plugin.xml" ) ).isFile() ) {
+          + "plugin.xml" ) ).isFile() ) {
         plugins.add( dir );
       }
     }
@@ -260,55 +303,101 @@ public class PluginService implements IPluginService {
     return compatibleVersions;
   }
 
-
-  private String getMarketplaceSiteContent() {
+  private URL getMetadataUrl() {
     IPluginResourceLoader resLoader = PentahoSystem.get( IPluginResourceLoader.class, null );
-    String site = null;
+    String urlPath = null;
     try {
-      site = resLoader.getPluginSetting( getClass(), "settings/marketplace-site" ); //$NON-NLS-1$
+      urlPath = resLoader.getPluginSetting( getClass(), "settings/marketplace-site" ); //$NON-NLS-1$
     } catch ( Exception e ) {
       logger.debug( "Error getting data access plugin settings", e );
     }
 
-    if ( site == null || "".equals( site ) ) {
-      site = MARKETPLACE_ENTRIES_URL_FALLBACK;
+    if ( urlPath == null || "".equals( urlPath ) ) {
+      urlPath = MARKETPLACE_ENTRIES_URL_FALLBACK;
     }
 
-    return HttpUtil.getURLContent( site );
-  }
-
-  private Collection<IPlugin> loadPluginsFromSite() {
-    String content = getMarketplaceSiteContent();
-    //Sometimes this call fails. Second attemp is always succesfull
-    if ( StringUtils.isEmpty( content ) ) {
-      content = getMarketplaceSiteContent();
-    }
-    DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
     try {
-      DocumentBuilder db = dbf.newDocumentBuilder();
-      Document dom = db.parse( new InputSource( new StringReader( content ) ) );
-
-      Collection<IPlugin> availablePlugins = this.getXmlSerializer().getPlugins( dom );
-      Collection<IPlugin> pluginsWithCompatibleVersions = new ArrayList<IPlugin>( );
-
-      for ( IPlugin plugin : availablePlugins ) {
-        // filter out plugin versions that are not compatible with parent version
-        Collection<IPluginVersion> compatibleVersions = this.getCompatibleVersionsWithParent( plugin.getVersions() );
-        // only include plugins that have versions within this release
-        if ( compatibleVersions.size() > 0 ) {
-          plugin.setVersions( compatibleVersions );
-          pluginsWithCompatibleVersions.add( plugin );
-        }
-      }
-
-      return pluginsWithCompatibleVersions;
-    } catch ( Exception e ) {
-      e.printStackTrace();
+      return new URL( urlPath );
+    } catch ( MalformedURLException e ) {
+      this.logger.error( "Invalid metadata url: " + urlPath, e );
+      return null;
     }
-    return null;
   }
 
+  /**
+   * Filters out plugins without a compatible version to server.
+   * Removes non compatible versions for the plugins which pass the filter.
+   * @param plugins
+   * @return
+   */
+  private Collection<IPlugin> removeNonCompatibleVersions( Iterable<IPlugin> plugins ) {
+    Collection<IPlugin> pluginsWithCompatibleVersions = new ArrayList<IPlugin>();
 
+    for ( IPlugin plugin : plugins ) {
+      // filter out plugin versions that are not compatible with parent version
+      Collection<IPluginVersion> compatibleVersions = this.getCompatibleVersionsWithParent( plugin.getVersions() );
+      // only include plugins that have versions within this release
+      if ( compatibleVersions.size() > 0 ) {
+        // change available version to only compatible ones
+        plugin.setVersions( compatibleVersions );
+        pluginsWithCompatibleVersions.add( plugin );
+      }
+    }
+
+    return pluginsWithCompatibleVersions;
+  }
+
+  private boolean isPluginIdValid( String pluginId ) {
+    return pluginId != null
+      && pluginId.length() > 0
+      // this checks to make sure the plugin metadata isn't attempting to overwrite a folder on the system.
+      // TODO: Test a .. encoded in UTF8, etc to see if there is a way to thwart this check
+      && pluginId.indexOf( "." ) < 0;
+  }
+
+  /**
+   * Filters plugins by plugin id
+   * @param plugins
+   * @param pluginIds
+   * @return
+   */
+  private Collection<IPlugin> filterPlugins( Collection<IPlugin> plugins, Collection<String> pluginIds ) {
+    if ( pluginIds.size() < 1 ) {
+      return Collections.emptyList();
+    }
+
+    Collection<IPlugin> filteredPlugins = new ArrayList<IPlugin>();
+    Map<String, IPlugin> pluginMap = new Hashtable<String, IPlugin>();
+    for( IPlugin plugin : plugins ) {
+      pluginMap.put( plugin.getId(), plugin );
+    }
+
+    for ( String pluginId : pluginIds ) {
+      IPlugin plugin = pluginMap.get( pluginId );
+      if ( plugin != null ) {
+        filteredPlugins.add( plugin );
+      }
+    }
+
+    return filteredPlugins;
+  }
+
+  /**
+   * Sets plugins as installed as well as the installed version
+   * @param plugins
+   */
+  private void setPluginsAsInstalled( Collection<IPlugin> plugins ) {
+    for ( IPlugin plugin : plugins ) {
+      plugin.setInstalled( true );
+      // TODO: assumes plugin is installed in a folder named with the plugin id
+      IPluginVersion installedVersion = getInstalledPluginVersion( plugin.getId() );
+      if ( installedVersion != null ) {
+        plugin.setInstalledBranch( installedVersion.getBranch() );
+        plugin.setInstalledVersion( installedVersion.getVersion() );
+        plugin.setInstalledBuildId( installedVersion.getBuildId() );
+      }
+    }
+  }
 
   private IDomainStatusMessage installPluginAux( String pluginId, String versionBranch )
     throws MarketplaceSecurityException {
@@ -317,6 +406,12 @@ public class PluginService implements IPluginService {
       throw new MarketplaceSecurityException();
     }
 
+    if ( !isPluginIdValid( pluginId ) ) {
+      return this.domainStatusMessageFactory.create( PluginService.NO_PLUGIN_ERROR_CODE,
+        "Invalid Plugin Id." );
+    }
+
+    // TODO: should not be necessary to get all plugins. Just the one we want.
     Iterable<IPlugin> plugins = getPlugins();
     IPlugin toInstall = null;
     for ( IPlugin plugin : plugins ) {
@@ -326,13 +421,6 @@ public class PluginService implements IPluginService {
     }
     if ( toInstall == null ) {
       return this.domainStatusMessageFactory.create( PluginService.NO_PLUGIN_ERROR_CODE, "Plugin Not Found" );
-    }
-
-    // this checks to make sure the plugin metadata isn't attempting to overwrite a folder on the system.
-    // TODO: Test a .. encoded in UTF8, etc to see if there is a way to thwart this check
-    if ( toInstall.getId().indexOf( "." ) >= 0 ) {
-      return this.domainStatusMessageFactory.create( PluginService.NO_PLUGIN_ERROR_CODE,
-        "Plugin ID contains an illegal character" );
     }
 
     // before deletion, close class loader
@@ -355,57 +443,8 @@ public class PluginService implements IPluginService {
           + ", see log for details." );
     }
 
-    // get plugin path
-    String jobPath = PentahoSystem.getApplicationContext().getSolutionPath( "system/" + PluginService.PLUGIN_NAME
-      + "/processes/download_and_install_plugin.kjb" );
-
-
     try {
-      JobMeta installJobMeta = new JobMeta( jobPath, null );
-      Job job = new Job( null, installJobMeta );
-
-      File file = new File( PentahoSystem.getApplicationContext().getSolutionPath( "system/plugin-cache/downloads" ) );
-      file.mkdirs();
-      file = new File( PentahoSystem.getApplicationContext().getSolutionPath( "system/plugin-cache/backups" ) );
-      file.mkdirs();
-      file = new File( PentahoSystem.getApplicationContext().getSolutionPath( "system/plugin-cache/staging" ) );
-      file.mkdirs();
-
-      job.getJobMeta().setParameterValue( "downloadUrl", downloadUrl );
-      if ( toInstall.getVersionByBranch( versionBranch ).getSamplesDownloadUrl() != null ) {
-        job.getJobMeta().setParameterValue( "samplesDownloadUrl", samplesDownloadUrl );
-        job.getJobMeta().setParameterValue( "samplesDir", "/public/plugin-samples" );
-        job.getJobMeta().setParameterValue( "samplesTargetDestination", PentahoSystem.getApplicationContext()
-          .getSolutionPath( "plugin-samples/" + toInstall.getId() ) );
-        job.getJobMeta().setParameterValue( "samplesTargetBackup", PentahoSystem.getApplicationContext()
-          .getSolutionPath( "system/plugin-cache/backups/" + toInstall.getId() + "_samples_" + new Date()
-            .getTime() ) );
-        job.getJobMeta().setParameterValue( "samplesDownloadDestination", PentahoSystem.getApplicationContext()
-          .getSolutionPath( "system/plugin-cache/downloads/" + toInstall.getId() + "-samples-" + availableVersion
-            + "_" + new Date().getTime() + ".zip" ) );
-        job.getJobMeta().setParameterValue( "samplesStagingDestination", PentahoSystem.getApplicationContext()
-          .getSolutionPath( "system/plugin-cache/staging_samples" ) );
-        job.getJobMeta().setParameterValue( "samplesStagingDestinationAndDir", PentahoSystem.getApplicationContext()
-          .getSolutionPath( "system/plugin-cache/staging_samples/" + toInstall.getId() ) );
-      }
-      job.getJobMeta().setParameterValue( "downloadDestination", PentahoSystem.getApplicationContext()
-        .getSolutionPath( "system/plugin-cache/downloads/" + toInstall.getId() + "-" + availableVersion + "_"
-          + new Date().getTime() + ".zip" ) );
-      job.getJobMeta().setParameterValue( "stagingDestination", PentahoSystem.getApplicationContext()
-        .getSolutionPath( "system/plugin-cache/staging" ) );
-      job.getJobMeta().setParameterValue( "stagingDestinationAndDir", PentahoSystem.getApplicationContext()
-        .getSolutionPath( "system/plugin-cache/staging/" + toInstall.getId() ) );
-      job.getJobMeta().setParameterValue( "targetDestination", PentahoSystem.getApplicationContext()
-        .getSolutionPath( "system/" + toInstall.getId() ) );
-      job.getJobMeta().setParameterValue( "targetBackup", PentahoSystem.getApplicationContext()
-        .getSolutionPath( "system/plugin-cache/backups/" + toInstall.getId() + "_" + new Date().getTime() ) );
-
-      job.copyParametersFrom( job.getJobMeta() );
-      job.setLogLevel( LogLevel.DETAILED );
-      job.activateParameters();
-      job.start();
-      job.waitUntilFinished();
-      Result result = job.getResult(); // Execute the selected job.
+      Result result = this.executeInstallPluginJob( toInstall.getId(), downloadUrl, samplesDownloadUrl, availableVersion );
 
       if ( result == null || result.getNrErrors() > 0 ) {
         return this.domainStatusMessageFactory
@@ -431,6 +470,64 @@ public class PluginService implements IPluginService {
       + " was successfully installed.  Please restart your BI Server. \n" + toInstall.getInstallationNotes() );
   }
 
+  private Result executeInstallPluginJob( String pluginId, String downloadUrl, String samplesDownloadUrl, String availableVersion )
+    throws KettleXMLException, UnknownParamException {
+
+    // get marketplace path
+    String jobPath = this.getApplicationContext().getSolutionPath( "system/" + PluginService.PLUGIN_NAME
+      + "/processes/download_and_install_plugin.kjb" );
+
+    JobMeta installJobMeta = new JobMeta( jobPath, null );
+    Job job = new Job( null, installJobMeta );
+
+    File file = new File( this.getApplicationContext().getSolutionPath( "system/plugin-cache/downloads" ) );
+    file.mkdirs();
+    file = new File( this.getApplicationContext().getSolutionPath( "system/plugin-cache/backups" ) );
+    file.mkdirs();
+    file = new File( this.getApplicationContext().getSolutionPath( "system/plugin-cache/staging" ) );
+    file.mkdirs();
+
+    job.getJobMeta().setParameterValue( "downloadUrl", downloadUrl );
+
+    if ( samplesDownloadUrl != null ) {
+      job.getJobMeta().setParameterValue( "samplesDownloadUrl", samplesDownloadUrl );
+      job.getJobMeta().setParameterValue( "samplesDir", "/public/plugin-samples" );
+      job.getJobMeta().setParameterValue( "samplesTargetDestination", this.getApplicationContext()
+        .getSolutionPath( "plugin-samples/" + pluginId ) );
+      job.getJobMeta().setParameterValue( "samplesTargetBackup", this.getApplicationContext()
+        .getSolutionPath( "system/plugin-cache/backups/" + pluginId + "_samples_" + new Date()
+          .getTime() ) );
+      job.getJobMeta().setParameterValue( "samplesDownloadDestination", this.getApplicationContext()
+        .getSolutionPath( "system/plugin-cache/downloads/" + pluginId + "-samples-" + availableVersion
+          + "_" + new Date().getTime() + ".zip" ) );
+      job.getJobMeta().setParameterValue( "samplesStagingDestination", this.getApplicationContext()
+        .getSolutionPath( "system/plugin-cache/staging_samples" ) );
+      job.getJobMeta().setParameterValue( "samplesStagingDestinationAndDir", this.getApplicationContext()
+        .getSolutionPath( "system/plugin-cache/staging_samples/" + pluginId ) );
+    }
+
+    job.getJobMeta().setParameterValue( "downloadDestination", this.getApplicationContext()
+      .getSolutionPath( "system/plugin-cache/downloads/" + pluginId + "-" + availableVersion + "_"
+        + new Date().getTime() + ".zip" ) );
+    job.getJobMeta().setParameterValue( "stagingDestination", this.getApplicationContext()
+      .getSolutionPath( "system/plugin-cache/staging" ) );
+    job.getJobMeta().setParameterValue( "stagingDestinationAndDir", this.getApplicationContext()
+      .getSolutionPath( "system/plugin-cache/staging/" + pluginId ) );
+    job.getJobMeta().setParameterValue( "targetDestination", this.getApplicationContext()
+      .getSolutionPath( "system/" + pluginId ) );
+    job.getJobMeta().setParameterValue( "targetBackup", this.getApplicationContext()
+      .getSolutionPath( "system/plugin-cache/backups/" + pluginId + "_" + new Date().getTime() ) );
+
+    job.copyParametersFrom( job.getJobMeta() );
+    job.setLogLevel( LogLevel.DETAILED );
+    job.activateParameters();
+    job.start();
+    job.waitUntilFinished();
+    Result result = job.getResult(); // Execute the selected job.
+
+    return result;
+  }
+
   private IDomainStatusMessage uninstallPluginAux( String pluginId ) throws MarketplaceSecurityException {
 
     if ( !hasMarketplacePermission() ) {
@@ -452,30 +549,9 @@ public class PluginService implements IPluginService {
     // before deletion, close class loader
     this.closeClassLoader( toUninstall.getId() );
 
-    String versionBranch = toUninstall.getInstalledBranch();
-    // get plugin path
-    String jobPath = PentahoSystem.getApplicationContext().getSolutionPath( "system/" + PLUGIN_NAME
-      + "/processes/uninstall_plugin.kjb" );
 
     try {
-      JobMeta uninstallJobMeta = new JobMeta( jobPath, null );
-      Job job = new Job( null, uninstallJobMeta );
-
-      File file = new File( PentahoSystem.getApplicationContext().getSolutionPath( "system/plugin-cache/backups" ) );
-      file.mkdirs();
-
-      String uninstallBackup = PentahoSystem.getApplicationContext().getSolutionPath( "system/plugin-cache/backups/"
-        + toUninstall.getId() + "_" + new Date().getTime() );
-      job.getJobMeta().setParameterValue( "uninstallLocation", PentahoSystem.getApplicationContext()
-        .getSolutionPath( "system/" + toUninstall.getId() ) );
-      job.getJobMeta().setParameterValue( "uninstallBackup", uninstallBackup );
-      job.getJobMeta().setParameterValue( "samplesDir", "/public/plugin-samples/" + toUninstall.getId() );
-
-      job.copyParametersFrom( job.getJobMeta() );
-      job.activateParameters();
-      job.start();
-      job.waitUntilFinished();
-      Result result = job.getResult(); // Execute the selected job.
+      Result result = this.executeUninstallPluginJob( toUninstall.getId() );
 
       if ( result == null || result.getNrErrors() > 0 ) {
         return this.domainStatusMessageFactory
@@ -496,46 +572,54 @@ public class PluginService implements IPluginService {
     return this.domainStatusMessageFactory.create( PluginService.PLUGIN_UNINSTALLED_CODE, toUninstall.getName()
       + " was successfully uninstalled.  Please restart your BI Server." );
   }
+
+  private Result executeUninstallPluginJob( String pluginId )
+    throws KettleXMLException, UnknownParamException {
+    // get plugin path
+    String jobPath = this.getApplicationContext().getSolutionPath( "system/" + PLUGIN_NAME
+        + "/processes/uninstall_plugin.kjb" );
+
+    JobMeta uninstallJobMeta = new JobMeta( jobPath, null );
+    Job job = new Job( null, uninstallJobMeta );
+
+    File file = new File( this.getApplicationContext().getSolutionPath( "system/plugin-cache/backups" ) );
+    file.mkdirs();
+
+    String uninstallBackup = this.getApplicationContext().getSolutionPath( "system/plugin-cache/backups/"
+      + pluginId + "_" + new Date().getTime() );
+    job.getJobMeta().setParameterValue( "uninstallLocation", this.getApplicationContext()
+        .getSolutionPath( "system/" + pluginId ) );
+    job.getJobMeta().setParameterValue( "uninstallBackup", uninstallBackup );
+    job.getJobMeta().setParameterValue( "samplesDir", "/public/plugin-samples/" + pluginId );
+
+    job.copyParametersFrom( job.getJobMeta() );
+    job.activateParameters();
+    job.start();
+    job.waitUntilFinished();
+    Result result = job.getResult(); // Execute the selected job.
+
+    return result;
+  }
   //endregion
 
   //region IPluginService implementation
   @Override
   public Collection<IPlugin> getPlugins() {
-    Collection<IPlugin> plugins = loadPluginsFromSite();
+    Collection<IPlugin> marketplacePlugins = this.getMetadataPluginsProvider().getPlugins();
 
+    Collection<IPlugin> compatiblePlugins = this.removeNonCompatibleVersions( marketplacePlugins );
 
-    // There are 2 methods of doing this.
+    // There are 2 methods of getting installed plugins.
     // 1 ) Plugin manager
     // 2 ) Scan file system
     // We'll use 2 ) because 1 ) gets totally screwed up after we do an install/uninstall operation
 
     // List<String> installedPlugins = getInstalledPluginsFromPluginManager(  );
-    Collection<String> installedPlugins = getInstalledPluginsFromFileSystem();
+    Collection<String> installedPluginIds = getInstalledPluginIdsFromFileSystem();
+    Collection<IPlugin> installedPlugins = this.filterPlugins( compatiblePlugins, installedPluginIds );
+    this.setPluginsAsInstalled( installedPlugins );
 
-
-    if ( installedPlugins.size() > 0 ) {
-      Map<String, IPlugin> marketplacePlugins = new HashMap<String, IPlugin>();
-      if ( plugins != null ) {
-        for ( IPlugin plugin : plugins ) {
-          marketplacePlugins.put( plugin.getId(), plugin );
-        }
-      }
-
-      for ( String installedPlugin : installedPlugins ) {
-        IPlugin plugin = marketplacePlugins.get( installedPlugin );
-        if ( plugin != null ) {
-          plugin.setInstalled( true );
-          // TODO: assumes plugin is installed in a folder named with the plugin id
-          IPluginVersion installedVersion = getInstalledPluginVersion( plugin.getId() );
-          if ( installedVersion != null ) {
-            plugin.setInstalledBranch( installedVersion.getBranch() );
-            plugin.setInstalledVersion( installedVersion.getVersion() );
-            plugin.setInstalledBuildId( installedVersion.getBuildId() );
-          }
-        }
-      }
-    }
-    return plugins;
+    return compatiblePlugins;
   }
 
   @Override

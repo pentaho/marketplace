@@ -17,15 +17,27 @@
   <bean id="@plugin.id@.domainStatusMessage-factory" class="org.pentaho.marketplace.domain.model.factories.DomainStatusMessageFactory" />
   <bean id="@plugin.id@.versionData-factory" class="org.pentaho.marketplace.domain.model.factories.VersionDataFactory" />
   <bean id="@plugin.id@.category-factory" class="org.pentaho.marketplace.domain.model.factories.CategoryFactory" />
+
+  <bean id="@plugin.id@.pluginSerializer" class="org.pentaho.marketplace.domain.model.entities.serialization.MarketplaceXmlSerializer">
+    <constructor-arg ref="@plugin.id@.plugin-factory" />
+    <constructor-arg ref="@plugin.id@.pluginVersion-factory"/>
+    <constructor-arg ref="@plugin.id@.versionData-factory" />
+    <constructor-arg ref="@plugin.id@.category-factory" />
+  </bean>
+
+
   <!-- END: Domain Entity Factories -->
 
   <!-- START: Domain Services -->
   <bean id="@plugin.id@.plugin-service" class="org.pentaho.marketplace.domain.services.PluginService">
-    <constructor-arg ref="@plugin.id@.plugin-factory"/>
-    <constructor-arg ref="@plugin.id@.pluginVersion-factory"/>
+    <constructor-arg ref="@plugin.id@.remotePluginProvider"/>
+    <constructor-arg ref="@plugin.id@.pluginSerializer"/>
     <constructor-arg ref="@plugin.id@.versionData-factory"/>
-    <constructor-arg ref="@plugin.id@.category-factory"/>
     <constructor-arg ref="@plugin.id@.domainStatusMessage-factory"/>
+  </bean>
+
+  <bean id="@plugin.id@.remotePluginProvider" class="org.pentaho.marketplace.domain.services.RemoteMetadataPluginProvider">
+    <constructor-arg ref="@plugin.id@.pluginSerializer" />
   </bean>
   <!-- END: Domain Services -->
 

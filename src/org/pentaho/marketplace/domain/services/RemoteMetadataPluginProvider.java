@@ -18,19 +18,13 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.pentaho.marketplace.domain.model.entities.interfaces.IPlugin;
 import org.pentaho.marketplace.domain.model.entities.serialization.MarketplaceXmlSerializer;
-import org.pentaho.marketplace.domain.services.interfaces.IPluginProvider;
+import org.pentaho.marketplace.domain.services.interfaces.IRemotePluginProvider;
 import org.pentaho.platform.util.web.HttpUtil;
-import org.w3c.dom.Document;
-import org.xml.sax.InputSource;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import java.io.StringReader;
 import java.net.URL;
 import java.util.Collection;
-import java.util.Collections;
 
-public class RemoteMetadataPluginProvider implements IPluginProvider {
+public class RemoteMetadataPluginProvider implements IRemotePluginProvider {
 
   // region Properties
   private Log logger = LogFactory.getLog( this.getClass() );
@@ -38,10 +32,10 @@ public class RemoteMetadataPluginProvider implements IPluginProvider {
     return this.logger;
   }
 
-  public URL getMetadataUrl() {
+  public URL getUrl() {
     return this.metadataUrl;
   }
-  public RemoteMetadataPluginProvider setMetadataUrl( URL metadataUrl ) {
+  public RemoteMetadataPluginProvider setUrl( URL metadataUrl ) {
     this.metadataUrl = metadataUrl;
     return this;
   }
@@ -56,49 +50,30 @@ public class RemoteMetadataPluginProvider implements IPluginProvider {
   }
   private MarketplaceXmlSerializer xmlPluginsSerializer;
 
-  private DocumentBuilderFactory getDocumentBuilderFactory() {
-    return this.documentBuilderFactory;
+  protected String getUrlContent( String url ) {
+    return HttpUtil.getURLContent( url );
   }
-  protected RemoteMetadataPluginProvider setDocumentBuilderFactory( DocumentBuilderFactory factory ) {
-    this.documentBuilderFactory = factory;
-    return this;
-  }
-  private DocumentBuilderFactory documentBuilderFactory;
   // endregion
 
 
   // region Constructors
   public RemoteMetadataPluginProvider( MarketplaceXmlSerializer xmlSerializer ) {
     this.setXmlSerializer( xmlSerializer );
-
-    this.setDocumentBuilderFactory( DocumentBuilderFactory.newInstance() );
   }
   // endregion
 
   // region Methods
   @Override
   public Collection<IPlugin> getPlugins() {
-    String url = this.getMetadataUrl().toString();
-    String content = HttpUtil.getURLContent( url );
+    String url = this.getUrl().toString();
 
-    //Sometimes this call fails. Second attemp is always succesfull
+    String content = this.getUrlContent( url );
+    //Sometimes this call fails. Second attempt is always successful
     if ( StringUtils.isEmpty( content ) ) {
-      content = HttpUtil.getURLContent( url );
-    }
-    DocumentBuilderFactory dbf = this.getDocumentBuilderFactory();
-    Collection<IPlugin> plugins;
-    try {
-      DocumentBuilder db = dbf.newDocumentBuilder();
-      Document dom = db.parse( new InputSource( new StringReader( content ) ) );
-
-      plugins = this.getXmlSerializer().getPlugins( dom );
-
-    } catch ( Exception e ) {
-      this.getLogger().error( "Error getting metadata from " + url, e );
-      plugins = Collections.emptyList();
+      content = this.getUrlContent( url );
     }
 
-    return plugins;
+    return this.getXmlSerializer().getPlugins( content );
   }
   // endregion
 }

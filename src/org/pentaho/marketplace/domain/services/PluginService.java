@@ -17,16 +17,15 @@ import org.pentaho.marketplace.domain.model.entities.interfaces.IPlugin;
 import org.pentaho.marketplace.domain.model.entities.interfaces.IPluginVersion;
 import org.pentaho.marketplace.domain.model.entities.interfaces.IVersionData;
 import org.pentaho.marketplace.domain.model.entities.serialization.MarketplaceXmlSerializer;
-import org.pentaho.marketplace.domain.model.factories.interfaces.ICategoryFactory;
 import org.pentaho.marketplace.domain.model.factories.interfaces.IDomainStatusMessageFactory;
-import org.pentaho.marketplace.domain.model.factories.interfaces.IPluginFactory;
-import org.pentaho.marketplace.domain.model.factories.interfaces.IPluginVersionFactory;
 import org.pentaho.marketplace.domain.model.factories.interfaces.IVersionDataFactory;
 import org.pentaho.marketplace.domain.services.helpers.Util;
 import org.pentaho.marketplace.domain.services.interfaces.IPluginProvider;
 import org.pentaho.marketplace.domain.services.interfaces.IPluginService;
 
+import org.pentaho.marketplace.domain.services.interfaces.IRemotePluginProvider;
 import org.pentaho.platform.api.engine.IApplicationContext;
+import org.pentaho.platform.api.engine.IPentahoSession;
 import org.pentaho.platform.api.engine.IPluginManager;
 import org.pentaho.platform.api.engine.IPluginResourceLoader;
 import org.pentaho.platform.api.engine.ISecurityHelper;
@@ -42,11 +41,8 @@ import org.pentaho.telemetry.TelemetryHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.Authentication;
 import org.springframework.security.GrantedAuthority;
-import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
@@ -118,16 +114,6 @@ public class PluginService implements IPluginService {
   }
   private ISecurityHelper securityHelper;
 
-  private DocumentBuilderFactory getDocumentBuilderFactory() {
-    return this.documentBuilderFactory;
-  }
-  protected PluginService setDocumentBuilderFactory( DocumentBuilderFactory factory ) {
-    this.documentBuilderFactory = factory;
-    return this;
-  }
-  private DocumentBuilderFactory documentBuilderFactory;
-
-
   public IPluginProvider getMetadataPluginsProvider() {
     return this.metadataPluginsProvider;
   }
@@ -135,45 +121,58 @@ public class PluginService implements IPluginService {
     this.metadataPluginsProvider = provider;
     return this;
   }
-  IPluginProvider metadataPluginsProvider;
+  private IPluginProvider metadataPluginsProvider;
+
+  public IPluginResourceLoader getPluginResourceLoader() { return this.pluginResourceLoader; }
+  protected PluginService setPluginResourceLoader( IPluginResourceLoader pluginResourceLoader ) {
+    this.pluginResourceLoader = pluginResourceLoader;
+    return this;
+  }
+  private IPluginResourceLoader pluginResourceLoader;
+
+
+  // TODO: see if there is a better way to encapsulate this
+  public IPluginManager getPluginManager ( IPentahoSession session ) {
+    return PentahoSystem.get( IPluginManager.class, session );
+  }
 
   // TODO: see if there is a better way to encapsulate this
   protected IApplicationContext getApplicationContext() {
     return PentahoSystem.getApplicationContext();
   }
+
+  // TODO: see if there is a better way to encapsulate this.
+  // Probably just pass in the session in the methods that require it.
+  protected IPentahoSession getCurrentSession() {
+    return PentahoSessionHolder.getSession();
+  }
   //endregion
 
   //region Constructors
   @Autowired
-  public PluginService( IPluginFactory pluginFactory,
-                        IPluginVersionFactory pluginVersionFactory,
+  public PluginService( IRemotePluginProvider metadataPluginsProvider,
+                        MarketplaceXmlSerializer pluginsSerializer,
                         IVersionDataFactory versionDataFactory,
-                        ICategoryFactory categoryFactory,
                         IDomainStatusMessageFactory domainStatusMessageFactory ) {
 
     //initialize dependencies
     this.versionDataFactory = versionDataFactory;
     this.domainStatusMessageFactory = domainStatusMessageFactory;
 
-    // TODO: use DI for this
-    MarketplaceXmlSerializer serializer = new MarketplaceXmlSerializer( pluginFactory, pluginVersionFactory, versionDataFactory, categoryFactory  );
+    MarketplaceXmlSerializer serializer = pluginsSerializer;
     this.setXmlSerializer( serializer );
 
-    // TODO: use DI for this
-    RemoteMetadataPluginProvider metadataPluginProvider = new RemoteMetadataPluginProvider( serializer );
-    metadataPluginProvider.setMetadataUrl( this.getMetadataUrl() );
-    this.setMetadataPluginsProvider( metadataPluginProvider );
+    metadataPluginsProvider.setUrl( this.getMetadataUrl() );
+    this.setMetadataPluginsProvider( metadataPluginsProvider );
 
     this.setSecurityHelper( SecurityHelper.getInstance() );
-
-    this.setDocumentBuilderFactory( DocumentBuilderFactory.newInstance() );
-
+    this.setPluginResourceLoader( PentahoSystem.get( IPluginResourceLoader.class ) );
   }
   //endregion
 
   //region Methods
   private void closeClassLoader( String pluginId ) {
-    IPluginManager pluginManager = PentahoSystem.get( IPluginManager.class, PentahoSessionHolder.getSession() );
+    IPluginManager pluginManager = this.getPluginManager( this.getCurrentSession() );
     ClassLoader cl = pluginManager.getClassLoader( pluginId );
     if ( cl != null && cl instanceof URLClassLoader ) {
       try {
@@ -194,8 +193,8 @@ public class PluginService implements IPluginService {
   }
 
   private boolean hasMarketplacePermission() {
-    Authentication auth = this.getSecurityHelper().getAuthentication( PentahoSessionHolder.getSession(), true );
-    IPluginResourceLoader resLoader = PentahoSystem.get( IPluginResourceLoader.class, null );
+    Authentication auth = this.getSecurityHelper().getAuthentication( this.getCurrentSession(), true );
+    IPluginResourceLoader resLoader = this.getPluginResourceLoader();
     String roles = null;
     String users = null;
 
@@ -208,7 +207,7 @@ public class PluginService implements IPluginService {
 
     if ( roles == null ) {
       // If it's true, we'll just check if the user is admin
-      return this.getSecurityHelper().isPentahoAdministrator( PentahoSessionHolder.getSession() );
+      return this.getSecurityHelper().isPentahoAdministrator( this.getCurrentSession() );
     }
 
     String[] roleArr = roles.split( "," ); //$NON-NLS-1$
@@ -234,18 +233,14 @@ public class PluginService implements IPluginService {
   private IPluginVersion getInstalledPluginVersion( String pluginFolderName ) {
     String versionPath = this.getApplicationContext().getSolutionPath( "system/" + pluginFolderName
       + "/version.xml" );
-    DocumentBuilderFactory dbf = this.getDocumentBuilderFactory();
     FileReader reader = null;
     try {
       File file = new File( versionPath );
       if ( !file.exists() ) {
         return null;
       }
-      DocumentBuilder db = dbf.newDocumentBuilder();
       reader = new FileReader( versionPath );
-      Document dom = db.parse( new InputSource( reader ) );
-
-      IPluginVersion version = this.getXmlSerializer().getInstalledVersion( dom );
+      IPluginVersion version = this.getXmlSerializer().getInstalledVersion( new InputSource( reader ) );
       return version;
 
     } catch ( Exception e ) {
@@ -304,7 +299,7 @@ public class PluginService implements IPluginService {
   }
 
   private URL getMetadataUrl() {
-    IPluginResourceLoader resLoader = PentahoSystem.get( IPluginResourceLoader.class, null );
+    IPluginResourceLoader resLoader = this.getPluginResourceLoader();
     String urlPath = null;
     try {
       urlPath = resLoader.getPluginSetting( getClass(), "settings/marketplace-site" ); //$NON-NLS-1$
@@ -648,6 +643,5 @@ public class PluginService implements IPluginService {
     }
   }
   //endregion
-
 
 }

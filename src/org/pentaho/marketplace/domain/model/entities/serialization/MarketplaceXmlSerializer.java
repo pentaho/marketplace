@@ -13,6 +13,8 @@
 
 package org.pentaho.marketplace.domain.model.entities.serialization;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.pentaho.marketplace.domain.model.entities.DevelopmentStage;
 import org.pentaho.marketplace.domain.model.entities.interfaces.ICategory;
 import org.pentaho.marketplace.domain.model.entities.interfaces.IDevelopmentStage;
@@ -25,11 +27,15 @@ import org.pentaho.marketplace.domain.model.factories.interfaces.IVersionDataFac
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -46,6 +52,20 @@ public class MarketplaceXmlSerializer {
   private IVersionDataFactory versionDataFactory;
   private ICategoryFactory categoryFactory;
 
+  private Log logger = LogFactory.getLog( this.getClass() );
+  private Log getLogger() {
+    return this.logger;
+  }
+
+  private DocumentBuilderFactory getDocumentBuilderFactory() {
+    return this.documentBuilderFactory;
+  }
+  protected MarketplaceXmlSerializer setDocumentBuilderFactory( DocumentBuilderFactory factory ) {
+    this.documentBuilderFactory = factory;
+    return this;
+  }
+  private DocumentBuilderFactory documentBuilderFactory;
+
   private XPath xpath;
   // endregion
 
@@ -60,6 +80,25 @@ public class MarketplaceXmlSerializer {
     this.categoryFactory = categoryFactory;
 
     this.xpath = XPathFactory.newInstance().newXPath();
+
+    this.setDocumentBuilderFactory( DocumentBuilderFactory.newInstance() );
+  }
+
+
+  public Collection<IPlugin> getPlugins( String xml ) {
+    Collection<IPlugin> plugins = Collections.emptyList();
+    try {
+      DocumentBuilder db = this.getDocumentBuilderFactory().newDocumentBuilder();
+      Document document = db.parse( new InputSource( new StringReader( xml ) ) );
+
+      plugins = this.getPlugins( document );
+
+    } catch ( Exception e ) {
+      this.getLogger().error( "Error getting plugins from marketplace xml: " + xml , e );
+      // TODO: throw app exception in order to return error in endpoint
+    }
+
+    return plugins;
   }
 
   public Collection<IPlugin> getPlugins( Document marketplaceMetadataDocument ) throws
@@ -80,7 +119,7 @@ public class MarketplaceXmlSerializer {
     return pluginList;
   }
 
-  private IPlugin getPlugin ( Element pluginElement ) throws XPathExpressionException {
+  private IPlugin getPlugin( Element pluginElement ) throws XPathExpressionException {
     IPlugin plugin = this.pluginFactory.create();
 
     plugin.setId( getElementChildValue( pluginElement, "id" ) );
@@ -114,7 +153,7 @@ public class MarketplaceXmlSerializer {
     return plugin;
   }
 
-  private IPluginVersion getPluginVersion ( Element versionElement ) throws XPathExpressionException {
+  private IPluginVersion getPluginVersion( Element versionElement ) throws XPathExpressionException {
     IPluginVersion version = this.pluginVersionFactory.create();
 
     version.setBranch( getElementChildValue( versionElement, "branch" ) );
@@ -220,6 +259,26 @@ public class MarketplaceXmlSerializer {
 
     // TODO: switch to factory to allow DI?
     return new DevelopmentStage( lane, phase );
+  }
+
+  public IPluginVersion getInstalledVersion( String xml ) {
+    return this.getInstalledVersion( new InputSource( new StringReader( xml ) ) );
+  }
+
+  public IPluginVersion getInstalledVersion( InputSource inputDocument ) {
+    IPluginVersion version = null;
+    try {
+      DocumentBuilder db = this.getDocumentBuilderFactory().newDocumentBuilder();
+      Document document = db.parse( inputDocument );
+
+      version = this.getInstalledVersion( document );
+
+    } catch ( Exception e ) {
+      this.getLogger().error( "Error getting plugin version from version xml.", e );
+      // TODO: throw app exception in order to return error in endpoint
+    }
+
+    return version;
   }
 
   public IPluginVersion getInstalledVersion( Document installedVersionDocument ) {

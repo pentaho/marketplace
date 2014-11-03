@@ -25,7 +25,8 @@ define(
           [ '$http', 'dtoMapperService', '$q',
             function( $http, dtoMapper, $q ) {
 
-              var baseUrl = '/pentaho/plugin/marketplace/api';
+              // TODO: remove global variable CONTEXT_PATH
+              var baseUrl = CONTEXT_PATH + 'plugin/marketplace/api';
               var pluginsUrl =  baseUrl + '/plugins';
               var installPluginBaseUrl = baseUrl + '/plugin';
               var pluginsPromise = null;

@@ -41,41 +41,104 @@ import org.pentaho.marketplace.domain.model.factories.interfaces.IVersionDataFac
 
 
 public class MarketplaceXmlSerializerTest {
-  /*
-  public Collection<IPlugin> getPlugins( String xml )
-
-  public Collection<IPlugin> getPlugins( Document marketplaceMetadataDocument )
-
-  private IPlugin getPlugin( Element pluginElement )
-
-  private IPluginVersion getPluginVersion( Element versionElement )
-
-  private Collection<IPluginVersion> getPluginVersions( NodeList versionsElement )
-
-  private String[] getScreenshots( NodeList screenshotsElement )
-
-  private String getElementChildValue( Element element, String child )
-
-  private ICategory getCategory( Element pluginElement )
-
-  private ICategory getCategoryFromCategoryElement( Element categoryElement )
-
-
-
-  private IDevelopmentStage getDevelopmentStage( Element versionElement )
-
-  public IPluginVersion getInstalledVersion( String xml )
-
-  public IPluginVersion getInstalledVersion( InputSource inputDocument )
-
-  public IPluginVersion getInstalledVersion( Document installedVersionDocument )
-  */
-
   private IPluginFactory pluginFactory;
   private IPluginVersionFactory pluginVersionFactory;
   private IVersionDataFactory versionDataFactory;
   private ICategoryFactory categoryFactory;
 
+  // region metadata.xml test resource information
+  /**
+   * metadata.xml market entry ids of type "platform"
+   */
+  private Collection<String> metadataXmlPlatformPluginIds = new ArrayList<String>( Arrays.asList( "marketplace", "pentaho-cdf", "cda", "languagePack_ja" ) );
+
+  /**
+   * Programatically creates the marketplace plugin that is in the metadata.xml test resource
+   */
+  private IPlugin getMetadataXmlMarketplacePlugin( ) {
+    IPlugin metadataXmlMarketplacePlugin = this.pluginFactory.create();
+    metadataXmlMarketplacePlugin.setId( "marketplace" );
+    metadataXmlMarketplacePlugin.setName( "Pentaho Marketplace" );
+    metadataXmlMarketplacePlugin.setImg( "http://pentaho.com/sites/all/themes/pentaho/_media/logo-pentaho.svg" );
+    metadataXmlMarketplacePlugin.setSmallImg( "http://www.webdetails.pt/ficheiros/mk_plugin.png" );
+    metadataXmlMarketplacePlugin.setDocumentationUrl( "http://wiki.pentaho.com/display/PMOPEN/Pentaho+BI+Server+Marketplace+Plugin" );
+    metadataXmlMarketplacePlugin.setDescription( "\n"
+        + "      Pentaho Marketplace allows users to explore and test the plugins\n"
+        + "      that are most relevant to them. This means high quality and useful\n"
+        + "      plugins that users can use to get the most out of their business.\n"
+        + "    " );
+    metadataXmlMarketplacePlugin.setAuthorName( "Pentaho" );
+    metadataXmlMarketplacePlugin.setAuthorUrl( "http://pentaho.com" );
+    metadataXmlMarketplacePlugin.setAuthorLogo( "http://pentaho.com/sites/all/themes/pentaho/_media/logo-pentaho.svg" );
+    metadataXmlMarketplacePlugin.setInstallationNotes( "These are the installation notes." );
+    metadataXmlMarketplacePlugin.setDependencies( "No dependencies." );
+    metadataXmlMarketplacePlugin.setLicense( "GLPL v2" );
+    metadataXmlMarketplacePlugin.setLicenseName( "License name glpl v2." );
+    metadataXmlMarketplacePlugin.setLicenseText( "You are allowed to do anything you like." );
+
+    ICategory parentCategory = categoryFactory.create( "Apps" );
+    ICategory category = categoryFactory.create( "Admin", parentCategory );
+    metadataXmlMarketplacePlugin.setCategory( category );
+
+    IPluginVersion trunk4XVersion = pluginVersionFactory.create();
+    trunk4XVersion.setBranch( "TRUNK" );
+    trunk4XVersion.setVersion( "TRUNK-SNAPSHOT" );
+    trunk4XVersion.setBuildId( "1" );
+    trunk4XVersion.setName( "Latest snapshot build" );
+    trunk4XVersion.setDownloadUrl( "http://ci.pentaho.com/job/marketplace-4.8/lastSuccessfulBuild/artifact/dist/marketplace-plugin-TRUNK-SNAPSHOT.zip" );
+    trunk4XVersion.setDescription( "The latest development snapshot build." );
+    trunk4XVersion.setMinParentVersion( "1.0" );
+    trunk4XVersion.setMaxParentVersion( "4.9" );
+    IPluginVersion trunk5XVersion = pluginVersionFactory.create();
+    trunk5XVersion.setBranch( "TRUNK" );
+    trunk5XVersion.setVersion( "TRUNK-SNAPSHOT" );
+    trunk5XVersion.setBuildId( "49" );
+    trunk5XVersion.setName( "Latest snapshot build" );
+    trunk5XVersion.setDownloadUrl( "http://repository.pentaho.org/artifactory/pentaho/pentaho/marketplace/5.1-SNAPSHOT/marketplace-5.1-SNAPSHOT.zip" );
+    trunk5XVersion.setSamplesDownloadUrl( "http://testing.pentaho.com/mySamples.zip" );
+    trunk5XVersion.setDescription( "Build for Pentaho 5.0" );
+    trunk5XVersion.setMinParentVersion( "5.0" );
+    trunk5XVersion.setMaxParentVersion( "5.1.99" );
+    trunk5XVersion.setDevelopmentStage( new DevelopmentStage( "Customer", "2" ) );
+    trunk5XVersion.setChangelog( "Lots of stuff changed." );
+
+    Collection<IPluginVersion> versions = new ArrayList<IPluginVersion>();
+    versions.add( trunk4XVersion );
+    versions.add( trunk5XVersion );
+    metadataXmlMarketplacePlugin.setVersions( versions );
+
+    String[] screenshots = new String[] {
+        "https://raw2.github.com/pentaho/marketplace/master/marketplace-resources/marketplace-01.png",
+        "https://raw2.github.com/pentaho/marketplace/master/marketplace-resources/marketplace-02.png",
+        "https://raw2.github.com/pentaho/marketplace/master/marketplace-resources/marketplace-03.png",
+        "https://raw2.github.com/pentaho/marketplace/master/marketplace-resources/marketplace-04.png",
+        "https://raw2.github.com/pentaho/marketplace/master/marketplace-resources/marketplace-05.png"
+    };
+    metadataXmlMarketplacePlugin.setScreenshots( screenshots );
+
+    // xsd properties not used in plugins (Platform type market entries)
+    //plugin.setSupportLevel( "" );
+    //plugin.setSupportOrganization( "" );
+    //plugin.setForumUrl( "" );
+    //plugin.setCasesUrl( "" );
+
+    return metadataXmlMarketplacePlugin;
+
+  }
+
+  // endregion
+
+  // region installedVersion.xml test resource information
+  private IPluginVersion getInstalledVersionXmlInstalledVersion(  ) {
+    IPluginVersion version = this.pluginVersionFactory.create();
+    version.setBranch( "testBranch" );
+    version.setVersion( "testVersionName" );
+    version.setBuildId( "123" );
+
+    return version;
+  }
+
+  // endregion
 
   @Before
   public void setup() {
@@ -161,6 +224,10 @@ public class MarketplaceXmlSerializerTest {
     Assert.assertEquals( "135", trunkVersion.getBuildId() );
   }
 
+
+  /**
+   * Tests that plugins are deserialized in the same order as they appear in the xml
+   */
   @Test
   public void testGetPluginsSameOrderAsXml() throws IOException {
     // arrange
@@ -183,6 +250,9 @@ public class MarketplaceXmlSerializerTest {
     inputStream.close();
   }
 
+  /**
+   * Tests that only market entries of type platform are deserialized into plugins
+   */
   @Test
   public void testGetPluginsOnlyParsePlatformMarketEntries() throws IOException {
     // arrange
@@ -190,94 +260,29 @@ public class MarketplaceXmlSerializerTest {
     String pluginsXml = IOUtils.toString( inputStream );
     MarketplaceXmlSerializer serializer = this.createSerializer();
 
-    Collection<String> platformPlugins = new ArrayList<String>( Arrays.asList( "marketplace", "pentaho-cdf", "cda", "languagePack_ja" ) );
-
     // act
     Collection<IPlugin>  plugins = serializer.getPlugins( pluginsXml );
 
     // assert
     for ( IPlugin plugin : plugins ) {
       String pluginId = plugin.getId();
-      Assert.assertTrue( platformPlugins.contains( pluginId ) );
+      Assert.assertTrue( this.metadataXmlPlatformPluginIds.contains( pluginId ) );
     }
 
     inputStream.close();
   }
 
+  /**
+   * Tests the deserialization of a plugin with all properties set
+   */
   @Test
-  public void testGetPluginsPluginParsedOk() throws IOException {
+  public void testGetPluginsPluginDeserialization() throws IOException {
     // arrange
-
-    IPlugin expectedPlugin = pluginFactory.create();
-    expectedPlugin.setId( "marketplace" );
-    expectedPlugin.setName( "Pentaho Marketplace" );
-    expectedPlugin.setImg( "http://pentaho.com/sites/all/themes/pentaho/_media/logo-pentaho.svg" );
-    expectedPlugin.setSmallImg( "http://www.webdetails.pt/ficheiros/mk_plugin.png" );
-    expectedPlugin.setDocumentationUrl( "http://wiki.pentaho.com/display/PMOPEN/Pentaho+BI+Server+Marketplace+Plugin" );
-    expectedPlugin.setDescription( "\n"
-      + "      Pentaho Marketplace allows users to explore and test the plugins\n"
-      + "      that are most relevant to them. This means high quality and useful\n"
-      + "      plugins that users can use to get the most out of their business.\n"
-      + "    " );
-    expectedPlugin.setAuthorName( "Pentaho" );
-    expectedPlugin.setAuthorUrl( "http://pentaho.com" );
-    expectedPlugin.setAuthorLogo( "http://pentaho.com/sites/all/themes/pentaho/_media/logo-pentaho.svg" );
-    expectedPlugin.setInstallationNotes( "These are the installation notes." );
-    expectedPlugin.setDependencies( "No dependencies." );
-    expectedPlugin.setLicense( "GLPL v2" );
-    expectedPlugin.setLicenseName( "License name glpl v2." );
-    expectedPlugin.setLicenseText( "You are allowed to do anything you like." );
-
-    ICategory parentCategory = categoryFactory.create( "Apps" );
-    ICategory category = categoryFactory.create( "Admin", parentCategory );
-    expectedPlugin.setCategory( category );
-
-    IPluginVersion trunk4XVersion = pluginVersionFactory.create();
-    trunk4XVersion.setBranch( "TRUNK" );
-    trunk4XVersion.setVersion( "TRUNK-SNAPSHOT" );
-    trunk4XVersion.setBuildId( "1" );
-    trunk4XVersion.setName( "Latest snapshot build" );
-    trunk4XVersion.setDownloadUrl( "http://ci.pentaho.com/job/marketplace-4.8/lastSuccessfulBuild/artifact/dist/marketplace-plugin-TRUNK-SNAPSHOT.zip" );
-    trunk4XVersion.setDescription( "The latest development snapshot build." );
-    trunk4XVersion.setMinParentVersion( "1.0" );
-    trunk4XVersion.setMaxParentVersion( "4.9" );
-    IPluginVersion trunk5XVersion = pluginVersionFactory.create();
-    trunk5XVersion.setBranch( "TRUNK" );
-    trunk5XVersion.setVersion( "TRUNK-SNAPSHOT" );
-    trunk5XVersion.setBuildId( "49" );
-    trunk5XVersion.setName( "Latest snapshot build" );
-    trunk5XVersion.setDownloadUrl( "http://repository.pentaho.org/artifactory/pentaho/pentaho/marketplace/5.1-SNAPSHOT/marketplace-5.1-SNAPSHOT.zip" );
-    trunk5XVersion.setSamplesDownloadUrl( "http://testing.pentaho.com/mySamples.zip" );
-    trunk5XVersion.setDescription( "Build for Pentaho 5.0" );
-    trunk5XVersion.setMinParentVersion( "5.0" );
-    trunk5XVersion.setMaxParentVersion( "5.1.99" );
-    trunk5XVersion.setDevelopmentStage( new DevelopmentStage( "Customer", "2" ) );
-    trunk5XVersion.setChangelog( "Lots of stuff changed." );
-
-    Collection<IPluginVersion> versions = new ArrayList<IPluginVersion>();
-    versions.add( trunk4XVersion );
-    versions.add( trunk5XVersion );
-    expectedPlugin.setVersions( versions );
-
-    String[] screenshots = new String[] {
-      "https://raw2.github.com/pentaho/marketplace/master/marketplace-resources/marketplace-01.png",
-      "https://raw2.github.com/pentaho/marketplace/master/marketplace-resources/marketplace-02.png",
-      "https://raw2.github.com/pentaho/marketplace/master/marketplace-resources/marketplace-03.png",
-      "https://raw2.github.com/pentaho/marketplace/master/marketplace-resources/marketplace-04.png",
-      "https://raw2.github.com/pentaho/marketplace/master/marketplace-resources/marketplace-05.png"
-    };
-    expectedPlugin.setScreenshots( screenshots );
-
-    // xsd properties not used in plugins (Platform type market entries)
-    //plugin.setSupportLevel( "" );
-    //plugin.setSupportOrganization( "" );
-    //plugin.setForumUrl( "" );
-    //plugin.setCasesUrl( "" );
-
     FileInputStream inputStream = new FileInputStream( "test-res/metadata.xml" );
     String pluginsXml = IOUtils.toString( inputStream );
     MarketplaceXmlSerializer serializer = this.createSerializer();
 
+    IPlugin expectedPlugin = this.getMetadataXmlMarketplacePlugin();
 
     // act
     Collection<IPlugin>  plugins = serializer.getPlugins( pluginsXml );
@@ -290,6 +295,26 @@ public class MarketplaceXmlSerializerTest {
   }
 
 
+  /**
+   * Tests that an installed version is properly serialized
+   */
+  @Test
+  public void testGetInstalledVersion() throws IOException {
+    // arrange
+    FileInputStream inputStream = new FileInputStream( "test-res/installedVersion.xml" );
+    String installedVersionXml = IOUtils.toString( inputStream );
+    MarketplaceXmlSerializer serializer = this.createSerializer();
+
+    IPluginVersion expectedVersion = this.getInstalledVersionXmlInstalledVersion();
+
+    // act
+    IPluginVersion actualVersion = serializer.getInstalledVersion( installedVersionXml );
+
+    // assert
+    Assert.assertEquals( expectedVersion, actualVersion );
+
+    inputStream.close();
+  }
 
 
 }

@@ -38,4 +38,33 @@ public final class DevelopmentStage implements IDevelopmentStage {
     return this.phase;
   }
   // endregion
+
+
+  @Override
+  public boolean equals( Object o ) {
+    if ( this == o ) {
+      return true;
+    }
+    if ( o == null || getClass() != o.getClass() ) {
+      return false;
+    }
+
+    DevelopmentStage that = (DevelopmentStage) o;
+
+    if ( lane != null ? !lane.equals( that.lane ) : that.lane != null ) {
+      return false;
+    }
+    if ( phase != null ? !phase.equals( that.phase ) : that.phase != null ) {
+      return false;
+    }
+
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    int result = lane != null ? lane.hashCode() : 0;
+    result = 31 * result + ( phase != null ? phase.hashCode() : 0 );
+    return result;
+  }
 }

@@ -4,6 +4,7 @@ import org.pentaho.marketplace.domain.model.entities.interfaces.ICategory;
 import org.pentaho.marketplace.domain.model.entities.interfaces.IPlugin;
 import org.pentaho.marketplace.domain.model.entities.interfaces.IPluginVersion;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 
@@ -176,6 +177,9 @@ public class Plugin implements IPlugin {
 
   @Override
   public Collection<IPluginVersion> getVersions() {
+    if ( this.versions == null ) {
+      this.versions = new ArrayList<IPluginVersion>();
+    }
     return this.versions;
   }
 

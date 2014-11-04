@@ -31,7 +31,6 @@ import org.pentaho.platform.api.engine.IPluginResourceLoader;
 import org.pentaho.platform.api.engine.ISecurityHelper;
 import org.pentaho.platform.engine.core.system.PentahoSessionHolder;
 import org.pentaho.platform.engine.core.system.PentahoSystem;
-import org.pentaho.platform.engine.security.SecurityHelper;
 import org.pentaho.platform.util.VersionHelper;
 import org.pentaho.platform.util.VersionInfo;
 
@@ -73,14 +72,14 @@ public class PluginService implements IPluginService {
 
   // Error messages codes should begin with ERROR
 
-  private static final String UNAUTHORIZED_ACCESS_MESSAGE =
-      "Unauthorized Access. Your Pentaho roles do not allow you to make changes to plugins.";
-  private static final String UNAUTHORIZED_ACCESS_ERROR_CODE =
+  protected static final String UNAUTHORIZED_ACCESS_MESSAGE =
+      "Unauthorized Access.";
+  protected static final String UNAUTHORIZED_ACCESS_ERROR_CODE =
       "ERROR_0002_UNAUTHORIZED_ACCESS";
-  private static final String NO_PLUGIN_ERROR_CODE = "ERROR_0001_NO_PLUGIN";
-  private static final String FAIL_ERROR_CODE = "ERROR_0003_FAIL";
-  private static final String PLUGIN_INSTALLED_CODE = "PLUGIN_INSTALLED";
-  private static final String PLUGIN_UNINSTALLED_CODE = "PLUGIN_UNINSTALLED";
+  protected static final String NO_PLUGIN_ERROR_CODE = "ERROR_0001_NO_PLUGIN";
+  protected static final String FAIL_ERROR_CODE = "ERROR_0003_FAIL";
+  protected static final String PLUGIN_INSTALLED_CODE = "PLUGIN_INSTALLED";
+  protected static final String PLUGIN_UNINSTALLED_CODE = "PLUGIN_UNINSTALLED";
 
   // endregion
 
@@ -130,6 +129,19 @@ public class PluginService implements IPluginService {
   }
   private IPluginResourceLoader pluginResourceLoader;
 
+  protected String getServerVersion() {
+    if ( this.serverVersion == null ) {
+      VersionInfo versionInfo = VersionHelper.getVersionInfo( PentahoSystem.class );
+      return versionInfo.getVersionNumber();
+    }
+
+    return this.serverVersion;
+  }
+  protected PluginService setServerVersion( String serverVersion ) {
+    this.serverVersion = serverVersion;
+    return this;
+  }
+  private String serverVersion;
 
   // TODO: see if there is a better way to encapsulate this
   public IPluginManager getPluginManager ( IPentahoSession session ) {
@@ -138,13 +150,27 @@ public class PluginService implements IPluginService {
 
   // TODO: see if there is a better way to encapsulate this
   protected IApplicationContext getApplicationContext() {
-    return PentahoSystem.getApplicationContext();
+    if ( this.applicationContext == null ) {
+      return PentahoSystem.getApplicationContext();
+    }
+
+    return this.applicationContext;
   }
+  protected PluginService setApplicationContext( IApplicationContext applicationContext ) {
+    this.applicationContext = applicationContext;
+    return this;
+  }
+  private IApplicationContext applicationContext;
+
 
   // TODO: see if there is a better way to encapsulate this.
   // Probably just pass in the session in the methods that require it.
   protected IPentahoSession getCurrentSession() {
     return PentahoSessionHolder.getSession();
+  }
+  protected PluginService setCurrentSession( IPentahoSession session ) {
+    PentahoSessionHolder.setSession( session );
+    return this;
   }
   //endregion
 
@@ -153,7 +179,9 @@ public class PluginService implements IPluginService {
   public PluginService( IRemotePluginProvider metadataPluginsProvider,
                         MarketplaceXmlSerializer pluginsSerializer,
                         IVersionDataFactory versionDataFactory,
-                        IDomainStatusMessageFactory domainStatusMessageFactory ) {
+                        IDomainStatusMessageFactory domainStatusMessageFactory,
+                        ISecurityHelper securityHelper,
+                        IPluginResourceLoader resourceLoader ) {
 
     //initialize dependencies
     this.versionDataFactory = versionDataFactory;
@@ -165,8 +193,8 @@ public class PluginService implements IPluginService {
     metadataPluginsProvider.setUrl( this.getMetadataUrl() );
     this.setMetadataPluginsProvider( metadataPluginsProvider );
 
-    this.setSecurityHelper( SecurityHelper.getInstance() );
-    this.setPluginResourceLoader( PentahoSystem.get( IPluginResourceLoader.class ) );
+    this.setSecurityHelper( securityHelper );
+    this.setPluginResourceLoader( resourceLoader );
   }
   //endregion
 
@@ -193,7 +221,6 @@ public class PluginService implements IPluginService {
   }
 
   private boolean hasMarketplacePermission() {
-    Authentication auth = this.getSecurityHelper().getAuthentication( this.getCurrentSession(), true );
     IPluginResourceLoader resLoader = this.getPluginResourceLoader();
     String roles = null;
     String users = null;
@@ -212,6 +239,7 @@ public class PluginService implements IPluginService {
 
     String[] roleArr = roles.split( "," ); //$NON-NLS-1$
 
+    Authentication auth = this.getSecurityHelper().getAuthentication( this.getCurrentSession(), true );
     for ( String role : roleArr ) {
       for ( GrantedAuthority userRole : auth.getAuthorities() ) {
         if ( role != null && role.trim().equals( userRole.getAuthority() ) ) {
@@ -278,8 +306,7 @@ public class PluginService implements IPluginService {
   private boolean withinParentVersion( IPluginVersion pv ) {
     // need to compare plugin version min and max parent with system version.
     // replace the version of the xml url path with the current release version:
-    VersionInfo versionInfo = VersionHelper.getVersionInfo( PentahoSystem.class );
-    String v = versionInfo.getVersionNumber();
+    String v = this.getServerVersion();
     IVersionData pvMax = this.versionDataFactory.create( pv.getMaxParentVersion() );
     IVersionData pvMin = this.versionDataFactory.create( pv.getMinParentVersion() );
     IVersionData version = this.versionDataFactory.create( v );
@@ -407,7 +434,7 @@ public class PluginService implements IPluginService {
     }
 
     // TODO: should not be necessary to get all plugins. Just the one we want.
-    Iterable<IPlugin> plugins = getPlugins();
+    Iterable<IPlugin> plugins = this.getPlugins();
     IPlugin toInstall = null;
     for ( IPlugin plugin : plugins ) {
       if ( plugin.getId().equals( pluginId ) ) {

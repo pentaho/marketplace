@@ -49,7 +49,7 @@ public class CategoryFactory implements ICategoryFactory {
     category = new Category( name, parent );
     // root category, store in factory namespace
     if ( parent == null ) {
-      this.categories.put( name, category );
+      categories.put( name, category );
     }
     else {
       parent.getChildren().put( name, category );

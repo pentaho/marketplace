@@ -15,9 +15,11 @@ package org.pentaho.marketplace.domain.model.entities.serialization;
 
 import org.apache.commons.io.IOUtils;
 
-import org.junit.Assert;
+import static org.junit.Assert.assertThat;
 import org.junit.Before;
 import org.junit.Test;
+
+import static org.hamcrest.Matchers.*;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -25,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 
 import org.pentaho.marketplace.domain.model.entities.DevelopmentStage;
 import org.pentaho.marketplace.domain.model.entities.interfaces.ICategory;
@@ -46,11 +49,21 @@ public class MarketplaceXmlSerializerTest {
   private IVersionDataFactory versionDataFactory;
   private ICategoryFactory categoryFactory;
 
+  // region auxiliary methods
+  private Collection<String> getPluginIds( Iterable<IPlugin> plugins ) {
+    Collection<String> pluginIds = new ArrayList<String>();
+    for ( IPlugin plugin : plugins ) {
+      pluginIds.add( plugin.getId() );
+    }
+    return pluginIds;
+  }
+  // endregion
+
   // region metadata.xml test resource information
   /**
    * metadata.xml market entry ids of type "platform"
    */
-  private Collection<String> metadataXmlPlatformPluginIds = new ArrayList<String>( Arrays.asList( "marketplace", "pentaho-cdf", "cda", "languagePack_ja" ) );
+  private List<String> metadataXmlPlatformPluginIds = new ArrayList<String>( Arrays.asList( "marketplace", "pentaho-cdf", "cda", "languagePack_ja" ) );
 
   /**
    * Programatically creates the marketplace plugin that is in the metadata.xml test resource
@@ -160,33 +173,33 @@ public class MarketplaceXmlSerializerTest {
 
     Collection<IPlugin> plugins = serializer.getPlugins( pluginsXml );
 
-    Assert.assertTrue( plugins.size() == 3 );
+    assertThat( plugins.size(), is( equalTo( 3 ) ) );
 
     Iterator<IPlugin> iterator = plugins.iterator();
     IPlugin cdePlugin = iterator.next();
     IPluginVersion cdeVersion = cdePlugin.getVersions().iterator().next();
 
-    Assert.assertEquals( "cde", cdePlugin.getId() );
-    Assert.assertEquals( "wt_transparent.png", cdePlugin.getImg() );
-    Assert.assertEquals( "wt_transparent_small.png", cdePlugin.getSmallImg() );
-    Assert.assertEquals( "Community Dashboard Editor", cdePlugin.getName() );
-    Assert.assertEquals( "http://cde.webdetails.org", cdePlugin.getDocumentationUrl() );
-    Assert.assertEquals( "The Community Dashboard Editor (CDE) is the outcome of real-world needs: It was born to greatly simplify the creation, edition and rendering of dashboards.\n\nCDE and the technology underneath (CDF, CDA and CCC) allows to develop and deploy dashboards in the Pentaho platform in a fast and effective way.", cdePlugin.getDescription().trim() );
-    Assert.assertEquals( "WebDetails", cdePlugin.getAuthorName() );
-    Assert.assertEquals( "http://webdetails.pt", cdePlugin.getAuthorUrl() );
-    Assert.assertEquals( "http://www.webdetails.pt/ficheiros/CDE-bundle-1.0-RC3.tar.bz2", cdeVersion.getDownloadUrl() );
-    Assert.assertEquals( "1.0-RC3", cdeVersion.getVersion() );
-    Assert.assertNull( cdePlugin.getInstallationNotes() );
+    assertThat( cdePlugin.getId(), is( equalTo( "cde" ) ) );
+    assertThat( cdePlugin.getImg(), is( equalTo( "wt_transparent.png" ) ) );
+    assertThat( cdePlugin.getSmallImg(), is( equalTo( "wt_transparent_small.png" ) ) );
+    assertThat( cdePlugin.getName(), is( equalTo( "Community Dashboard Editor" ) ) );
+    assertThat( cdePlugin.getDocumentationUrl(), is( equalTo( "http://cde.webdetails.org" ) ) );
+    assertThat( cdePlugin.getDescription().trim(), is( equalTo( "The Community Dashboard Editor (CDE) is the outcome of real-world needs: It was born to greatly simplify the creation, edition and rendering of dashboards.\n\nCDE and the technology underneath (CDF, CDA and CCC) allows to develop and deploy dashboards in the Pentaho platform in a fast and effective way." ) ) );
+    assertThat( cdePlugin.getAuthorName(), is( equalTo( "WebDetails" ) ) );
+    assertThat( cdePlugin.getAuthorUrl(), is( equalTo( "http://webdetails.pt" ) ) );
+    assertThat( cdeVersion.getDownloadUrl(), is( equalTo( "http://www.webdetails.pt/ficheiros/CDE-bundle-1.0-RC3.tar.bz2" ) ) );
+    assertThat( cdeVersion.getVersion(), is( equalTo( "1.0-RC3" ) ) );
+    assertThat( cdePlugin.getInstallationNotes(), is( nullValue() ) );
 
     IPlugin cdaPlugin = iterator.next();
     IPluginVersion cdaVersion = cdaPlugin.getVersions().iterator().next();
-    Assert.assertNull( cdaVersion.getChangelog() );
+    assertThat( cdaVersion.getChangelog(), is( nullValue() ) );
 
     IPlugin cdfPlugin = iterator.next();
     IPluginVersion cdfVersion = cdfPlugin.getVersions().iterator().next();
-    Assert.assertEquals( "Changelog", cdfVersion.getChangelog() );
-    Assert.assertEquals( "http://localhost:8080/cdf-1.0.samples.zip", cdfVersion.getSamplesDownloadUrl() );
-    Assert.assertEquals( "Notes after install", cdfPlugin.getInstallationNotes() );
+    assertThat( cdfVersion.getChangelog(), is( equalTo( "Changelog" ) ) );
+    assertThat( cdfVersion.getSamplesDownloadUrl(), is( equalTo( "http://localhost:8080/cdf-1.0.samples.zip" ) ) );
+    assertThat( cdfPlugin.getInstallationNotes(), is( equalTo( "Notes after install" ) ) );
 
   }
 
@@ -198,30 +211,31 @@ public class MarketplaceXmlSerializerTest {
 
     Collection<IPlugin> plugins = serializer.getPlugins( pluginsXml );
 
-    Assert.assertEquals( 1, plugins.size() );
+    assertThat( plugins.size(), is( equalTo( 1 ) ) );
 
     IPlugin plugin = plugins.iterator().next();
 
     Collection<IPluginVersion> alternativeVersions = plugin.getVersions();
-    Assert.assertEquals( 2, alternativeVersions.size() );
+    assertThat( alternativeVersions.size(), is( equalTo( 2 ) ) );
 
     Iterator<IPluginVersion> versionIterator = plugin.getVersions().iterator();
     IPluginVersion releaseCandidateVersion =  versionIterator.next();
 
-    Assert.assertEquals( "RC", releaseCandidateVersion.getBranch() );
-    Assert.assertEquals( "Release Candidate", releaseCandidateVersion.getName() );
-    Assert.assertEquals( "ChangeLog for RC", releaseCandidateVersion.getChangelog() );
-    Assert.assertEquals( "This is RC1 - pretty cool version but still not quite there", releaseCandidateVersion.getDescription() );
-    Assert.assertEquals( "http://www.webdetails.pt/RC/ficheiros/CDE-bundle-1.0-RC3.tar.bz2", releaseCandidateVersion.getDownloadUrl() );
-    Assert.assertEquals( "http://www.webdetails.pt/RC/ficheiros/CDE-bundle-1.0-RC3-samples.tar.bz2", releaseCandidateVersion.getSamplesDownloadUrl() );
-    Assert.assertNull( releaseCandidateVersion.getBuildId() );
+    assertThat( releaseCandidateVersion.getBranch(), is( equalTo( "RC" ) ) );
+    assertThat( releaseCandidateVersion.getName(), is( equalTo( "Release Candidate" ) ) );
+    assertThat( releaseCandidateVersion.getChangelog(), is( equalTo( "ChangeLog for RC" ) ) );
+    assertThat( releaseCandidateVersion.getDescription(), is( equalTo( "This is RC1 - pretty cool version but still not quite there" ) ) );
+    assertThat( releaseCandidateVersion.getDownloadUrl(), is( equalTo( "http://www.webdetails.pt/RC/ficheiros/CDE-bundle-1.0-RC3.tar.bz2" ) ) );
+    assertThat( releaseCandidateVersion.getSamplesDownloadUrl(), is( equalTo( "http://www.webdetails.pt/RC/ficheiros/CDE-bundle-1.0-RC3-samples.tar.bz2" ) ) );
+
+    assertThat( releaseCandidateVersion.getBuildId(), is( nullValue() ) );
 
     IPluginVersion trunkVersion = plugin.getVersionByBranch( "TRUNK" );
-    Assert.assertNotNull( trunkVersion );
-    Assert.assertEquals( "TRUNK", trunkVersion.getBranch() );
-    Assert.assertEquals( "Trunk", trunkVersion.getName() );
-    Assert.assertEquals( "Change Log for TRUNK", trunkVersion.getChangelog() );
-    Assert.assertEquals( "135", trunkVersion.getBuildId() );
+    assertThat( trunkVersion , is( notNullValue() ) );
+    assertThat( trunkVersion.getBranch(), is( equalTo( "TRUNK" ) ) );
+    assertThat( trunkVersion.getName(), is( equalTo( "Trunk" ) ) );
+    assertThat( trunkVersion.getChangelog(), is( equalTo( "Change Log for TRUNK" ) ) );
+    assertThat( trunkVersion.getBuildId(), is( equalTo( "135" ) ) );
   }
 
 
@@ -235,16 +249,15 @@ public class MarketplaceXmlSerializerTest {
     String pluginsXml = IOUtils.toString( inputStream );
     MarketplaceXmlSerializer serializer = this.createSerializer();
 
-    String[] expectedIds = new String[] {  "marketplace", "pentaho-cdf", "cda", "languagePack_ja" };
+    List<String> expectedIds = this.metadataXmlPlatformPluginIds;
 
     // act
-    Collection<IPlugin>  pluginCollection = serializer.getPlugins( pluginsXml );
+    Collection<IPlugin>  actualPlugins = serializer.getPlugins( pluginsXml );
 
     // assert
-    IPlugin[] plugins = pluginCollection.toArray( new IPlugin[ pluginCollection.size() ] );
-
-    for ( int i = 0; i < expectedIds.length; i++ ) {
-      Assert.assertEquals( expectedIds[i], plugins[i].getId() );
+    String[] actualPluginIds = this.getPluginIds( actualPlugins ).toArray( new String[ actualPlugins.size() ]);
+    for ( int i = 0; i < actualPluginIds.length; i++ ) {
+      assertThat( actualPluginIds[i], is( equalTo( expectedIds.get( i ) ) ) );
     }
 
     inputStream.close();
@@ -260,14 +273,15 @@ public class MarketplaceXmlSerializerTest {
     String pluginsXml = IOUtils.toString( inputStream );
     MarketplaceXmlSerializer serializer = this.createSerializer();
 
+    Collection<String> expectedPluginIds = this.metadataXmlPlatformPluginIds;
+
     // act
-    Collection<IPlugin>  plugins = serializer.getPlugins( pluginsXml );
+    Collection<IPlugin> actualPlugins = serializer.getPlugins( pluginsXml );
 
     // assert
-    for ( IPlugin plugin : plugins ) {
-      String pluginId = plugin.getId();
-      Assert.assertTrue( this.metadataXmlPlatformPluginIds.contains( pluginId ) );
-    }
+    Collection<String> actualPluginIds = this.getPluginIds( actualPlugins );
+    assertThat( actualPluginIds, hasSize( expectedPluginIds.size() ) );
+    assertThat( actualPluginIds, is( equalTo( expectedPluginIds ) ) );
 
     inputStream.close();
   }
@@ -289,7 +303,7 @@ public class MarketplaceXmlSerializerTest {
     IPlugin actualPlugin = plugins.iterator().next();
 
     // assert
-    Assert.assertEquals( expectedPlugin, actualPlugin );
+    assertThat( actualPlugin, is( equalTo( expectedPlugin ) ) );
 
     inputStream.close();
   }
@@ -311,7 +325,7 @@ public class MarketplaceXmlSerializerTest {
     IPluginVersion actualVersion = serializer.getInstalledVersion( installedVersionXml );
 
     // assert
-    Assert.assertEquals( expectedVersion, actualVersion );
+    assertThat( actualVersion, is( equalTo( expectedVersion ) ) );
 
     inputStream.close();
   }

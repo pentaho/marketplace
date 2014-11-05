@@ -19,9 +19,11 @@ import static org.hamcrest.CoreMatchers.*;
 import org.junit.Test;
 import org.junit.Before;
 
+import static org.mockito.Mockito.*;
 import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
+
 import org.pentaho.marketplace.domain.model.entities.interfaces.IDomainStatusMessage;
 import org.pentaho.marketplace.domain.model.entities.interfaces.IPlugin;
 import org.pentaho.marketplace.domain.model.entities.interfaces.IPluginVersion;
@@ -74,18 +76,18 @@ public class PluginServiceTest {
     IDomainStatusMessageFactory domainStatusMessageFactory = this.domainStatusMessageFactory;
     IVersionDataFactory versionDataFactory = this.versionDataFactory;
 
-    IRemotePluginProvider pluginProvider = Mockito.mock( IRemotePluginProvider.class );
-    MarketplaceXmlSerializer serializer = Mockito.mock( MarketplaceXmlSerializer.class );
-    ISecurityHelper securityHelper = Mockito.mock( ISecurityHelper.class );
-    IPluginResourceLoader resourceLoader = Mockito.mock( IPluginResourceLoader.class );
+    IRemotePluginProvider pluginProvider = mock( IRemotePluginProvider.class );
+    MarketplaceXmlSerializer serializer = mock( MarketplaceXmlSerializer.class );
+    ISecurityHelper securityHelper = mock( ISecurityHelper.class );
+    IPluginResourceLoader resourceLoader = mock( IPluginResourceLoader.class );
 
     PluginService service = new PluginService( pluginProvider, serializer, versionDataFactory, domainStatusMessageFactory, securityHelper, resourceLoader );
 
-    IApplicationContext applicationContext = Mockito.mock( IApplicationContext.class );
+    IApplicationContext applicationContext = mock( IApplicationContext.class );
     final String solutionPath = this.getSolutionPath();
-    Mockito.when( applicationContext.getSolutionPath( Mockito.anyString() ) ).thenAnswer( new Answer<Object>() {
-      @Override public Object answer( InvocationOnMock invocation ) throws Throwable {
-        String path = (String) invocation.getArguments()[0];
+    when( applicationContext.getSolutionPath( anyString() ) ).thenAnswer( new Answer<String>() {
+      @Override public String answer( InvocationOnMock invocation ) throws Throwable {
+        String path = (String) invocation.getArguments()[ 0 ];
         return solutionPath + path;
       }
     } );
@@ -95,11 +97,11 @@ public class PluginServiceTest {
   }
 
   private Authentication createMockUserAuthentication( String role, String userName ) {
-    GrantedAuthority userAuthority = Mockito.mock( GrantedAuthority.class );
-    Mockito.when( userAuthority.getAuthority() ).thenReturn( role );
-    Authentication userAuthentication = Mockito.mock( Authentication.class );
-    Mockito.when( userAuthentication.getAuthorities() ).thenReturn( new GrantedAuthority[] { userAuthority } );
-    Mockito.when( userAuthentication.getName() ).thenReturn( userName );
+    GrantedAuthority userAuthority = mock( GrantedAuthority.class );
+    when( userAuthority.getAuthority() ).thenReturn( role );
+    Authentication userAuthentication = mock( Authentication.class );
+    when( userAuthentication.getAuthorities() ).thenReturn( new GrantedAuthority[] { userAuthority } );
+    when( userAuthentication.getName() ).thenReturn( userName );
 
     return  userAuthentication;
   }
@@ -135,11 +137,11 @@ public class PluginServiceTest {
 
     // setup no roles
     IPluginResourceLoader resourceLoader = service.getPluginResourceLoader();
-    Mockito.when( resourceLoader.getPluginSetting( PluginService.class, SETTINGS_ROLES ) ).thenReturn( null );
+    when( resourceLoader.getPluginSetting( PluginService.class, SETTINGS_ROLES ) ).thenReturn( null );
 
     // setup security helper for non admin user
     ISecurityHelper securityHelper = service.getSecurityHelper();
-    Mockito.when( securityHelper.isPentahoAdministrator( Mockito.any( IPentahoSession.class ) ) ).thenReturn( false );
+    when( securityHelper.isPentahoAdministrator( Mockito.any( IPentahoSession.class ) ) ).thenReturn( false );
 
     // act
     IDomainStatusMessage result = service.installPlugin( "doesNotMatter", "doesNotMatter" );
@@ -159,11 +161,11 @@ public class PluginServiceTest {
 
     // setup no roles
     IPluginResourceLoader resourceLoader = service.getPluginResourceLoader();
-    Mockito.when( resourceLoader.getPluginSetting( PluginService.class, SETTINGS_ROLES ) ).thenReturn( null );
+    when( resourceLoader.getPluginSetting( PluginService.class, SETTINGS_ROLES ) ).thenReturn( null );
 
     // setup security helper for non admin user
     ISecurityHelper securityHelper = service.getSecurityHelper();
-    Mockito.when( securityHelper.isPentahoAdministrator( Mockito.any( IPentahoSession.class ) ) ).thenReturn( false );
+    when( securityHelper.isPentahoAdministrator( Mockito.any( IPentahoSession.class ) ) ).thenReturn( false );
 
     // act
     IDomainStatusMessage result = service.uninstallPlugin( "doesNotMatter" );
@@ -188,12 +190,12 @@ public class PluginServiceTest {
 
     // setup roles
     IPluginResourceLoader resourceLoader = service.getPluginResourceLoader();
-    Mockito.when( resourceLoader.getPluginSetting( PluginService.class,  SETTINGS_ROLES ) ).thenReturn( authorizedRoles );
+    when( resourceLoader.getPluginSetting( PluginService.class,  SETTINGS_ROLES ) ).thenReturn( authorizedRoles );
 
     Authentication userAuthentication = this.createMockUserAuthentication( userRole, null );
     // setup security helper
     ISecurityHelper securityHelper = service.getSecurityHelper();
-    Mockito.when( securityHelper.getAuthentication( Mockito.any( IPentahoSession.class ), Mockito.eq( true ) ) ).thenReturn( userAuthentication );
+    when( securityHelper.getAuthentication( Mockito.any( IPentahoSession.class ), eq( true ) ) ).thenReturn( userAuthentication );
 
     // endregion
 
@@ -219,12 +221,12 @@ public class PluginServiceTest {
 
     // setup roles
     IPluginResourceLoader resourceLoader = service.getPluginResourceLoader();
-    Mockito.when( resourceLoader.getPluginSetting( PluginService.class,  SETTINGS_ROLES ) ).thenReturn( authorizedRoles );
+    when( resourceLoader.getPluginSetting( PluginService.class,  SETTINGS_ROLES ) ).thenReturn( authorizedRoles );
 
     Authentication userAuthentication = this.createMockUserAuthentication( userRole, null );
     // setup security helper
     ISecurityHelper securityHelper = service.getSecurityHelper();
-    Mockito.when( securityHelper.getAuthentication( Mockito.any( IPentahoSession.class ), Mockito.eq( true ) ) ).thenReturn( userAuthentication );
+    when( securityHelper.getAuthentication( Mockito.any( IPentahoSession.class ), eq( true ) ) ).thenReturn( userAuthentication );
 
     // endregion
 
@@ -249,12 +251,12 @@ public class PluginServiceTest {
     PluginService service = this.createPluginService();
 
     IPluginResourceLoader resourceLoader = service.getPluginResourceLoader();
-    Mockito.when( resourceLoader.getPluginSetting( PluginService.class,  SETTINGS_ROLES ) ).thenReturn( authorizedRoles );
-    Mockito.when( resourceLoader.getPluginSetting( PluginService.class,  SETTINGS_USERS ) ).thenReturn( authorizedUsers );
+    when( resourceLoader.getPluginSetting( PluginService.class,  SETTINGS_ROLES ) ).thenReturn( authorizedRoles );
+    when( resourceLoader.getPluginSetting( PluginService.class,  SETTINGS_USERS ) ).thenReturn( authorizedUsers );
 
     Authentication userAuthentication = this.createMockUserAuthentication( null, userName );
     ISecurityHelper securityHelper = service.getSecurityHelper();
-    Mockito.when( securityHelper.getAuthentication( Mockito.any( IPentahoSession.class ), Mockito.eq( true ) ) ).thenReturn( userAuthentication );
+    when( securityHelper.getAuthentication( Mockito.any( IPentahoSession.class ), eq( true ) ) ).thenReturn( userAuthentication );
 
     // act
     IDomainStatusMessage result = service.installPlugin( "doesNotMatter", "doesNotMatter" );
@@ -276,12 +278,12 @@ public class PluginServiceTest {
     PluginService service = this.createPluginService();
 
     IPluginResourceLoader resourceLoader = service.getPluginResourceLoader();
-    Mockito.when( resourceLoader.getPluginSetting( PluginService.class,  SETTINGS_ROLES ) ).thenReturn( authorizedRoles );
-    Mockito.when( resourceLoader.getPluginSetting( PluginService.class,  SETTINGS_USERS ) ).thenReturn( authorizedUsers );
+    when( resourceLoader.getPluginSetting( PluginService.class,  SETTINGS_ROLES ) ).thenReturn( authorizedRoles );
+    when( resourceLoader.getPluginSetting( PluginService.class,  SETTINGS_USERS ) ).thenReturn( authorizedUsers );
 
     Authentication userAuthentication = this.createMockUserAuthentication( null, userName );
     ISecurityHelper securityHelper = service.getSecurityHelper();
-    Mockito.when( securityHelper.getAuthentication( Mockito.any( IPentahoSession.class ), Mockito.eq( true ) ) ).thenReturn( userAuthentication );
+    when( securityHelper.getAuthentication( Mockito.any( IPentahoSession.class ), eq( true ) ) ).thenReturn( userAuthentication );
 
     // act
     IDomainStatusMessage result = service.uninstallPlugin( "doesNotMatter" );
@@ -320,7 +322,7 @@ public class PluginServiceTest {
     plugins.add( plugin );
 
     IPluginProvider pluginProvider = service.getMetadataPluginsProvider();
-    Mockito.when( pluginProvider.getPlugins() ).thenReturn( plugins );
+    when( pluginProvider.getPlugins() ).thenReturn( plugins );
 
     // act
     Collection<IPlugin> actualPlugins = service.getPlugins();
@@ -367,7 +369,7 @@ public class PluginServiceTest {
     plugins.add( notInstalledPlugin );
 
     IPluginProvider pluginProvider = service.getMetadataPluginsProvider();
-    Mockito.when( pluginProvider.getPlugins() ).thenReturn( plugins );
+    when( pluginProvider.getPlugins() ).thenReturn( plugins );
 
     // act
     Collection<IPlugin> actualPlugins = service.getPlugins();
@@ -375,7 +377,8 @@ public class PluginServiceTest {
     // assert
     IPlugin actualInstalledPlugin = this.getPluginById( actualPlugins, installedPluginId );
     IPlugin actualNotInstalledPlugin = this.getPluginById( actualPlugins, notInstalledPluginId );
-
+    assertThat( actualInstalledPlugin, is( notNullValue() ) );
+    assertThat( actualNotInstalledPlugin, is( notNullValue() ) );
     assertThat( actualInstalledPlugin.isInstalled(), is( true ) );
     assertThat( actualNotInstalledPlugin.isInstalled(), is( false ) );
   }

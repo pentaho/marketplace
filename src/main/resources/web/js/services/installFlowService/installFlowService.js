@@ -33,27 +33,28 @@ define(
               }
 
               function installPlugin( plugin, version ) {
-                newDialogModal(
-                    function ( ) { return appService.installPlugin( plugin, version); },
-                    'marketplace.installationDialog.title',
-                    'marketplace.installationDialog.confirmation',
-                    'marketplace.installationDialog.installing',
-                    'marketplace.installationDialog.success',
-                    'marketplace.installationDialog.error',
-                    plugin
-                );
+                newDialogModal( {
+                  okAction: function ( ) { return appService.installPlugin( plugin, version); },
+                  titleId: 'marketplace.installationDialog.title',
+                  bodyId:  'marketplace.installationDialog.confirmation',
+                  processingMessageId:  'marketplace.installationDialog.installing',
+                  onSuccessMessageId: 'marketplace.installationDialog.success',
+                  onFailMessageId: 'marketplace.installationDialog.error',
+                  notes: plugin.installationNotes,
+                  plugin: plugin
+                });
               }
 
               function updatePlugin( plugin, version ) {
-                newDialogModal(
-                    function ( ) { return appService.installPlugin( plugin, version); },
-                    'marketplace.updateDialog.title',
-                    'marketplace.updateDialog.confirmation',
-                    'marketplace.updateDialog.installing',
-                    'marketplace.updateDialog.success',
-                    'marketplace.updateDialog.error',
-                    plugin
-                );
+                newDialogModal( {
+                  okAction: function ( ) { return appService.installPlugin( plugin, version); },
+                  titleId: 'marketplace.updateDialog.title',
+                  bodyId: 'marketplace.updateDialog.confirmation',
+                  processingMessageId: 'marketplace.updateDialog.installing',
+                  onSuccessMessageId: 'marketplace.updateDialog.success',
+                  onFailMessageId: 'marketplace.updateDialog.error',
+                  plugin: plugin
+                });
               }
 
               function uninstallPlugin( plugin ) {
@@ -61,33 +62,36 @@ define(
                   return;
                 }
 
-                newDialogModal(
-                    function ( ) { return appService.uninstallPlugin( plugin ); },
-                    'marketplace.uninstallDialog.title',
-                    'marketplace.uninstallDialog.confirmation',
-                    'marketplace.uninstallDialog.installing',
-                    'marketplace.uninstallDialog.success',
-                    'marketplace.uninstallDialog.error',
-                    plugin
-                );
+                newDialogModal( {
+                  okAction: function ( ) { return appService.uninstallPlugin( plugin ); },
+                  titleId: 'marketplace.uninstallDialog.title',
+                  bodyId: 'marketplace.uninstallDialog.confirmation',
+                  processingMessageId: 'marketplace.uninstallDialog.installing',
+                  onSuccessMessageId: 'marketplace.uninstallDialog.success',
+                  onFailMessageId: 'marketplace.uninstallDialog.error',
+                  plugin: plugin
+                });
               }
 
-              function newDialogModal ( okAction, titleId, bodyId, processingMessageId, onSuccessMessageId, onFailMessageId, plugin  ) {
+
+              function newDialogModal ( opts  ) {
+
                 function onOk ( scope, modalInstance ) {
-                  scope.dialog.body = $translate.instant( processingMessageId, { pluginName: plugin.name } );
+                  scope.dialog.body = $translate.instant( opts.processingMessageId, { pluginName: opts.plugin.name } );
                   var okButton = scope.dialog.buttons[0];
                   var cancelButton = scope.dialog.buttons[1];
                   okButton.disabled = true;
                   cancelButton.disabled = true;
                   // install / update / uninstall plugin
-                  okAction().then(
+                  opts.okAction().then(
                       function () {
-                        var successMessage = $translate.instant( onSuccessMessageId, { pluginName: plugin.name } );
+                        var successMessage = $translate.instant( opts.onSuccessMessageId, { pluginName: opts.plugin.name } );
+                        scope.dialog.notes = opts.notes;
                         onOperationResult( successMessage, scope.dialog, modalInstance );
                       },
                       function ( error ) {
-                        var errorMessage = $translate.instant( onFailMessageId, { pluginName: plugin.name } ) +
-                            "[ " + error.message + "]";
+                        var errorMessage = error.message ? "[ " + error.message + "]" : "";
+                        errorMessage = $translate.instant( opts.onFailMessageId, { pluginName: opts.plugin.name } ) + errorMessage;
                         onOperationResult( errorMessage, scope.dialog, modalInstance );
                       }
                   );
@@ -101,8 +105,8 @@ define(
                   backdrop: 'static',
                   keyboard: false,
                   resolve: {
-                    title: function() { return $translate.instant( titleId, { pluginName: plugin.name } ); },
-                    body: function() { return $translate.instant( bodyId, { pluginName: plugin.name } ); },
+                    title: function() { return $translate.instant( opts.titleId, { pluginName: opts.plugin.name } ); },
+                    body: function() { return $translate.instant( opts.bodyId, { pluginName: opts.plugin.name } ); },
                     onOk: function() { return onOk; },
                     onCancel: function() { return onCancel; }
                   },

@@ -1260,6 +1260,15 @@ body.bootstrap .modal.confirmationDialog .dialog .body {
   line-height: 18px;
 }
 
+body.bootstrap .modal.confirmationDialog .dialog .notes {
+  padding-top: 15px;
+}
+
+body.bootstrap .modal.confirmationDialog .dialog .notes .title {
+  font-size: 14px;
+  padding-bottom: 5px;
+}
+
 body.bootstrap .modal.confirmationDialog .dialog .buttonsContainer {
   text-align: right;
 }

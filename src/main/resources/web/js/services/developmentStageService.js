@@ -80,6 +80,15 @@ define(
                 this.description = description;
               }
 
+              DevelopmentStage.stagesRank = {
+                Community: { 1: 1, 2: 2, 3: 3, 4: 4 },
+                Customer: { 1: 5, 2: 6, 3: 7, 4: 8 }
+              };
+
+              DevelopmentStage.prototype.getRank = function() {
+                return DevelopmentStage.stagesRank[this.lane.id][this.phase];
+              }
+
               function createDevelopmentStage( laneId, phaseId, nameTranslationId, descriptionTrasnlationId ) {
                 var lane = getLane( laneId );
                 if( lane === undefined ) {

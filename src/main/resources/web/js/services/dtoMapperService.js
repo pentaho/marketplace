@@ -108,6 +108,18 @@ define(
                   });
                   if ( sameBranchVersion ) {
                     installedVersion.devStage = sameBranchVersion.devStage;
+                  } else {
+                    // NOTE: another huge assumption: if no version of the same branch is found
+                    // then assume the devStage of the installed version
+                    // is the lowest dev stage in an installable version
+                    var sortedStages = _.chain( installableVersions )
+                        .map( function ( version ) { return version.devStage; })
+                        .filter( function ( devStage ) { return devStage; }) // remove null / undefined stages
+                        .sortBy( function ( devStage ) { return devStage.getRank(); })
+                        .value();
+
+                    var lowestRankStage = sortedStages[0];
+                    installedVersion.devStage = lowestRankStage;
                   }
 
                   return installedVersion;

@@ -200,7 +200,7 @@
       <field>
         <name>samplesDir</name>
         <variable>&#x24;&#x7b;samplesDir&#x7d;</variable>
-        <type>None</type>
+        <type>String</type>
         <format/>
         <currency/>
         <decimal/>
@@ -288,7 +288,7 @@ public boolean processRow(StepMetaInterface smi, StepDataInterface sdi) throws K
 
 	logBasic("Ready to start importing samples");
 	RepositoryImportResource repositoryImporter = new RepositoryImportResource();
-	repositoryImporter.doPostImport(getParameter("SamplesDir"), input, "true", "true", "true", "true", "UTF-8", "DEBUG", fileInfo);
+	repositoryImporter.doPostImport(getParameter("SamplesDir"), input, "true", "true", "true", "true", "UTF-8", "DEBUG", fileInfo, null);
 	
 	logBasic("Finished importing samples");
 	return true;

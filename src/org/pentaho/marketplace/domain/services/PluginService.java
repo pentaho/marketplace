@@ -190,11 +190,13 @@ public class PluginService implements IPluginService {
     MarketplaceXmlSerializer serializer = pluginsSerializer;
     this.setXmlSerializer( serializer );
 
-    metadataPluginsProvider.setUrl( this.getMetadataUrl() );
-    this.setMetadataPluginsProvider( metadataPluginsProvider );
-
     this.setSecurityHelper( securityHelper );
     this.setPluginResourceLoader( resourceLoader );
+
+    URL metadataUrl = this.getMetadataUrl( resourceLoader );
+    metadataPluginsProvider.setUrl( metadataUrl );
+    this.setMetadataPluginsProvider( metadataPluginsProvider );
+
   }
   //endregion
 
@@ -325,8 +327,7 @@ public class PluginService implements IPluginService {
     return compatibleVersions;
   }
 
-  private URL getMetadataUrl() {
-    IPluginResourceLoader resLoader = this.getPluginResourceLoader();
+  private URL getMetadataUrl( IPluginResourceLoader resLoader ) {
     String urlPath = null;
     try {
       urlPath = resLoader.getPluginSetting( getClass(), "settings/marketplace-site" ); //$NON-NLS-1$

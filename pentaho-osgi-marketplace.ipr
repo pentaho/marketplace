@@ -667,6 +667,17 @@
         <root url="jar://$MAVEN_REPOSITORY$/javax/mail/mail/1.3.2/mail-1.3.2-sources.jar!/" />
       </SOURCES>
     </library>
+    <library name="Maven: javax.ws.rs:javax.ws.rs-api:2.0">
+      <CLASSES>
+        <root url="jar://$MAVEN_REPOSITORY$/javax/ws/rs/javax.ws.rs-api/2.0/javax.ws.rs-api-2.0.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$MAVEN_REPOSITORY$/javax/ws/rs/javax.ws.rs-api/2.0/javax.ws.rs-api-2.0-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$MAVEN_REPOSITORY$/javax/ws/rs/javax.ws.rs-api/2.0/javax.ws.rs-api-2.0-sources.jar!/" />
+      </SOURCES>
+    </library>
     <library name="Maven: jaxen:jaxen:1.1.1">
       <CLASSES>
         <root url="jar://$MAVEN_REPOSITORY$/jaxen/jaxen/1.1.1/jaxen-1.1.1.jar!/" />
@@ -964,15 +975,15 @@
         <root url="jar://$MAVEN_REPOSITORY$/org/samba/jcifs/jcifs/1.3.3/jcifs-1.3.3-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="Maven: org.slf4j:slf4j-api:1.7.7">
+    <library name="Maven: org.slf4j:slf4j-api:1.7.5">
       <CLASSES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/slf4j/slf4j-api/1.7.7/slf4j-api-1.7.7.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/slf4j/slf4j-api/1.7.5/slf4j-api-1.7.5.jar!/" />
       </CLASSES>
       <JAVADOC>
-        <root url="jar://$MAVEN_REPOSITORY$/org/slf4j/slf4j-api/1.7.7/slf4j-api-1.7.7-javadoc.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/slf4j/slf4j-api/1.7.5/slf4j-api-1.7.5-javadoc.jar!/" />
       </JAVADOC>
       <SOURCES>
-        <root url="jar://$MAVEN_REPOSITORY$/org/slf4j/slf4j-api/1.7.7/slf4j-api-1.7.7-sources.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/org/slf4j/slf4j-api/1.7.5/slf4j-api-1.7.5-sources.jar!/" />
       </SOURCES>
     </library>
     <library name="Maven: org.tukaani:xz:1.0">
@@ -997,103 +1008,103 @@
         <root url="jar://$MAVEN_REPOSITORY$/oro/oro/2.0.8/oro-2.0.8-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="Maven: pentaho-kettle:kettle-core:TRUNK-SNAPSHOT">
+    <library name="Maven: pentaho-kettle:kettle-core:6.0-SNAPSHOT">
       <CLASSES>
-        <root url="jar://$MAVEN_REPOSITORY$/pentaho-kettle/kettle-core/TRUNK-SNAPSHOT/kettle-core-TRUNK-20141119.072628-432.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/pentaho-kettle/kettle-core/6.0-SNAPSHOT/kettle-core-6.0-20150209.082717-252.jar!/" />
       </CLASSES>
       <JAVADOC>
-        <root url="jar://$MAVEN_REPOSITORY$/pentaho-kettle/kettle-core/TRUNK-SNAPSHOT/kettle-core-TRUNK-20141119.072628-432-javadoc.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/pentaho-kettle/kettle-core/6.0-SNAPSHOT/kettle-core-6.0-20150209.082717-252-javadoc.jar!/" />
       </JAVADOC>
       <SOURCES>
-        <root url="jar://$MAVEN_REPOSITORY$/pentaho-kettle/kettle-core/TRUNK-SNAPSHOT/kettle-core-TRUNK-20141119.072628-432-sources.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/pentaho-kettle/kettle-core/6.0-SNAPSHOT/kettle-core-6.0-20150209.082717-252-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="Maven: pentaho-kettle:kettle-dbdialog:TRUNK-SNAPSHOT">
+    <library name="Maven: pentaho-kettle:kettle-dbdialog:6.0-SNAPSHOT">
       <CLASSES>
-        <root url="jar://$MAVEN_REPOSITORY$/pentaho-kettle/kettle-dbdialog/TRUNK-SNAPSHOT/kettle-dbdialog-TRUNK-20141119.072720-429.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/pentaho-kettle/kettle-dbdialog/6.0-SNAPSHOT/kettle-dbdialog-6.0-20150209.084247-252.jar!/" />
       </CLASSES>
       <JAVADOC>
-        <root url="jar://$MAVEN_REPOSITORY$/pentaho-kettle/kettle-dbdialog/TRUNK-SNAPSHOT/kettle-dbdialog-TRUNK-20141119.072720-429-javadoc.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/pentaho-kettle/kettle-dbdialog/6.0-SNAPSHOT/kettle-dbdialog-6.0-20150209.084247-252-javadoc.jar!/" />
       </JAVADOC>
       <SOURCES>
-        <root url="jar://$MAVEN_REPOSITORY$/pentaho-kettle/kettle-dbdialog/TRUNK-SNAPSHOT/kettle-dbdialog-TRUNK-20141119.072720-429-sources.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/pentaho-kettle/kettle-dbdialog/6.0-SNAPSHOT/kettle-dbdialog-6.0-20150209.084247-252-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="Maven: pentaho-kettle:kettle-engine:TRUNK-SNAPSHOT">
+    <library name="Maven: pentaho-kettle:kettle-engine:6.0-SNAPSHOT">
       <CLASSES>
-        <root url="jar://$MAVEN_REPOSITORY$/pentaho-kettle/kettle-engine/TRUNK-SNAPSHOT/kettle-engine-TRUNK-20141119.072653-429.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/pentaho-kettle/kettle-engine/6.0-SNAPSHOT/kettle-engine-6.0-20150209.084143-252.jar!/" />
       </CLASSES>
       <JAVADOC>
-        <root url="jar://$MAVEN_REPOSITORY$/pentaho-kettle/kettle-engine/TRUNK-SNAPSHOT/kettle-engine-TRUNK-20141119.072653-429-javadoc.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/pentaho-kettle/kettle-engine/6.0-SNAPSHOT/kettle-engine-6.0-20150209.084143-252-javadoc.jar!/" />
       </JAVADOC>
       <SOURCES>
-        <root url="jar://$MAVEN_REPOSITORY$/pentaho-kettle/kettle-engine/TRUNK-SNAPSHOT/kettle-engine-TRUNK-20141119.072653-429-sources.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/pentaho-kettle/kettle-engine/6.0-SNAPSHOT/kettle-engine-6.0-20150209.084143-252-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="Maven: pentaho-kettle:kettle-ui-swt:TRUNK-SNAPSHOT">
+    <library name="Maven: pentaho-kettle:kettle-ui-swt:6.0-SNAPSHOT">
       <CLASSES>
-        <root url="jar://$MAVEN_REPOSITORY$/pentaho-kettle/kettle-ui-swt/TRUNK-SNAPSHOT/kettle-ui-swt-TRUNK-20141119.072734-429.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/pentaho-kettle/kettle-ui-swt/6.0-SNAPSHOT/kettle-ui-swt-6.0-20150209.084732-252.jar!/" />
       </CLASSES>
       <JAVADOC>
-        <root url="jar://$MAVEN_REPOSITORY$/pentaho-kettle/kettle-ui-swt/TRUNK-SNAPSHOT/kettle-ui-swt-TRUNK-20141119.072734-429-javadoc.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/pentaho-kettle/kettle-ui-swt/6.0-SNAPSHOT/kettle-ui-swt-6.0-20150209.084732-252-javadoc.jar!/" />
       </JAVADOC>
       <SOURCES>
-        <root url="jar://$MAVEN_REPOSITORY$/pentaho-kettle/kettle-ui-swt/TRUNK-SNAPSHOT/kettle-ui-swt-TRUNK-20141119.072734-429-sources.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/pentaho-kettle/kettle-ui-swt/6.0-SNAPSHOT/kettle-ui-swt-6.0-20150209.084732-252-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="Maven: pentaho:metastore:TRUNK-SNAPSHOT">
+    <library name="Maven: pentaho:metastore:6.0-SNAPSHOT">
       <CLASSES>
-        <root url="jar://$MAVEN_REPOSITORY$/pentaho/metastore/TRUNK-SNAPSHOT/metastore-TRUNK-20141118.171208-9.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/pentaho/metastore/6.0-SNAPSHOT/metastore-6.0-20150209.070247-195.jar!/" />
       </CLASSES>
       <JAVADOC>
-        <root url="jar://$MAVEN_REPOSITORY$/pentaho/metastore/TRUNK-SNAPSHOT/metastore-TRUNK-20141118.171208-9-javadoc.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/pentaho/metastore/6.0-SNAPSHOT/metastore-6.0-20150209.070247-195-javadoc.jar!/" />
       </JAVADOC>
       <SOURCES>
-        <root url="jar://$MAVEN_REPOSITORY$/pentaho/metastore/TRUNK-SNAPSHOT/metastore-TRUNK-20141118.171208-9-sources.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/pentaho/metastore/6.0-SNAPSHOT/metastore-6.0-20150209.070247-195-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="Maven: pentaho:pentaho-vfs-browser:TRUNK-SNAPSHOT">
+    <library name="Maven: pentaho:pentaho-vfs-browser:6.0-SNAPSHOT">
       <CLASSES>
-        <root url="jar://$MAVEN_REPOSITORY$/pentaho/pentaho-vfs-browser/TRUNK-SNAPSHOT/pentaho-vfs-browser-TRUNK-20140925.142703-6.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/pentaho/pentaho-vfs-browser/6.0-SNAPSHOT/pentaho-vfs-browser-6.0-20150209.070206-195.jar!/" />
       </CLASSES>
       <JAVADOC>
-        <root url="jar://$MAVEN_REPOSITORY$/pentaho/pentaho-vfs-browser/TRUNK-SNAPSHOT/pentaho-vfs-browser-TRUNK-20140925.142703-6-javadoc.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/pentaho/pentaho-vfs-browser/6.0-SNAPSHOT/pentaho-vfs-browser-6.0-20150209.070206-195-javadoc.jar!/" />
       </JAVADOC>
       <SOURCES>
-        <root url="jar://$MAVEN_REPOSITORY$/pentaho/pentaho-vfs-browser/TRUNK-SNAPSHOT/pentaho-vfs-browser-TRUNK-20140925.142703-6-sources.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/pentaho/pentaho-vfs-browser/6.0-SNAPSHOT/pentaho-vfs-browser-6.0-20150209.070206-195-sources.jar!/" />
       </SOURCES>
     </library>
     <library name="Maven: pentaho:pentaho-xul-core:TRUNK-SNAPSHOT">
       <CLASSES>
-        <root url="jar://$MAVEN_REPOSITORY$/pentaho/pentaho-xul-core/TRUNK-SNAPSHOT/pentaho-xul-core-TRUNK-20141114.150232-15.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/pentaho/pentaho-xul-core/TRUNK-SNAPSHOT/pentaho-xul-core-TRUNK-20141209.220727-18.jar!/" />
       </CLASSES>
       <JAVADOC>
-        <root url="jar://$MAVEN_REPOSITORY$/pentaho/pentaho-xul-core/TRUNK-SNAPSHOT/pentaho-xul-core-TRUNK-20141114.150232-15-javadoc.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/pentaho/pentaho-xul-core/TRUNK-SNAPSHOT/pentaho-xul-core-TRUNK-20141209.220727-18-javadoc.jar!/" />
       </JAVADOC>
       <SOURCES>
-        <root url="jar://$MAVEN_REPOSITORY$/pentaho/pentaho-xul-core/TRUNK-SNAPSHOT/pentaho-xul-core-TRUNK-20141114.150232-15-sources.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/pentaho/pentaho-xul-core/TRUNK-SNAPSHOT/pentaho-xul-core-TRUNK-20141209.220727-18-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="Maven: pentaho:pentaho-xul-swing:TRUNK-SNAPSHOT">
+    <library name="Maven: pentaho:pentaho-xul-swing:6.0-SNAPSHOT">
       <CLASSES>
-        <root url="jar://$MAVEN_REPOSITORY$/pentaho/pentaho-xul-swing/TRUNK-SNAPSHOT/pentaho-xul-swing-TRUNK-20141114.150516-15.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/pentaho/pentaho-xul-swing/6.0-SNAPSHOT/pentaho-xul-swing-6.0-20150209.080737-162.jar!/" />
       </CLASSES>
       <JAVADOC>
-        <root url="jar://$MAVEN_REPOSITORY$/pentaho/pentaho-xul-swing/TRUNK-SNAPSHOT/pentaho-xul-swing-TRUNK-20141114.150516-15-javadoc.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/pentaho/pentaho-xul-swing/6.0-SNAPSHOT/pentaho-xul-swing-6.0-20150209.080737-162-javadoc.jar!/" />
       </JAVADOC>
       <SOURCES>
-        <root url="jar://$MAVEN_REPOSITORY$/pentaho/pentaho-xul-swing/TRUNK-SNAPSHOT/pentaho-xul-swing-TRUNK-20141114.150516-15-sources.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/pentaho/pentaho-xul-swing/6.0-SNAPSHOT/pentaho-xul-swing-6.0-20150209.080737-162-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="Maven: pentaho:pentaho-xul-swt:TRUNK-SNAPSHOT">
+    <library name="Maven: pentaho:pentaho-xul-swt:6.0-SNAPSHOT">
       <CLASSES>
-        <root url="jar://$MAVEN_REPOSITORY$/pentaho/pentaho-xul-swt/TRUNK-SNAPSHOT/pentaho-xul-swt-TRUNK-20141114.150501-15.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/pentaho/pentaho-xul-swt/6.0-SNAPSHOT/pentaho-xul-swt-6.0-20150209.080923-162.jar!/" />
       </CLASSES>
       <JAVADOC>
-        <root url="jar://$MAVEN_REPOSITORY$/pentaho/pentaho-xul-swt/TRUNK-SNAPSHOT/pentaho-xul-swt-TRUNK-20141114.150501-15-javadoc.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/pentaho/pentaho-xul-swt/6.0-SNAPSHOT/pentaho-xul-swt-6.0-20150209.080923-162-javadoc.jar!/" />
       </JAVADOC>
       <SOURCES>
-        <root url="jar://$MAVEN_REPOSITORY$/pentaho/pentaho-xul-swt/TRUNK-SNAPSHOT/pentaho-xul-swt-TRUNK-20141114.150501-15-sources.jar!/" />
+        <root url="jar://$MAVEN_REPOSITORY$/pentaho/pentaho-xul-swt/6.0-SNAPSHOT/pentaho-xul-swt-6.0-20150209.080923-162-sources.jar!/" />
       </SOURCES>
     </library>
     <library name="Maven: rhino:js:1.7R3">

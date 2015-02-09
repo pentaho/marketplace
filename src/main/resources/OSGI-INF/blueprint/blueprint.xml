@@ -52,72 +52,67 @@
             <!--Local Folder -->
             <property name="path" value="/web"/>
         </bean>
+
     </service>
 
+    <cxf:bus id="marketplaceImplBus">
+    </cxf:bus>
+
+    <bean id="testService" class="org.pentaho.marketplace.di.plugin.HelloRest">
+    </bean>
+
+    <jaxrs:server address="/marketplace" id="marketplaceService">
+        <jaxrs:serviceBeans>
+            <ref component-id="testService" />
+        </jaxrs:serviceBeans>
+        <jaxrs:providers>
+            <bean class="org.apache.cxf.jaxrs.provider.json.JSONProvider"/>
+        </jaxrs:providers>
+    </jaxrs:server>
 
     <!--
 
-        <cxf:bus id="marketplaceImplBus">
-        </cxf:bus>
 
-        <jaxrs:server address="/marketplace" id="marketplaceService">
-            <jaxrs:serviceBeans>
-                <ref component-id="profilingServiceWebserviceImpl" />
-            </jaxrs:serviceBeans>
-            <jaxrs:providers>
-                <bean class="org.codehaus.jackson.jaxrs.JacksonJaxbJsonProvider"/>
-            </jaxrs:providers>
-        </jaxrs:server>
+            <cm:property-placeholder persistent-id="com.pentaho.profiling.services"
+                                     update-strategy="reload">
+            </cm:property-placeholder>
 
-        <bean id="profilingServiceWebserviceImpl" class="org.pentaho.marketplace profiling.services.ProfilingServiceWebserviceImpl">
-            <property name="delegate" ref="delegateRef"/>
-        </bean>
+            <cxf:bus id="profilingServiceWebserviceImplBus">
+            </cxf:bus>
 
+            <jaxrs:server address="/profile" id="profileService">
+                <jaxrs:serviceBeans>
+                    <ref component-id="profilingServiceWebserviceImpl" />
+                </jaxrs:serviceBeans>
+                <jaxrs:providers>
+                  <bean class="org.codehaus.jackson.jaxrs.JacksonJaxbJsonProvider"/>
+                </jaxrs:providers>
+            </jaxrs:server>
 
+            <jaxrs:server address="/data-profiling-service/dataSource" id="profileDsService">
+                <jaxrs:serviceBeans>
+                    <ref component-id="profileDataSourceIncludeWebserviceImpl" />
+                </jaxrs:serviceBeans>
+            </jaxrs:server>
 
+            <bean id="profilingServiceWebserviceImpl" class="com.pentaho.profiling.services.ProfilingServiceWebserviceImpl">
+                <property name="delegate" ref="delegateRef"/>
+            </bean>
 
+            <bean id="profileDataSourceIncludeWebserviceImpl" class="com.pentaho.profiling.services.ProfileDataSourceIncludeWebserviceImpl">
+                <property name="includeServices" ref="dsServiceList"/>
+            </bean>
 
+            <bean id="resourceMapping"
+                  class="org.ops4j.pax.web.extender.whiteboard.runtime.DefaultResourceMapping">
+                <property name="alias" value="/profileWebView" />
+                <property name="path" value="/webview" />
+            </bean>
+            <service id="resources" ref="resourceMapping" interface="org.ops4j.pax.web.extender.whiteboard.ResourceMapping" />
 
-        <cm:property-placeholder persistent-id="com.pentaho.profiling.services"
-                                 update-strategy="reload">
-        </cm:property-placeholder>
+            <reference id="delegateRef" interface="com.pentaho.profiling.api.ProfilingService"/>
+            <reference-list id="dsServiceList" interface="com.pentaho.profiling.services.api.ProfileDataSourceIncludeService" availability="optional"/>
 
-        <cxf:bus id="profilingServiceWebserviceImplBus">
-        </cxf:bus>
-
-        <jaxrs:server address="/profile" id="profileService">
-            <jaxrs:serviceBeans>
-                <ref component-id="profilingServiceWebserviceImpl" />
-            </jaxrs:serviceBeans>
-            <jaxrs:providers>
-              <bean class="org.codehaus.jackson.jaxrs.JacksonJaxbJsonProvider"/>
-            </jaxrs:providers>
-        </jaxrs:server>
-
-        <jaxrs:server address="/data-profiling-service/dataSource" id="profileDsService">
-            <jaxrs:serviceBeans>
-                <ref component-id="profileDataSourceIncludeWebserviceImpl" />
-            </jaxrs:serviceBeans>
-        </jaxrs:server>
-
-        <bean id="profilingServiceWebserviceImpl" class="com.pentaho.profiling.services.ProfilingServiceWebserviceImpl">
-            <property name="delegate" ref="delegateRef"/>
-        </bean>
-
-        <bean id="profileDataSourceIncludeWebserviceImpl" class="com.pentaho.profiling.services.ProfileDataSourceIncludeWebserviceImpl">
-            <property name="includeServices" ref="dsServiceList"/>
-        </bean>
-
-        <bean id="resourceMapping"
-              class="org.ops4j.pax.web.extender.whiteboard.runtime.DefaultResourceMapping">
-            <property name="alias" value="/profileWebView" />
-            <property name="path" value="/webview" />
-        </bean>
-        <service id="resources" ref="resourceMapping" interface="org.ops4j.pax.web.extender.whiteboard.ResourceMapping" />
-
-        <reference id="delegateRef" interface="com.pentaho.profiling.api.ProfilingService"/>
-        <reference-list id="dsServiceList" interface="com.pentaho.profiling.services.api.ProfileDataSourceIncludeService" availability="optional"/>
-
-        -->
+            -->
 
 </blueprint>

@@ -17,7 +17,6 @@ import org.pentaho.marketplace.domain.model.entities.interfaces.ICategory;
 import org.pentaho.marketplace.domain.model.factories.interfaces.ICategoryFactory;
 import org.pentaho.marketplace.endpoints.dtos.entities.CategoryDTO;
 import org.pentaho.marketplace.endpoints.dtos.mappers.interfaces.ICategoryDTOMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -30,7 +29,6 @@ public final class CategoryDTOMapper implements ICategoryDTOMapper {
   // endregion
 
   // region Constructors
-  @Autowired
   public CategoryDTOMapper( ICategoryFactory categoryFactory ) {
     this.categoryFactory = categoryFactory;
   }

@@ -8,7 +8,6 @@ import org.pentaho.marketplace.endpoints.dtos.mappers.interfaces.IStatusMessageD
 import org.pentaho.marketplace.endpoints.dtos.responses.IterablePluginOperationResultDTO;
 import org.pentaho.marketplace.endpoints.dtos.responses.StringOperationResultDTO;
 import org.pentaho.marketplace.endpoints.dtos.responses.base.OperationResultDTO;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -19,14 +18,13 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import java.util.Collection;
 
-@Path( "@plugin.java.rest.path.root@" )
+@Path( "services" )
 public class MarketplaceService {
 
   private IRDO RDO;
   private IPluginDTOMapper pluginDTOMapper;
   private IStatusMessageDTOMapper statusMessageDTOMapper;
 
-  @Autowired
   public MarketplaceService( IRDO rdo,
                              IPluginDTOMapper pluginDTOMapper,
                              IStatusMessageDTOMapper statusMessageDTOMapper ) {

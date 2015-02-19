@@ -34,9 +34,12 @@
 package org.pentaho.marketplace.endpoints;
 
 import org.apache.commons.logging.Log;
-import org.pentaho.platform.engine.services.solution.BaseContentGenerator;
+//import org.pentaho.platform.engine.services.solution.BaseContentGenerator;
 
-public class MarketplaceContentGenerator extends BaseContentGenerator {
+public class MarketplaceContentGenerator //extends BaseContentGenerator
+{
+  //TODO: check this class
+  /*
 
   public static final String ENCODING = "utf-8";
   private static final long serialVersionUID = 1L;
@@ -49,4 +52,6 @@ public class MarketplaceContentGenerator extends BaseContentGenerator {
   @Override
   public void createContent() throws Exception {
   }
+
+  */
 }

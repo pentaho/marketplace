@@ -19,21 +19,38 @@ import org.apache.commons.logging.LogFactory;
 import org.pentaho.marketplace.domain.model.entities.interfaces.IPlugin;
 import org.pentaho.marketplace.domain.model.entities.serialization.MarketplaceXmlSerializer;
 import org.pentaho.marketplace.domain.services.interfaces.IRemotePluginProvider;
-import org.pentaho.platform.util.web.HttpUtil;
 
+//import org.pentaho.platform.api.engine.IPluginResourceLoader;
+
+//import org.pentaho.platform.util.web.HttpUtil;
+import org.pentaho.marketplace.util.web.HttpUtil;
+
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Collection;
 
 public class RemoteMetadataPluginProvider implements IRemotePluginProvider {
 
   // region Properties
+  private static final String MARKETPLACE_ENTRIES_URL_FALLBACK = "https://raw.github.com/pentaho/marketplace-metadata/master/marketplace.xml";
+
   private Log logger = LogFactory.getLog( this.getClass() );
   private Log getLogger() {
     return this.logger;
   }
 
   public URL getUrl() {
-    return this.metadataUrl;
+
+    // TODO: Temporary
+    String urlPath = MARKETPLACE_ENTRIES_URL_FALLBACK;
+    try {
+      return new URL( urlPath );
+    } catch ( MalformedURLException e ) {
+      this.logger.error( "Invalid metadata url: " + urlPath, e );
+      return null;
+    }
+
+    //return this.metadataUrl;
   }
   public RemoteMetadataPluginProvider setUrl( URL metadataUrl ) {
     this.metadataUrl = metadataUrl;
@@ -61,6 +78,30 @@ public class RemoteMetadataPluginProvider implements IRemotePluginProvider {
     this.setXmlSerializer( xmlSerializer );
   }
   // endregion
+
+  /*
+  // TODO check dependency...
+  private URL getMetadataUrl( IPluginResourceLoader resLoader ) {
+      String urlPath = null;
+      try {
+          urlPath = resLoader.getPluginSetting( getClass(), "settings/marketplace-site" ); //$NON-NLS-1$
+      } catch ( Exception e ) {
+          logger.debug( "Error getting data access plugin settings", e );
+      }
+
+      if ( urlPath == null || "".equals( urlPath ) ) {
+          urlPath = MARKETPLACE_ENTRIES_URL_FALLBACK;
+      }
+
+      try {
+          return new URL( urlPath );
+      } catch ( MalformedURLException e ) {
+          this.logger.error( "Invalid metadata url: " + urlPath, e );
+          return null;
+      }
+  }
+  */
+
 
   // region Methods
   @Override

@@ -18,7 +18,8 @@
         <property name="perspective" ref="marketplaceSpoonWebPerspective"/>
     </bean>
 
-    <bean id="marketplaceSpoonWebPerspective" class="org.pentaho.marketplace.di.plugin.WebPerspective">
+    <bean id="marketplaceSpoonWebPerspective"
+          class="org.pentaho.marketplace.di.plugin.WebPerspective">
     </bean>
 
     <!-- Actual Plugin Class PluginInterface, references the Spoon Plugin above -->
@@ -38,7 +39,7 @@
     </bean>
 
     <!-- Register plugin with the Service Registry -->
-    <service id="pluginService" interface="org.pentaho.di.core.plugins.PluginInterface" ref="marketplacePlugin">
+    <service id="spoonPluginService" interface="org.pentaho.di.core.plugins.PluginInterface" ref="marketplacePlugin">
         <service-properties>
             <entry key="PluginType" value="org.pentaho.di.ui.spoon.SpoonPluginType"/>
         </service-properties>
@@ -55,64 +56,119 @@
 
     </service>
 
+
     <cxf:bus id="marketplaceImplBus">
     </cxf:bus>
 
     <bean id="testService" class="org.pentaho.marketplace.di.plugin.HelloRest">
     </bean>
 
+
     <jaxrs:server address="/marketplace" id="marketplaceService">
         <jaxrs:serviceBeans>
             <ref component-id="testService" />
+            <ref component-id="marketplaceServiceEndpoint"/>
         </jaxrs:serviceBeans>
         <jaxrs:providers>
             <bean class="org.apache.cxf.jaxrs.provider.json.JSONProvider"/>
         </jaxrs:providers>
     </jaxrs:server>
 
-    <!--
 
 
-            <cm:property-placeholder persistent-id="com.pentaho.profiling.services"
-                                     update-strategy="reload">
-            </cm:property-placeholder>
+    <!-- START: Service Endpoints -->
+    <bean id="marketplaceServiceEndpoint"
+          class="org.pentaho.marketplace.endpoints.MarketplaceService">
+        <argument ref="marketplaceRDO"/>
+        <argument ref="marketplacePluginMapper"/>
+        <argument ref="marketplaceStatusMessageMapper"/>
+    </bean>
+    <!-- END: Service Endpoints -->
 
-            <cxf:bus id="profilingServiceWebserviceImplBus">
-            </cxf:bus>
+    <!-- START: RDO -->
+    <bean id="marketplaceRDO"
+          class="org.pentaho.marketplace.domain.services.RDO">
+        <argument ref="marketplacePluginService"/>
+    </bean>
+    <!-- END: RDO -->
 
-            <jaxrs:server address="/profile" id="profileService">
-                <jaxrs:serviceBeans>
-                    <ref component-id="profilingServiceWebserviceImpl" />
-                </jaxrs:serviceBeans>
-                <jaxrs:providers>
-                  <bean class="org.codehaus.jackson.jaxrs.JacksonJaxbJsonProvider"/>
-                </jaxrs:providers>
-            </jaxrs:server>
+    <!-- START: Domain Entity Factories -->
+    <bean id="marketplacePluginFactory" class="org.pentaho.marketplace.domain.model.factories.PluginFactory" />
+    <bean id="marketplacePluginVersionFactory" class="org.pentaho.marketplace.domain.model.factories.PluginVersionFactory" />
+    <bean id="marketplaceDomainStatusMessageFactory" class="org.pentaho.marketplace.domain.model.factories.DomainStatusMessageFactory" />
+    <bean id="marketplaceVersionDataFactory" class="org.pentaho.marketplace.domain.model.factories.VersionDataFactory" />
+    <bean id="marketplaceCategoryFactory" class="org.pentaho.marketplace.domain.model.factories.CategoryFactory" />
 
-            <jaxrs:server address="/data-profiling-service/dataSource" id="profileDsService">
-                <jaxrs:serviceBeans>
-                    <ref component-id="profileDataSourceIncludeWebserviceImpl" />
-                </jaxrs:serviceBeans>
-            </jaxrs:server>
+  <!--
+    <bean id="marketplaceSecurityHelperFactory"
+          class="org.pentaho.platform.engine.security.SecurityHelper"
+          factory-method="getInstance">
+    </bean>
+  -->
 
-            <bean id="profilingServiceWebserviceImpl" class="com.pentaho.profiling.services.ProfilingServiceWebserviceImpl">
-                <property name="delegate" ref="delegateRef"/>
-            </bean>
+    <bean id="marketplacePluginSerializer"
+          class="org.pentaho.marketplace.domain.model.entities.serialization.MarketplaceXmlSerializer">
+        <argument ref="marketplacePluginFactory" />
+        <argument ref="marketplacePluginVersionFactory"/>
+        <argument ref="marketplaceVersionDataFactory" />
+        <argument ref="marketplaceCategoryFactory" />
+    </bean>
+    <!-- END: Domain Entity Factories -->
 
-            <bean id="profileDataSourceIncludeWebserviceImpl" class="com.pentaho.profiling.services.ProfileDataSourceIncludeWebserviceImpl">
-                <property name="includeServices" ref="dsServiceList"/>
-            </bean>
 
-            <bean id="resourceMapping"
-                  class="org.ops4j.pax.web.extender.whiteboard.runtime.DefaultResourceMapping">
-                <property name="alias" value="/profileWebView" />
-                <property name="path" value="/webview" />
-            </bean>
-            <service id="resources" ref="resourceMapping" interface="org.ops4j.pax.web.extender.whiteboard.ResourceMapping" />
+    <!-- START: Domain Services -->
+<!--
+    <bean id="marketplacePluginService"
+          class="org.pentaho.marketplace.domain.services.PluginService">
+        <argument ref="marketplaceRemotePluginProvider"/>
+        <argument ref="marketplacePluginSerializer"/>
+        <argument ref="marketplaceVersionDataFactory"/>
+        <argument ref="marketplaceDomainStatusMessageFactory"/>
+        <argument ref="marketplaceSecurityHelperFactory"/>
 
-            <reference id="delegateRef" interface="com.pentaho.profiling.api.ProfilingService"/>
-            <reference-list id="dsServiceList" interface="com.pentaho.profiling.services.api.ProfileDataSourceIncludeService" availability="optional"/>
+        <constructor-arg>
+            <pen:bean class="org.pentaho.platform.api.engine.IPluginResourceLoader"/>
+        </constructor-arg>
 
-            -->
+    </bean>
+-->
+
+  <bean id="marketplacePluginService"
+        class="org.pentaho.marketplace.domain.services.KettlePluginService">
+    <argument ref="marketplaceRemotePluginProvider"/>
+    <argument ref="marketplaceVersionDataFactory"/>
+    <argument ref="marketplaceDomainStatusMessageFactory"/>
+  </bean>
+
+  <bean id="marketplaceRemotePluginProvider"
+          class="org.pentaho.marketplace.domain.services.RemoteMetadataPluginProvider">
+        <argument ref="marketplacePluginSerializer" />
+    </bean>
+    <!-- END: Domain Services -->
+
+    <!-- START: DTO Mappers -->
+    <bean id="marketplaceStatusMessageMapper"
+          class="org.pentaho.marketplace.endpoints.dtos.mappers.StatusMessageDTOMapper">
+        <argument ref="marketplaceDomainStatusMessageFactory"/>
+    </bean>
+
+    <bean id="marketplacePluginVersionMapper"
+          class="org.pentaho.marketplace.endpoints.dtos.mappers.PluginVersionDTOMapper">
+        <argument ref="marketplacePluginVersionFactory"/>
+    </bean>
+
+    <bean id="marketplaceCategoryMapper"
+          class="org.pentaho.marketplace.endpoints.dtos.mappers.CategoryDTOMapper">
+        <argument ref="marketplaceCategoryFactory"/>
+    </bean>
+
+    <bean id="marketplacePluginMapper"
+          class="org.pentaho.marketplace.endpoints.dtos.mappers.PluginDTOMapper">
+        <argument ref="marketplacePluginFactory"/>
+        <argument ref="marketplacePluginVersionMapper"/>
+        <argument ref="marketplaceCategoryMapper"/>
+    </bean>
+    <!-- END: DTO Mappers -->
+
 
 </blueprint>

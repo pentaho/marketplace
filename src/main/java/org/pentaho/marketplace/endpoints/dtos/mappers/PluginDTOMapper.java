@@ -6,7 +6,6 @@ import org.pentaho.marketplace.endpoints.dtos.entities.PluginDTO;
 import org.pentaho.marketplace.endpoints.dtos.mappers.interfaces.ICategoryDTOMapper;
 import org.pentaho.marketplace.endpoints.dtos.mappers.interfaces.IPluginDTOMapper;
 import org.pentaho.marketplace.endpoints.dtos.mappers.interfaces.IPluginVersionDTOMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -21,7 +20,6 @@ public class PluginDTOMapper implements IPluginDTOMapper {
   //endregion
 
   //region Constructors
-  @Autowired
   public PluginDTOMapper( IPluginFactory pluginFactory,
                           IPluginVersionDTOMapper pluginVersionDTOMapper,
                           ICategoryDTOMapper categoryDTOMapper) {

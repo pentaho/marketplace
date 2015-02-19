@@ -6,7 +6,6 @@ import org.pentaho.marketplace.domain.model.entities.interfaces.IPluginVersion;
 import org.pentaho.marketplace.domain.model.factories.interfaces.IPluginVersionFactory;
 import org.pentaho.marketplace.endpoints.dtos.entities.PluginVersionDTO;
 import org.pentaho.marketplace.endpoints.dtos.mappers.interfaces.IPluginVersionDTOMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -19,7 +18,6 @@ public class PluginVersionDTOMapper implements IPluginVersionDTOMapper {
   //endregion
 
   //region Constructors
-  @Autowired
   public PluginVersionDTOMapper( IPluginVersionFactory pluginVersionFactory ) {
 
     //initialize dependencies

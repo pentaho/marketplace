@@ -4,7 +4,6 @@ import org.pentaho.marketplace.domain.model.entities.interfaces.IDomainStatusMes
 import org.pentaho.marketplace.domain.model.factories.interfaces.IDomainStatusMessageFactory;
 import org.pentaho.marketplace.endpoints.dtos.mappers.interfaces.IStatusMessageDTOMapper;
 import org.pentaho.marketplace.endpoints.dtos.responses.base.StatusMessageDTO;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -17,7 +16,6 @@ public class StatusMessageDTOMapper implements IStatusMessageDTOMapper {
   //endregion
 
   //region Constructors
-  @Autowired
   public StatusMessageDTOMapper( IDomainStatusMessageFactory domainStatusMessageFactory ) {
 
     //initialize dependencies

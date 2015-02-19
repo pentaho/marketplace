@@ -105,7 +105,15 @@ define(
               };
 
               function contains ( string, subString ) {
-                return string ? string.toLowerCase().indexOf(subString.toLowerCase()) > -1 : false;
+                if ( !string || !subString ) {
+                  return false;
+                }
+
+                // make sure these are strings
+                string = string.toString().toLowerCase();
+                subString = string.toString().toLowerCase();
+
+                return string.indexOf( subString ) > -1;
               };
 
               function filterText ( plugin, text ) {

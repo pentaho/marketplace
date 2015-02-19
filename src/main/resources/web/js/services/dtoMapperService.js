@@ -50,7 +50,8 @@ define(
                 plugin.author.logoUrl = pluginDTO.authorLogo;
 
                 // TODO change to function that checks for installed version info?
-                plugin.isInstalled = (pluginDTO.installed.toUpperCase() === 'TRUE');
+                // TODO: toString is used because of difference between BA server and OSGI serializer
+                plugin.isInstalled = (pluginDTO.installed.toString().toUpperCase() === 'TRUE');
 
                 plugin.versions = _.map( pluginDTO.versions, toVersion );
 

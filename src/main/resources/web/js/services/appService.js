@@ -26,13 +26,19 @@ define(
             function( $http, dtoMapper, $q ) {
 
               // TODO: remove global variable CONTEXT_PATH
-              var baseUrl = CONTEXT_PATH + 'plugin/marketplace/api';
+              //var baseUrl = CONTEXT_PATH + 'plugin/marketplace/api';
+              // TODO: see how to generalize this for both PDI and BA
+              var baseUrl = CONTEXT_PATH + 'cxf/marketplace/services';
+
               var pluginsUrl =  baseUrl + '/plugins';
               var installPluginBaseUrl = baseUrl + '/plugin';
               var pluginsPromise = null;
 
               function isResponseError( response ) {
-                return response.data.statusMessage.code.substring(0,5).toLowerCase() == 'error';
+                var code = response.data.iterablePluginOperationResultDTO ?
+                    response.data.iterablePluginOperationResultDTO.statusMessage.code :
+                    response.data.statusMessage.code ;
+                return code.substring(0,5).toLowerCase() == 'error';
               }
               return {
                 refreshPluginsFromServer: function() {
@@ -44,11 +50,15 @@ define(
                   if ( pluginsPromise == null ) {
                     pluginsPromise = $http.get( pluginsUrl ).then(
                         function ( response ) {
+                          // diference in response.data structure occurs due to different serializers being used in the BA and PDI OSGI Bridge server
+                          var dto = response.data.iterablePluginOperationResultDTO ?
+                              response.data.iterablePluginOperationResultDTO :
+                              response.data;
                           if ( isResponseError( response ) ) {
                             console.log( "Failed getting plugins from server." );
-                            return $q.reject( response.data.statusMessage );
+                            return $q.reject( dto.statusMessage );
                           }
-                          return _.map( response.data.plugins, dtoMapper.toPlugin );
+                          return _.map( dto.plugins, dtoMapper.toPlugin );
                         }
                     );
                   }

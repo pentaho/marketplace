@@ -240,6 +240,7 @@ define(
                 updateOptionsDisplayString();
               });
 
+              $scope.groups = [];
 
             }
           ]);

@@ -159,7 +159,7 @@ define(
               function getStages () {
                 return _.chain( lanes )
                     .map( function( lane ) { return lane.stages; } )
-                    .map( function (stages) { return _.flatten( stages ); })
+                    .map( function (stages) { return _.toArray( stages ); })
                     .flatten()
                     // IE8 requires that undefined and null values are explicitly removed
                     .filter( function ( stage ) { return !(stage === undefined || stage === null); } )

@@ -18,3 +18,4 @@ build-res/requireCfg-raw.js
 build-res/requireCfg.js
 dev-lib
 target/
+.idea

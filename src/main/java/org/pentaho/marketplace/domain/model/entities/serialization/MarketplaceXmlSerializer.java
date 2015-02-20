@@ -16,6 +16,7 @@ package org.pentaho.marketplace.domain.model.entities.serialization;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.pentaho.marketplace.domain.model.entities.DevelopmentStage;
+import org.pentaho.marketplace.domain.model.entities.MarketEntryType;
 import org.pentaho.marketplace.domain.model.entities.interfaces.ICategory;
 import org.pentaho.marketplace.domain.model.entities.interfaces.IDevelopmentStage;
 import org.pentaho.marketplace.domain.model.entities.interfaces.IPlugin;
@@ -107,10 +108,6 @@ public class MarketplaceXmlSerializer {
     Collection<IPlugin> pluginList = new ArrayList<IPlugin>();
     for ( int i = 0; i < plugins.getLength(); i++ ) {
       Element pluginElement = (Element) plugins.item( i );
-      String type = getElementChildValue( pluginElement, "type" );
-      if ( !"Platform".equals( type ) ) {
-        continue;
-      }
 
       IPlugin plugin = getPlugin( pluginElement );
       pluginList.add( plugin );
@@ -138,6 +135,7 @@ public class MarketplaceXmlSerializer {
     plugin.setLicenseName( getElementChildValue( pluginElement, "license_name" ) );
     plugin.setLicenseText( getElementChildValue( pluginElement, "license_text" ) );
     plugin.setDependencies( getElementChildValue( pluginElement, "dependencies" ) );
+    plugin.setType( MarketEntryType.valueOf( getElementChildValue( pluginElement, "type" ) ) );
     plugin.setCategory( this.getCategory( pluginElement ) );
 
     NodeList availableVersionsNode =

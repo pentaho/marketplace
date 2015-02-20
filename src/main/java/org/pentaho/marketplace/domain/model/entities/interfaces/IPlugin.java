@@ -1,5 +1,7 @@
 package org.pentaho.marketplace.domain.model.entities.interfaces;
 
+import org.pentaho.marketplace.domain.model.entities.MarketEntryType;
+
 import java.util.Collection;
 
 public interface IPlugin {
@@ -90,6 +92,9 @@ public interface IPlugin {
   ICategory getCategory();
   void setCategory( ICategory category );
 
+  // Type
+  MarketEntryType getType();
+  void setType( MarketEntryType type );
   //endregion
 
   //region Methods

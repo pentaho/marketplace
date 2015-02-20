@@ -1,9 +1,12 @@
 package org.pentaho.marketplace.domain.services;
 
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.Predicate;
 import org.pentaho.di.core.Const;
 import org.pentaho.di.core.plugins.PluginInterface;
 import org.pentaho.di.core.plugins.PluginRegistry;
 import org.pentaho.di.core.plugins.PluginTypeInterface;
+import org.pentaho.marketplace.domain.model.entities.MarketEntryType;
 import org.pentaho.marketplace.domain.model.entities.interfaces.IPlugin;
 import org.pentaho.marketplace.domain.model.entities.interfaces.IPluginVersion;
 import org.pentaho.marketplace.domain.model.factories.interfaces.IDomainStatusMessageFactory;
@@ -112,7 +115,23 @@ public class KettlePluginService extends BasePluginService {
     return false;
   }
 
+  @Override
+  public Collection<IPlugin> getPlugins() {
+    Collection<IPlugin> plugins = super.getPlugins();
 
+    // remove non PDI plugins
+    CollectionUtils.filter( plugins, new Predicate() {
+      @Override public boolean evaluate( Object plugin ) {
+        if ( !(plugin instanceof IPlugin) ) {
+          return false;
+        }
+        IPlugin castedPlugin = (IPlugin) plugin;
+        return castedPlugin.getType() != MarketEntryType.Platform;
+      }
+    });
+
+    return plugins;
+  }
 
 
 

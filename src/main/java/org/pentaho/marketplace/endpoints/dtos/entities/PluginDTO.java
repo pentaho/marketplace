@@ -25,6 +25,7 @@ public class PluginDTO {
   public String[] screenshots;
   public String dependencies;
   public String license;
+  public String type;
 
   public CategoryDTO category;
 

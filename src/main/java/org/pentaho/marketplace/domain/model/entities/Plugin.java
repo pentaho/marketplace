@@ -32,6 +32,8 @@ public class Plugin implements IPlugin {
   private String licenseName;
   private String licenseText;
   private ICategory category;
+
+  private MarketEntryType type;
   //endregion
 
   //region IPlugin implementation
@@ -228,6 +230,15 @@ public class Plugin implements IPlugin {
   @Override public void setCategory( ICategory category ) { this.category = category; }
 
   @Override
+  public MarketEntryType getType() {
+    return this.type;
+  }
+  @Override
+  public void setType( MarketEntryType type ) {
+    this.type = type;
+  }
+
+  @Override
   public IPluginVersion getVersionByBranch( String branch ) {
 
     if ( this.versions == null ) {
@@ -320,6 +331,9 @@ public class Plugin implements IPlugin {
     if ( smallImg != null ? !smallImg.equals( plugin.smallImg ) : plugin.smallImg != null ) {
       return false;
     }
+    if ( type != plugin.type ) {
+      return false;
+    }
     if ( versions != null ? !versions.equals( plugin.versions ) : plugin.versions != null ) {
       return false;
     }
@@ -350,6 +364,7 @@ public class Plugin implements IPlugin {
     result = 31 * result + ( licenseName != null ? licenseName.hashCode() : 0 );
     result = 31 * result + ( licenseText != null ? licenseText.hashCode() : 0 );
     result = 31 * result + ( category != null ? category.hashCode() : 0 );
+    result = 31 * result + ( type != null ? type.hashCode() : 0 );
     return result;
   }
 }

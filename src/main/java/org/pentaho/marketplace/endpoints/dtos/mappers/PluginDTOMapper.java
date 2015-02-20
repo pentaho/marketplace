@@ -1,5 +1,6 @@
 package org.pentaho.marketplace.endpoints.dtos.mappers;
 
+import org.pentaho.marketplace.domain.model.entities.MarketEntryType;
 import org.pentaho.marketplace.domain.model.entities.interfaces.IPlugin;
 import org.pentaho.marketplace.domain.model.factories.interfaces.IPluginFactory;
 import org.pentaho.marketplace.endpoints.dtos.entities.PluginDTO;
@@ -57,6 +58,7 @@ public class PluginDTOMapper implements IPluginDTOMapper {
     plugin.setScreenshots( dto.screenshots );
     plugin.setDependencies( dto.dependencies );
     plugin.setLicense( dto.license );
+    plugin.setType( MarketEntryType.valueOf( dto.type ) );
 
     //return the instance
     return plugin;
@@ -87,6 +89,8 @@ public class PluginDTOMapper implements IPluginDTOMapper {
     dto.screenshots = plugin.getScreenshots();
     dto.dependencies = plugin.getDependencies();
     dto.license = plugin.getLicense();
+    dto.type = plugin.getType().toString();
+
     dto.category = this.categoryDTOMapper.toDTO( plugin.getCategory() );
 
     //return the dto

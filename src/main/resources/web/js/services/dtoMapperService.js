@@ -74,6 +74,8 @@ define(
                 }
                 plugin.license.text = pluginDTO.license_text;
 
+                plugin.type = pluginDTO.type;
+
                 //plugin.category = categories[ Math.floor( Math.random() * categories.length ) ];;
                 plugin.category = toCategory( pluginDTO.category );
 

@@ -192,7 +192,7 @@ public abstract class BasePluginService implements IPluginService {
     for ( IPlugin plugin : plugins ) {
       plugin.setInstalled( true );
       // TODO: assumes plugin is installed in a folder named with the plugin id
-      IPluginVersion installedVersion = getInstalledPluginVersion( plugin.getId() );
+      IPluginVersion installedVersion = getInstalledPluginVersion( plugin );
       if ( installedVersion != null ) {
         plugin.setInstalledBranch( installedVersion.getBranch() );
         plugin.setInstalledVersion( installedVersion.getVersion() );
@@ -373,7 +373,7 @@ public abstract class BasePluginService implements IPluginService {
 
   abstract protected boolean executeUninstall( IPlugin plugin );
 
-  abstract protected IPluginVersion getInstalledPluginVersion( String pluginId );
+  abstract protected IPluginVersion getInstalledPluginVersion( IPlugin plugin );
 
   abstract protected Collection<String> getInstalledPluginIds();
 

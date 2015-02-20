@@ -10,6 +10,7 @@ import org.pentaho.marketplace.domain.model.entities.MarketEntryType;
 import org.pentaho.marketplace.domain.model.entities.interfaces.IPlugin;
 import org.pentaho.marketplace.domain.model.entities.interfaces.IPluginVersion;
 import org.pentaho.marketplace.domain.model.factories.interfaces.IDomainStatusMessageFactory;
+import org.pentaho.marketplace.domain.model.factories.interfaces.IPluginVersionFactory;
 import org.pentaho.marketplace.domain.model.factories.interfaces.IVersionDataFactory;
 import org.pentaho.marketplace.domain.services.interfaces.IRemotePluginProvider;
 import org.w3c.dom.Document;
@@ -21,16 +22,34 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
 import java.io.FileReader;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 
 public class KettlePluginService extends BasePluginService {
+
+  // region Properties
+  private PluginRegistry getPluginRegistry() {
+    return PluginRegistry.getInstance();
+  }
+
+  public IPluginVersionFactory getPluginVersionFactory() {
+    return this.pluginVersionFactory;
+  }
+  public KettlePluginService setPluginVersionFactory( IPluginVersionFactory factory ) {
+    this.pluginVersionFactory = factory;
+    return this;
+  }
+  private IPluginVersionFactory pluginVersionFactory;
+  // endregion
 
   // region Constructor
   public KettlePluginService( IRemotePluginProvider metadataPluginsProvider,
                               IVersionDataFactory versionDataFactory,
-                              IDomainStatusMessageFactory domainStatusMessageFactory ) {
+                              IDomainStatusMessageFactory domainStatusMessageFactory,
+                              IPluginVersionFactory pluginVersionFactory ) {
     super( metadataPluginsProvider, versionDataFactory, domainStatusMessageFactory );
+
+    this.setPluginVersionFactory( pluginVersionFactory );
   }
   // endregion
 
@@ -45,12 +64,8 @@ public class KettlePluginService extends BasePluginService {
   }
 
   @Override
-  protected IPluginVersion getInstalledPluginVersion( String pluginId ) {
-
-    return null;
-
-    /*
-    String pluginFolder = buildPluginsFolderPath( marketEntry ) + File.separator + pluginId;
+  protected IPluginVersion getInstalledPluginVersion( IPlugin plugin ) {
+    String pluginFolder = buildPluginsFolderPath( plugin ) + File.separator + plugin.getId();
     File pluginFolderFile = new File( pluginFolder );
 
     if ( !pluginFolderFile.exists() ) {
@@ -72,8 +87,7 @@ public class KettlePluginService extends BasePluginService {
       if ( versionElements.getLength() >= 1 ) {
         Element versionElement = (Element) versionElements.item( 0 );
 
-        // TODO: instantiate version
-        IPluginVersion version;
+        IPluginVersion version = this.getPluginVersionFactory().create();
         version.setBuildId( versionElement.getAttribute( "buildId" ) );
         version.setBranch( versionElement.getAttribute( "branch" ) );
         version.setVersion( versionElement.getTextContent() );
@@ -94,15 +108,22 @@ public class KettlePluginService extends BasePluginService {
     }
 
     return null;
-    */
   }
 
   @Override
   protected Collection<String> getInstalledPluginIds() {
+    Collection<String> pluginIds = new ArrayList<>();
+    PluginRegistry pluginRegistry = this.getPluginRegistry();
 
-    return Collections.EMPTY_LIST;
+    for ( Class<? extends PluginTypeInterface> pluginType : pluginRegistry.getPluginTypes() ) {
+      for( PluginInterface plugin : pluginRegistry.getPlugins( pluginType) ) {
+        for( String pluginId : plugin.getIds() ) {
+          pluginIds.add( pluginId );
+        }
+      }
+    }
 
-    //return null;
+    return pluginIds;
   }
 
   @Override
@@ -122,13 +143,13 @@ public class KettlePluginService extends BasePluginService {
     // remove non PDI plugins
     CollectionUtils.filter( plugins, new Predicate() {
       @Override public boolean evaluate( Object plugin ) {
-        if ( !(plugin instanceof IPlugin) ) {
+        if ( !( plugin instanceof IPlugin ) ) {
           return false;
         }
         IPlugin castedPlugin = (IPlugin) plugin;
         return castedPlugin.getType() != MarketEntryType.Platform;
       }
-    });
+    } );
 
     return plugins;
   }
@@ -141,10 +162,7 @@ public class KettlePluginService extends BasePluginService {
    * @param marketEntry
    * @return String the path to the plugins folder.
    */
-  public static String buildPluginsFolderPath( final IPlugin marketEntry ) throws Exception {
-
-    throw new Exception( "Not implemented" );
-    /*
+  public static String buildPluginsFolderPath( final IPlugin marketEntry ) {
     PluginInterface plugin = getPluginObject( marketEntry.getId() );
     if ( plugin != null && plugin.getPluginDirectory() != null ) {
       return new File( plugin.getPluginDirectory().getFile() ).getParent();
@@ -155,7 +173,6 @@ public class KettlePluginService extends BasePluginService {
       // This is because plugin types are not guaranteed to search the ~/.kettle folder for plugins.
       return "plugins" + ( subfolder == null ? "" : Const.FILE_SEPARATOR + subfolder );
     }
-    */
   }
 
   /**
@@ -180,12 +197,7 @@ public class KettlePluginService extends BasePluginService {
    * @param marketEntry
    * @return
    */
-  public static String getInstallationSubfolder( IPlugin marketEntry ) throws Exception {
-    //TODO IMPLEMENT
-
-    throw new Exception( "Not Implemented" );
-
-    /*
+  public static String getInstallationSubfolder( IPlugin marketEntry ) {
     String subfolder = null;
     switch ( marketEntry.getType() ) {
       case Step:
@@ -203,14 +215,18 @@ public class KettlePluginService extends BasePluginService {
       case Database:
         subfolder = "databases";
         break;
+      /*
       case Repository:
         subfolder = "repositories";
         break;
+        */
       case HadoopShim:
         subfolder = "pentaho-big-data-plugin" + File.separator + "hadoop-configurations";
         break;
-      case Mixed:
+      /*
       case General:
+      */
+      case Mixed:
         subfolder = "";
         break;
 
@@ -218,7 +234,6 @@ public class KettlePluginService extends BasePluginService {
         subfolder = null;
     }
     return subfolder;
-    */
   }
 
 }

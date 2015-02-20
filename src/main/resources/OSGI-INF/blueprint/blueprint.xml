@@ -138,6 +138,7 @@
     <argument ref="marketplaceRemotePluginProvider"/>
     <argument ref="marketplaceVersionDataFactory"/>
     <argument ref="marketplaceDomainStatusMessageFactory"/>
+    <argument ref="marketplacePluginVersionFactory"/>
   </bean>
 
   <bean id="marketplaceRemotePluginProvider"

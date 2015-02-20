@@ -111,7 +111,7 @@ define(
 
                 // make sure these are strings
                 string = string.toString().toLowerCase();
-                subString = string.toString().toLowerCase();
+                subString = subString.toString().toLowerCase();
 
                 return string.indexOf( subString ) > -1;
               };

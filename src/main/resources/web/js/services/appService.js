@@ -35,10 +35,7 @@ define(
               var pluginsPromise = null;
 
               function isResponseError( response ) {
-                var code = response.data.iterablePluginOperationResultDTO ?
-                    response.data.iterablePluginOperationResultDTO.statusMessage.code :
-                    response.data.statusMessage.code ;
-                return code.substring(0,5).toLowerCase() == 'error';
+                return response.data.statusMessage.code.substring(0,5).toLowerCase() == 'error';
               }
               return {
                 refreshPluginsFromServer: function() {
@@ -50,10 +47,7 @@ define(
                   if ( pluginsPromise == null ) {
                     pluginsPromise = $http.get( pluginsUrl ).then(
                         function ( response ) {
-                          // diference in response.data structure occurs due to different serializers being used in the BA and PDI OSGI Bridge server
-                          var dto = response.data.iterablePluginOperationResultDTO ?
-                              response.data.iterablePluginOperationResultDTO :
-                              response.data;
+                          var dto = response.data;
                           if ( isResponseError( response ) ) {
                             console.log( "Failed getting plugins from server." );
                             return $q.reject( dto.statusMessage );

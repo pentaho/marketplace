@@ -59,6 +59,9 @@ public abstract class BasePluginService implements IPluginService {
   //endregion
 
   //region Attributes
+  protected Log getLogger() {
+    return this.logger; 
+  }
   protected Log logger = LogFactory.getLog( this.getClass() );
 
   private IVersionDataFactory versionDataFactory;
@@ -346,7 +349,7 @@ public abstract class BasePluginService implements IPluginService {
       IDomainStatusMessage msg = this.installPluginAux( pluginId, versionBranch );
       return msg;
     } catch ( MarketplaceSecurityException e ) {
-      logger.debug( e.getMessage(), e );
+      this.getLogger().debug( e.getMessage(), e );
       return this.domainStatusMessageFactory.create( UNAUTHORIZED_ACCESS_ERROR_CODE,
         UNAUTHORIZED_ACCESS_MESSAGE );
     }
@@ -358,7 +361,7 @@ public abstract class BasePluginService implements IPluginService {
       IDomainStatusMessage msg = uninstallPluginAux( pluginId );
       return msg;
     } catch ( MarketplaceSecurityException e ) {
-      logger.debug( e.getMessage(), e );
+      this.getLogger().debug( e.getMessage(), e );
       return this.domainStatusMessageFactory.create( UNAUTHORIZED_ACCESS_ERROR_CODE,
         UNAUTHORIZED_ACCESS_MESSAGE );
     }

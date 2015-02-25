@@ -7,7 +7,6 @@ import org.eclipse.swt.widgets.Display;
 import org.pentaho.di.core.Const;
 import org.pentaho.di.core.database.DatabaseMeta;
 import org.pentaho.di.core.exception.KettleException;
-import org.pentaho.di.core.logging.LogChannel;
 import org.pentaho.di.core.plugins.KettleURLClassLoader;
 import org.pentaho.di.core.plugins.PluginInterface;
 import org.pentaho.di.core.plugins.PluginRegistry;
@@ -85,7 +84,7 @@ public class KettlePluginService extends BasePluginService {
   protected void unloadPlugin( String pluginId ) {
     PluginInterface pluginObj = this.getPluginObject( pluginId );
     if ( pluginObj == null ) {
-      LogChannel.GENERAL.logBasic( "Plugin " + pluginId + " not found. Skipping unload." );
+      this.getLogger().debug( "Plugin " + pluginId + " not found. Skipping unload." );
       return;
     }
 
@@ -95,7 +94,7 @@ public class KettlePluginService extends BasePluginService {
         ( (KettleURLClassLoader) classLoader ).closeClassLoader();
       }
     } catch ( KettleException e ) {
-      LogChannel.GENERAL.logBasic( "Failed unloading plugin " + pluginId );
+      this.getLogger().error( "Failed unloading plugin " + pluginId, e );
     }
   }
 
@@ -177,7 +176,7 @@ public class KettlePluginService extends BasePluginService {
     }
 
     File pluginFolder = new File( parentFolderName + File.separator + plugin.getId() );
-    LogChannel.GENERAL.logBasic( "Installing plugin in folder: " + pluginFolder.getAbsolutePath() );
+    this.getLogger().info( "Installing plugin in folder: " + pluginFolder.getAbsolutePath() );
 
     try {
 
@@ -189,7 +188,7 @@ public class KettlePluginService extends BasePluginService {
         createVersionXML( plugin, version );
       }
     } catch ( KettleException e ) {
-      LogChannel.GENERAL.logBasic("ERROR on delete or create" );
+      this.getLogger().error( "ERROR on delete or create", e );
       return false;
     }
 

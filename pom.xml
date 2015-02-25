@@ -29,25 +29,21 @@
             <groupId>pentaho-kettle</groupId>
             <artifactId>kettle-core</artifactId>
             <version>${dependency.pentaho-kettle.version}</version>
-            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>pentaho-kettle</groupId>
             <artifactId>kettle-engine</artifactId>
             <version>${dependency.pentaho-kettle.version}</version>
-            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>pentaho-kettle</groupId>
             <artifactId>kettle-ui-swt</artifactId>
             <version>${dependency.pentaho-kettle.version}</version>
-            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>pentaho</groupId>
             <artifactId>pentaho-xul-core</artifactId>
             <version>${dependency.pentaho.pentaho-xul-core.version}</version>
-            <scope>provided</scope>
         </dependency>
       <dependency>
         <groupId>org.hibernate</groupId>
@@ -73,7 +69,6 @@
             <groupId>net.sf.flexjson</groupId>
             <artifactId>flexjson</artifactId>
             <version>2.1</version>
-            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>javax.ws.rs</groupId>

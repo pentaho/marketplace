@@ -261,7 +261,7 @@ public class KettlePluginService extends BasePluginService {
 
         // remove plugin from registry
         pluginRegistry.removePlugin( pdiPlugin.getPluginType(), pdiPlugin );
-      }<
+      }
     } catch ( MalformedURLException e1 ) {
       this.getLogger().error( e1.getLocalizedMessage(), e1 );
     }

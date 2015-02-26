@@ -3,10 +3,12 @@ package org.pentaho.marketplace.domain.services;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Predicate;
 
+import org.apache.commons.io.FilenameUtils;
 import org.eclipse.swt.widgets.Display;
 import org.pentaho.di.core.Const;
 import org.pentaho.di.core.database.DatabaseMeta;
 import org.pentaho.di.core.exception.KettleException;
+import org.pentaho.di.core.logging.LogChannel;
 import org.pentaho.di.core.plugins.KettleURLClassLoader;
 import org.pentaho.di.core.plugins.PluginInterface;
 import org.pentaho.di.core.plugins.PluginRegistry;
@@ -38,9 +40,11 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -50,6 +54,8 @@ import org.pentaho.xul.swt.tab.TabSet;
 public class KettlePluginService extends BasePluginService {
 
   // region Properties
+  private static final String BASE_PLUGINS_FOLDER_NAME = "plugins";
+
   private PluginRegistry getPluginRegistry() {
     return PluginRegistry.getInstance();
   }
@@ -145,15 +151,25 @@ public class KettlePluginService extends BasePluginService {
     return null;
   }
 
+  /***
+   * Goes to every folder where market entries may be installed and assumes each sub-folder is a market entry id
+   * @return
+   */
   @Override
   protected Collection<String> getInstalledPluginIds() {
-    Collection<String> pluginIds = new ArrayList<>();
-    PluginRegistry pluginRegistry = this.getPluginRegistry();
+    Collection<String> pluginIds = new HashSet<>();
 
-    for ( Class<? extends PluginTypeInterface> pluginType : pluginRegistry.getPluginTypes() ) {
-      for( PluginInterface plugin : pluginRegistry.getPlugins( pluginType) ) {
-        for( String pluginId : plugin.getIds() ) {
-          pluginIds.add( pluginId );
+    for( MarketEntryType type : MarketEntryType.values() ) {
+      String pluginTypeFolderName = this.getInstallationSubfolder( type );
+      pluginTypeFolderName = BASE_PLUGINS_FOLDER_NAME + ( pluginTypeFolderName == null ? "" : Const.FILE_SEPARATOR + pluginTypeFolderName );
+      File pluginTypeFolder = new File( pluginTypeFolderName );
+      File[] files = pluginTypeFolder.listFiles();
+      if ( files != null ) {
+        for ( File file : files ) {
+          if ( file.isDirectory() ) {
+            String folderNamePotentialPluginId = file.getName();
+            pluginIds.add( folderNamePotentialPluginId );
+          }
         }
       }
     }
@@ -219,7 +235,46 @@ public class KettlePluginService extends BasePluginService {
 
   @Override
   protected boolean executeUninstall( IPlugin plugin ) {
-    return false;
+    String parentFolderName = buildPluginsFolderPath( plugin );
+    File pluginFolder = new File( parentFolderName + File.separator + plugin.getId() );
+    this.getLogger().info( "Uninstalling plugin in folder: " + pluginFolder.getAbsolutePath() );
+
+    if ( !pluginFolder.exists() ) {
+      this.getLogger().error( "No plugin was found in the expected folder : " + pluginFolder.getAbsolutePath() );
+      return false;
+    }
+
+    try {
+      URL pluginFolderURL = pluginFolder.toURI().toURL();
+      PluginRegistry pluginRegistry = this.getPluginRegistry();
+      Iterable<PluginInterface> pdiPlugins = pluginRegistry.findPluginsByFolder( pluginFolderURL );
+      for ( PluginInterface pdiPlugin : pdiPlugins ) {
+
+        // Do this on unloadPlugin method
+        /*
+        // unload plugin
+        ClassLoader cl = PluginRegistry.getInstance().getClassLoader( plugin );
+        if ( cl instanceof KettleURLClassLoader ) {
+          ( (KettleURLClassLoader) cl ).closeClassLoader();
+        }
+        */
+
+        // remove plugin from registry
+        pluginRegistry.removePlugin( pdiPlugin.getPluginType(), pdiPlugin );
+      }<
+    } catch ( MalformedURLException e1 ) {
+      this.getLogger().error( e1.getLocalizedMessage(), e1 );
+    }
+
+    // delete plugin folder
+    try {
+      deleteDirectory( pluginFolder );
+    } catch ( KettleException exception ) {
+      this.getLogger().error( "Error deleting plugin folder on uninstall of plugin " + plugin.getId() );
+      return false;
+    }
+
+    return true;
   }
 
   @Override
@@ -253,11 +308,11 @@ public class KettlePluginService extends BasePluginService {
     if ( plugin != null && plugin.getPluginDirectory() != null ) {
       return new File( plugin.getPluginDirectory().getFile() ).getParent();
     } else {
-      String subfolder = getInstallationSubfolder( marketEntry );
+      String subfolder = getInstallationSubfolder( marketEntry.getType() );
 
       // Use current directory (should be the Kettle distribution directory) as the root folder to install plugins
       // This is because plugin types are not guaranteed to search the ~/.kettle folder for plugins.
-      return "plugins" + ( subfolder == null ? "" : Const.FILE_SEPARATOR + subfolder );
+      return BASE_PLUGINS_FOLDER_NAME + ( subfolder == null ? "" : Const.FILE_SEPARATOR + subfolder );
     }
   }
 
@@ -280,12 +335,12 @@ public class KettlePluginService extends BasePluginService {
   /**
    * Returns the folder name for the MarketEntries type.
    *
-   * @param marketEntry
+   * @param marketEntryType
    * @return
    */
-  public static String getInstallationSubfolder( IPlugin marketEntry ) {
-    String subfolder = null;
-    switch ( marketEntry.getType() ) {
+  public static String getInstallationSubfolder( MarketEntryType marketEntryType ) {
+    String subfolder;
+    switch ( marketEntryType ) {
       case Step:
         subfolder = "steps";
         break;
@@ -332,25 +387,22 @@ public class KettlePluginService extends BasePluginService {
    *
    * @param dir
    */
-  private static boolean deleteDirectory( File dir ) {
+  private static void deleteDirectory( File dir ) throws KettleException {
     if ( dir != null ) {
       File[] files = dir.listFiles();
       if ( files != null ) {
         for ( int i = 0; i < files.length; i++ ) {
           if ( files[i].isDirectory() ) {
-            return deleteDirectory( files[i] );
+            deleteDirectory( files[i] );
           } else if ( !files[i].delete() ) {
-            // failed to delete
-            return false;
+            throw new KettleException( "Failed to delete " + files[i] );
           }
         }
       }
       if ( !dir.delete() ) {
-        // failed to delete
-        return false;
+        throw new KettleException( "Failed to delete directory " + dir );
       }
     }
-    return true;
   }
 
   private static void createVersionXML( IPlugin marketEntry, IPluginVersion version ) throws KettleException {

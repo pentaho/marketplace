@@ -60,7 +60,7 @@ public abstract class BasePluginService implements IPluginService {
 
   //region Attributes
   protected Log getLogger() {
-    return this.logger; 
+    return this.logger;
   }
   protected Log logger = LogFactory.getLog( this.getClass() );
 

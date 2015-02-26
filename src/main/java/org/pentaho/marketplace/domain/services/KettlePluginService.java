@@ -56,6 +56,7 @@ public class KettlePluginService extends BasePluginService {
   // region Properties
   private static final String BASE_PLUGINS_FOLDER_NAME = "plugins";
 
+  // TODO turn into explicit dependency
   private PluginRegistry getPluginRegistry() {
     return PluginRegistry.getInstance();
   }
@@ -303,7 +304,7 @@ public class KettlePluginService extends BasePluginService {
    * @param marketEntry
    * @return String the path to the plugins folder.
    */
-  public static String buildPluginsFolderPath( final IPlugin marketEntry ) {
+  public String buildPluginsFolderPath( final IPlugin marketEntry ) {
     PluginInterface plugin = getPluginObject( marketEntry.getId() );
     if ( plugin != null && plugin.getPluginDirectory() != null ) {
       return new File( plugin.getPluginDirectory().getFile() ).getParent();
@@ -323,10 +324,11 @@ public class KettlePluginService extends BasePluginService {
    *          id of plugin
    * @return plugin object
    */
-  private static PluginInterface getPluginObject( String pluginId ) {
-    for ( Class<? extends PluginTypeInterface> pluginType : PluginRegistry.getInstance().getPluginTypes() ) {
-      if ( PluginRegistry.getInstance().findPluginWithId( pluginType, pluginId ) != null ) {
-        return PluginRegistry.getInstance().findPluginWithId( pluginType, pluginId );
+  private PluginInterface getPluginObject( String pluginId ) {
+    PluginRegistry pluginRegistry = this.getPluginRegistry();
+    for ( Class<? extends PluginTypeInterface> pluginType : pluginRegistry.getPluginTypes() ) {
+      if ( pluginRegistry.findPluginWithId( pluginType, pluginId ) != null ) {
+        return pluginRegistry.findPluginWithId( pluginType, pluginId );
       }
     }
     return null;
@@ -405,7 +407,7 @@ public class KettlePluginService extends BasePluginService {
     }
   }
 
-  private static void createVersionXML( IPlugin marketEntry, IPluginVersion version ) throws KettleException {
+  private void createVersionXML( IPlugin marketEntry, IPluginVersion version ) throws KettleException {
     String pluginFolder = buildPluginsFolderPath( marketEntry ) + File.separator + marketEntry.getId();
     String versionPath = pluginFolder + File.separator + "version.xml";
     File parentFolder = new File( pluginFolder );
@@ -420,7 +422,8 @@ public class KettlePluginService extends BasePluginService {
         FileWriter fw = new FileWriter( file.getAbsoluteFile() );
         bufferedWriter = new BufferedWriter( fw );
         bufferedWriter.write(
-          "<version branch='" + version.getBranch() + "' buildId='" + version.getBuildId() + "'>" +
+          "<version " + buildAttribute( "branch", version.getBranch() ) + " "
+                      + buildAttribute( "buildId", version.getBuildId() ) + ">" +
             version.getVersion() +
           "</version>" );
       } catch ( IOException ioe ) {
@@ -435,6 +438,16 @@ public class KettlePluginService extends BasePluginService {
         }
       }
     }
+  }
+
+  private static String buildAttribute( String name, String value ) {
+    return nullOrEmpty( value ) ?
+      "" :
+      name + "='" + value + "'" ;
+  }
+
+  private static boolean nullOrEmpty( String string ) {
+    return string == null || string.isEmpty();
   }
 
   /**

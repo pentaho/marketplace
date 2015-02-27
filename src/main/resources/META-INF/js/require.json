@@ -4,7 +4,7 @@
     "marketplace": "marketplace/web",
     "marketplaceApp": "marketplace/web/js/app",
     "angular-translate": "marketplace/web/lib/angular-translate/angular-translate",
-    "ui-bootstrap": "marketplace/web/lib/ui-bootstrap-tpls-0.12.0.min",
+    "ui-bootstrap": "marketplace/web/lib/ui-bootstrap-tpls-0.6.0.min"
   },
 
   "shim": {

@@ -1,13 +1,20 @@
 {
+  "deps": [ "jquery" ],
+
   "paths": {
     "org.pentaho.marketplace.di.plugin.web": "marketplace/web",
     "marketplace": "marketplace/web",
     "marketplaceApp": "marketplace/web/js/app",
     "angular-translate": "marketplace/web/lib/angular-translate/angular-translate",
-    "ui-bootstrap": "marketplace/web/lib/ui-bootstrap-tpls-0.6.0.min"
+    "ui-bootstrap": "marketplace/web/lib/ui-bootstrap-tpls-0.6.0.min",
+    "jquery": "marketplace/web/lib/jquery/jquery-1.9.1.min"
   },
 
   "shim": {
+    "jquery": {
+      "exports": "$"
+    },
+
     "angular-translate": {
       "deps": [ "angular" ]
     },

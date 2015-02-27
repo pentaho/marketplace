@@ -3,19 +3,12 @@ package org.pentaho.marketplace.domain.services;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Predicate;
 
-import org.apache.commons.io.FilenameUtils;
-import org.eclipse.swt.widgets.Display;
 import org.pentaho.di.core.Const;
-import org.pentaho.di.core.database.DatabaseMeta;
 import org.pentaho.di.core.exception.KettleException;
-import org.pentaho.di.core.logging.LogChannel;
 import org.pentaho.di.core.plugins.KettleURLClassLoader;
 import org.pentaho.di.core.plugins.PluginInterface;
 import org.pentaho.di.core.plugins.PluginRegistry;
 import org.pentaho.di.core.plugins.PluginTypeInterface;
-import org.pentaho.di.i18n.BaseMessages;
-import org.pentaho.di.ui.spoon.Spoon;
-import org.pentaho.di.ui.core.gui.GUIResource;
 
 import org.pentaho.marketplace.domain.model.entities.MarketEntryType;
 import org.pentaho.marketplace.domain.model.entities.interfaces.IPlugin;
@@ -42,13 +35,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
-
-import org.pentaho.xul.swt.tab.TabSet;
 
 
 public class KettlePluginService extends BasePluginService {
@@ -208,28 +198,6 @@ public class KettlePluginService extends BasePluginService {
       this.getLogger().error( "ERROR on delete or create", e );
       return false;
     }
-
-    // Refreshing spoon is not working
-    /*
-    if ( !Display.getDefault().getThread().equals( Thread.currentThread() ) ) {
-      Spoon.getInstance().getDisplay().asyncExec( new Runnable() {
-        public void run() {
-          try {
-            refreshSpoon();
-          } catch ( KettleException e ) {
-            e.printStackTrace();
-          }
-        }
-      } );
-    } else {
-      try {
-        refreshSpoon();
-      } catch ( KettleException e ) {
-        e.printStackTrace();
-        return false;
-      }
-    }
-    */
 
     return true;
   }
@@ -448,50 +416,6 @@ public class KettlePluginService extends BasePluginService {
 
   private static boolean nullOrEmpty( String string ) {
     return string == null || string.isEmpty();
-  }
-
-  /**
-   * Refreshes Spoons plugin registry, core objects and some UI things.
-   *
-   * @throws KettleException
-   */
-  private static void refreshSpoon() throws KettleException {
-
-    /*
-    MessageBox box = new MessageBox( Spoon.getInstance().getShell(), SWT.ICON_QUESTION | SWT.OK );
-    box.setText( BaseMessages.getString( PKG, "MarketplacesDialog.RestartUpdate.Title" ) );
-    box.setMessage( BaseMessages.getString( PKG, "MarketplacesDialog.RestartUpdate.Message" ) );
-    box.open();
-    */
-
-    DatabaseMeta.clearDatabaseInterfacesMap();
-    PluginRegistry.init();
-    Spoon spoon = Spoon.getInstance();
-
-    // Close all Execution Results panes to avoid SWT disposal issues during refresh
-    int numTabs = spoon.delegates.tabs.getTabs().size();
-    TabSet tabSet = spoon.getTabSet();
-    int selectedIndex = tabSet.getSelectedIndex();
-    for ( int i = numTabs - 1; i >= 0; i-- ) {
-      if ( i != selectedIndex ) {
-        tabSet.setSelected( i );
-        if ( spoon.isExecutionResultsPaneVisible() ) {
-          spoon.showExecutionResults();
-        }
-      }
-    }
-    tabSet.setSelected( selectedIndex );
-    if ( spoon.isExecutionResultsPaneVisible() ) {
-      spoon.showExecutionResults();
-    }
-
-    // Refresh Spoon objects and UI components
-    spoon.refreshCoreObjects();
-    spoon.refreshTree();
-    spoon.refreshGraph();
-    spoon.enableMenus();
-    GUIResource.getInstance().reload();
-    spoon.selectionFilter.setText( spoon.selectionFilter.getText() );
   }
 
   /**

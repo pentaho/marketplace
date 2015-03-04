@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-           xmlns:cm="http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.1.0" xmlns:cxf="http://cxf.apache.org/blueprint/core"
+           xmlns:cm="http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.1.0"
+           xmlns:cxf="http://cxf.apache.org/blueprint/core"
            xmlns:jaxrs="http://cxf.apache.org/blueprint/jaxrs" xmlns:jaxws="http://cxf.apache.org/blueprint/jaxws"
            xsi:schemaLocation="
   http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd
@@ -12,97 +13,107 @@
   http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.1.0 http://aries.apache.org/schemas/blueprint-cm/blueprint-cm-1.1.0.xsd
   ">
 
-    <!-- Marketplace Spoon Plugin -->
-    <bean id="marketplaceSpoonPlugin" class="org.pentaho.marketplace.di.plugin.SpoonPlugin"
-          scope="singleton" destroy-method="removeFromContainer">
-        <property name="perspective" ref="marketplaceSpoonWebPerspective"/>
+  <!-- START: Configuration -->
+  <cm:property-placeholder persistent-id="pentaho.pdi.marketplace"
+                           update-strategy="reload">
+    <cm:default-properties>
+      <cm:property name="marketplace.site" value="http://marketplace.pentaho.com/marketplace-plugins.xml"/>
+      <cm:property name="telemetry.site" value="http://marketplace.pentaho.com/telemetry-servlet/telemetry"/>
+    </cm:default-properties>
+  </cm:property-placeholder>
+  <!-- END: Configuration -->
+
+  <!-- Marketplace Spoon Plugin -->
+  <bean id="marketplaceSpoonPlugin" class="org.pentaho.marketplace.di.plugin.SpoonPlugin"
+        scope="singleton" destroy-method="removeFromContainer">
+    <property name="perspective" ref="marketplaceSpoonWebPerspective"/>
+  </bean>
+
+  <bean id="marketplaceSpoonWebPerspective"
+        class="org.pentaho.marketplace.di.plugin.WebPerspective">
+  </bean>
+
+  <!-- Actual Plugin Class PluginInterface, references the Spoon Plugin above -->
+  <bean id="marketplacePlugin" class="org.pentaho.di.osgi.OSGIPlugin">
+    <property name="mainType" value="org.pentaho.di.ui.spoon.SpoonPluginInterface"/>
+    <property name="name" value="MarketplaceSpoonPlugin"/>
+    <property name="ID" value="MarketplaceSpoonPlugin"/>
+    <!-- <property name="imageFile" value="MGL.png"/> -->
+    <property name="description" value="Marketplace Spoon Plugin"/>
+    <property name="pluginTypeInterface" value="org.pentaho.di.ui.spoon.SpoonPluginType"/>
+    <property name="category" value="spoon"/>
+    <property name="classToBeanMap">
+      <map>
+        <entry key="org.pentaho.di.ui.spoon.SpoonPluginInterface" value="marketplaceSpoonPlugin"/>
+      </map>
+    </property>
+  </bean>
+
+  <!-- Register plugin with the Service Registry -->
+  <service id="spoonPluginService" interface="org.pentaho.di.core.plugins.PluginInterface" ref="marketplacePlugin">
+    <service-properties>
+      <entry key="PluginType" value="org.pentaho.di.ui.spoon.SpoonPluginType"/>
+    </service-properties>
+  </service>
+
+  <!-- HttpService Whiteboard registration of web assets -->
+  <service interface="org.ops4j.pax.web.extender.whiteboard.ResourceMapping">
+    <bean class="org.ops4j.pax.web.extender.whiteboard.runtime.DefaultResourceMapping">
+      <!-- http path -->
+      <property name="alias" value="/marketplace/web"/>
+      <!--Local Folder -->
+      <property name="path" value="/web"/>
     </bean>
 
-    <bean id="marketplaceSpoonWebPerspective"
-          class="org.pentaho.marketplace.di.plugin.WebPerspective">
-    </bean>
+  </service>
 
-    <!-- Actual Plugin Class PluginInterface, references the Spoon Plugin above -->
-    <bean id="marketplacePlugin" class="org.pentaho.di.osgi.OSGIPlugin">
-        <property name="mainType" value="org.pentaho.di.ui.spoon.SpoonPluginInterface"/>
-        <property name="name" value="MarketplaceSpoonPlugin"/>
-        <property name="ID" value="MarketplaceSpoonPlugin"/>
-        <!-- <property name="imageFile" value="MGL.png"/> -->
-        <property name="description" value="Marketplace Spoon Plugin"/>
-        <property name="pluginTypeInterface" value="org.pentaho.di.ui.spoon.SpoonPluginType"/>
-        <property name="category" value="spoon"/>
-        <property name="classToBeanMap">
-            <map>
-                <entry key="org.pentaho.di.ui.spoon.SpoonPluginInterface" value="marketplaceSpoonPlugin"/>
-            </map>
-        </property>
-    </bean>
+  <cxf:bus id="marketplaceImplBus">
+  </cxf:bus>
 
-    <!-- Register plugin with the Service Registry -->
-    <service id="spoonPluginService" interface="org.pentaho.di.core.plugins.PluginInterface" ref="marketplacePlugin">
-        <service-properties>
-            <entry key="PluginType" value="org.pentaho.di.ui.spoon.SpoonPluginType"/>
-        </service-properties>
-    </service>
-
-    <!-- HttpService Whiteboard registration of web assets -->
-    <service interface="org.ops4j.pax.web.extender.whiteboard.ResourceMapping">
-        <bean class="org.ops4j.pax.web.extender.whiteboard.runtime.DefaultResourceMapping">
-            <!-- http path -->
-            <property name="alias" value="/marketplace/web"/>
-            <!--Local Folder -->
-            <property name="path" value="/web"/>
-        </bean>
-
-    </service>
+  <bean id="testService" class="org.pentaho.marketplace.di.plugin.HelloRest">
+  </bean>
 
 
-    <cxf:bus id="marketplaceImplBus">
-    </cxf:bus>
-
-    <bean id="testService" class="org.pentaho.marketplace.di.plugin.HelloRest">
-    </bean>
-
-
-    <jaxrs:server address="/marketplace" id="marketplaceService">
-        <jaxrs:serviceBeans>
-            <ref component-id="testService" />
-            <ref component-id="marketplaceServiceEndpoint"/>
-        </jaxrs:serviceBeans>
-        <jaxrs:providers>
-            <bean class="org.apache.cxf.jaxrs.provider.json.JSONProvider">
-              <property name="dropRootElement" value="true"/>
-              <property name="dropCollectionWrapperElement" value="true"/>
-              <property name="serializeAsArray" value="true"/>
-              <property name="supportUnwrapped" value="true"/>
-            </bean>
-        </jaxrs:providers>
-    </jaxrs:server>
+  <jaxrs:server address="/marketplace" id="marketplaceService">
+    <jaxrs:serviceBeans>
+      <ref component-id="testService"/>
+      <ref component-id="marketplaceServiceEndpoint"/>
+    </jaxrs:serviceBeans>
+    <jaxrs:providers>
+      <bean class="org.apache.cxf.jaxrs.provider.json.JSONProvider">
+        <property name="dropRootElement" value="true"/>
+        <property name="dropCollectionWrapperElement" value="true"/>
+        <property name="serializeAsArray" value="true"/>
+        <property name="supportUnwrapped" value="true"/>
+      </bean>
+    </jaxrs:providers>
+  </jaxrs:server>
 
 
+  <!-- START: Service Endpoints -->
+  <bean id="marketplaceServiceEndpoint"
+        class="org.pentaho.marketplace.endpoints.MarketplaceService">
+    <argument ref="marketplaceRDO"/>
+    <argument ref="marketplacePluginMapper"/>
+    <argument ref="marketplaceStatusMessageMapper"/>
+  </bean>
+  <!-- END: Service Endpoints -->
 
-    <!-- START: Service Endpoints -->
-    <bean id="marketplaceServiceEndpoint"
-          class="org.pentaho.marketplace.endpoints.MarketplaceService">
-        <argument ref="marketplaceRDO"/>
-        <argument ref="marketplacePluginMapper"/>
-        <argument ref="marketplaceStatusMessageMapper"/>
-    </bean>
-    <!-- END: Service Endpoints -->
+  <!-- START: RDO -->
+  <bean id="marketplaceRDO"
+        class="org.pentaho.marketplace.domain.services.RDO">
+    <argument ref="marketplacePluginService"/>
+  </bean>
+  <!-- END: RDO -->
 
-    <!-- START: RDO -->
-    <bean id="marketplaceRDO"
-          class="org.pentaho.marketplace.domain.services.RDO">
-        <argument ref="marketplacePluginService"/>
-    </bean>
-    <!-- END: RDO -->
-
-    <!-- START: Domain Entity Factories -->
-    <bean id="marketplacePluginFactory" class="org.pentaho.marketplace.domain.model.factories.PluginFactory" />
-    <bean id="marketplacePluginVersionFactory" class="org.pentaho.marketplace.domain.model.factories.PluginVersionFactory" />
-    <bean id="marketplaceDomainStatusMessageFactory" class="org.pentaho.marketplace.domain.model.factories.DomainStatusMessageFactory" />
-    <bean id="marketplaceVersionDataFactory" class="org.pentaho.marketplace.domain.model.factories.VersionDataFactory" />
-    <bean id="marketplaceCategoryFactory" class="org.pentaho.marketplace.domain.model.factories.CategoryFactory" />
+  <!-- START: Domain Entity Factories -->
+  <bean id="marketplacePluginFactory" class="org.pentaho.marketplace.domain.model.factories.PluginFactory"/>
+  <bean id="marketplacePluginVersionFactory"
+        class="org.pentaho.marketplace.domain.model.factories.PluginVersionFactory"/>
+  <bean id="marketplaceDomainStatusMessageFactory"
+        class="org.pentaho.marketplace.domain.model.factories.DomainStatusMessageFactory"/>
+  <bean id="marketplaceVersionDataFactory" class="org.pentaho.marketplace.domain.model.factories.VersionDataFactory"/>
+  <bean id="marketplaceCategoryFactory" class="org.pentaho.marketplace.domain.model.factories.CategoryFactory"/>
 
   <!--
     <bean id="marketplaceSecurityHelperFactory"
@@ -111,32 +122,32 @@
     </bean>
   -->
 
-    <bean id="marketplacePluginSerializer"
-          class="org.pentaho.marketplace.domain.model.entities.serialization.MarketplaceXmlSerializer">
-        <argument ref="marketplacePluginFactory" />
-        <argument ref="marketplacePluginVersionFactory"/>
-        <argument ref="marketplaceVersionDataFactory" />
-        <argument ref="marketplaceCategoryFactory" />
-    </bean>
-    <!-- END: Domain Entity Factories -->
+  <bean id="marketplacePluginSerializer"
+        class="org.pentaho.marketplace.domain.model.entities.serialization.MarketplaceXmlSerializer">
+    <argument ref="marketplacePluginFactory"/>
+    <argument ref="marketplacePluginVersionFactory"/>
+    <argument ref="marketplaceVersionDataFactory"/>
+    <argument ref="marketplaceCategoryFactory"/>
+  </bean>
+  <!-- END: Domain Entity Factories -->
 
 
-    <!-- START: Domain Services -->
-<!--
-    <bean id="marketplacePluginService"
-          class="org.pentaho.marketplace.domain.services.PluginService">
-        <argument ref="marketplaceRemotePluginProvider"/>
-        <argument ref="marketplacePluginSerializer"/>
-        <argument ref="marketplaceVersionDataFactory"/>
-        <argument ref="marketplaceDomainStatusMessageFactory"/>
-        <argument ref="marketplaceSecurityHelperFactory"/>
-
-        <constructor-arg>
-            <pen:bean class="org.pentaho.platform.api.engine.IPluginResourceLoader"/>
-        </constructor-arg>
-
-    </bean>
--->
+  <!-- START: Domain Services -->
+  <!--
+      <bean id="marketplacePluginService"
+            class="org.pentaho.marketplace.domain.services.PluginService">
+          <argument ref="marketplaceRemotePluginProvider"/>
+          <argument ref="marketplacePluginSerializer"/>
+          <argument ref="marketplaceVersionDataFactory"/>
+          <argument ref="marketplaceDomainStatusMessageFactory"/>
+          <argument ref="marketplaceSecurityHelperFactory"/>
+  
+          <constructor-arg>
+              <pen:bean class="org.pentaho.platform.api.engine.IPluginResourceLoader"/>
+          </constructor-arg>
+  
+      </bean>
+  -->
 
   <bean id="marketplacePluginService"
         class="org.pentaho.marketplace.domain.services.KettlePluginService">
@@ -147,34 +158,39 @@
   </bean>
 
   <bean id="marketplaceRemotePluginProvider"
-          class="org.pentaho.marketplace.domain.services.RemoteMetadataPluginProvider">
-        <argument ref="marketplacePluginSerializer" />
-    </bean>
-    <!-- END: Domain Services -->
+        class="org.pentaho.marketplace.domain.services.RemoteMetadataPluginProvider">
+    <argument ref="marketplacePluginSerializer"/>
+    <property name="url" ref="metadataUrl" />
+  </bean>
 
-    <!-- START: DTO Mappers -->
-    <bean id="marketplaceStatusMessageMapper"
-          class="org.pentaho.marketplace.endpoints.dtos.mappers.StatusMessageDTOMapper">
-        <argument ref="marketplaceDomainStatusMessageFactory"/>
-    </bean>
+  <bean id="metadataUrl" class="java.net.URL">
+    <argument value="${marketplace.site}" />
+  </bean>
+  <!-- END: Domain Services -->
 
-    <bean id="marketplacePluginVersionMapper"
-          class="org.pentaho.marketplace.endpoints.dtos.mappers.PluginVersionDTOMapper">
-        <argument ref="marketplacePluginVersionFactory"/>
-    </bean>
+  <!-- START: DTO Mappers -->
+  <bean id="marketplaceStatusMessageMapper"
+        class="org.pentaho.marketplace.endpoints.dtos.mappers.StatusMessageDTOMapper">
+    <argument ref="marketplaceDomainStatusMessageFactory"/>
+  </bean>
 
-    <bean id="marketplaceCategoryMapper"
-          class="org.pentaho.marketplace.endpoints.dtos.mappers.CategoryDTOMapper">
-        <argument ref="marketplaceCategoryFactory"/>
-    </bean>
+  <bean id="marketplacePluginVersionMapper"
+        class="org.pentaho.marketplace.endpoints.dtos.mappers.PluginVersionDTOMapper">
+    <argument ref="marketplacePluginVersionFactory"/>
+  </bean>
 
-    <bean id="marketplacePluginMapper"
-          class="org.pentaho.marketplace.endpoints.dtos.mappers.PluginDTOMapper">
-        <argument ref="marketplacePluginFactory"/>
-        <argument ref="marketplacePluginVersionMapper"/>
-        <argument ref="marketplaceCategoryMapper"/>
-    </bean>
-    <!-- END: DTO Mappers -->
+  <bean id="marketplaceCategoryMapper"
+        class="org.pentaho.marketplace.endpoints.dtos.mappers.CategoryDTOMapper">
+    <argument ref="marketplaceCategoryFactory"/>
+  </bean>
+
+  <bean id="marketplacePluginMapper"
+        class="org.pentaho.marketplace.endpoints.dtos.mappers.PluginDTOMapper">
+    <argument ref="marketplacePluginFactory"/>
+    <argument ref="marketplacePluginVersionMapper"/>
+    <argument ref="marketplaceCategoryMapper"/>
+  </bean>
+  <!-- END: DTO Mappers -->
 
 
 </blueprint>

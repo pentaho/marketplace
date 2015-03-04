@@ -18,6 +18,6 @@ import java.net.URL;
 public interface IRemotePluginProvider extends IPluginProvider {
 
   URL getUrl();
-  IRemotePluginProvider setUrl( URL url );
+  void setUrl( URL url );
 
 }

@@ -39,22 +39,13 @@ public class RemoteMetadataPluginProvider implements IRemotePluginProvider {
     return this.logger;
   }
 
+  @Override
   public URL getUrl() {
-
-    // TODO: Temporary
-    String urlPath = MARKETPLACE_ENTRIES_URL_FALLBACK;
-    try {
-      return new URL( urlPath );
-    } catch ( MalformedURLException e ) {
-      this.logger.error( "Invalid metadata url: " + urlPath, e );
-      return null;
-    }
-
-    //return this.metadataUrl;
+    return this.metadataUrl;
   }
-  public RemoteMetadataPluginProvider setUrl( URL metadataUrl ) {
+  @Override
+  public void setUrl( URL metadataUrl ) {
     this.metadataUrl = metadataUrl;
-    return this;
   }
   private URL metadataUrl;
 
@@ -76,32 +67,15 @@ public class RemoteMetadataPluginProvider implements IRemotePluginProvider {
   // region Constructors
   public RemoteMetadataPluginProvider( MarketplaceXmlSerializer xmlSerializer ) {
     this.setXmlSerializer( xmlSerializer );
+
+    try {
+      this.setUrl( new URL( MARKETPLACE_ENTRIES_URL_FALLBACK ) );
+    } catch ( MalformedURLException e ) {
+      this.logger.error( "Invalid metadata url: " + MARKETPLACE_ENTRIES_URL_FALLBACK , e );
+    }
+
   }
   // endregion
-
-  /*
-  // TODO check dependency...
-  private URL getMetadataUrl( IPluginResourceLoader resLoader ) {
-      String urlPath = null;
-      try {
-          urlPath = resLoader.getPluginSetting( getClass(), "settings/marketplace-site" ); //$NON-NLS-1$
-      } catch ( Exception e ) {
-          logger.debug( "Error getting data access plugin settings", e );
-      }
-
-      if ( urlPath == null || "".equals( urlPath ) ) {
-          urlPath = MARKETPLACE_ENTRIES_URL_FALLBACK;
-      }
-
-      try {
-          return new URL( urlPath );
-      } catch ( MalformedURLException e ) {
-          this.logger.error( "Invalid metadata url: " + urlPath, e );
-          return null;
-      }
-  }
-  */
-
 
   // region Methods
   @Override

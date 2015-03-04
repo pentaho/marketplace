@@ -18,6 +18,9 @@
 <features xmlns="http://karaf.apache.org/xmlns/features/v1.0.0">
 
   <feature name="pentaho-marketplace" version="6.0">
+    <configfile finalname="/etc/pentaho.pdi.marketplace.cfg">mvn:org.pentaho/pentaho-osgi-marketplace/6.0-SNAPSHOT/cfg/pentaho-marketplace-config
+    </configfile>
+
     <feature>cxf</feature>
 
     <!-- Is this necessary ???

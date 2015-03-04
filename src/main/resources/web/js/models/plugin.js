@@ -105,8 +105,7 @@ define(
               };
 
               Plugin.Version.prototype.clone = function () {
-                // TODO: change to a clone that returns Plugin.Version type
-                return _.clone( this );
+                return new Plugin.Version( this.branch, this.version, this.buildId );
               };
 
               return Plugin;

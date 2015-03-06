@@ -107,7 +107,8 @@
   <!-- END: RDO -->
 
   <!-- START: Domain Entity Factories -->
-  <bean id="marketplacePluginFactory" class="org.pentaho.marketplace.domain.model.factories.PluginFactory"/>
+  <bean id="marketplacePluginFactory"
+        class="org.pentaho.marketplace.domain.model.factories.PluginFactory"/>
   <bean id="marketplacePluginVersionFactory"
         class="org.pentaho.marketplace.domain.model.factories.PluginVersionFactory"/>
   <bean id="marketplaceDomainStatusMessageFactory"
@@ -122,13 +123,21 @@
     </bean>
   -->
 
-  <bean id="marketplacePluginSerializer"
+  <!-- bean id="marketplacePluginSerializer"
         class="org.pentaho.marketplace.domain.model.entities.serialization.MarketplaceXmlSerializer">
     <argument ref="marketplacePluginFactory"/>
     <argument ref="marketplacePluginVersionFactory"/>
-    <argument ref="marketplaceVersionDataFactory"/>
+    <argument ref="marketplaceCategoryFactory"/>
+  </bean-->
+
+  <bean id="marketplacePluginSerializer"
+        class="org.pentaho.marketplace.domain.model.entities.serialization.jaxb.JAXBMarketplaceXmlSerializer">
+    <argument ref="marketplacePluginFactory"/>
+    <argument ref="marketplacePluginVersionFactory"/>
     <argument ref="marketplaceCategoryFactory"/>
   </bean>
+
+
   <!-- END: Domain Entity Factories -->
 
 

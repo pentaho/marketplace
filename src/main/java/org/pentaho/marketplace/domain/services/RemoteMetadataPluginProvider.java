@@ -13,18 +13,14 @@
 
 package org.pentaho.marketplace.domain.services;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.pentaho.marketplace.domain.model.entities.interfaces.IPlugin;
-import org.pentaho.marketplace.domain.model.entities.serialization.MarketplaceXmlSerializer;
+import org.pentaho.marketplace.domain.model.entities.serialization.IMarketplaceXmlSerializer;
 import org.pentaho.marketplace.domain.services.interfaces.IRemotePluginProvider;
-
-//import org.pentaho.platform.api.engine.IPluginResourceLoader;
-
-//import org.pentaho.platform.util.web.HttpUtil;
 import org.pentaho.marketplace.util.web.HttpUtil;
 
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Collection;
@@ -49,46 +45,35 @@ public class RemoteMetadataPluginProvider implements IRemotePluginProvider {
   }
   private URL metadataUrl;
 
-  public MarketplaceXmlSerializer getXmlSerializer() {
+  public IMarketplaceXmlSerializer getXmlSerializer() {
     return this.xmlPluginsSerializer;
   }
-  protected RemoteMetadataPluginProvider setXmlSerializer( MarketplaceXmlSerializer serializer ) {
+  protected RemoteMetadataPluginProvider setXmlSerializer( IMarketplaceXmlSerializer serializer ) {
     this.xmlPluginsSerializer = serializer;
     return this;
   }
-  private MarketplaceXmlSerializer xmlPluginsSerializer;
+  private IMarketplaceXmlSerializer xmlPluginsSerializer;
 
-  protected String getUrlContent( String url ) {
-    return HttpUtil.getURLContent( url );
-  }
   // endregion
 
-
   // region Constructors
-  public RemoteMetadataPluginProvider( MarketplaceXmlSerializer xmlSerializer ) {
+  public RemoteMetadataPluginProvider( IMarketplaceXmlSerializer xmlSerializer ) {
     this.setXmlSerializer( xmlSerializer );
 
     try {
       this.setUrl( new URL( MARKETPLACE_ENTRIES_URL_FALLBACK ) );
     } catch ( MalformedURLException e ) {
-      this.logger.error( "Invalid metadata url: " + MARKETPLACE_ENTRIES_URL_FALLBACK , e );
+      this.getLogger().error( "Invalid metadata url: " + MARKETPLACE_ENTRIES_URL_FALLBACK, e );
     }
-
   }
   // endregion
 
   // region Methods
   @Override
   public Collection<IPlugin> getPlugins() {
-    String url = this.getUrl().toString();
-
-    String content = this.getUrlContent( url );
-    //Sometimes this call fails. Second attempt is always successful
-    if ( StringUtils.isEmpty( content ) ) {
-      content = this.getUrlContent( url );
-    }
-
-    return this.getXmlSerializer().getPlugins( content );
+    InputStream inputStream = HttpUtil.getURLInputStream( this.getUrl() );
+    Collection<IPlugin> plugins = this.getXmlSerializer().getPlugins( inputStream );
+    return plugins;
   }
   // endregion
 }

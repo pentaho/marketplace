@@ -36,24 +36,26 @@ import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
+import java.io.InputStream;
 import java.io.StringReader;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 
-public class MarketplaceXmlSerializer {
+public class MarketplaceXmlSerializer implements IMarketplaceXmlSerializer {
 
   // region constants
-  private static final String[] EMPTY_STRING_ARRAY = new String[0];
+  private static final String[] EMPTY_STRING_ARRAY = new String[ 0 ];
   // endregion
 
   // region Properties
   private IPluginFactory pluginFactory;
   private IPluginVersionFactory pluginVersionFactory;
-  private IVersionDataFactory versionDataFactory;
   private ICategoryFactory categoryFactory;
 
   private Log logger = LogFactory.getLog( this.getClass() );
+
   private Log getLogger() {
     return this.logger;
   }
@@ -61,23 +63,23 @@ public class MarketplaceXmlSerializer {
   private DocumentBuilderFactory getDocumentBuilderFactory() {
     return this.documentBuilderFactory;
   }
+
   protected MarketplaceXmlSerializer setDocumentBuilderFactory( DocumentBuilderFactory factory ) {
     this.documentBuilderFactory = factory;
     return this;
   }
+
   private DocumentBuilderFactory documentBuilderFactory;
 
   private XPath xpath;
   // endregion
 
   public MarketplaceXmlSerializer( IPluginFactory pluginFactory,
-                        IPluginVersionFactory pluginVersionFactory,
-                        IVersionDataFactory versionDataFactory,
-                        ICategoryFactory categoryFactory ) {
+                                   IPluginVersionFactory pluginVersionFactory,
+                                   ICategoryFactory categoryFactory ) {
 
     this.pluginFactory = pluginFactory;
     this.pluginVersionFactory = pluginVersionFactory;
-    this.versionDataFactory = versionDataFactory;
     this.categoryFactory = categoryFactory;
 
     this.xpath = XPathFactory.newInstance().newXPath();
@@ -85,8 +87,23 @@ public class MarketplaceXmlSerializer {
     this.setDocumentBuilderFactory( DocumentBuilderFactory.newInstance() );
   }
 
+  @Override public Collection<IPlugin> getPlugins( InputStream xmlStream ) {
+    Collection<IPlugin> plugins = Collections.emptyList();
+    try {
+      DocumentBuilder db = this.getDocumentBuilderFactory().newDocumentBuilder();
+      Document document = db.parse( xmlStream );
 
-  public Collection<IPlugin> getPlugins( String xml ) {
+      plugins = this.getPlugins( document );
+
+    } catch ( Exception e ) {
+      this.getLogger().error( "Error getting plugins from marketplace xml.", e );
+      // TODO: throw app exception in order to return error in endpoint
+    }
+
+    return plugins;
+  }
+
+  @Override public Collection<IPlugin> getPlugins( String xml ) {
     Collection<IPlugin> plugins = Collections.emptyList();
     try {
       DocumentBuilder db = this.getDocumentBuilderFactory().newDocumentBuilder();
@@ -95,14 +112,14 @@ public class MarketplaceXmlSerializer {
       plugins = this.getPlugins( document );
 
     } catch ( Exception e ) {
-      this.getLogger().error( "Error getting plugins from marketplace xml: " + xml , e );
+      this.getLogger().error( "Error getting plugins from marketplace xml: " + xml, e );
       // TODO: throw app exception in order to return error in endpoint
     }
 
     return plugins;
   }
 
-  public Collection<IPlugin> getPlugins( Document marketplaceMetadataDocument ) throws
+  @Override public Collection<IPlugin> getPlugins( Document marketplaceMetadataDocument ) throws
     XPathExpressionException {
     NodeList plugins = marketplaceMetadataDocument.getElementsByTagName( "market_entry" );
     Collection<IPlugin> pluginList = new ArrayList<IPlugin>();
@@ -171,7 +188,7 @@ public class MarketplaceXmlSerializer {
   }
 
   private Collection<IPluginVersion> getPluginVersions( NodeList versionsElement ) throws XPathExpressionException {
-    if( versionsElement.getLength() == 0 ) {
+    if ( versionsElement.getLength() == 0 ) {
       return Collections.emptyList();
     }
 
@@ -239,6 +256,7 @@ public class MarketplaceXmlSerializer {
 
   /**
    * Parses the version element to get the development stage
+   *
    * @param versionElement where the development stage element is contained
    * @return
    */
@@ -247,23 +265,24 @@ public class MarketplaceXmlSerializer {
     final String DEVELOPMENT_STAGE_LANE_ELEMENT_NAME = "lane";
     final String DEVELOPMENT_STAGE_PHASE_ELEMENT_NAME = "phase";
 
-    Element devStageElement = (Element) xpath.evaluate( DEVELOPMENT_STAGE_ELEMENT_NAME, versionElement, XPathConstants.NODE );
+    Element devStageElement =
+      (Element) xpath.evaluate( DEVELOPMENT_STAGE_ELEMENT_NAME, versionElement, XPathConstants.NODE );
     if ( devStageElement == null ) {
       return null;
     }
 
     String lane = this.getElementChildValue( devStageElement, DEVELOPMENT_STAGE_LANE_ELEMENT_NAME );
-    String phase = this.getElementChildValue( devStageElement, DEVELOPMENT_STAGE_PHASE_ELEMENT_NAME );;
+    String phase = this.getElementChildValue( devStageElement, DEVELOPMENT_STAGE_PHASE_ELEMENT_NAME ); ;
 
     // TODO: switch to factory to allow DI?
     return new DevelopmentStage( lane, phase );
   }
 
-  public IPluginVersion getInstalledVersion( String xml ) {
+  @Override public IPluginVersion getInstalledVersion( String xml ) {
     return this.getInstalledVersion( new InputSource( new StringReader( xml ) ) );
   }
 
-  public IPluginVersion getInstalledVersion( InputSource inputDocument ) {
+  @Override public IPluginVersion getInstalledVersion( InputSource inputDocument ) {
     IPluginVersion version = null;
     try {
       DocumentBuilder db = this.getDocumentBuilderFactory().newDocumentBuilder();
@@ -279,7 +298,7 @@ public class MarketplaceXmlSerializer {
     return version;
   }
 
-  public IPluginVersion getInstalledVersion( Document installedVersionDocument ) {
+  @Override public IPluginVersion getInstalledVersion( Document installedVersionDocument ) {
     NodeList versionElements = installedVersionDocument.getElementsByTagName( "version" );
 
     if ( versionElements.getLength() == 0 ) {

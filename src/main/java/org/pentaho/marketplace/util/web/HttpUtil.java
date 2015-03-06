@@ -26,26 +26,26 @@ import org.apache.commons.httpclient.auth.AuthScope;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.params.HttpConnectionManagerParams;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
-/*
-import org.pentaho.platform.util.logging.Logger;
-import org.pentaho.platform.util.messages.Messages;
-*/
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.io.Reader;
-import java.io.StringWriter;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
 
 public class HttpUtil {
+
+  private static final String PROXY_HOST_PROPERTY_NAME = "http.proxyHost";
+  private static final String PROXY_PORT_PROPERTY_NAME = "http.proxyPort";
+  private static final String PROXY_USER_PROPERTY_NAME = "http.proxyUser";
+  private static final String PROXY_PASSWORD_PROPERTY_NAME = "http.proxyPassword";
+
+  private static Log logger = LogFactory.getLog( HttpUtil.class );
 
   public static HttpClient getClient() {
 
@@ -60,132 +60,99 @@ public class HttpUtil {
     if ( connectionManager != null ) {
       httpClient = new HttpClient( connectionManager );
     }
-    return httpClient;
-
-  }
-
-  public static boolean getURLContent( final String url, final StringBuffer content ) throws MalformedURLException,
-    IOException {
-
-    HttpClient httpClient = HttpUtil.getClient();
 
     try {
       HostConfiguration hostConfig = null;
-      if ( StringUtils.isNotEmpty( System.getProperty( "http.proxyHost" ) ) ) {
+      final String proxyHost = System.getProperty( PROXY_HOST_PROPERTY_NAME );
+      final int proxyPort = Integer.parseInt( System.getProperty( PROXY_PORT_PROPERTY_NAME ) );
+      if ( StringUtils.isNotEmpty( proxyHost ) ) {
         hostConfig = new HostConfiguration() {
           @Override
           public synchronized String getProxyHost() {
-            return System.getProperty( "http.proxyHost" );
+            return proxyHost;
           }
 
           @Override
           public synchronized int getProxyPort() {
-            return Integer.parseInt( System.getProperty( "http.proxyPort" ) );
+            return proxyPort;
           }
         };
         httpClient.setHostConfiguration( hostConfig );
-        if ( System.getProperty( "http.proxyUser" ) != null
-          && System.getProperty( "http.proxyUser" ).trim().length() > 0 ) {
+        String proxyUser = System.getProperty( PROXY_USER_PROPERTY_NAME );
+        String proxyPassword = System.getProperty( PROXY_PASSWORD_PROPERTY_NAME );
+        if ( proxyUser != null && proxyUser.trim().length() > 0 ) {
           httpClient.getState().setProxyCredentials(
-            new AuthScope( System.getProperty( "http.proxyHost" ),
-              Integer.parseInt( System.getProperty( "http.proxyPort" ) ) ),
-            new UsernamePasswordCredentials( System.getProperty( "http.proxyUser" ),
-              System.getProperty( "http.proxyPassword" ) )
+            new AuthScope( proxyHost, proxyPort ),
+            new UsernamePasswordCredentials( proxyUser, proxyPassword )
           );
         }
       }
+    } catch ( Exception e ) {
 
+    }
 
-      GetMethod call = new GetMethod( url );
+    return httpClient;
 
-      int status = httpClient.executeMethod( hostConfig, call );
-      if ( status == 200 ) {
-        InputStream response = call.getResponseBodyAsStream();
-        try {
-          byte[] buffer = new byte[ 2048 ];
-          int size = response.read( buffer );
-          while ( size > 0 ) {
-            for ( int idx = 0; idx < size; idx++ ) {
-              content.append( (char) buffer[ idx ] );
-            }
-            size = response.read( buffer );
-          }
-        } catch ( Exception e ) {
-          // we can ignore this because the content comparison will fail
-        }
-      }
-    } catch ( Throwable e ) {
-      StringWriter writer = new StringWriter();
-      PrintWriter writer2 = new PrintWriter( writer );
-      e.printStackTrace( writer2 );
-      content.append( writer.getBuffer() );
+  }
+
+  public static boolean getURLContent( final String url, final StringBuffer content ) {
+    InputStream response = getURLInputStream( url );
+    if ( response == null ) {
       return false;
     }
-    return true;
 
+    try {
+      byte[] buffer = new byte[ 2048 ];
+      int size = response.read( buffer );
+      while ( size > 0 ) {
+        for ( int idx = 0; idx < size; idx++ ) {
+          content.append( (char) buffer[ idx ] );
+        }
+        size = response.read( buffer );
+      }
+    } catch ( Exception e ) {
+      // we can ignore this because the content comparison will fail
+    }
+
+    return true;
   }
 
   public static String getURLContent( final String uri ) {
-
-    try {
       StringBuffer content = new StringBuffer();
       HttpUtil.getURLContent( uri, content );
       return content.toString();
-    } catch ( Exception e ) {
-      e.printStackTrace();
-
-      /*
-      // TODO: handle this error
-      Logger
-        .error(
-          "org.pentaho.platform.util.web.HttpUtil",
-          Messages.getInstance().getErrorString( "HttpUtil.ERROR_0001_URL_ERROR", e.getMessage() ),
-          e ); //$NON-NLS-1$ //$NON-NLS-2$
-          */
-      return null;
-    }
   }
 
-  public static InputStream getURLInputStream( final String uri ) {
+  public static InputStream getURLInputStream( final String url ) {
+    HttpClient httpClient = HttpUtil.getClient();
 
     try {
-      URL url = new URL( uri );
-      HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-      connection.connect();
-      InputStream in = connection.getInputStream();
-      return in;
-    } catch ( Exception e ) {
-      e.printStackTrace();
-      /*
-      // TODO: handle this error
-      Logger
-        .error(
-          "org.pentaho.platform.util.web.HttpUtil",
-          Messages.getInstance().getErrorString( "HttpUtil.ERROR_0001_URL_ERROR", e.getMessage() ),
-          e ); //$NON-NLS-1$ //$NON-NLS-2$
-      */
+      GetMethod call = new GetMethod( url );
+
+      int status = httpClient.executeMethod( call );
+      if ( status == 200 ) {
+        return call.getResponseBodyAsStream();
+      }
+      return null;
+    } catch ( Throwable e ) {
+      logger.debug( "Unable to get input stream from " + url, e );
       return null;
     }
-
   }
+
+
+  public static InputStream getURLInputStream( final URL url ) {
+    return getURLInputStream( url.toString() );
+  }
+
 
   public static Reader getURLReader( final String uri ) {
-
-    try {
-      URL url = new URL( uri );
-      HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-      connection.connect();
-      InputStream in = connection.getInputStream();
-      return new InputStreamReader( in );
-    } catch ( Exception e ) {
-      e.printStackTrace();
-      /*
-      // TODO: handle this error
-      Logger.error( HttpUtil.class.getName(), Messages.getInstance().getErrorString(
-        "HttpUtil.ERROR_0001_URL_ERROR", e.getMessage() ), e ); //$NON-NLS-1$
-      */
-      return null;
+    InputStream inputStream = getURLInputStream( uri );
+    if ( inputStream != null ) {
+      return new InputStreamReader( inputStream );
     }
+
+    return null;
 
   }
 

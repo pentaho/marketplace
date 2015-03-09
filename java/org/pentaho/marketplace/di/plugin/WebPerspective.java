@@ -72,7 +72,8 @@ public class WebPerspective implements SpoonPerspective {
   }
 
   public String getDisplayName( Locale locale ) {
-    return "Spoon Example";
+    // TODO i18n
+    return "Marketplace";
   }
 
   public InputStream getPerspectiveIcon() {

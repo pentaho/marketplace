@@ -17,7 +17,7 @@
   <url>http://www.pentaho.com/marketplace</url>
 
   <properties>
-    <dependency.pentaho.pentaho-xul-core.version>TRUNK-SNAPSHOT</dependency.pentaho.pentaho-xul-core.version>
+    <dependency.pentaho.pentaho-xul-core.version>${project.version}</dependency.pentaho.pentaho-xul-core.version>
     <dependency.pentaho-kettle.version>${project.version}</dependency.pentaho-kettle.version>
     <dependency.pentaho.platform.version>${project.version}</dependency.pentaho.platform.version>
     <paxexamversion>4.1.0</paxexamversion>

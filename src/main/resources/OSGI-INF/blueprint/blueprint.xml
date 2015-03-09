@@ -26,11 +26,6 @@
   <!-- Marketplace Spoon Plugin -->
   <bean id="marketplaceSpoonPlugin" class="org.pentaho.marketplace.di.plugin.SpoonPlugin"
         scope="singleton" destroy-method="removeFromContainer">
-    <property name="perspective" ref="marketplaceSpoonWebPerspective"/>
-  </bean>
-
-  <bean id="marketplaceSpoonWebPerspective"
-        class="org.pentaho.marketplace.di.plugin.WebPerspective">
   </bean>
 
   <!-- Actual Plugin Class PluginInterface, references the Spoon Plugin above -->

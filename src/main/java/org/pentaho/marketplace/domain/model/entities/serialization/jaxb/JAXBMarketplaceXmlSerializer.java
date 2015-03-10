@@ -36,7 +36,9 @@ import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public final class JAXBMarketplaceXmlSerializer implements IMarketplaceXmlSerializer {
 
@@ -73,40 +75,40 @@ public final class JAXBMarketplaceXmlSerializer implements IMarketplaceXmlSerial
   // endregion
 
   // regions Methods
-  @Override public Collection<IPlugin> getPlugins( InputStream xmlInputStream ) {
+  @Override public Map<String, IPlugin> getPlugins( InputStream xmlInputStream ) {
     try {
       Market market = (Market) jaxbUnmarshaller.unmarshal( xmlInputStream );
-      Collection<IPlugin> plugins = this.toPlugins( market );
+      Map<String, IPlugin> plugins = this.toPlugins( market );
       return plugins;
 
     } catch ( JAXBException e ) {
       this.getLogger().debug( "Failed trying to parse invalid marketplace metadata." );
-      return Collections.emptyList();
+      return Collections.emptyMap();
     }
   }
 
-  @Override public Collection<IPlugin> getPlugins( String xml ) {
+  @Override public Map<String, IPlugin> getPlugins( String xml ) {
     try {
       Market market = (Market) jaxbUnmarshaller.unmarshal( new StringReader( xml ) );
-      Collection<IPlugin> plugins = this.toPlugins( market );
+      Map<String, IPlugin> plugins = this.toPlugins( market );
       return plugins;
 
     } catch ( JAXBException e ) {
       this.getLogger().debug( "Failed trying to parse invalid marketplace metadata." );
-      return Collections.emptyList();
+      return Collections.emptyMap();
     }
   }
 
-  @Override public Collection<IPlugin> getPlugins( Document marketplaceMetadataDocument )
+  @Override public Map<String, IPlugin> getPlugins( Document marketplaceMetadataDocument )
     throws XPathExpressionException {
     try {
       Market market = (Market) jaxbUnmarshaller.unmarshal( marketplaceMetadataDocument );
-      Collection<IPlugin> plugins = this.toPlugins( market );
+      Map<String, IPlugin> plugins = this.toPlugins( market );
       return plugins;
 
     } catch ( JAXBException e ) {
       this.getLogger().debug( "Failed trying to parse invalid marketplace metadata." );
-      return Collections.emptyList();
+      return Collections.emptyMap();
     }
   }
 
@@ -148,12 +150,13 @@ public final class JAXBMarketplaceXmlSerializer implements IMarketplaceXmlSerial
   }
 
   // region DTO => Entity mapping
-  private Collection<IPlugin> toPlugins( Market market ) {
+
+  private Map<String, IPlugin> toPlugins( Market market ) {
     Collection<Market.MarketEntry> marketEntries = market.getMarketEntry();
-    Collection<IPlugin> plugins = new ArrayList<>( marketEntries.size() );
+    Map<String, IPlugin> plugins = new HashMap<>( marketEntries.size() );
 
     for ( Market.MarketEntry entry : marketEntries ) {
-      plugins.add( this.toPlugin( entry ) );
+      plugins.put( entry.getId(), this.toPlugin( entry ) );
     }
 
     return plugins;

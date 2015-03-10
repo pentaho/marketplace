@@ -24,7 +24,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.Map;
 
 public abstract class BasePluginService implements IPluginService {
@@ -125,7 +124,6 @@ public abstract class BasePluginService implements IPluginService {
     return compatibleVersions;
   }
 
-
   /**
    * Filters out plugins without a compatible version to server. Removes non compatible versions for the plugins which
    * pass the filter.
@@ -133,8 +131,8 @@ public abstract class BasePluginService implements IPluginService {
    * @param plugins
    * @return
    */
-  private Collection<IPlugin> removeNonCompatibleVersions( Iterable<IPlugin> plugins ) {
-    Collection<IPlugin> pluginsWithCompatibleVersions = new ArrayList<>();
+  private Map<String, IPlugin> removeNonCompatibleVersions( Iterable<IPlugin> plugins ) {
+    Map<String, IPlugin> pluginsWithCompatibleVersions = new HashMap<>(  );
 
     for ( IPlugin plugin : plugins ) {
       // filter out plugin versions that are not compatible with parent version
@@ -143,7 +141,7 @@ public abstract class BasePluginService implements IPluginService {
       if ( compatibleVersions.size() > 0 ) {
         // change available version to only compatible ones
         plugin.setVersions( compatibleVersions );
-        pluginsWithCompatibleVersions.add( plugin );
+        pluginsWithCompatibleVersions.put( plugin.getId(), plugin );
       }
     }
 
@@ -165,21 +163,17 @@ public abstract class BasePluginService implements IPluginService {
    * @param pluginIds
    * @return
    */
-  private Collection<IPlugin> filterPlugins( Collection<IPlugin> plugins, Collection<String> pluginIds ) {
+  private Map<String, IPlugin> filterPlugins( Map<String, IPlugin> plugins, Collection<String> pluginIds ) {
     if ( pluginIds.size() < 1 ) {
-      return Collections.emptyList();
+      return Collections.emptyMap();
     }
 
-    Collection<IPlugin> filteredPlugins = new ArrayList<>();
-    Map<String, IPlugin> pluginMap = new Hashtable<>();
-    for ( IPlugin plugin : plugins ) {
-      pluginMap.put( plugin.getId(), plugin );
-    }
+    Map<String, IPlugin> filteredPlugins = new HashMap<>();
 
     for ( String pluginId : pluginIds ) {
-      IPlugin plugin = pluginMap.get( pluginId );
+      IPlugin plugin = plugins.get( pluginId );
       if ( plugin != null ) {
-        filteredPlugins.add( plugin );
+        filteredPlugins.put( pluginId, plugin );
       }
     }
 
@@ -216,14 +210,7 @@ public abstract class BasePluginService implements IPluginService {
         "Invalid Plugin Id." );
     }
 
-    // TODO: should not be necessary to get all plugins. Just the one we want.
-    Iterable<IPlugin> plugins = this.getPlugins();
-    IPlugin toInstall = null;
-    for ( IPlugin plugin : plugins ) {
-      if ( plugin.getId().equals( pluginId ) ) {
-        toInstall = plugin;
-      }
-    }
+    IPlugin toInstall = this.getPlugin( pluginId );
     if ( toInstall == null ) {
       return this.domainStatusMessageFactory.create( NO_PLUGIN_ERROR_CODE, "Plugin Not Found" );
     }
@@ -284,14 +271,7 @@ public abstract class BasePluginService implements IPluginService {
       throw new MarketplaceSecurityException();
     }
 
-    Iterable<IPlugin> plugins = getPlugins();
-    IPlugin toUninstall = null;
-
-    for ( IPlugin plugin : plugins ) {
-      if ( plugin.getId().equals( pluginId ) ) {
-        toUninstall = plugin;
-      }
-    }
+    IPlugin toUninstall = this.getPlugin( pluginId );
     if ( toUninstall == null ) {
       return this.domainStatusMessageFactory.create( NO_PLUGIN_ERROR_CODE, "Plugin Not Found" );
     }
@@ -330,15 +310,18 @@ public abstract class BasePluginService implements IPluginService {
   //endregion
 
   //region IPluginService implementation
-  @Override
-  public Collection<IPlugin> getPlugins() {
-    Collection<IPlugin> marketplacePlugins = this.getMetadataPluginsProvider().getPlugins();
+  public IPlugin getPlugin( String id ) {
+    return this.getPlugins().get( id );
+  }
 
-    Collection<IPlugin> compatiblePlugins = this.removeNonCompatibleVersions( marketplacePlugins );
+  @Override public Map<String, IPlugin> getPlugins() {
+    Map<String, IPlugin> marketplacePlugins = this.getMetadataPluginsProvider().getPlugins();
+
+    Map<String, IPlugin> compatiblePlugins = this.removeNonCompatibleVersions( marketplacePlugins.values() );
 
     Collection<String> installedPluginIds = getInstalledPluginIds();
-    Collection<IPlugin> installedPlugins = this.filterPlugins( compatiblePlugins, installedPluginIds );
-    this.setPluginsAsInstalled( installedPlugins );
+    Map<String, IPlugin> installedPlugins = this.filterPlugins( compatiblePlugins, installedPluginIds );
+    this.setPluginsAsInstalled( installedPlugins.values() );
 
     return compatiblePlugins;
   }

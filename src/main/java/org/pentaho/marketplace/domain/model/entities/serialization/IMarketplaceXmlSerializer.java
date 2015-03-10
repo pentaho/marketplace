@@ -7,16 +7,15 @@ import org.xml.sax.InputSource;
 
 import javax.xml.xpath.XPathExpressionException;
 import java.io.InputStream;
-import java.net.URL;
-import java.util.Collection;
+import java.util.Map;
 
 public interface IMarketplaceXmlSerializer {
 
-  Collection<IPlugin> getPlugins( InputStream xmlInputStream );
+  Map<String, IPlugin> getPlugins( InputStream xmlInputStream );
 
-  Collection<IPlugin> getPlugins( String xml );
+  Map<String, IPlugin> getPlugins( String xml );
 
-  Collection<IPlugin> getPlugins( Document marketplaceMetadataDocument ) throws
+  Map<String, IPlugin> getPlugins( Document marketplaceMetadataDocument ) throws
     XPathExpressionException;
 
   IPluginVersion getInstalledVersion( String xml );

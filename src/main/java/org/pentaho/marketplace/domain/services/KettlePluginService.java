@@ -37,6 +37,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -247,24 +248,19 @@ public class KettlePluginService extends BasePluginService {
   }
 
   @Override
-  public Collection<IPlugin> getPlugins() {
-    Collection<IPlugin> plugins = super.getPlugins();
+  public Map<String, IPlugin> getPlugins() {
+    Map<String, IPlugin> plugins = super.getPlugins();
 
     // remove non PDI plugins
-    CollectionUtils.filter( plugins, new Predicate() {
-      @Override public boolean evaluate( Object plugin ) {
-        if ( !( plugin instanceof IPlugin ) ) {
-          return false;
-        }
-        IPlugin castedPlugin = (IPlugin) plugin;
-        return castedPlugin.getType() != MarketEntryType.Platform;
+    CollectionUtils.filter( plugins.entrySet(), new Predicate() {
+      @Override public boolean evaluate( Object mapEntry ) {
+        Map.Entry<String, IPlugin> mapEntryCasted = (Map.Entry<String, IPlugin>) mapEntry;
+        return mapEntryCasted.getValue().getType() != MarketEntryType.Platform;
       }
     } );
 
     return plugins;
   }
-
-
 
   /**
    * Builds and returns the path to the plugins folder.

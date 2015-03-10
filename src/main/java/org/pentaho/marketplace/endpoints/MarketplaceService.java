@@ -58,7 +58,7 @@ public class MarketplaceService {
   public IterablePluginOperationResultDTO getPlugins() {
 
     //get plugins from the domain model
-    Collection<IPlugin> plugins = this.RDO.getPluginService().getPlugins();
+    Collection<IPlugin> plugins = this.RDO.getPluginService().getPlugins().values();
 
     //transform plugins to DTOs for serialization
     IterablePluginOperationResultDTO result = new IterablePluginOperationResultDTO();

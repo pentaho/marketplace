@@ -15,9 +15,10 @@ package org.pentaho.marketplace.domain.services.interfaces;
 
 import org.pentaho.marketplace.domain.model.entities.interfaces.IPlugin;
 
-import java.util.Collection;
+import java.util.Map;
 
 public interface IPluginProvider {
 
-  Collection<IPlugin> getPlugins();
+  Map<String, IPlugin> getPlugins();
+
 }

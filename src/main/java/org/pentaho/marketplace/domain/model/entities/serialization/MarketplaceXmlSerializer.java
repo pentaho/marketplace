@@ -24,7 +24,6 @@ import org.pentaho.marketplace.domain.model.entities.interfaces.IPluginVersion;
 import org.pentaho.marketplace.domain.model.factories.interfaces.ICategoryFactory;
 import org.pentaho.marketplace.domain.model.factories.interfaces.IPluginFactory;
 import org.pentaho.marketplace.domain.model.factories.interfaces.IPluginVersionFactory;
-import org.pentaho.marketplace.domain.model.factories.interfaces.IVersionDataFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -38,10 +37,11 @@ import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 import java.io.InputStream;
 import java.io.StringReader;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MarketplaceXmlSerializer implements IMarketplaceXmlSerializer {
 
@@ -87,8 +87,8 @@ public class MarketplaceXmlSerializer implements IMarketplaceXmlSerializer {
     this.setDocumentBuilderFactory( DocumentBuilderFactory.newInstance() );
   }
 
-  @Override public Collection<IPlugin> getPlugins( InputStream xmlStream ) {
-    Collection<IPlugin> plugins = Collections.emptyList();
+  @Override public Map<String, IPlugin> getPlugins( InputStream xmlStream ) {
+    Map<String, IPlugin> plugins = Collections.emptyMap();
     try {
       DocumentBuilder db = this.getDocumentBuilderFactory().newDocumentBuilder();
       Document document = db.parse( xmlStream );
@@ -103,8 +103,8 @@ public class MarketplaceXmlSerializer implements IMarketplaceXmlSerializer {
     return plugins;
   }
 
-  @Override public Collection<IPlugin> getPlugins( String xml ) {
-    Collection<IPlugin> plugins = Collections.emptyList();
+  @Override public Map<String, IPlugin> getPlugins( String xml ) {
+    Map<String, IPlugin> plugins = Collections.emptyMap();
     try {
       DocumentBuilder db = this.getDocumentBuilderFactory().newDocumentBuilder();
       Document document = db.parse( new InputSource( new StringReader( xml ) ) );
@@ -119,18 +119,18 @@ public class MarketplaceXmlSerializer implements IMarketplaceXmlSerializer {
     return plugins;
   }
 
-  @Override public Collection<IPlugin> getPlugins( Document marketplaceMetadataDocument ) throws
+  @Override public Map<String, IPlugin> getPlugins( Document marketplaceMetadataDocument ) throws
     XPathExpressionException {
     NodeList plugins = marketplaceMetadataDocument.getElementsByTagName( "market_entry" );
-    Collection<IPlugin> pluginList = new ArrayList<IPlugin>();
+    Map<String, IPlugin> pluginMap = new HashMap<>();
     for ( int i = 0; i < plugins.getLength(); i++ ) {
       Element pluginElement = (Element) plugins.item( i );
 
       IPlugin plugin = getPlugin( pluginElement );
-      pluginList.add( plugin );
+      pluginMap.put( plugin.getId(), plugin );
     }
 
-    return pluginList;
+    return pluginMap;
   }
 
   private IPlugin getPlugin( Element pluginElement ) throws XPathExpressionException {

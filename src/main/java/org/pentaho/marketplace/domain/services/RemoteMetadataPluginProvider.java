@@ -23,7 +23,7 @@ import org.pentaho.marketplace.util.web.HttpUtil;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Collection;
+import java.util.Map;
 
 public class RemoteMetadataPluginProvider implements IRemotePluginProvider {
 
@@ -69,10 +69,9 @@ public class RemoteMetadataPluginProvider implements IRemotePluginProvider {
   // endregion
 
   // region Methods
-  @Override
-  public Collection<IPlugin> getPlugins() {
+  public Map<String, IPlugin> getPlugins() {
     InputStream inputStream = HttpUtil.getURLInputStream( this.getUrl() );
-    Collection<IPlugin> plugins = this.getXmlSerializer().getPlugins( inputStream );
+    Map<String, IPlugin> plugins = this.getXmlSerializer().getPlugins( inputStream );
     return plugins;
   }
   // endregion

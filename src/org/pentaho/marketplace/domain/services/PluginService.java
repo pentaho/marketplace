@@ -190,11 +190,13 @@ public class PluginService implements IPluginService {
     MarketplaceXmlSerializer serializer = pluginsSerializer;
     this.setXmlSerializer( serializer );
 
-    metadataPluginsProvider.setUrl( this.getMetadataUrl() );
-    this.setMetadataPluginsProvider( metadataPluginsProvider );
-
     this.setSecurityHelper( securityHelper );
     this.setPluginResourceLoader( resourceLoader );
+
+    URL metadataUrl = this.getMetadataUrl( resourceLoader );
+    metadataPluginsProvider.setUrl( metadataUrl );
+    this.setMetadataPluginsProvider( metadataPluginsProvider );
+
   }
   //endregion
 
@@ -325,8 +327,7 @@ public class PluginService implements IPluginService {
     return compatibleVersions;
   }
 
-  private URL getMetadataUrl() {
-    IPluginResourceLoader resLoader = this.getPluginResourceLoader();
+  private URL getMetadataUrl( IPluginResourceLoader resLoader ) {
     String urlPath = null;
     try {
       urlPath = resLoader.getPluginSetting( getClass(), "settings/marketplace-site" ); //$NON-NLS-1$
@@ -445,9 +446,6 @@ public class PluginService implements IPluginService {
       return this.domainStatusMessageFactory.create( PluginService.NO_PLUGIN_ERROR_CODE, "Plugin Not Found" );
     }
 
-    // before deletion, close class loader
-    this.closeClassLoader( toInstall.getId() );
-
 
     String downloadUrl, samplesDownloadUrl, availableVersion;
 
@@ -465,31 +463,41 @@ public class PluginService implements IPluginService {
           + ", see log for details." );
     }
 
-    try {
-      Result result = this.executeInstallPluginJob( toInstall.getId(), downloadUrl, samplesDownloadUrl, availableVersion );
-
-      if ( result == null || result.getNrErrors() > 0 ) {
-        return this.domainStatusMessageFactory
-          .create( PluginService.FAIL_ERROR_CODE, "Failed to execute install, see log for details." );
-      }
-    } catch ( KettleException e ) {
-      logger.error( e.getMessage(), e );
-      return this.domainStatusMessageFactory
-        .create( PluginService.FAIL_ERROR_CODE, "Failed to execute install, see log for details." );
-    }
-
-
+    // Perhaps we are reinstalling the marketplace.
+    // Create telemetry event and messages before closing class loader just in case.
     BaPluginTelemetry telemetryEvent = new BaPluginTelemetry( PLUGIN_NAME );
     Map<String, String> extraInfo = new HashMap<String, String>( 1 );
     extraInfo.put( "installedPlugin", toInstall.getId() );
     extraInfo.put( "installedVersion", availableVersion );
     extraInfo.put( "installedBranch", versionBranch );
 
-    telemetryEvent.sendTelemetryRequest( TelemetryHelper.TelemetryEventType.INSTALLATION, extraInfo );
-
-
-    return this.domainStatusMessageFactory.create( PluginService.PLUGIN_INSTALLED_CODE, toInstall.getName()
+    IDomainStatusMessage successMessage = this.domainStatusMessageFactory.create( PluginService.PLUGIN_INSTALLED_CODE, toInstall.getName()
       + " was successfully installed.  Please restart your BI Server. \n" + toInstall.getInstallationNotes() );
+
+    IDomainStatusMessage failureMessage = this.domainStatusMessageFactory
+      .create( PluginService.FAIL_ERROR_CODE, "Failed to execute install, see log for details." );
+
+    // before install, close class loader in case it's a reinstall
+    this.closeClassLoader( toInstall.getId() );
+
+    try {
+      Result result = this.executeInstallPluginJob( toInstall.getId(), downloadUrl, samplesDownloadUrl, availableVersion );
+
+      if ( result == null || result.getNrErrors() > 0 ) {
+        return failureMessage;
+      }
+    } catch ( KettleException e ) {
+      logger.error( e.getMessage(), e );
+      return failureMessage;
+    }
+
+    try {
+      telemetryEvent.sendTelemetryRequest( TelemetryHelper.TelemetryEventType.INSTALLATION, extraInfo );
+    } catch ( NoClassDefFoundError e ) {
+      this.logger.debug( "Failed to find class definitions. Most likely reason is reinstalling marketplace.", e );
+    }
+
+    return successMessage;
   }
 
   private Result executeInstallPluginJob( String pluginId, String downloadUrl, String samplesDownloadUrl, String availableVersion )
@@ -568,31 +576,37 @@ public class PluginService implements IPluginService {
       return this.domainStatusMessageFactory.create( PluginService.NO_PLUGIN_ERROR_CODE, "Plugin Not Found" );
     }
 
-    // before deletion, close class loader
-    this.closeClassLoader( toUninstall.getId() );
-
-
-    try {
-      Result result = this.executeUninstallPluginJob( toUninstall.getId() );
-
-      if ( result == null || result.getNrErrors() > 0 ) {
-        return this.domainStatusMessageFactory
-          .create( PluginService.FAIL_ERROR_CODE, "Failed to execute uninstall, see log for details." );
-      }
-    } catch ( KettleException e ) {
-      logger.error( e.getMessage(), e );
-    }
-
-
+    // Perhaps we are uninstalling the marketplace.
+    // Create telemetry event and messages before closing class loader just in case.
     BaPluginTelemetry telemetryEvent = new BaPluginTelemetry( PLUGIN_NAME );
     Map<String, String> extraInfo = new HashMap<String, String>( 1 );
     extraInfo.put( "uninstalledPlugin", toUninstall.getId() );
     extraInfo.put( "uninstalledPluginVersion", toUninstall.getInstalledVersion() );
     extraInfo.put( "uninstalledPluginBranch", toUninstall.getInstalledBranch() );
+
+    IDomainStatusMessage successMessage = this.domainStatusMessageFactory.create( PluginService.PLUGIN_UNINSTALLED_CODE, toUninstall.getName()
+      + " was successfully uninstalled.  Please restart your BI Server." );
+
+    IDomainStatusMessage failureMessage = this.domainStatusMessageFactory
+      .create( PluginService.FAIL_ERROR_CODE, "Failed to execute uninstall, see log for details." );
+
+    // before deletion, close class loader
+    this.closeClassLoader( toUninstall.getId() );
+
+    try {
+      Result result = this.executeUninstallPluginJob( toUninstall.getId() );
+
+      if ( result == null || result.getNrErrors() > 0 ) {
+        return failureMessage;
+      }
+    } catch ( KettleException e ) {
+      logger.error( e.getMessage(), e );
+      return failureMessage;
+    }
+
     telemetryEvent.sendTelemetryRequest( TelemetryHelper.TelemetryEventType.REMOVAL, extraInfo );
 
-    return this.domainStatusMessageFactory.create( PluginService.PLUGIN_UNINSTALLED_CODE, toUninstall.getName()
-      + " was successfully uninstalled.  Please restart your BI Server." );
+    return successMessage;
   }
 
   private Result executeUninstallPluginJob( String pluginId )

@@ -47,6 +47,8 @@ import org.pentaho.platform.api.engine.ISecurityHelper;
 import org.springframework.security.Authentication;
 import org.springframework.security.GrantedAuthority;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -54,6 +56,7 @@ public class PluginServiceTest {
 
   private static final String SETTINGS_ROLES = "settings/marketplace-roles";
   private static final String SETTINGS_USERS = "settings/marketplace-users";
+  private static final String SETTINGS_MARKETPLACE_SITE_ = "settings/marketplace-site";
 
   private String getSolutionPath() {
     return System.getProperty( "user.dir" ) + "/test-res/pentaho-solutions/";
@@ -382,7 +385,34 @@ public class PluginServiceTest {
     assertThat( actualInstalledPlugin.isInstalled(), is( true ) );
     assertThat( actualNotInstalledPlugin.isInstalled(), is( false ) );
   }
-  // endregion
 
+  /**
+   * Tests that the metadata plugin provider fed into the PluginService is initialized
+   * with the URL specified in the settings.xml provided by the resource loader
+   */
+  @Test
+  public void testUsesUrlSpecifiedByPluginResourceLoader() throws MalformedURLException {
+    // arrange
+    IDomainStatusMessageFactory domainStatusMessageFactory = this.domainStatusMessageFactory;
+    IVersionDataFactory versionDataFactory = this.versionDataFactory;
+
+    IRemotePluginProvider pluginProvider = mock( IRemotePluginProvider.class );
+    MarketplaceXmlSerializer serializer = mock( MarketplaceXmlSerializer.class );
+    ISecurityHelper securityHelper = mock( ISecurityHelper.class );
+
+    IPluginResourceLoader resourceLoader = mock( IPluginResourceLoader.class );
+    String resourceMetadataUrl = "http://myresource.com/metadata.xml";
+    when(resourceLoader.getPluginSetting( PluginService.class, SETTINGS_MARKETPLACE_SITE_ ) )
+      .thenReturn( resourceMetadataUrl );
+
+    // act
+    PluginService service = new PluginService( pluginProvider, serializer, versionDataFactory,
+        domainStatusMessageFactory, securityHelper, resourceLoader );
+
+    // assert
+    verify( pluginProvider, times( 1 ) ).setUrl( new URL( resourceMetadataUrl )  );
+  }
+
+  // endregion
 
 }

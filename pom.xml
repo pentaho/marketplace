@@ -116,7 +116,7 @@
               org.pentaho.marketplace.* <!-- , org.pentaho.telemetry.* -->
             </Export-Package>
             <Import-Package>
-              !javax.xml.namespace, *
+              <!-- !javax.xml.namespace, !org.eclipse.jface.action, --> *
             </Import-Package>
 
             <Private-Package>

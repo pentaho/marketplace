@@ -2,12 +2,12 @@ package org.pentaho.marketplace.di.plugin;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.pentaho.di.core.gui.SpoonFactory;
 import org.pentaho.di.ui.spoon.Spoon;
 import org.pentaho.di.ui.spoon.SpoonLifecycleListener;
 import org.pentaho.di.ui.spoon.SpoonPerspective;
 import org.pentaho.di.ui.spoon.SpoonPluginCategories;
 import org.pentaho.di.ui.spoon.SpoonPluginInterface;
+import org.pentaho.di.ui.spoon.TabMapEntry;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulException;
 
@@ -71,11 +71,14 @@ public class SpoonPlugin implements SpoonPluginInterface {
    * @throws XulException
    */
   public void applyToContainer( String category, XulDomContainer container ) throws XulException {
-    this.container = container;
-    container.registerClassLoader( getClass().getClassLoader() );
     if ( category.equals( SPOON_CATEGORY ) ) {
+      this.container = container;
+      container.registerClassLoader( getClass().getClassLoader() );
       container.loadOverlay( OVERLAY_FILE_PATH );
       container.addEventHandler( this.getMenuHandler() );
+
+      // refresh menus
+      this.getSpoon().enableMenus();
     }
   }
 
@@ -85,7 +88,7 @@ public class SpoonPlugin implements SpoonPluginInterface {
       return;
     }
 
-    Spoon spoon = this.getSpoon();
+    final Spoon spoon = this.getSpoon();
     final Log logger = this.getLogger();
     final String menuHandlerName = this.getMenuHandler().getName();
     spoon.getDisplay().syncExec( new Runnable() {
@@ -96,11 +99,32 @@ public class SpoonPlugin implements SpoonPluginInterface {
           logger.error( "Error removing overlay: " + OVERLAY_FILE_PATH, e );
         }
         container.getEventHandlers().remove( menuHandlerName );
-        // TODO Close marketplace tab
         container.deRegisterClassLoader( SpoonPlugin.class.getClassLoader() );
 
+        closeMarketplaceTab();
+
+        // refresh menus
+        spoon.enableMenus();
       }
-    } );
+
+      private void closeMarketplaceTab() {
+        TabMapEntry marketplaceTab = getMarketplaceTab();
+        if( marketplaceTab != null ) {
+          spoon.delegates.tabs.removeTab( marketplaceTab );
+        }
+      }
+
+      private TabMapEntry getMarketplaceTab() {
+        TabMapEntry marketplaceTab = null;
+        for( TabMapEntry tabMapEntry : spoon.delegates.tabs.getTabs() ) {
+          if ( tabMapEntry.getTabItem().getId().equalsIgnoreCase( "Marketplace" ) ) {
+            marketplaceTab = tabMapEntry;
+            break;
+          }
+        }
+        return marketplaceTab;
+      }
+    });
   }
 }
 

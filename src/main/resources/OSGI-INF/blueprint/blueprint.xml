@@ -52,7 +52,7 @@
   </service>
 
   <!-- HttpService Whiteboard registration of web assets -->
-  <service interface="org.ops4j.pax.web.extender.whiteboard.ResourceMapping">
+  <service interface="org.ops4j.pax.web.extender.whiteboard.ResourceMapping" >
     <bean class="org.ops4j.pax.web.extender.whiteboard.runtime.DefaultResourceMapping">
       <!-- http path -->
       <property name="alias" value="/marketplace/web"/>
@@ -62,12 +62,30 @@
 
   </service>
 
+  <service id="marketplaceHttpContextService"
+           interface="org.osgi.service.http.HttpContext"
+           ref="marketplaceHttpContext">
+    <service-properties>
+      <entry key="contextId" value="marketplaceContextId"/>
+    </service-properties>
+  </service>
+
+  <bean id="marketplaceHttpContext"
+        class="org.pentaho.marketplace.util.web.MarketplaceHttpContext">
+    <property name="mimeTypes">
+      <map>
+        <entry key="woff"  value="application/font-woff"/>
+        <entry key="woff2" value="application/font-woff2"/>
+      </map>
+    </property>
+  </bean>
+
+
   <cxf:bus id="marketplaceImplBus">
   </cxf:bus>
 
   <bean id="testService" class="org.pentaho.marketplace.di.plugin.HelloRest">
   </bean>
-
 
   <jaxrs:server address="/marketplace" id="marketplaceService">
     <jaxrs:serviceBeans>

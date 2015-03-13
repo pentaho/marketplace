@@ -252,6 +252,15 @@ public class Plugin implements IPlugin {
     }
     return null;
   }
+
+  @Override
+  public int getRank() {
+    return this.rank;
+  }
+  public void setRank( int rank ) {
+    this.rank = rank;
+  }
+  private int rank;
   //endregion
 
 

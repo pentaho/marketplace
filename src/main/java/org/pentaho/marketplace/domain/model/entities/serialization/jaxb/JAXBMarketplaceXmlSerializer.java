@@ -155,17 +155,19 @@ public final class JAXBMarketplaceXmlSerializer implements IMarketplaceXmlSerial
     Collection<Market.MarketEntry> marketEntries = market.getMarketEntry();
     Map<String, IPlugin> plugins = new HashMap<>( marketEntries.size() );
 
+    int rank = 0;
     for ( Market.MarketEntry entry : marketEntries ) {
-      plugins.put( entry.getId(), this.toPlugin( entry ) );
+      plugins.put( entry.getId(), this.toPlugin( entry, rank++ ) );
     }
 
     return plugins;
   }
 
-  private IPlugin toPlugin( Market.MarketEntry entry ) {
+  private IPlugin toPlugin( Market.MarketEntry entry, int rank ) {
     IPlugin plugin = this.pluginFactory.create();
 
     //fill the instance
+    plugin.setRank( rank );
     plugin.setId( entry.getId() );
     plugin.setName( entry.getName() );
     plugin.setType( this.toEntryType( entry.getType() ) );

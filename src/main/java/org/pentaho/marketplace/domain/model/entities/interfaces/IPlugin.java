@@ -95,6 +95,9 @@ public interface IPlugin {
   // Type
   MarketEntryType getType();
   void setType( MarketEntryType type );
+
+  int getRank();
+  void setRank( int rank );
   //endregion
 
   //region Methods

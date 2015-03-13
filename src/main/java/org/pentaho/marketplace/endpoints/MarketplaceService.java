@@ -16,7 +16,10 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import java.util.Collection;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 @Path( "services" )
 public class MarketplaceService {
@@ -58,7 +61,14 @@ public class MarketplaceService {
   public IterablePluginOperationResultDTO getPlugins() {
 
     //get plugins from the domain model
-    Collection<IPlugin> plugins = this.RDO.getPluginService().getPlugins().values();
+    List<IPlugin> plugins = new ArrayList<>( this.RDO.getPluginService().getPlugins().values() );
+
+    Collections.sort( plugins, new Comparator<IPlugin>() {
+        @Override public int compare( IPlugin plugin1, IPlugin plugin2 ) {
+          return plugin1.getRank() - plugin2.getRank();
+        }
+      }
+    );
 
     //transform plugins to DTOs for serialization
     IterablePluginOperationResultDTO result = new IterablePluginOperationResultDTO();

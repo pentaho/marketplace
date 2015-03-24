@@ -19,6 +19,7 @@
     <cm:default-properties>
       <cm:property name="marketplace.site" value="http://marketplace.pentaho.com/marketplace-plugins.xml"/>
       <cm:property name="telemetry.site" value="http://marketplace.pentaho.com/telemetry-servlet/telemetry"/>
+        <cm:property name="telemetry.enabled" value="true"/>
     </cm:default-properties>
   </cm:property-placeholder>
   <!-- END: Configuration -->
@@ -89,7 +90,6 @@
 
   <jaxrs:server address="/marketplace" id="marketplaceService">
     <jaxrs:serviceBeans>
-      <ref component-id="testService"/>
       <ref component-id="marketplaceServiceEndpoint"/>
     </jaxrs:serviceBeans>
     <jaxrs:providers>
@@ -177,6 +177,7 @@
     <argument ref="marketplaceVersionDataFactory"/>
     <argument ref="marketplaceDomainStatusMessageFactory"/>
     <argument ref="marketplacePluginVersionFactory"/>
+      <argument ref="marketplaceTelemetry"/>
   </bean>
 
   <bean id="marketplaceRemotePluginProvider"
@@ -189,6 +190,31 @@
     <argument value="${marketplace.site}" />
   </bean>
   <!-- END: Domain Services -->
+
+
+    <!-- START: Telemetry -->
+    <bean id="diTelemetryServiceConfiguration"
+          class="org.pentaho.telemetry.DiTelemetryServiceConfiguration">
+    </bean>
+
+    <bean id="diTelemetryService"
+          class="org.pentaho.telemetry.TelemetryService">
+        <argument> <!--value="/Users/mvala/Temp/.telemetry">  -->
+            <bean factory-ref="diTelemetryServiceConfiguration" factory-method="getTelemetryPath" />
+
+        </argument>
+    </bean>
+
+    <bean id="marketplaceTelemetry"
+          class="org.pentaho.telemetry.DiPluginTelemetry">
+        <argument ref="diTelemetryService"/>
+        <argument value="${telemetry.site}"/>
+        <argument>
+            <value type="java.lang.Boolean">${telemetry.enabled}</value>
+        </argument>
+    </bean>
+    <!-- END: Telemetry -->
+
 
   <!-- START: DTO Mappers -->
   <bean id="marketplaceStatusMessageMapper"

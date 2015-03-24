@@ -34,6 +34,7 @@ import org.pentaho.marketplace.domain.model.factories.interfaces.IDomainStatusMe
 import org.pentaho.marketplace.domain.model.factories.interfaces.IPluginVersionFactory;
 import org.pentaho.marketplace.domain.model.factories.interfaces.IVersionDataFactory;
 import org.pentaho.marketplace.domain.services.interfaces.IRemotePluginProvider;
+import org.pentaho.telemetry.ITelemetryService;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -83,8 +84,11 @@ public class KettlePluginService extends BasePluginService {
   public KettlePluginService( IRemotePluginProvider metadataPluginsProvider,
                               IVersionDataFactory versionDataFactory,
                               IDomainStatusMessageFactory domainStatusMessageFactory,
-                              IPluginVersionFactory pluginVersionFactory ) {
-    super( metadataPluginsProvider, versionDataFactory, domainStatusMessageFactory );
+                              IPluginVersionFactory pluginVersionFactory,
+                              ITelemetryService telemetryService ) {
+    super( metadataPluginsProvider, versionDataFactory, domainStatusMessageFactory, telemetryService );
+
+
 
     this.setPluginVersionFactory( pluginVersionFactory );
   }

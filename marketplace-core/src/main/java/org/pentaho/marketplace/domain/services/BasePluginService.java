@@ -30,12 +30,9 @@ import org.pentaho.marketplace.domain.services.interfaces.IPluginProvider;
 import org.pentaho.marketplace.domain.services.interfaces.IPluginService;
 
 import org.pentaho.marketplace.domain.services.interfaces.IRemotePluginProvider;
-
-// TODO: turn on telemetry
-/*
-import org.pentaho.telemetry.BaPluginTelemetry;
-import org.pentaho.telemetry.TelemetryHelper;
-*/
+import org.pentaho.telemetry.ITelemetryService;
+import org.pentaho.telemetry.TelemetryEvent;
+import org.pentaho.telemetry.TelemetryEventType;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -45,7 +42,8 @@ import java.util.Map;
 
 public abstract class BasePluginService implements IPluginService {
 
-  //region Inner Definitions
+
+    //region Inner Definitions
   protected static class MarketplaceSecurityException extends Exception {
 
     private static final long serialVersionUID = -1852471739131561628L;
@@ -74,7 +72,7 @@ public abstract class BasePluginService implements IPluginService {
 
   //endregion
 
-  //region Attributes
+  //region Properties
   protected Log getLogger() {
     return this.logger;
   }
@@ -102,18 +100,29 @@ public abstract class BasePluginService implements IPluginService {
   }
   private String serverVersion;
 
+
+    public ITelemetryService getTelemetryService() {
+        return this.telemetryService;
+    }
+    protected void setTelemetryService(ITelemetryService telemetryService) {
+        this.telemetryService = telemetryService;
+    }
+    private ITelemetryService telemetryService;
+
   //endregion
 
   //region Constructors
   protected BasePluginService( IRemotePluginProvider metadataPluginsProvider,
                                IVersionDataFactory versionDataFactory,
-                               IDomainStatusMessageFactory domainStatusMessageFactory
+                               IDomainStatusMessageFactory domainStatusMessageFactory,
+                               ITelemetryService telemetryService
   ) {
     //initialize dependencies
     this.versionDataFactory = versionDataFactory;
     this.domainStatusMessageFactory = domainStatusMessageFactory;
 
     this.setMetadataPluginsProvider( metadataPluginsProvider );
+      this.setTelemetryService( telemetryService );
   }
   //endregion
 
@@ -244,17 +253,13 @@ public abstract class BasePluginService implements IPluginService {
           + ", see log for details." );
     }
 
+      // Perhaps we are reinstalling the marketplace.
+      // Create telemetry event and messages before closing class loader just in case.
 
-    // TODO: turn on telemetry
-    /*
-    // Perhaps we are reinstalling the marketplace.
-    // Create telemetry event and messages before closing class loader just in case.
-    BaPluginTelemetry telemetryEvent = new BaPluginTelemetry( PLUGIN_NAME );
-    Map<String, String> extraInfo = new HashMap<>( 1 );
-    extraInfo.put( "installedPlugin", toInstall.getId() );
-    extraInfo.put( "installedVersion", versionToInstall.getVersion() );
-    extraInfo.put( "installedBranch", versionBranch );
-    */
+      TelemetryEvent te = new TelemetryEvent( TelemetryEventType.INSTALLATION );
+      te.addInfo("installedPlugin", toInstall.getId());
+      te.addInfo("installedVersion", versionToInstall.getVersion());
+      te.addInfo("installedBranch", versionBranch);
 
     IDomainStatusMessage successMessage =
       this.domainStatusMessageFactory.create( PLUGIN_INSTALLED_CODE, toInstall.getName()
@@ -264,22 +269,22 @@ public abstract class BasePluginService implements IPluginService {
       .create( FAIL_ERROR_CODE, "Failed to execute install, see log for details." );
 
     // before install, close class loader in case it's a reinstall
-    this.unloadPlugin( toInstall.getId() );
+      /*
+      this.unloadPlugin( toInstall.getId() );
 
     if ( !this.executeInstall( toInstall, versionToInstall ) ) {
       return failureMessage;
     }
-
-    // TODO: turn on telemetry
-    /*
-    try {
-      telemetryEvent.sendTelemetryRequest( TelemetryHelper.TelemetryEventType.INSTALLATION, extraInfo );
-    } catch ( NoClassDefFoundError e ) {
-      this.logger.debug( "Failed to find class definitions. Most likely reason is reinstalling marketplace.", e );
-    }
     */
 
-    return successMessage;
+      try {
+          this.getTelemetryService().publishEvent( te );
+      } catch ( NoClassDefFoundError e ) {
+          this.logger.debug( "Failed to find class definitions. Most likely reason is reinstalling marketplace.", e );
+      }
+
+
+      return successMessage;
   }
 
   private IDomainStatusMessage uninstallPluginAux( String pluginId ) throws MarketplaceSecurityException {
@@ -293,16 +298,12 @@ public abstract class BasePluginService implements IPluginService {
       return this.domainStatusMessageFactory.create( NO_PLUGIN_ERROR_CODE, "Plugin Not Found" );
     }
 
-    // TODO: turn on telemetry
-    /*
     // Perhaps we are uninstalling the marketplace.
     // Create telemetry event and messages before closing class loader just in case.
-    BaPluginTelemetry telemetryEvent = new BaPluginTelemetry( PLUGIN_NAME );
-    Map<String, String> extraInfo = new HashMap<>( 1 );
-    extraInfo.put( "uninstalledPlugin", toUninstall.getId() );
-    extraInfo.put( "uninstalledPluginVersion", toUninstall.getInstalledVersion() );
-    extraInfo.put( "uninstalledPluginBranch", toUninstall.getInstalledBranch() );
-    */
+      TelemetryEvent te = new TelemetryEvent( TelemetryEventType.REMOVAL);
+      te.addInfo("uninstalledPlugin", toUninstall.getId());
+      te.addInfo("uninstalledPluginVersion", toUninstall.getInstalledVersion());
+      te.addInfo("uninstalledPluginBranch", toUninstall.getInstalledBranch());
 
     IDomainStatusMessage successMessage =
       this.domainStatusMessageFactory.create( PLUGIN_UNINSTALLED_CODE, toUninstall.getName()
@@ -311,16 +312,21 @@ public abstract class BasePluginService implements IPluginService {
     IDomainStatusMessage failureMessage = this.domainStatusMessageFactory
       .create( FAIL_ERROR_CODE, "Failed to execute uninstall, see log for details." );
 
+      /*
     // before deletion, close class loader
     this.unloadPlugin( toUninstall.getId() );
 
     if ( !this.executeUninstall( toUninstall ) ) {
       return failureMessage;
     }
+    */
 
 
-    // TODO: turn on telemetry
-    //telemetryEvent.sendTelemetryRequest( TelemetryHelper.TelemetryEventType.REMOVAL, extraInfo );
+      try {
+          this.getTelemetryService().publishEvent(te);
+      } catch ( NoClassDefFoundError e ) {
+          this.logger.debug( "Failed to find class definitions. Most likely reason is uninstalling marketplace.", e );
+      }
 
     return successMessage;
   }

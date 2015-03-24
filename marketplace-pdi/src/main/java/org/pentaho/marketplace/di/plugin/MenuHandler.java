@@ -20,9 +20,6 @@ package org.pentaho.marketplace.di.plugin;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.eclipse.swt.browser.LocationEvent;
-import org.eclipse.swt.browser.LocationListener;
-import org.pentaho.di.i18n.BaseMessages;
 import org.pentaho.di.ui.spoon.Spoon;
 import org.pentaho.ui.xul.impl.AbstractXulEventHandler;
 

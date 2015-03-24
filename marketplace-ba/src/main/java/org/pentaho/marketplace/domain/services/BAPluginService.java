@@ -47,7 +47,7 @@ import org.pentaho.platform.util.VersionInfo;
 
 import org.springframework.security.Authentication;
 import org.springframework.security.GrantedAuthority;
-import org.xml.sax.InputSource;
+//import org.xml.sax.InputSource;
 
 import java.io.File;
 import java.io.FileReader;
@@ -56,13 +56,57 @@ import java.lang.reflect.Method;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 
-public class PluginService extends BasePluginService {
+public class BAPluginService extends BasePluginService {
 
+    public BAPluginService(IRemotePluginProvider metadataPluginsProvider, IVersionDataFactory versionDataFactory, IDomainStatusMessageFactory domainStatusMessageFactory) {
+        super(metadataPluginsProvider, versionDataFactory, domainStatusMessageFactory);
+    }
+
+    @Override
+    protected boolean hasMarketplacePermission() {
+        return false;
+    }
+
+    @Override
+    protected void unloadPlugin(String pluginId) {
+
+    }
+
+    @Override
+    protected boolean executeInstall(IPlugin plugin, IPluginVersion version) {
+        return false;
+    }
+
+    @Override
+    protected boolean executeUninstall(IPlugin plugin) {
+        return false;
+    }
+
+    @Override
+    protected IPluginVersion getInstalledPluginVersion(IPlugin plugin) {
+        return null;
+    }
+
+    @Override
+    protected Collection<String> getInstalledPluginIds() {
+        return Collections.emptyList();
+    }
+
+    /*
   //region Constants
 
   private static final String CLOSE_METHOD_NAME = "close";
+  private static final String PROCESSES_FILES_FOLDER =  "system/" + PLUGIN_NAME + "/processes/";
+  private static final String INSTALL_JOB_PATH = PROCESSES_FILES_FOLDER + "download_and_install_plugin.kjb";
+  private static final String UNINSTALL_JOB_PATH = PROCESSES_FILES_FOLDER + "uninstall_plugin.kjb";
+
+  private static final String CACHE_FOLDER = "system/plugin-cache/";
+  private static final String DOWNLOAD_CACHE_FOLDER = CACHE_FOLDER + "downloads/";
+  private static final String BACKUP_CACHE_FOLDER = CACHE_FOLDER + "backups/";
+  private static final String STAGING_CACHE_FOLDER = CACHE_FOLDER + "staging/";
 
   //endregion
 
@@ -71,7 +115,7 @@ public class PluginService extends BasePluginService {
   public MarketplaceXmlSerializer getXmlSerializer() {
     return this.xmlPluginsSerializer;
   }
-  protected PluginService setXmlSerializer( MarketplaceXmlSerializer serializer ) {
+  protected BAPluginService setXmlSerializer( MarketplaceXmlSerializer serializer ) {
     this.xmlPluginsSerializer = serializer;
     return this;
   }
@@ -80,7 +124,7 @@ public class PluginService extends BasePluginService {
   public ISecurityHelper getSecurityHelper() {
     return this.securityHelper;
   }
-  protected PluginService setSecurityHelper( ISecurityHelper securityHelper ) {
+  protected BAPluginService setSecurityHelper( ISecurityHelper securityHelper ) {
     this.securityHelper = securityHelper;
     return this;
   }
@@ -90,7 +134,7 @@ public class PluginService extends BasePluginService {
   public IPluginResourceLoader getPluginResourceLoader() {
     return this.pluginResourceLoader;
   }
-  protected PluginService setPluginResourceLoader( IPluginResourceLoader pluginResourceLoader ) {
+  protected BAPluginService setPluginResourceLoader( IPluginResourceLoader pluginResourceLoader ) {
     this.pluginResourceLoader = pluginResourceLoader;
     return this;
   }
@@ -119,7 +163,7 @@ public class PluginService extends BasePluginService {
 
     return this.applicationContext;
   }
-  protected PluginService setApplicationContext( IApplicationContext applicationContext ) {
+  protected BAPluginService setApplicationContext( IApplicationContext applicationContext ) {
     this.applicationContext = applicationContext;
     return this;
   }
@@ -131,19 +175,19 @@ public class PluginService extends BasePluginService {
   protected IPentahoSession getCurrentSession() {
     return PentahoSessionHolder.getSession();
   }
-  protected PluginService setCurrentSession( IPentahoSession session ) {
+  protected BAPluginService setCurrentSession( IPentahoSession session ) {
     PentahoSessionHolder.setSession( session );
     return this;
   }
   //endregion
 
   //region Constructors
-  public PluginService( IRemotePluginProvider metadataPluginsProvider,
-                        MarketplaceXmlSerializer pluginsSerializer,
-                        IVersionDataFactory versionDataFactory,
-                        IDomainStatusMessageFactory domainStatusMessageFactory,
-                        ISecurityHelper securityHelper,
-                        IPluginResourceLoader resourceLoader ) {
+  public BAPluginService(IRemotePluginProvider metadataPluginsProvider,
+                         MarketplaceXmlSerializer pluginsSerializer,
+                         IVersionDataFactory versionDataFactory,
+                         IDomainStatusMessageFactory domainStatusMessageFactory,
+                         ISecurityHelper securityHelper,
+                         IPluginResourceLoader resourceLoader) {
     super( metadataPluginsProvider, versionDataFactory, domainStatusMessageFactory );
 
     //initialize dependencies
@@ -196,8 +240,8 @@ public class PluginService extends BasePluginService {
   }
 
   @Override
-  protected IPluginVersion getInstalledPluginVersion( String pluginId ) {
-    String versionPath = this.getApplicationContext().getSolutionPath( "system/" + pluginId
+  protected IPluginVersion getInstalledPluginVersion( IPlugin plugin ) {
+    String versionPath = this.getApplicationContext().getSolutionPath( "system/" + plugin.getId()
       + "/version.xml" );
     FileReader reader = null;
     try {
@@ -249,7 +293,7 @@ public class PluginService extends BasePluginService {
       try {
         URLClassLoader cl1 = (URLClassLoader) cl;
         Util.closeURLClassLoader( cl1 );
-        Method closeMethod = cl1.getClass().getMethod( PluginService.CLOSE_METHOD_NAME );
+        Method closeMethod = cl1.getClass().getMethod( BAPluginService.CLOSE_METHOD_NAME );
         closeMethod.invoke( cl1 );
       } catch ( Throwable e ) {
         if ( e instanceof NoSuchMethodException ) {
@@ -301,17 +345,16 @@ public class PluginService extends BasePluginService {
     throws KettleXMLException, UnknownParamException {
 
     // get marketplace path
-    String jobPath = this.getApplicationContext().getSolutionPath( "system/" + PLUGIN_NAME
-      + "/processes/download_and_install_plugin.kjb" );
+    String jobPath = this.getApplicationContext().getSolutionPath( INSTALL_JOB_PATH );
 
     JobMeta installJobMeta = new JobMeta( jobPath, null );
     Job job = new Job( null, installJobMeta );
 
-    File file = new File( this.getApplicationContext().getSolutionPath( "system/plugin-cache/downloads" ) );
+    File file = new File( this.getApplicationContext().getSolutionPath( DOWNLOAD_CACHE_FOLDER ) );
     file.mkdirs();
-    file = new File( this.getApplicationContext().getSolutionPath( "system/plugin-cache/backups" ) );
+    file = new File( this.getApplicationContext().getSolutionPath( BACKUP_CACHE_FOLDER ) );
     file.mkdirs();
-    file = new File( this.getApplicationContext().getSolutionPath( "system/plugin-cache/staging" ) );
+    file = new File( this.getApplicationContext().getSolutionPath( STAGING_CACHE_FOLDER ) );
     file.mkdirs();
 
     job.getJobMeta().setParameterValue( "downloadUrl", downloadUrl );
@@ -322,10 +365,10 @@ public class PluginService extends BasePluginService {
       job.getJobMeta().setParameterValue( "samplesTargetDestination", this.getApplicationContext()
         .getSolutionPath( "plugin-samples/" + pluginId ) );
       job.getJobMeta().setParameterValue( "samplesTargetBackup", this.getApplicationContext()
-        .getSolutionPath( "system/plugin-cache/backups/" + pluginId + "_samples_" + new Date()
+        .getSolutionPath( BACKUP_CACHE_FOLDER + pluginId + "_samples_" + new Date()
           .getTime() ) );
       job.getJobMeta().setParameterValue( "samplesDownloadDestination", this.getApplicationContext()
-        .getSolutionPath( "system/plugin-cache/downloads/" + pluginId + "-samples-" + availableVersion
+        .getSolutionPath( DOWNLOAD_CACHE_FOLDER + pluginId + "-samples-" + availableVersion
           + "_" + new Date().getTime() + ".zip" ) );
       job.getJobMeta().setParameterValue( "samplesStagingDestination", this.getApplicationContext()
         .getSolutionPath( "system/plugin-cache/staging_samples" ) );
@@ -337,13 +380,13 @@ public class PluginService extends BasePluginService {
       .getSolutionPath( "system/plugin-cache/downloads/" + pluginId + "-" + availableVersion + "_"
         + new Date().getTime() + ".zip" ) );
     job.getJobMeta().setParameterValue( "stagingDestination", this.getApplicationContext()
-      .getSolutionPath( "system/plugin-cache/staging" ) );
+      .getSolutionPath( STAGING_CACHE_FOLDER ) );
     job.getJobMeta().setParameterValue( "stagingDestinationAndDir", this.getApplicationContext()
-      .getSolutionPath( "system/plugin-cache/staging/" + pluginId ) );
+      .getSolutionPath( STAGING_CACHE_FOLDER + pluginId ) );
     job.getJobMeta().setParameterValue( "targetDestination", this.getApplicationContext()
       .getSolutionPath( "system/" + pluginId ) );
     job.getJobMeta().setParameterValue( "targetBackup", this.getApplicationContext()
-      .getSolutionPath( "system/plugin-cache/backups/" + pluginId + "_" + new Date().getTime() ) );
+      .getSolutionPath( BACKUP_CACHE_FOLDER + pluginId + "_" + new Date().getTime() ) );
 
     job.copyParametersFrom( job.getJobMeta() );
     job.setLogLevel( LogLevel.DETAILED );
@@ -358,16 +401,15 @@ public class PluginService extends BasePluginService {
   private Result executeUninstallPluginJob( String pluginId )
     throws KettleXMLException, UnknownParamException {
     // get plugin path
-    String jobPath = this.getApplicationContext().getSolutionPath( "system/" + PLUGIN_NAME
-      + "/processes/uninstall_plugin.kjb" );
+    String jobPath = this.getApplicationContext().getSolutionPath( UNINSTALL_JOB_PATH );
 
     JobMeta uninstallJobMeta = new JobMeta( jobPath, null );
     Job job = new Job( null, uninstallJobMeta );
 
-    File file = new File( this.getApplicationContext().getSolutionPath( "system/plugin-cache/backups" ) );
+    File file = new File( this.getApplicationContext().getSolutionPath( BACKUP_CACHE_FOLDER ) );
     file.mkdirs();
 
-    String uninstallBackup = this.getApplicationContext().getSolutionPath( "system/plugin-cache/backups/"
+    String uninstallBackup = this.getApplicationContext().getSolutionPath( BACKUP_CACHE_FOLDER
       + pluginId + "_" + new Date().getTime() );
     job.getJobMeta().setParameterValue( "uninstallLocation", this.getApplicationContext()
       .getSolutionPath( "system/" + pluginId ) );
@@ -383,6 +425,8 @@ public class PluginService extends BasePluginService {
     return result;
   }
   //endregion
+
+  */
 
 }
 

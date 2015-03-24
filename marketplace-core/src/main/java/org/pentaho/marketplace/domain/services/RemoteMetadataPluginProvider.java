@@ -74,6 +74,7 @@ public class RemoteMetadataPluginProvider implements IRemotePluginProvider {
 
   // region Methods
   public Map<String, IPlugin> getPlugins() {
+    // TODO: make dependency explicit
     InputStream inputStream = HttpUtil.getURLInputStream( this.getUrl() );
     Map<String, IPlugin> plugins = this.getXmlSerializer().getPlugins( inputStream );
     return plugins;

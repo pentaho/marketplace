@@ -23,11 +23,7 @@ import static org.hamcrest.Matchers.*;
 
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 import org.pentaho.marketplace.domain.model.entities.DevelopmentStage;
 import org.pentaho.marketplace.domain.model.entities.interfaces.ICategory;
@@ -42,12 +38,20 @@ import org.pentaho.marketplace.domain.model.factories.interfaces.IPluginFactory;
 import org.pentaho.marketplace.domain.model.factories.interfaces.IPluginVersionFactory;
 import org.pentaho.marketplace.domain.model.factories.interfaces.IVersionDataFactory;
 
+public abstract class MarketplaceXmlSerializerTest<TSerializer extends IMarketplaceXmlSerializer> {
 
-public class MarketplaceXmlSerializerTest {
   private IPluginFactory pluginFactory;
   private IPluginVersionFactory pluginVersionFactory;
   private IVersionDataFactory versionDataFactory;
   private ICategoryFactory categoryFactory;
+
+  protected abstract TSerializer create( IPluginFactory pluginFactory, IPluginVersionFactory pluginVersionFactory,
+                                                                IVersionDataFactory versionDataFactory, ICategoryFactory categoryFactory );
+
+  private TSerializer createSerializer() {
+    return this.create( this.pluginFactory, this.pluginVersionFactory, this.versionDataFactory, this.categoryFactory );
+  }
+
 
   // region auxiliary methods
   private Collection<String> getPluginIds( Iterable<IPlugin> plugins ) {
@@ -161,17 +165,14 @@ public class MarketplaceXmlSerializerTest {
     this.categoryFactory = new CategoryFactory();
   }
 
-  private MarketplaceXmlSerializer createSerializer() {
-    return new MarketplaceXmlSerializer( this.pluginFactory,  this.pluginVersionFactory, this.versionDataFactory, this.categoryFactory );
-  }
 
   @Test
   public void oldTestGetPlugins( ) throws IOException {
 
-    String pluginsXml = IOUtils.toString( new FileInputStream( "test-res/availableplugins.xml" ) );
-    MarketplaceXmlSerializer serializer = this.createSerializer();
+    String pluginsXml = IOUtils.toString( new FileInputStream( "availableplugins.xml" ) );
+    IMarketplaceXmlSerializer serializer = this.createSerializer();
 
-    Collection<IPlugin> plugins = serializer.getPlugins( pluginsXml );
+    Collection<IPlugin> plugins = serializer.getPlugins( pluginsXml ).values();
 
     assertThat( plugins.size(), is( equalTo( 3 ) ) );
 
@@ -206,10 +207,10 @@ public class MarketplaceXmlSerializerTest {
   @Test
   public void oldTestGetPluginsAlternativeVersions( ) throws IOException {
 
-    String pluginsXml = IOUtils.toString( new FileInputStream( "test-res/availableplugins_differentversions.xml" ) );
-    MarketplaceXmlSerializer serializer = this.createSerializer();
+    String pluginsXml = IOUtils.toString( new FileInputStream( "availableplugins_differentversions.xml" ) );
+    IMarketplaceXmlSerializer serializer = this.createSerializer();
 
-    Collection<IPlugin> plugins = serializer.getPlugins( pluginsXml );
+    Collection<IPlugin> plugins = serializer.getPlugins( pluginsXml ).values();
 
     assertThat( plugins.size(), is( equalTo( 1 ) ) );
 
@@ -245,14 +246,14 @@ public class MarketplaceXmlSerializerTest {
   @Test
   public void testGetPluginsSameOrderAsXml() throws IOException {
     // arrange
-    FileInputStream inputStream = new FileInputStream( "test-res/metadata.xml" );
+    FileInputStream inputStream = new FileInputStream( "metadata.xml" );
     String pluginsXml = IOUtils.toString( inputStream );
-    MarketplaceXmlSerializer serializer = this.createSerializer();
+    IMarketplaceXmlSerializer serializer = this.createSerializer();
 
     List<String> expectedIds = this.metadataXmlPlatformPluginIds;
 
     // act
-    Collection<IPlugin>  actualPlugins = serializer.getPlugins( pluginsXml );
+    Collection<IPlugin>  actualPlugins = serializer.getPlugins( pluginsXml ).values();
 
     // assert
     String[] actualPluginIds = this.getPluginIds( actualPlugins ).toArray( new String[ actualPlugins.size() ]);
@@ -269,14 +270,14 @@ public class MarketplaceXmlSerializerTest {
   @Test
   public void testGetPluginsOnlyParsePlatformMarketEntries() throws IOException {
     // arrange
-    FileInputStream inputStream = new FileInputStream( "test-res/metadata.xml" );
+    FileInputStream inputStream = new FileInputStream( "metadata.xml" );
     String pluginsXml = IOUtils.toString( inputStream );
-    MarketplaceXmlSerializer serializer = this.createSerializer();
+    IMarketplaceXmlSerializer serializer = this.createSerializer();
 
     Collection<String> expectedPluginIds = this.metadataXmlPlatformPluginIds;
 
     // act
-    Collection<IPlugin> actualPlugins = serializer.getPlugins( pluginsXml );
+    Collection<IPlugin> actualPlugins = serializer.getPlugins( pluginsXml ).values();
 
     // assert
     Collection<String> actualPluginIds = this.getPluginIds( actualPlugins );
@@ -292,15 +293,15 @@ public class MarketplaceXmlSerializerTest {
   @Test
   public void testGetPluginsPluginDeserialization() throws IOException {
     // arrange
-    FileInputStream inputStream = new FileInputStream( "test-res/metadata.xml" );
+    FileInputStream inputStream = new FileInputStream( "metadata.xml" );
     String pluginsXml = IOUtils.toString( inputStream );
-    MarketplaceXmlSerializer serializer = this.createSerializer();
+    IMarketplaceXmlSerializer serializer = this.createSerializer();
 
     IPlugin expectedPlugin = this.getMetadataXmlMarketplacePlugin();
 
     // act
-    Collection<IPlugin>  plugins = serializer.getPlugins( pluginsXml );
-    IPlugin actualPlugin = plugins.iterator().next();
+    Map<String, IPlugin> plugins = serializer.getPlugins(pluginsXml);
+    IPlugin actualPlugin = plugins.get( expectedPlugin.getId() );
 
     // assert
     assertThat( actualPlugin, is( equalTo( expectedPlugin ) ) );
@@ -315,9 +316,9 @@ public class MarketplaceXmlSerializerTest {
   @Test
   public void testGetInstalledVersion() throws IOException {
     // arrange
-    FileInputStream inputStream = new FileInputStream( "test-res/installedVersion.xml" );
+    FileInputStream inputStream = new FileInputStream( "installedVersion.xml" );
     String installedVersionXml = IOUtils.toString( inputStream );
-    MarketplaceXmlSerializer serializer = this.createSerializer();
+    IMarketplaceXmlSerializer serializer = this.createSerializer();
 
     IPluginVersion expectedVersion = this.getInstalledVersionXmlInstalledVersion();
 

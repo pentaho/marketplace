@@ -51,6 +51,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 public class PluginServiceTest {
 
@@ -75,7 +77,7 @@ public class PluginServiceTest {
    * Solution folder is set to "test-res/pentaho-solutions/"
    * @return
    */
-  private PluginService createPluginService() {
+  private BAPluginService createPluginService() {
     IDomainStatusMessageFactory domainStatusMessageFactory = this.domainStatusMessageFactory;
     IVersionDataFactory versionDataFactory = this.versionDataFactory;
 
@@ -84,7 +86,7 @@ public class PluginServiceTest {
     ISecurityHelper securityHelper = mock( ISecurityHelper.class );
     IPluginResourceLoader resourceLoader = mock( IPluginResourceLoader.class );
 
-    PluginService service = new PluginService( pluginProvider, serializer, versionDataFactory, domainStatusMessageFactory, securityHelper, resourceLoader );
+    BAPluginService service = new BAPluginService( pluginProvider, serializer, versionDataFactory, domainStatusMessageFactory, securityHelper, resourceLoader );
 
     IApplicationContext applicationContext = mock( IApplicationContext.class );
     final String solutionPath = this.getSolutionPath();
@@ -136,11 +138,11 @@ public class PluginServiceTest {
   @Test
   public void testInstallDeniedNoRolesAndNonAdminUser( ) {
     // arrange
-    PluginService service = this.createPluginService();
+    BAPluginService service = this.createPluginService();
 
     // setup no roles
     IPluginResourceLoader resourceLoader = service.getPluginResourceLoader();
-    when( resourceLoader.getPluginSetting( PluginService.class, SETTINGS_ROLES ) ).thenReturn( null );
+    when( resourceLoader.getPluginSetting( BAPluginService.class, SETTINGS_ROLES ) ).thenReturn( null );
 
     // setup security helper for non admin user
     ISecurityHelper securityHelper = service.getSecurityHelper();
@@ -150,7 +152,7 @@ public class PluginServiceTest {
     IDomainStatusMessage result = service.installPlugin( "doesNotMatter", "doesNotMatter" );
 
     // assert
-    assertThat( result.getCode(), is( equalTo( PluginService.UNAUTHORIZED_ACCESS_ERROR_CODE ) ) );
+    assertThat( result.getCode(), is( equalTo( BasePluginService.UNAUTHORIZED_ACCESS_ERROR_CODE ) ) );
   }
 
   /**
@@ -160,11 +162,11 @@ public class PluginServiceTest {
   @Test
   public void testUninstallDeniedNoRolesAndNonAdminUser( ) {
     // arrange
-    PluginService service = this.createPluginService();
+    BAPluginService service = this.createPluginService();
 
     // setup no roles
     IPluginResourceLoader resourceLoader = service.getPluginResourceLoader();
-    when( resourceLoader.getPluginSetting( PluginService.class, SETTINGS_ROLES ) ).thenReturn( null );
+    when( resourceLoader.getPluginSetting( BAPluginService.class, SETTINGS_ROLES ) ).thenReturn( null );
 
     // setup security helper for non admin user
     ISecurityHelper securityHelper = service.getSecurityHelper();
@@ -174,7 +176,7 @@ public class PluginServiceTest {
     IDomainStatusMessage result = service.uninstallPlugin( "doesNotMatter" );
 
     // assert
-    assertThat( result.getCode(), is( equalTo( PluginService.UNAUTHORIZED_ACCESS_ERROR_CODE ) ) );
+    assertThat( result.getCode(), is( equalTo( BasePluginService.UNAUTHORIZED_ACCESS_ERROR_CODE ) ) );
   }
 
 
@@ -185,7 +187,7 @@ public class PluginServiceTest {
   @Test
   public void testInstallDeniedUserNotInRoles( ) {
     // region arrange
-    PluginService service = this.createPluginService();
+    BAPluginService service = this.createPluginService();
 
     // this is the role of the user which will be in the authorized roles
     String userRole = "peasant";
@@ -193,7 +195,7 @@ public class PluginServiceTest {
 
     // setup roles
     IPluginResourceLoader resourceLoader = service.getPluginResourceLoader();
-    when( resourceLoader.getPluginSetting( PluginService.class,  SETTINGS_ROLES ) ).thenReturn( authorizedRoles );
+    when( resourceLoader.getPluginSetting( BAPluginService.class,  SETTINGS_ROLES ) ).thenReturn( authorizedRoles );
 
     Authentication userAuthentication = this.createMockUserAuthentication( userRole, null );
     // setup security helper
@@ -206,7 +208,7 @@ public class PluginServiceTest {
     IDomainStatusMessage result = service.installPlugin( "doesNotMatter", "doesNotMatter" );
 
     // assert
-    assertThat( result.getCode(), is( equalTo( PluginService.UNAUTHORIZED_ACCESS_ERROR_CODE ) ) );
+    assertThat( result.getCode(), is( equalTo( BasePluginService.UNAUTHORIZED_ACCESS_ERROR_CODE ) ) );
   }
 
   /**
@@ -216,7 +218,7 @@ public class PluginServiceTest {
   @Test
   public void testUninstallDeniedUserNotInRoles( ) {
     // region arrange
-    PluginService service = this.createPluginService();
+    BAPluginService service = this.createPluginService();
 
     // this is the role of the user which will be in the authorized roles
     String userRole = "peasant";
@@ -224,7 +226,7 @@ public class PluginServiceTest {
 
     // setup roles
     IPluginResourceLoader resourceLoader = service.getPluginResourceLoader();
-    when( resourceLoader.getPluginSetting( PluginService.class,  SETTINGS_ROLES ) ).thenReturn( authorizedRoles );
+    when( resourceLoader.getPluginSetting( BAPluginService.class,  SETTINGS_ROLES ) ).thenReturn( authorizedRoles );
 
     Authentication userAuthentication = this.createMockUserAuthentication( userRole, null );
     // setup security helper
@@ -237,7 +239,7 @@ public class PluginServiceTest {
     IDomainStatusMessage result = service.uninstallPlugin( "doesNotMatter" );
 
     // assert
-    assertThat( result.getCode(), is( equalTo( PluginService.UNAUTHORIZED_ACCESS_ERROR_CODE ) ) );
+    assertThat( result.getCode(), is( equalTo( BasePluginService.UNAUTHORIZED_ACCESS_ERROR_CODE ) ) );
   }
 
 
@@ -251,11 +253,11 @@ public class PluginServiceTest {
     String userName = "Dennis";
     String authorizedUsers = "Joseph,David";
     String authorizedRoles = "";
-    PluginService service = this.createPluginService();
+    BAPluginService service = this.createPluginService();
 
     IPluginResourceLoader resourceLoader = service.getPluginResourceLoader();
-    when( resourceLoader.getPluginSetting( PluginService.class,  SETTINGS_ROLES ) ).thenReturn( authorizedRoles );
-    when( resourceLoader.getPluginSetting( PluginService.class,  SETTINGS_USERS ) ).thenReturn( authorizedUsers );
+    when( resourceLoader.getPluginSetting( BAPluginService.class,  SETTINGS_ROLES ) ).thenReturn( authorizedRoles );
+    when( resourceLoader.getPluginSetting( BAPluginService.class,  SETTINGS_USERS ) ).thenReturn( authorizedUsers );
 
     Authentication userAuthentication = this.createMockUserAuthentication( null, userName );
     ISecurityHelper securityHelper = service.getSecurityHelper();
@@ -265,7 +267,7 @@ public class PluginServiceTest {
     IDomainStatusMessage result = service.installPlugin( "doesNotMatter", "doesNotMatter" );
 
     // assert
-    assertThat( result.getCode(), is( equalTo( PluginService.UNAUTHORIZED_ACCESS_ERROR_CODE ) ) );
+    assertThat( result.getCode(), is( equalTo( BasePluginService.UNAUTHORIZED_ACCESS_ERROR_CODE ) ) );
   }
 
   /**
@@ -278,11 +280,11 @@ public class PluginServiceTest {
     String userName = "Dennis";
     String authorizedUsers = "Joseph,David";
     String authorizedRoles = "";
-    PluginService service = this.createPluginService();
+    BAPluginService service = this.createPluginService();
 
     IPluginResourceLoader resourceLoader = service.getPluginResourceLoader();
-    when( resourceLoader.getPluginSetting( PluginService.class,  SETTINGS_ROLES ) ).thenReturn( authorizedRoles );
-    when( resourceLoader.getPluginSetting( PluginService.class,  SETTINGS_USERS ) ).thenReturn( authorizedUsers );
+    when( resourceLoader.getPluginSetting( BAPluginService.class,  SETTINGS_ROLES ) ).thenReturn( authorizedRoles );
+    when( resourceLoader.getPluginSetting( BAPluginService.class,  SETTINGS_USERS ) ).thenReturn( authorizedUsers );
 
     Authentication userAuthentication = this.createMockUserAuthentication( null, userName );
     ISecurityHelper securityHelper = service.getSecurityHelper();
@@ -292,7 +294,7 @@ public class PluginServiceTest {
     IDomainStatusMessage result = service.uninstallPlugin( "doesNotMatter" );
 
     // assert
-    assertThat( result.getCode(), is( equalTo( PluginService.UNAUTHORIZED_ACCESS_ERROR_CODE ) ) );
+    assertThat( result.getCode(), is( equalTo( BasePluginService.UNAUTHORIZED_ACCESS_ERROR_CODE ) ) );
   }
 
   //TODO: "(un)install allowed" test cases
@@ -303,7 +305,7 @@ public class PluginServiceTest {
   @Test
   public void testGetPluginsOnlyCompatibleVersions( ) {
     // arrange
-    PluginService service = this.createPluginService();
+    BAPluginService service = this.createPluginService();
     service.setServerVersion( "5.2" );
 
     IPluginVersion compatibleVersion = this.pluginVersionFactory.create();
@@ -318,20 +320,21 @@ public class PluginServiceTest {
     versions.add( compatibleVersion );
     versions.add( notCompatibleVersion );
 
-    Collection<IPlugin> plugins = new ArrayList<IPlugin>();
+    Map<String, IPlugin> plugins = new HashMap<>();
     IPlugin plugin = this.pluginFactory.create();
-    plugin.setId( "myPlugin" );
+    String pluginId = "myPlugin";
+    plugin.setId( pluginId );
     plugin.setVersions( versions );
-    plugins.add( plugin );
+    plugins.put(plugin.getId(), plugin );
 
     IPluginProvider pluginProvider = service.getMetadataPluginsProvider();
     when( pluginProvider.getPlugins() ).thenReturn( plugins );
 
     // act
-    Collection<IPlugin> actualPlugins = service.getPlugins();
+    Map<String, IPlugin> actualPlugins = service.getPlugins();
 
     // assert
-    IPlugin actualPlugin = actualPlugins.iterator().next();
+    IPlugin actualPlugin = actualPlugins.get( pluginId );
     Collection<IPluginVersion> actualVersions = actualPlugin.getVersions();
 
     assertThat( actualPlugin, is( equalTo( plugin ) ) );
@@ -345,7 +348,7 @@ public class PluginServiceTest {
   @Test
   public void testGetPluginsInstalledPluginsAreIdentified() {
     // arrange
-    PluginService service = this.createPluginService();
+    BAPluginService service = this.createPluginService();
     service.setServerVersion( "5.2" );
 
     IPluginVersion compatibleVersion = this.pluginVersionFactory.create();
@@ -367,19 +370,19 @@ public class PluginServiceTest {
     // have at least one compatible version so its not filtered out
     notInstalledPlugin.getVersions().add( compatibleVersion );
 
-    Collection<IPlugin> plugins = new ArrayList<IPlugin>();
-    plugins.add( installedPlugin );
-    plugins.add( notInstalledPlugin );
+    Map<String, IPlugin> plugins = new HashMap<>();
+    plugins.put( installedPlugin.getId(), installedPlugin );
+    plugins.put( notInstalledPlugin.getId(), notInstalledPlugin );
 
     IPluginProvider pluginProvider = service.getMetadataPluginsProvider();
     when( pluginProvider.getPlugins() ).thenReturn( plugins );
 
     // act
-    Collection<IPlugin> actualPlugins = service.getPlugins();
+    Map<String, IPlugin> actualPlugins = service.getPlugins();
 
     // assert
-    IPlugin actualInstalledPlugin = this.getPluginById( actualPlugins, installedPluginId );
-    IPlugin actualNotInstalledPlugin = this.getPluginById( actualPlugins, notInstalledPluginId );
+    IPlugin actualInstalledPlugin = actualPlugins.get( installedPluginId );
+    IPlugin actualNotInstalledPlugin = actualPlugins.get( notInstalledPluginId );
     assertThat( actualInstalledPlugin, is( notNullValue() ) );
     assertThat( actualNotInstalledPlugin, is( notNullValue() ) );
     assertThat( actualInstalledPlugin.isInstalled(), is( true ) );
@@ -402,11 +405,11 @@ public class PluginServiceTest {
 
     IPluginResourceLoader resourceLoader = mock( IPluginResourceLoader.class );
     String resourceMetadataUrl = "http://myresource.com/metadata.xml";
-    when(resourceLoader.getPluginSetting( PluginService.class, SETTINGS_MARKETPLACE_SITE_ ) )
+    when(resourceLoader.getPluginSetting( BAPluginService.class, SETTINGS_MARKETPLACE_SITE_ ) )
       .thenReturn( resourceMetadataUrl );
 
     // act
-    PluginService service = new PluginService( pluginProvider, serializer, versionDataFactory,
+    BAPluginService service = new BAPluginService( pluginProvider, serializer, versionDataFactory,
         domainStatusMessageFactory, securityHelper, resourceLoader );
 
     // assert

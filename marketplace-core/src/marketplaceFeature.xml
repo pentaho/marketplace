@@ -24,6 +24,8 @@
     <feature>cxf-jaxrs</feature>
     <feature>cxf-databinding-jaxb</feature>
 
+    <!--bundle>mvn:org.ops4j.pax.web/pax-web-spi/1.1.17</bundle-->
+
     <!-- Is this necessary ???
     <bundle>wrap:mvn:javax.xml/namespace/1.0.1</bundle>
     -->

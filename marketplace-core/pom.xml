@@ -75,6 +75,20 @@
       <artifactId>pax-web-spi</artifactId>
     </dependency>
 
+    <!-- Test Dependencies -->
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-all</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.hamcrest</groupId>
+      <artifactId>hamcrest-all</artifactId>
+    </dependency>
+
   </dependencies>
 
   <build>
@@ -94,6 +108,13 @@
           <includes>
             <include>**/*</include>
           </includes>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+          <workingDirectory>${project.build.testOutputDirectory}</workingDirectory>
         </configuration>
       </plugin>
     </plugins>

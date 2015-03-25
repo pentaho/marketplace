@@ -49,7 +49,7 @@ import java.util.concurrent.*;
  */
 public class DiTelemetryHandler extends TelemetryHandler {
 
-    public DiTelemetryHandler(String telemetryDirPath) {
+    public DiTelemetryHandler() {
         super(new File( "" ).getAbsolutePath());
     }
 }

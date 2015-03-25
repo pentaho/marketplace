@@ -47,7 +47,7 @@ import java.io.File;
  */
 public class BaTelemetryHandler extends TelemetryHandler {
 
-    public BaTelemetryHandler(String telemetryDirPath) {
+    public BaTelemetryHandler() {
         super(PentahoSystem.getApplicationContext().getSolutionPath("system/.telemetry"));
     }
 }

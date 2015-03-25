@@ -36,6 +36,7 @@
     <cm:default-properties>
       <cm:property name="marketplace.site" value="http://marketplace.pentaho.com/marketplace-plugins.xml"/>
       <cm:property name="telemetry.site" value="http://marketplace.pentaho.com/telemetry-servlet/telemetry"/>
+      <cm:property name="telemetry.enabled" value="true"/>
     </cm:default-properties>
   </cm:property-placeholder>
   <!-- END: Configuration -->
@@ -130,19 +131,19 @@
   <bean id="marketplaceVersionDataFactory" class="org.pentaho.marketplace.domain.model.factories.VersionDataFactory"/>
   <bean id="marketplaceCategoryFactory" class="org.pentaho.marketplace.domain.model.factories.CategoryFactory"/>
 
-  <!--
-    <bean id="marketplaceSecurityHelperFactory"
-          class="org.pentaho.platform.engine.security.SecurityHelper"
-          factory-method="getInstance">
-    </bean>
-  -->
+  <bean id="marketplaceSecurityHelperFactory"
+        class="org.pentaho.platform.engine.security.SecurityHelper"
+        factory-method="getInstance">
+  </bean>
 
-  <!-- bean id="marketplacePluginSerializer"
+  <!--
+  <bean id="marketplacePluginSerializer"
         class="org.pentaho.marketplace.domain.model.entities.serialization.MarketplaceXmlSerializer">
     <argument ref="marketplacePluginFactory"/>
     <argument ref="marketplacePluginVersionFactory"/>
     <argument ref="marketplaceCategoryFactory"/>
-  </bean-->
+  </bean>
+  -->
 
   <bean id="marketplacePluginSerializer"
         class="org.pentaho.marketplace.domain.model.entities.serialization.jaxb.JAXBMarketplaceXmlSerializer">
@@ -154,9 +155,7 @@
 
   <!-- END: Domain Entity Factories -->
 
-  <reference id="pluginResourceLoader" interface="org.pentaho.platform.api.engine.IPluginResourceLoader">
-
-  </reference>
+  <!--reference id="pluginResourceLoader" interface="org.pentaho.platform.api.engine.IPluginResourceLoader" /-->
 
   <!-- START: Domain Services -->
   <bean id="marketplacePluginService"
@@ -164,10 +163,10 @@
     <argument ref="marketplaceRemotePluginProvider"/>
     <argument ref="marketplaceVersionDataFactory"/>
     <argument ref="marketplaceDomainStatusMessageFactory"/>
+    <argument ref="baMarketplaceTelemetry"/>
     <argument ref="marketplacePluginSerializer"/>
     <argument ref="marketplaceSecurityHelperFactory"/>
-    <argument ref="pluginResourceLoader"/>
-    <argument ref="baMarketplaceTelemetry"/>
+    <!-- <argument ref="pluginResourceLoader"/> -->
   </bean>
 
   <bean id="marketplaceRemotePluginProvider"
@@ -212,7 +211,7 @@
     </bean>
 
     <bean id="baMarketplaceTelemetry"
-          class="org.pentaho.telemetry.DiPluginTelemetry">
+          class="org.pentaho.telemetry.BaPluginTelemetry">
         <argument ref="baTelemetryHandler"/>
         <argument value="${telemetry.site}"/>
         <argument>

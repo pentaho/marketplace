@@ -20,7 +20,7 @@ package org.pentaho.marketplace.domain.services;
 
 import org.pentaho.marketplace.domain.model.entities.interfaces.IPlugin;
 import org.pentaho.marketplace.domain.model.entities.interfaces.IPluginVersion;
-import org.pentaho.marketplace.domain.model.entities.serialization.MarketplaceXmlSerializer;
+import org.pentaho.marketplace.domain.model.entities.serialization.IMarketplaceXmlSerializer;
 import org.pentaho.marketplace.domain.model.factories.interfaces.IDomainStatusMessageFactory;
 import org.pentaho.marketplace.domain.model.factories.interfaces.IVersionDataFactory;
 import org.pentaho.marketplace.domain.services.interfaces.IRemotePluginProvider;
@@ -35,7 +35,6 @@ import org.pentaho.platform.engine.core.system.PentahoSystem;
 import org.pentaho.platform.util.VersionHelper;
 import org.pentaho.platform.util.VersionInfo;
 
-import org.pentaho.telemetry.ITelemetryHandler;
 import org.pentaho.telemetry.ITelemetryService;
 //import org.xml.sax.InputSource;
 
@@ -90,14 +89,14 @@ public class BAPluginService extends BasePluginService {
 
   //region Properties
 
-  public MarketplaceXmlSerializer getXmlSerializer() {
+  public IMarketplaceXmlSerializer getXmlSerializer() {
     return this.xmlPluginsSerializer;
   }
-  protected BAPluginService setXmlSerializer( MarketplaceXmlSerializer serializer ) {
+  protected BAPluginService setXmlSerializer( IMarketplaceXmlSerializer serializer ) {
     this.xmlPluginsSerializer = serializer;
     return this;
   }
-  private MarketplaceXmlSerializer xmlPluginsSerializer;
+  private IMarketplaceXmlSerializer xmlPluginsSerializer;
 
   public ISecurityHelper getSecurityHelper() {
     return this.securityHelper;
@@ -160,21 +159,31 @@ public class BAPluginService extends BasePluginService {
   //endregion
 
   //region Constructors
-  public BAPluginService(IRemotePluginProvider metadataPluginsProvider,
-                         MarketplaceXmlSerializer pluginsSerializer,
-                         IVersionDataFactory versionDataFactory,
-                         IDomainStatusMessageFactory domainStatusMessageFactory,
-                         ISecurityHelper securityHelper,
-                         IPluginResourceLoader resourceLoader,
-                         ITelemetryService telemetryService) {
+  public BAPluginService( IRemotePluginProvider metadataPluginsProvider,
+                          IVersionDataFactory versionDataFactory,
+                          IDomainStatusMessageFactory domainStatusMessageFactory,
+                          ITelemetryService telemetryService,
+                          IMarketplaceXmlSerializer pluginsSerializer,
+                          ISecurityHelper securityHelper,
+                          IPluginResourceLoader resourceLoader) {
     super( metadataPluginsProvider, versionDataFactory, domainStatusMessageFactory, telemetryService );
 
     //initialize dependencies
-    MarketplaceXmlSerializer serializer = pluginsSerializer;
+    IMarketplaceXmlSerializer serializer = pluginsSerializer;
     this.setXmlSerializer( serializer );
 
     this.setSecurityHelper( securityHelper );
     this.setPluginResourceLoader( resourceLoader );
+  }
+
+  public BAPluginService(IRemotePluginProvider metadataPluginsProvider,
+                         IVersionDataFactory versionDataFactory,
+                         IDomainStatusMessageFactory domainStatusMessageFactory,
+                         ITelemetryService telemetryService,
+                         IMarketplaceXmlSerializer pluginsSerializer,
+                         ISecurityHelper securityHelper ) {
+    this ( metadataPluginsProvider, versionDataFactory, domainStatusMessageFactory, telemetryService,
+        pluginsSerializer, securityHelper, PentahoSystem.get( IPluginResourceLoader.class ) );
   }
   //endregion
 

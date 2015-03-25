@@ -270,22 +270,19 @@ public abstract class BasePluginService implements IPluginService {
       .create( FAIL_ERROR_CODE, "Failed to execute install, see log for details." );
 
     // before install, close class loader in case it's a reinstall
-      /*
-      this.unloadPlugin( toInstall.getId() );
+    this.unloadPlugin( toInstall.getId() );
 
     if ( !this.executeInstall( toInstall, versionToInstall ) ) {
       return failureMessage;
     }
-    */
 
-      try {
-          this.getTelemetryService().publishEvent( te );
-      } catch ( NoClassDefFoundError e ) {
-          this.logger.debug( "Failed to find class definitions. Most likely reason is reinstalling marketplace.", e );
-      }
+    try {
+        this.getTelemetryService().publishEvent( te );
+    } catch ( NoClassDefFoundError e ) {
+        this.logger.debug( "Failed to find class definitions. Most likely reason is reinstalling marketplace.", e );
+    }
 
-
-      return successMessage;
+    return successMessage;
   }
 
   private IDomainStatusMessage uninstallPluginAux( String pluginId ) throws MarketplaceSecurityException {
@@ -313,21 +310,18 @@ public abstract class BasePluginService implements IPluginService {
     IDomainStatusMessage failureMessage = this.domainStatusMessageFactory
       .create( FAIL_ERROR_CODE, "Failed to execute uninstall, see log for details." );
 
-      /*
     // before deletion, close class loader
     this.unloadPlugin( toUninstall.getId() );
 
     if ( !this.executeUninstall( toUninstall ) ) {
       return failureMessage;
     }
-    */
 
-
-      try {
-          this.getTelemetryService().publishEvent(te);
-      } catch ( NoClassDefFoundError e ) {
-          this.logger.debug( "Failed to find class definitions. Most likely reason is uninstalling marketplace.", e );
-      }
+    try {
+        this.getTelemetryService().publishEvent(te);
+    } catch ( NoClassDefFoundError e ) {
+        this.logger.debug( "Failed to find class definitions. Most likely reason is uninstalling marketplace.", e );
+    }
 
     return successMessage;
   }

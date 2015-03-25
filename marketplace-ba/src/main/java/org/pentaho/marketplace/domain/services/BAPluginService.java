@@ -18,11 +18,20 @@
 package org.pentaho.marketplace.domain.services;
 
 
+import org.apache.commons.io.filefilter.DirectoryFileFilter;
+import org.pentaho.di.core.Result;
+import org.pentaho.di.core.exception.KettleException;
+import org.pentaho.di.core.exception.KettleXMLException;
+import org.pentaho.di.core.logging.LogLevel;
+import org.pentaho.di.core.parameters.UnknownParamException;
+import org.pentaho.di.job.Job;
+import org.pentaho.di.job.JobMeta;
 import org.pentaho.marketplace.domain.model.entities.interfaces.IPlugin;
 import org.pentaho.marketplace.domain.model.entities.interfaces.IPluginVersion;
 import org.pentaho.marketplace.domain.model.entities.serialization.IMarketplaceXmlSerializer;
 import org.pentaho.marketplace.domain.model.factories.interfaces.IDomainStatusMessageFactory;
 import org.pentaho.marketplace.domain.model.factories.interfaces.IVersionDataFactory;
+import org.pentaho.marketplace.domain.services.helpers.Util;
 import org.pentaho.marketplace.domain.services.interfaces.IRemotePluginProvider;
 
 import org.pentaho.platform.api.engine.IApplicationContext;
@@ -36,42 +45,20 @@ import org.pentaho.platform.util.VersionHelper;
 import org.pentaho.platform.util.VersionInfo;
 
 import org.pentaho.telemetry.ITelemetryService;
-//import org.xml.sax.InputSource;
+import org.springframework.security.Authentication;
+import org.springframework.security.GrantedAuthority;
+import org.xml.sax.InputSource;
 
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.lang.reflect.Method;
+import java.net.URLClassLoader;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
+import java.util.Date;
 
 public class BAPluginService extends BasePluginService {
-
-    @Override
-    protected boolean hasMarketplacePermission() {
-        return false;
-    }
-
-    @Override
-    protected void unloadPlugin(String pluginId) {
-
-    }
-
-    @Override
-    protected boolean executeInstall(IPlugin plugin, IPluginVersion version) {
-        return false;
-    }
-
-    @Override
-    protected boolean executeUninstall(IPlugin plugin) {
-        return false;
-    }
-
-    @Override
-    protected IPluginVersion getInstalledPluginVersion(IPlugin plugin) {
-        return null;
-    }
-
-    @Override
-    protected Collection<String> getInstalledPluginIds() {
-        return Collections.emptyList();
-    }
 
   //region Constants
 
@@ -187,7 +174,6 @@ public class BAPluginService extends BasePluginService {
   }
   //endregion
 
-  /*
 
   //region Methods
   @Override
@@ -229,6 +215,7 @@ public class BAPluginService extends BasePluginService {
     return false;
   }
 
+
   @Override
   protected IPluginVersion getInstalledPluginVersion( IPlugin plugin ) {
     String versionPath = this.getApplicationContext().getSolutionPath( "system/" + plugin.getId()
@@ -257,6 +244,7 @@ public class BAPluginService extends BasePluginService {
     return null;
   }
 
+
   @Override
   protected Collection<String> getInstalledPluginIds() {
     Collection<String> plugins = new ArrayList<>();
@@ -275,6 +263,7 @@ public class BAPluginService extends BasePluginService {
     return plugins;
   }
 
+
   @Override
   protected void unloadPlugin( String pluginId ) {
     IPluginManager pluginManager = this.getPluginManager( this.getCurrentSession() );
@@ -282,13 +271,13 @@ public class BAPluginService extends BasePluginService {
     if ( cl != null && cl instanceof URLClassLoader ) {
       try {
         URLClassLoader cl1 = (URLClassLoader) cl;
-        Util.closeURLClassLoader( cl1 );
+        Util.closeURLClassLoader(cl1);
         Method closeMethod = cl1.getClass().getMethod( BAPluginService.CLOSE_METHOD_NAME );
         closeMethod.invoke( cl1 );
       } catch ( Throwable e ) {
         if ( e instanceof NoSuchMethodException ) {
           logger.debug( "Probably running in java 6 so close method on URLClassLoader is not available" );
-        } else if ( e instanceof IOException ) {
+        } else if ( e instanceof IOException) {
           logger.error( "Unable to close class loader for plugin. Will try uninstalling plugin anyway", e );
         } else {
           logger.error( "Error while closing class loader", e );
@@ -416,7 +405,6 @@ public class BAPluginService extends BasePluginService {
   }
   //endregion
 
-  */
 
 }
 

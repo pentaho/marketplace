@@ -47,16 +47,16 @@ import java.util.concurrent.*;
  *
  * @author pedrovale
  */
-public class TelemetryService implements ITelemetryService {
+public class TelemetryHandler implements ITelemetryHandler {
 
-  private static Log logger = LogFactory.getLog( TelemetryService.class );
+  private static Log logger = LogFactory.getLog( TelemetryHandler.class );
 
     private static final int EVENT_QUEUE_CAPACITY = 100;
     private static final long EVENT_SENDER_PERIOD_IN_HOURS = 1;
 
     private BlockingQueue<TelemetryEvent> eventQueue;
 
-    public TelemetryService( String telemetryDirPath ) {
+    public TelemetryHandler(String telemetryDirPath) {
       // ensure we have the telemetry folder
       File telemetryDir = new File( telemetryDirPath );
       if ( !telemetryDir.exists() ) {

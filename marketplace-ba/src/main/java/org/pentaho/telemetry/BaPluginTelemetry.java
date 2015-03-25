@@ -20,9 +20,9 @@ package org.pentaho.telemetry;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-public class DiPluginTelemetry implements ITelemetryService {
+public class BaPluginTelemetry implements ITelemetryService {
 
-    private static Log logger = LogFactory.getLog( DiPluginTelemetry.class );
+    private static Log logger = LogFactory.getLog( BaPluginTelemetry.class );
 
     // region Constants
 
@@ -105,12 +105,12 @@ public class DiPluginTelemetry implements ITelemetryService {
 
     // region Constructors
 
-    public DiPluginTelemetry( ITelemetryHandler telemetryHandler,
+    public BaPluginTelemetry(ITelemetryHandler telemetryHandler,
                               String telemetryUrl,
-                              boolean telemetryEnabled ) {
+                              boolean telemetryEnabled) {
         this.setTelemetryHandler(telemetryHandler);
-        this.setPlatformVersion( "PDI 1.0" );
-        this.setPluginName( "PDI marketplace" );
+        this.setPlatformVersion( "BA 1.0" );
+        this.setPluginName( "Unknwown" );
         this.setPluginVersion( "1.0.0" );
         this.setBaseUrl( telemetryUrl );
         this.setTelemetryEnabled(telemetryEnabled);

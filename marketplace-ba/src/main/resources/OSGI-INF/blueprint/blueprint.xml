@@ -154,6 +154,9 @@
 
   <!-- END: Domain Entity Factories -->
 
+  <reference id="pluginResourceLoader" interface="org.pentaho.platform.api.engine.IPluginResourceLoader">
+
+  </reference>
 
   <!-- START: Domain Services -->
   <bean id="marketplacePluginService"
@@ -161,15 +164,10 @@
     <argument ref="marketplaceRemotePluginProvider"/>
     <argument ref="marketplaceVersionDataFactory"/>
     <argument ref="marketplaceDomainStatusMessageFactory"/>
-   <!--
     <argument ref="marketplacePluginSerializer"/>
     <argument ref="marketplaceSecurityHelperFactory"/>
-  -->
-    <!--
-    <constructor-arg>
-      <pen:bean class="org.pentaho.platform.api.engine.IPluginResourceLoader"/>
-    </constructor-arg>
-    -->
+    <argument ref="pluginResourceLoader"/>
+    <argument ref="baMarketplaceTelemetry"/>
   </bean>
 
   <bean id="marketplaceRemotePluginProvider"
@@ -206,5 +204,21 @@
     <argument ref="marketplaceCategoryMapper"/>
   </bean>
   <!-- END: DTO Mappers -->
+
+
+    <!-- START: Telemetry -->
+    <bean id="baTelemetryHandler"
+          class="org.pentaho.telemetry.BaTelemetryHandler">
+    </bean>
+
+    <bean id="baMarketplaceTelemetry"
+          class="org.pentaho.telemetry.DiPluginTelemetry">
+        <argument ref="baTelemetryHandler"/>
+        <argument value="${telemetry.site}"/>
+        <argument>
+            <value type="java.lang.Boolean">${telemetry.enabled}</value>
+        </argument>
+    </bean>
+    <!-- END: Telemetry -->
 
 </blueprint>

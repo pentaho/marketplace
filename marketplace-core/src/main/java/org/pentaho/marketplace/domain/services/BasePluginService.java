@@ -30,6 +30,7 @@ import org.pentaho.marketplace.domain.services.interfaces.IPluginProvider;
 import org.pentaho.marketplace.domain.services.interfaces.IPluginService;
 
 import org.pentaho.marketplace.domain.services.interfaces.IRemotePluginProvider;
+import org.pentaho.telemetry.ITelemetryHandler;
 import org.pentaho.telemetry.ITelemetryService;
 import org.pentaho.telemetry.TelemetryEvent;
 import org.pentaho.telemetry.TelemetryEventType;

@@ -177,7 +177,7 @@
     <argument ref="marketplaceVersionDataFactory"/>
     <argument ref="marketplaceDomainStatusMessageFactory"/>
     <argument ref="marketplacePluginVersionFactory"/>
-      <argument ref="marketplaceTelemetry"/>
+      <argument ref="diMarketplaceTelemetry"/>
   </bean>
 
   <bean id="marketplaceRemotePluginProvider"
@@ -193,21 +193,13 @@
 
 
     <!-- START: Telemetry -->
-    <bean id="diTelemetryServiceConfiguration"
-          class="org.pentaho.telemetry.DiTelemetryServiceConfiguration">
+    <bean id="diTelemetryHandler"
+          class="org.pentaho.telemetry.DiTelemetryHandler">
     </bean>
 
-    <bean id="diTelemetryService"
-          class="org.pentaho.telemetry.TelemetryService">
-        <argument> <!--value="/Users/mvala/Temp/.telemetry">  -->
-            <bean factory-ref="diTelemetryServiceConfiguration" factory-method="getTelemetryPath" />
-
-        </argument>
-    </bean>
-
-    <bean id="marketplaceTelemetry"
+    <bean id="diMarketplaceTelemetry"
           class="org.pentaho.telemetry.DiPluginTelemetry">
-        <argument ref="diTelemetryService"/>
+        <argument ref="diTelemetryHandler"/>
         <argument value="${telemetry.site}"/>
         <argument>
             <value type="java.lang.Boolean">${telemetry.enabled}</value>

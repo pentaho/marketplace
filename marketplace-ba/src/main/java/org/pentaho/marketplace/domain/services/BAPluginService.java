@@ -45,6 +45,7 @@ import org.pentaho.platform.engine.core.system.PentahoSystem;
 import org.pentaho.platform.util.VersionHelper;
 import org.pentaho.platform.util.VersionInfo;
 
+import org.pentaho.telemetry.ITelemetryService;
 import org.springframework.security.Authentication;
 import org.springframework.security.GrantedAuthority;
 //import org.xml.sax.InputSource;
@@ -60,10 +61,6 @@ import java.util.Collections;
 import java.util.Date;
 
 public class BAPluginService extends BasePluginService {
-
-    public BAPluginService(IRemotePluginProvider metadataPluginsProvider, IVersionDataFactory versionDataFactory, IDomainStatusMessageFactory domainStatusMessageFactory) {
-        super(metadataPluginsProvider, versionDataFactory, domainStatusMessageFactory);
-    }
 
     @Override
     protected boolean hasMarketplacePermission() {
@@ -95,7 +92,6 @@ public class BAPluginService extends BasePluginService {
         return Collections.emptyList();
     }
 
-    /*
   //region Constants
 
   private static final String CLOSE_METHOD_NAME = "close";
@@ -187,8 +183,9 @@ public class BAPluginService extends BasePluginService {
                          IVersionDataFactory versionDataFactory,
                          IDomainStatusMessageFactory domainStatusMessageFactory,
                          ISecurityHelper securityHelper,
-                         IPluginResourceLoader resourceLoader) {
-    super( metadataPluginsProvider, versionDataFactory, domainStatusMessageFactory );
+                         IPluginResourceLoader resourceLoader,
+                         ITelemetryService telemetryService) {
+    super( metadataPluginsProvider, versionDataFactory, domainStatusMessageFactory, telemetryService );
 
     //initialize dependencies
     MarketplaceXmlSerializer serializer = pluginsSerializer;
@@ -198,6 +195,8 @@ public class BAPluginService extends BasePluginService {
     this.setPluginResourceLoader( resourceLoader );
   }
   //endregion
+
+  /*
 
   //region Methods
   @Override

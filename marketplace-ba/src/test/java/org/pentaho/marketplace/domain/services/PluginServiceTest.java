@@ -44,6 +44,7 @@ import org.pentaho.platform.api.engine.IPentahoSession;
 import org.pentaho.platform.api.engine.IPluginResourceLoader;
 import org.pentaho.platform.api.engine.ISecurityHelper;
 
+import org.pentaho.telemetry.ITelemetryService;
 import org.springframework.security.Authentication;
 import org.springframework.security.GrantedAuthority;
 
@@ -85,8 +86,10 @@ public class PluginServiceTest {
     MarketplaceXmlSerializer serializer = mock( MarketplaceXmlSerializer.class );
     ISecurityHelper securityHelper = mock( ISecurityHelper.class );
     IPluginResourceLoader resourceLoader = mock( IPluginResourceLoader.class );
+    ITelemetryService telemetryService = mock( ITelemetryService.class );
 
-    BAPluginService service = new BAPluginService( pluginProvider, serializer, versionDataFactory, domainStatusMessageFactory, securityHelper, resourceLoader );
+    BAPluginService service = new BAPluginService( pluginProvider, serializer, versionDataFactory,
+        domainStatusMessageFactory, securityHelper, resourceLoader, telemetryService );
 
     IApplicationContext applicationContext = mock( IApplicationContext.class );
     final String solutionPath = this.getSolutionPath();
@@ -109,16 +112,6 @@ public class PluginServiceTest {
     when( userAuthentication.getName() ).thenReturn( userName );
 
     return  userAuthentication;
-  }
-
-  private IPlugin getPluginById( Iterable<IPlugin> plugins, String pluginId ) {
-    for ( IPlugin plugin : plugins ) {
-      if ( pluginId.equals( plugin.getId() ) ) {
-        return plugin;
-      }
-    }
-
-    return null;
   }
 
   // endregion
@@ -316,7 +309,7 @@ public class PluginServiceTest {
     notCompatibleVersion.setMaxParentVersion( "1.0" );
     notCompatibleVersion.setMinParentVersion( "1.0" );
 
-    Collection<IPluginVersion> versions = new ArrayList<IPluginVersion>();
+    Collection<IPluginVersion> versions = new ArrayList<>();
     versions.add( compatibleVersion );
     versions.add( notCompatibleVersion );
 
@@ -408,9 +401,11 @@ public class PluginServiceTest {
     when(resourceLoader.getPluginSetting( BAPluginService.class, SETTINGS_MARKETPLACE_SITE_ ) )
       .thenReturn( resourceMetadataUrl );
 
+    ITelemetryService telemetryService = mock ( ITelemetryService.class );
+
     // act
     BAPluginService service = new BAPluginService( pluginProvider, serializer, versionDataFactory,
-        domainStatusMessageFactory, securityHelper, resourceLoader );
+        domainStatusMessageFactory, securityHelper, resourceLoader, telemetryService );
 
     // assert
     verify( pluginProvider, times( 1 ) ).setUrl( new URL( resourceMetadataUrl )  );

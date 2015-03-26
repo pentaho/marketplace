@@ -30,108 +30,126 @@ import java.util.Map;
  */
 public class TelemetryEvent implements Serializable {
 
-    // region Properties
 
-    public String getPlatformVersion() {
-        return this.platformVersion;
-    }
+  public enum Type {
+    INSTALLATION, REMOVAL, USAGE, OTHER
+  }
 
-    protected void setPlatformVersion(String platformVersion) {
-        this.platformVersion = platformVersion;
-    }
 
-    private String platformVersion;
+  // region Properties
 
-    public String getPluginName() {
-        return this.pluginName;
-    }
+  public String getPlatformVersion() {
+    return this.platformVersion;
+  }
 
-    protected void setPluginName(String pluginName) {
-        this.pluginName = pluginName;
-    }
+  protected void setPlatformVersion(String platformVersion) {
+    this.platformVersion = platformVersion;
+  }
 
-    private String pluginName;
+  private String platformVersion;
 
-    public String getPluginVersion() {
-        return this.pluginVersion;
-    }
+  public String getPluginName() {
+    return this.pluginName;
+  }
 
-    protected void setPluginVersion(String pluginVersion) {
-        this.pluginVersion = pluginVersion;
-    }
+  protected void setPluginName(String pluginName) {
+    this.pluginName = pluginName;
+  }
 
-    private String pluginVersion;
+  private String pluginName;
 
-    public String getUrlToCall() {
-        return this.urlToCall;
-    }
+  public String getPluginVersion() {
+    return this.pluginVersion;
+  }
 
-    protected void setUrlToCall(String urlToCall) {
-        this.urlToCall = urlToCall;
-    }
+  protected void setPluginVersion(String pluginVersion) {
+    this.pluginVersion = pluginVersion;
+  }
 
-    private String urlToCall;
+  private String pluginVersion;
 
-    public TelemetryEventType getEventType() {
-        return this.eventType;
-    }
+  public String getUrlToCall() {
+    return this.urlToCall;
+  }
 
-    protected void setEventType(TelemetryEventType eventType) {
-        this.eventType = eventType;
-    }
+  protected void setUrlToCall(String urlToCall) {
+    this.urlToCall = urlToCall;
+  }
 
-    private TelemetryEventType eventType;
+  private String urlToCall;
 
-    public Map<String, String> getExtraInfo() {
-        return this.extraInfo;
-    }
+  public TelemetryEvent.Type getEventType() {
+    return this.eventType;
+  }
 
-    protected void setExtraInfo(Map<String, String> extraInfo) {
-        this.extraInfo = extraInfo;
-    }
+  protected void setEventType(TelemetryEvent.Type eventType) {
+    this.eventType = eventType;
+  }
 
-    private Map<String, String> extraInfo;
+  private TelemetryEvent.Type eventType;
 
-    public long getEventTimestamp() {
-        return this.eventTimestamp;
-    }
+  public Map<String, String> getExtraInfo() {
+    return this.extraInfo;
+  }
 
-    protected void setEventTimestamp(long eventTimestamp) {
-        this.eventTimestamp = eventTimestamp;
-    }
+  protected void setExtraInfo(Map<String, String> extraInfo) {
+    this.extraInfo = extraInfo;
+  }
 
-    private long eventTimestamp;
+  private Map<String, String> extraInfo;
 
-    // endregion
+  public long getEventTimestamp() {
+    return this.eventTimestamp;
+  }
 
-    // region Constructors
+  protected void setEventTimestamp(long eventTimestamp) {
+    this.eventTimestamp = eventTimestamp;
+  }
 
-    public TelemetryEvent(TelemetryEventType eventType) {
-        this( eventType, new HashMap<String, String>(1));
-    }
+  private long eventTimestamp;
 
-    public TelemetryEvent(TelemetryEventType eventType,
-                          Map<String, String> eventInfo ) {
-        this.setEventType(eventType);
-        this.setExtraInfo(eventInfo);
-    }
+  // endregion
 
-    // endregion
+  // region Constructors
 
-    // region Methods
+  protected TelemetryEvent(TelemetryEvent.Type eventType,
+                        String pluginName,
+                        String pluginVersion,
+                        String platformVersion,
+                        String urlToCall) {
+    this(eventType, pluginName, pluginVersion, platformVersion, urlToCall, new HashMap<String, String>(1));
+  }
 
-    public void addInfo(String key, String value) {
-        this.getExtraInfo().put(key, value);
-    }
+  protected TelemetryEvent(TelemetryEvent.Type eventType,
+                        String pluginName,
+                        String pluginVersion,
+                        String platformVersion,
+                        String urlToCall,
+                        Map<String, String> eventInfo) {
+    this.setEventType(eventType);
+    this.setPluginName(pluginName);
+    this.setPluginVersion(pluginVersion);
+    this.setPlatformVersion(platformVersion);
+    this.setUrlToCall(urlToCall);
+    this.setExtraInfo(eventInfo);
+  }
 
-    protected void updateTimestamp() {
-        this.setEventTimestamp(System.currentTimeMillis());
-    }
+  // endregion
 
-    protected String encodeEvent() {
-        JSONSerializer serializer = new JSONSerializer();
-        return serializer.deepSerialize(this);
-    }
+  // region Methods
 
-    // endregion
+  public void addInfo(String key, String value) {
+    this.getExtraInfo().put(key, value);
+  }
+
+  protected void updateTimestamp() {
+    this.setEventTimestamp(System.currentTimeMillis());
+  }
+
+  protected String encodeEvent() {
+    JSONSerializer serializer = new JSONSerializer();
+    return serializer.deepSerialize(this);
+  }
+
+  // endregion
 }

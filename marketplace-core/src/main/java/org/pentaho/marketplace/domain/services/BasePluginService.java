@@ -30,10 +30,8 @@ import org.pentaho.marketplace.domain.services.interfaces.IPluginProvider;
 import org.pentaho.marketplace.domain.services.interfaces.IPluginService;
 
 import org.pentaho.marketplace.domain.services.interfaces.IRemotePluginProvider;
-import org.pentaho.telemetry.ITelemetryHandler;
 import org.pentaho.telemetry.ITelemetryService;
 import org.pentaho.telemetry.TelemetryEvent;
-import org.pentaho.telemetry.TelemetryEventType;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -254,13 +252,12 @@ public abstract class BasePluginService implements IPluginService {
           + ", see log for details." );
     }
 
-      // Perhaps we are reinstalling the marketplace.
-      // Create telemetry event and messages before closing class loader just in case.
-
-      TelemetryEvent te = new TelemetryEvent( TelemetryEventType.INSTALLATION );
-      te.addInfo("installedPlugin", toInstall.getId());
-      te.addInfo("installedVersion", versionToInstall.getVersion());
-      te.addInfo("installedBranch", versionBranch);
+    // Perhaps we are reinstalling the marketplace.
+    // Create telemetry event and messages before closing class loader just in case.
+    TelemetryEvent event =  this.getTelemetryService().createEvent( TelemetryEvent.Type.INSTALLATION );
+    event.addInfo("installedPlugin", toInstall.getId());
+    event.addInfo("installedVersion", versionToInstall.getVersion());
+    event.addInfo("installedBranch", versionBranch);
 
     IDomainStatusMessage successMessage =
       this.domainStatusMessageFactory.create( PLUGIN_INSTALLED_CODE, toInstall.getName()
@@ -277,7 +274,7 @@ public abstract class BasePluginService implements IPluginService {
     }
 
     try {
-        this.getTelemetryService().publishEvent( te );
+        this.getTelemetryService().publishEvent( event );
     } catch ( NoClassDefFoundError e ) {
         this.logger.debug( "Failed to find class definitions. Most likely reason is reinstalling marketplace.", e );
     }
@@ -298,10 +295,10 @@ public abstract class BasePluginService implements IPluginService {
 
     // Perhaps we are uninstalling the marketplace.
     // Create telemetry event and messages before closing class loader just in case.
-      TelemetryEvent te = new TelemetryEvent( TelemetryEventType.REMOVAL);
-      te.addInfo("uninstalledPlugin", toUninstall.getId());
-      te.addInfo("uninstalledPluginVersion", toUninstall.getInstalledVersion());
-      te.addInfo("uninstalledPluginBranch", toUninstall.getInstalledBranch());
+    TelemetryEvent event =  this.getTelemetryService().createEvent( TelemetryEvent.Type.INSTALLATION );
+    event.addInfo("uninstalledPlugin", toUninstall.getId());
+    event.addInfo("uninstalledPluginVersion", toUninstall.getInstalledVersion());
+    event.addInfo("uninstalledPluginBranch", toUninstall.getInstalledBranch());
 
     IDomainStatusMessage successMessage =
       this.domainStatusMessageFactory.create( PLUGIN_UNINSTALLED_CODE, toUninstall.getName()
@@ -318,9 +315,9 @@ public abstract class BasePluginService implements IPluginService {
     }
 
     try {
-        this.getTelemetryService().publishEvent(te);
+      this.getTelemetryService().publishEvent(event);
     } catch ( NoClassDefFoundError e ) {
-        this.logger.debug( "Failed to find class definitions. Most likely reason is uninstalling marketplace.", e );
+      this.logger.debug( "Failed to find class definitions. Most likely reason is uninstalling marketplace.", e );
     }
 
     return successMessage;

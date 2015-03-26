@@ -19,10 +19,19 @@ package org.pentaho.telemetry;
 
 public interface ITelemetryService {
 
-    /**
-     * Publishes a telemetry event.
-     *
-     * @return <i>true</i> if the event was published correctly, <i>false</i> otherwise
-     */
-    boolean publishEvent(TelemetryEvent event);
+  /**
+   * Creates a telemetry event.
+   *
+   * @param eventType the type of event
+   *
+   * @return the telemetry event
+   */
+  TelemetryEvent createEvent(TelemetryEvent.Type eventType);
+
+  /**
+   * Publishes a telemetry event.
+   *
+   * @return <i>true</i> if the event was published correctly, <i>false</i> otherwise
+   */
+  boolean publishEvent(TelemetryEvent event);
 }

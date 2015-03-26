@@ -20,128 +20,34 @@ package org.pentaho.telemetry;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-public class DiPluginTelemetry implements ITelemetryService {
+public class DiPluginTelemetry extends TelemetryService {
 
-    private static Log logger = LogFactory.getLog( DiPluginTelemetry.class );
+  private static Log logger = LogFactory.getLog(DiPluginTelemetry.class);
 
-    // region Constants
+  // region Constructors
 
-    private static final String BASE_TELEMETRY_SERVICE_NOT_DEFINED_MESSAGE =
-            "Base telemetry service is not defined for plugin: ";
-    private static final String TELEMETRY_NOT_ENABLED_MESSAGE =
-            "Telemetry is not enabled for plugin: ";
+  public DiPluginTelemetry( String pluginName,
+                            ITelemetryHandler telemetryHandler,
+                            String telemetryUrl,
+                            boolean telemetryEnabled ) {
+    super( telemetryHandler, telemetryUrl, telemetryEnabled );
 
-    // endregion
+    this.setPlatformVersion(this.getPlatformVersion());
+    this.setPluginName(pluginName);
+    this.setPluginVersion(this.getPluginVersion());
+  }
 
-    // region Properties
+  // endregion
 
-    /**
-     * @return the base telemetry service
-     */
-    public ITelemetryHandler getTelemetryHandler() {
-        return this.telemetryHandler;
-    }
-    protected void setTelemetryHandler(ITelemetryHandler telemetryHandler) {
-        this.telemetryHandler = telemetryHandler;
-    }
-    private ITelemetryHandler telemetryHandler;
+  // region Methods
 
-    /**
-     * @return the platform version
-     */
-    public String getPlatformVersion() {
-        return this.platformVersion;
-    }
-    protected void setPlatformVersion( String platformVersion ) {
-        this.platformVersion = platformVersion;
-    }
-    private String platformVersion;
+  public String getPlatformVersion() {
+    return "PDI marketplace";
+  }
 
-    /**
-     * @return the plugin name
-     */
-    public String getPluginName() {
-        return this.pluginName;
-    }
-    protected void setPluginName( String pluginName ) {
-        this.pluginName = pluginName;
-    }
-    private String pluginName;
+  public String getPluginVersion() {
+    return "1.0.0";
+  }
 
-    /**
-     * @return the plugin version
-     */
-    public String getPluginVersion() {
-        return this.pluginVersion;
-    }
-    protected void setPluginVersion( String pluginVersion ) {
-        this.pluginVersion = pluginVersion;
-    }
-    private String pluginVersion;
-
-    /**
-     * @return the base url for telemetry events to be posted
-     */
-    public String getBaseUrl() {
-        return this.baseUrl;
-    }
-    protected void setBaseUrl( String baseUrl ) {
-        this.baseUrl = baseUrl;
-    }
-    private String baseUrl;
-
-    /**
-     * @return true if telemetry is enabled for this plugin
-     */
-    public boolean isTelemetryEnabled() {
-        return this.telemetryEnabled;
-    }
-    protected void setTelemetryEnabled( boolean telemetryEnabled ) {
-        this.telemetryEnabled = telemetryEnabled;
-    }
-    private boolean telemetryEnabled;
-
-    // endregion
-
-    // region Constructors
-
-    public DiPluginTelemetry( ITelemetryHandler telemetryHandler,
-                              String telemetryUrl,
-                              boolean telemetryEnabled ) {
-        this.setTelemetryHandler(telemetryHandler);
-        this.setPlatformVersion( "PDI 1.0" );
-        this.setPluginName( "PDI marketplace" );
-        this.setPluginVersion( "1.0.0" );
-        this.setBaseUrl( telemetryUrl );
-        this.setTelemetryEnabled(telemetryEnabled);
-    }
-
-    // endregion
-
-    // region Methods
-
-    @Override
-    public boolean publishEvent( TelemetryEvent event ) {
-
-        if ( !this.isTelemetryEnabled() ) {
-            logger.info( TELEMETRY_NOT_ENABLED_MESSAGE + this.getPluginName() );
-            return false;
-        }
-
-        if ( this.getTelemetryHandler() == null ) {
-            logger.warn( BASE_TELEMETRY_SERVICE_NOT_DEFINED_MESSAGE + this.getPluginName() );
-            return false;
-        }
-
-        // add provider info to telemetry event
-        event.setPlatformVersion(this.getPlatformVersion());
-        event.setPluginName(this.getPluginName());
-        event.setPluginVersion(this.getPluginVersion());
-        event.setUrlToCall(this.getBaseUrl());
-
-        // call base service to publish event
-        return this.getTelemetryHandler().publishEvent(event);
-    }
-
-    // endregion
+  // endregion
 }

@@ -20,128 +20,110 @@ package org.pentaho.telemetry;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-public class BaPluginTelemetry implements ITelemetryService {
+import org.pentaho.platform.api.engine.IApplicationContext;
+import org.pentaho.platform.api.util.IVersionHelper;
+import org.pentaho.platform.engine.core.system.PentahoSystem;
+import org.pentaho.platform.util.VersionHelper;
+import org.pentaho.platform.util.VersionInfo;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
 
-    private static Log logger = LogFactory.getLog( BaPluginTelemetry.class );
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import java.io.File;
+import java.io.FileReader;
 
-    // region Constants
+public class BaPluginTelemetry extends TelemetryService {
 
-    private static final String BASE_TELEMETRY_SERVICE_NOT_DEFINED_MESSAGE =
-            "Base telemetry service is not defined for plugin: ";
-    private static final String TELEMETRY_NOT_ENABLED_MESSAGE =
-            "Telemetry is not enabled for plugin: ";
+  private static Log logger = LogFactory.getLog(BaPluginTelemetry.class);
 
-    // endregion
+  // region Constructors
 
-    // region Properties
+  public BaPluginTelemetry(String pluginName,
+                           ITelemetryHandler telemetryHandler,
+                           String telemetryUrl,
+                           boolean telemetryEnabled) {
+    super(telemetryHandler, telemetryUrl, telemetryEnabled);
 
-    /**
-     * @return the base telemetry service
-     */
-    public ITelemetryHandler getTelemetryHandler() {
-        return this.telemetryHandler;
+    this.setPluginName( pluginName );
+    this.setPluginVersion( this.getBaPluginVersion(pluginName) );
+    this.setPlatformVersion( this.getBaPlatformVersion() );
+  }
+
+  // endregion
+
+  // region Methods
+
+  private String getBaPlatformVersion() {
+    String platformVersion;
+    VersionInfo versionInfo;
+    IVersionHelper versionHelper = PentahoSystem.get( IVersionHelper.class, null );
+    if ( versionHelper != null ) {
+      versionInfo = VersionHelper.getVersionInfo( versionHelper.getClass() );
+    } else {
+      versionInfo = VersionHelper.getVersionInfo( PentahoSystem.class );
     }
-    protected void setTelemetryHandler(ITelemetryHandler telemetryHandler) {
-        this.telemetryHandler = telemetryHandler;
-    }
-    private ITelemetryHandler telemetryHandler;
+    platformVersion = versionInfo.getProductID() + "_" + versionInfo.getVersionNumber();
+    return platformVersion;
+  }
 
-    /**
-     * @return the platform version
-     */
-    public String getPlatformVersion() {
-        return this.platformVersion;
-    }
-    protected void setPlatformVersion( String platformVersion ) {
-        this.platformVersion = platformVersion;
-    }
-    private String platformVersion;
+  private String getBaPluginVersion( String pluginName ) {
 
-    /**
-     * @return the plugin name
-     */
-    public String getPluginName() {
-        return this.pluginName;
-    }
-    protected void setPluginName( String pluginName ) {
-        this.pluginName = pluginName;
-    }
-    private String pluginName;
+    IApplicationContext context = PentahoSystem.getApplicationContext();
 
-    /**
-     * @return the plugin version
-     */
-    public String getPluginVersion() {
-        return this.pluginVersion;
-    }
-    protected void setPluginVersion( String pluginVersion ) {
-        this.pluginVersion = pluginVersion;
-    }
-    private String pluginVersion;
-
-    /**
-     * @return the base url for telemetry events to be posted
-     */
-    public String getBaseUrl() {
-        return this.baseUrl;
-    }
-    protected void setBaseUrl( String baseUrl ) {
-        this.baseUrl = baseUrl;
-    }
-    private String baseUrl;
-
-    /**
-     * @return true if telemetry is enabled for this plugin
-     */
-    public boolean isTelemetryEnabled() {
-        return this.telemetryEnabled;
-    }
-    protected void setTelemetryEnabled( boolean telemetryEnabled ) {
-        this.telemetryEnabled = telemetryEnabled;
-    }
-    private boolean telemetryEnabled;
-
-    // endregion
-
-    // region Constructors
-
-    public BaPluginTelemetry(ITelemetryHandler telemetryHandler,
-                              String telemetryUrl,
-                              boolean telemetryEnabled) {
-        this.setTelemetryHandler(telemetryHandler);
-        this.setPlatformVersion( "BA 1.0" );
-        this.setPluginName( "Unknwown" );
-        this.setPluginVersion( "1.0.0" );
-        this.setBaseUrl( telemetryUrl );
-        this.setTelemetryEnabled(telemetryEnabled);
-    }
-
-    // endregion
-
-    // region Methods
-
-    @Override
-    public boolean publishEvent( TelemetryEvent event ) {
-
-        if ( !this.isTelemetryEnabled() ) {
-            logger.info( TELEMETRY_NOT_ENABLED_MESSAGE + this.getPluginName() );
-            return false;
+    String versionPath = PentahoSystem.getApplicationContext().getSolutionPath("system/" + pluginName + "/version.xml");
+    DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+    FileReader reader = null;
+    try {
+      File file = new File(versionPath);
+      if (!file.exists()) {
+        return "Unknown";
+      }
+      DocumentBuilder db = dbf.newDocumentBuilder();
+      reader = new FileReader(versionPath);
+      Document dom = db.parse(new InputSource(reader));
+      NodeList versionElements = dom.getElementsByTagName("version");
+      if (versionElements.getLength() >= 1) {
+        Element versionElement = (Element) versionElements.item(0);
+        return versionElement.getAttribute("branch") + "-" + versionElement.getTextContent();
+      }
+    } catch (Exception e) {
+      logger.error("Error while trying to read plugin version for " + pluginName, e);
+    } finally {
+      try {
+        if (reader != null) {
+          reader.close();
         }
+      } catch (Exception e) {
+      }
+    }
+    return "Unknown";
+  }
 
-        if ( this.getTelemetryHandler() == null ) {
-            logger.warn( BASE_TELEMETRY_SERVICE_NOT_DEFINED_MESSAGE + this.getPluginName() );
-            return false;
-        }
+  // endregion
 
-        // add provider info to telemetry event
-        event.setPlatformVersion(this.getPlatformVersion());
-        event.setPluginName(this.getPluginName());
-        event.setPluginVersion(this.getPluginVersion());
-        event.setUrlToCall(this.getBaseUrl());
+  /*
+  public boolean isPluginTelemetryEnabled() {
+    return Boolean.parseBoolean( PentahoSystem.getSystemSetting( "telemetry", "true" ) );
+  }
 
-        // call base service to publish event
-        return this.getTelemetryHandler().publishEvent(event);
+  protected String getTelemetryBaseUrlFromPlugin() {
+    IPluginResourceLoader resLoader = PentahoSystem.get( IPluginResourceLoader.class, null );
+    String baseUrl = null;
+    try {
+      baseUrl = resLoader.getPluginSetting( getClass(), "settings/telemetry-site" ); //$NON-NLS-1$
+    } catch ( Exception e ) {
+      logger.debug( "Error getting data access plugin settings", e );
     }
 
-    // endregion
+    if ( baseUrl == null || "".equals( baseUrl ) ) {
+      logger.warn( "Telemetry url is not set for plugin " + pluginName + ". Defaulting to a bogus local url" );
+      baseUrl = "https://localhost:8080/pentaho/telemetry";
+    }
+
+    return baseUrl;
+  }
+  */
 }

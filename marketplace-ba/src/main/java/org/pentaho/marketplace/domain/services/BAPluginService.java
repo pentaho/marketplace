@@ -19,6 +19,7 @@ package org.pentaho.marketplace.domain.services;
 
 
 import org.apache.commons.io.filefilter.DirectoryFileFilter;
+import org.osgi.framework.Bundle;
 import org.pentaho.di.core.Result;
 import org.pentaho.di.core.exception.KettleException;
 import org.pentaho.di.core.exception.KettleXMLException;
@@ -52,7 +53,9 @@ import org.xml.sax.InputSource;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Method;
+import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -63,7 +66,7 @@ public class BAPluginService extends BasePluginService {
   //region Constants
 
   private static final String CLOSE_METHOD_NAME = "close";
-  private static final String PROCESSES_FILES_FOLDER =  "system/" + PLUGIN_NAME + "/processes/";
+  private static final String PROCESSES_FILES_FOLDER = "/processes/";
   private static final String INSTALL_JOB_PATH = PROCESSES_FILES_FOLDER + "download_and_install_plugin.kjb";
   private static final String UNINSTALL_JOB_PATH = PROCESSES_FILES_FOLDER + "uninstall_plugin.kjb";
 
@@ -143,6 +146,40 @@ public class BAPluginService extends BasePluginService {
     PentahoSessionHolder.setSession( session );
     return this;
   }
+
+  public Bundle getBundle() {
+    return this.bundle;
+  }
+  public void setBundle( Bundle bundle ) {
+    this.bundle = bundle;
+  }
+  private Bundle bundle;
+
+  private JobMeta getInstallJobMeta() {
+    return this.getJobMeta( INSTALL_JOB_PATH );
+  }
+
+  private JobMeta getUninstallJobMeta() {
+   return this.getJobMeta( UNINSTALL_JOB_PATH );
+  }
+
+  private JobMeta getJobMeta( String bundleJobFilePath ) {
+    URL url = this.getBundle().getResource( bundleJobFilePath );
+    InputStream jobInputStream;
+    JobMeta meta = null;
+
+    try {
+      jobInputStream = url.openConnection().getInputStream();
+      meta = new JobMeta( jobInputStream, null, null );
+    } catch ( IOException e ) {
+      this.getLogger().error( "Unable to open job file " + bundleJobFilePath, e );
+    } catch ( KettleXMLException e ) {
+      this.getLogger().error( "Unable to create job meta from input stream of file " + bundleJobFilePath, e );
+    }
+
+    return meta;
+  }
+
   //endregion
 
   //region Constructors
@@ -152,8 +189,11 @@ public class BAPluginService extends BasePluginService {
                           ITelemetryService telemetryService,
                           IMarketplaceXmlSerializer pluginsSerializer,
                           ISecurityHelper securityHelper,
+                          Bundle bundle,
                           IPluginResourceLoader resourceLoader) {
     super( metadataPluginsProvider, versionDataFactory, domainStatusMessageFactory, telemetryService );
+
+    this.setBundle( bundle );
 
     //initialize dependencies
     IMarketplaceXmlSerializer serializer = pluginsSerializer;
@@ -168,9 +208,10 @@ public class BAPluginService extends BasePluginService {
                          IDomainStatusMessageFactory domainStatusMessageFactory,
                          ITelemetryService telemetryService,
                          IMarketplaceXmlSerializer pluginsSerializer,
-                         ISecurityHelper securityHelper ) {
+                         ISecurityHelper securityHelper,
+                         Bundle bundle ) {
     this ( metadataPluginsProvider, versionDataFactory, domainStatusMessageFactory, telemetryService,
-        pluginsSerializer, securityHelper, PentahoSystem.get( IPluginResourceLoader.class ) );
+        pluginsSerializer, securityHelper, bundle, PentahoSystem.get( IPluginResourceLoader.class ) );
   }
   //endregion
 
@@ -290,7 +331,7 @@ public class BAPluginService extends BasePluginService {
   protected boolean executeInstall( IPlugin plugin, IPluginVersion version ) {
     try {
       Result result =
-        this.executeInstallPluginJob( plugin.getId(), version.getDownloadUrl(), version.getSamplesDownloadUrl(), version.getVersion() );
+        this.executeInstallPluginJob(plugin.getId(), version.getDownloadUrl(), version.getSamplesDownloadUrl(), version.getVersion());
 
       if ( result == null || result.getNrErrors() > 0 ) {
         return false;
@@ -321,13 +362,14 @@ public class BAPluginService extends BasePluginService {
 
   private Result executeInstallPluginJob( String pluginId, String downloadUrl, String samplesDownloadUrl,
                                           String availableVersion )
-    throws KettleXMLException, UnknownParamException {
+    throws UnknownParamException {
 
-    // get marketplace path
-    String jobPath = this.getApplicationContext().getSolutionPath( INSTALL_JOB_PATH );
+    JobMeta installMeta = this.getInstallJobMeta();
+    if ( installMeta == null ) {
+      return null;
+    }
 
-    JobMeta installJobMeta = new JobMeta( jobPath, null );
-    Job job = new Job( null, installJobMeta );
+    Job job = new Job( null, installMeta );
 
     File file = new File( this.getApplicationContext().getSolutionPath( DOWNLOAD_CACHE_FOLDER ) );
     file.mkdirs();
@@ -341,8 +383,8 @@ public class BAPluginService extends BasePluginService {
     if ( samplesDownloadUrl != null ) {
       job.getJobMeta().setParameterValue( "samplesDownloadUrl", samplesDownloadUrl );
       job.getJobMeta().setParameterValue( "samplesDir", "/public/plugin-samples" );
-      job.getJobMeta().setParameterValue( "samplesTargetDestination", this.getApplicationContext()
-        .getSolutionPath( "plugin-samples/" + pluginId ) );
+      job.getJobMeta().setParameterValue("samplesTargetDestination", this.getApplicationContext()
+          .getSolutionPath("plugin-samples/" + pluginId));
       job.getJobMeta().setParameterValue( "samplesTargetBackup", this.getApplicationContext()
         .getSolutionPath( BACKUP_CACHE_FOLDER + pluginId + "_samples_" + new Date()
           .getTime() ) );
@@ -378,11 +420,13 @@ public class BAPluginService extends BasePluginService {
   }
 
   private Result executeUninstallPluginJob( String pluginId )
-    throws KettleXMLException, UnknownParamException {
-    // get plugin path
-    String jobPath = this.getApplicationContext().getSolutionPath( UNINSTALL_JOB_PATH );
+    throws UnknownParamException {
 
-    JobMeta uninstallJobMeta = new JobMeta( jobPath, null );
+    JobMeta uninstallJobMeta = this.getUninstallJobMeta();
+    if ( uninstallJobMeta == null ) {
+      return null;
+    }
+
     Job job = new Job( null, uninstallJobMeta );
 
     File file = new File( this.getApplicationContext().getSolutionPath( BACKUP_CACHE_FOLDER ) );

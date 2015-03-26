@@ -166,6 +166,7 @@
     <argument ref="baMarketplaceTelemetry"/>
     <argument ref="marketplacePluginSerializer"/>
     <argument ref="marketplaceSecurityHelperFactory"/>
+    <argument ref="blueprintBundle"/>
     <!-- <argument ref="pluginResourceLoader"/> -->
   </bean>
 

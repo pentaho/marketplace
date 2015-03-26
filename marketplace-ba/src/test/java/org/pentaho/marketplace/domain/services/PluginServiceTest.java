@@ -24,6 +24,7 @@ import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
+import org.osgi.framework.Bundle;
 import org.pentaho.marketplace.domain.model.entities.interfaces.IDomainStatusMessage;
 import org.pentaho.marketplace.domain.model.entities.interfaces.IPlugin;
 import org.pentaho.marketplace.domain.model.entities.interfaces.IPluginVersion;
@@ -87,9 +88,10 @@ public class PluginServiceTest {
     ISecurityHelper securityHelper = mock( ISecurityHelper.class );
     IPluginResourceLoader resourceLoader = mock( IPluginResourceLoader.class );
     ITelemetryService telemetryService = mock( ITelemetryService.class );
+    Bundle bundle = mock( Bundle.class );
 
-    BAPluginService service = new BAPluginService( pluginProvider, serializer, versionDataFactory,
-        domainStatusMessageFactory, securityHelper, resourceLoader, telemetryService );
+    BAPluginService service = new BAPluginService( pluginProvider, versionDataFactory,
+        domainStatusMessageFactory, telemetryService, serializer, securityHelper, bundle, resourceLoader );
 
     IApplicationContext applicationContext = mock( IApplicationContext.class );
     final String solutionPath = this.getSolutionPath();
@@ -402,10 +404,11 @@ public class PluginServiceTest {
       .thenReturn( resourceMetadataUrl );
 
     ITelemetryService telemetryService = mock ( ITelemetryService.class );
+    Bundle bundle = mock( Bundle.class );
 
     // act
-    BAPluginService service = new BAPluginService( pluginProvider, serializer, versionDataFactory,
-        domainStatusMessageFactory, securityHelper, resourceLoader, telemetryService );
+    BAPluginService service = new BAPluginService( pluginProvider, versionDataFactory,
+        domainStatusMessageFactory, telemetryService, serializer, securityHelper, bundle, resourceLoader );
 
     // assert
     verify( pluginProvider, times( 1 ) ).setUrl( new URL( resourceMetadataUrl )  );

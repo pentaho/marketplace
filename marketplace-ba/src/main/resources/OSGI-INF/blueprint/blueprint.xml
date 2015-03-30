@@ -160,7 +160,9 @@
 
   <!-- START: Domain Services -->
   <bean id="marketplacePluginService"
-        class="org.pentaho.marketplace.domain.services.BAPluginService">
+        class="org.pentaho.marketplace.domain.services.BAPluginService"
+        init-method="init"
+        destroy-method="destroy">
     <argument ref="marketplaceRemotePluginProvider"/>
     <argument ref="marketplaceVersionDataFactory"/>
     <argument ref="marketplaceDomainStatusMessageFactory"/>
@@ -169,6 +171,10 @@
     <argument ref="marketplaceSecurityHelperFactory"/>
     <argument ref="blueprintBundle"/>
     <!-- <argument ref="pluginResourceLoader"/> -->
+    <property name="relativeKettleExecutionFolderPath"
+              value="marketplace/processes/" />
+    <property name="absoluteKettleResourcesSourcePath"
+              value="/processes/"/>
   </bean>
 
   <bean id="marketplaceRemotePluginProvider"

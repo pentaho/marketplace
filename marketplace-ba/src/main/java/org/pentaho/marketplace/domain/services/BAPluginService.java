@@ -18,6 +18,8 @@
 package org.pentaho.marketplace.domain.services;
 
 
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.filefilter.DirectoryFileFilter;
 import org.osgi.framework.Bundle;
 import org.pentaho.di.core.Result;
@@ -55,10 +57,17 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Method;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 
 public class BAPluginService extends BasePluginService {
@@ -66,9 +75,9 @@ public class BAPluginService extends BasePluginService {
   //region Constants
 
   private static final String CLOSE_METHOD_NAME = "close";
-  private static final String PROCESSES_FILES_FOLDER = "/processes/";
-  private static final String INSTALL_JOB_PATH = PROCESSES_FILES_FOLDER + "download_and_install_plugin.kjb";
-  private static final String UNINSTALL_JOB_PATH = PROCESSES_FILES_FOLDER + "uninstall_plugin.kjb";
+
+  private static final String INSTALL_JOB_NAME = "download_and_install_plugin.kjb";
+  private static final String UNINSTALL_JOB_NAME = "uninstall_plugin.kjb";
 
   private static final String CACHE_FOLDER = "system/plugin-cache/";
   private static final String DOWNLOAD_CACHE_FOLDER = CACHE_FOLDER + "downloads/";
@@ -155,26 +164,75 @@ public class BAPluginService extends BasePluginService {
   }
   private Bundle bundle;
 
+  /**
+   * Gets the relative path of the folder where the marketplace kettle transformations / jobs are stored.
+   * This path is relative to the bundle base folder supplied by {@link Bundle#getLocation()}
+   * @return
+   */
+  public String getRelativeKettleExecutionFolderPath() {
+    return relativeKettleExecutionFolderPath;
+  }
+  /**
+   * Sets the relative path of the folder where the marketplace kettle transformations / jobs are stored
+   * This path is relative to the bundle base folder supplied by {@link Bundle#getLocation()}
+   * @param folderPath
+   */
+  public void setRelativeKettleExecutionFolderPath( String folderPath ) {
+    this.relativeKettleExecutionFolderPath = folderPath;
+  }
+  private String relativeKettleExecutionFolderPath;
+
+  /**
+   * Gets the absolute path to the folder where the marketplace transformations / jobs are stored and executed.
+   * @return
+   */
+  public Path getAbsoluteKettleExecutionFolderPath() {
+    return this.getBundleLocation().resolve( this.getRelativeKettleExecutionFolderPath() );
+  }
+
+  /**
+   * Gets the path to where the kettle files are within the Bundle.
+   * This path is relative to the bundle root.
+   * @return
+   */
+  public String getAbsoluteKettleResourcesSourcePath() {
+    return this.absoluteKettleResourcesSourcePath;
+  }
+  public void setAbsoluteKettleResourcesSourcePath ( String path ) {
+    this.absoluteKettleResourcesSourcePath = path;
+  }
+  private String absoluteKettleResourcesSourcePath;
+
+  /**
+   * Gets the marketplace bundle location
+   * @return
+   */
+  public Path getBundleLocation() {
+    try {
+      return Paths.get( new URI( this.getBundle().getLocation()) )
+          .getParent()
+          .toAbsolutePath();
+    } catch ( URISyntaxException e ) {
+      this.getLogger().error( "Invalid URI from marketplace bundle location: " + bundle.getLocation(), e );
+      return null;
+    }
+  }
+
   private JobMeta getInstallJobMeta() {
-    return this.getJobMeta( INSTALL_JOB_PATH );
+    return this.getJobMeta( INSTALL_JOB_NAME );
   }
 
   private JobMeta getUninstallJobMeta() {
-   return this.getJobMeta( UNINSTALL_JOB_PATH );
+   return this.getJobMeta( UNINSTALL_JOB_NAME );
   }
 
-  private JobMeta getJobMeta( String bundleJobFilePath ) {
-    URL url = this.getBundle().getResource( bundleJobFilePath );
-    InputStream jobInputStream;
+  private JobMeta getJobMeta( String jobFileName ) {
+    String jobFilePath = this.getAbsoluteKettleExecutionFolderPath().resolve( jobFileName ).toString();
     JobMeta meta = null;
-
     try {
-      jobInputStream = url.openConnection().getInputStream();
-      meta = new JobMeta( jobInputStream, null, null );
-    } catch ( IOException e ) {
-      this.getLogger().error( "Unable to open job file " + bundleJobFilePath, e );
+      meta = new JobMeta( jobFilePath, null );
     } catch ( KettleXMLException e ) {
-      this.getLogger().error( "Unable to create job meta from input stream of file " + bundleJobFilePath, e );
+      this.getLogger().error( "Unable to create job meta from file path " + jobFilePath, e );
     }
 
     return meta;
@@ -203,7 +261,7 @@ public class BAPluginService extends BasePluginService {
     this.setPluginResourceLoader( resourceLoader );
   }
 
-  public BAPluginService(IRemotePluginProvider metadataPluginsProvider,
+  public BAPluginService( IRemotePluginProvider metadataPluginsProvider,
                          IVersionDataFactory versionDataFactory,
                          IDomainStatusMessageFactory domainStatusMessageFactory,
                          ITelemetryService telemetryService,
@@ -212,6 +270,20 @@ public class BAPluginService extends BasePluginService {
                          Bundle bundle ) {
     this ( metadataPluginsProvider, versionDataFactory, domainStatusMessageFactory, telemetryService,
         pluginsSerializer, securityHelper, bundle, PentahoSystem.get( IPluginResourceLoader.class ) );
+  }
+
+  /**
+   * Called after class is instantiated by DI
+   */
+  public void init() {
+    this.copyKettleFilesToExecutionFolder();
+  }
+
+  /**
+   * Called on object destruction by DI
+   */
+  public void destroy() {
+    this.deleteKettleFilesFromExecutionFolder();
   }
   //endregion
 
@@ -259,8 +331,8 @@ public class BAPluginService extends BasePluginService {
 
   @Override
   protected IPluginVersion getInstalledPluginVersion( IPlugin plugin ) {
-    String versionPath = this.getApplicationContext().getSolutionPath( "system/" + plugin.getId()
-      + "/version.xml" );
+    String versionPath = this.getApplicationContext().getSolutionPath("system/" + plugin.getId()
+        + "/version.xml");
     FileReader reader = null;
     try {
       File file = new File( versionPath );
@@ -307,12 +379,12 @@ public class BAPluginService extends BasePluginService {
 
   @Override
   protected void unloadPlugin( String pluginId ) {
-    IPluginManager pluginManager = this.getPluginManager( this.getCurrentSession() );
+    IPluginManager pluginManager = this.getPluginManager(this.getCurrentSession());
     ClassLoader cl = pluginManager.getClassLoader( pluginId );
     if ( cl != null && cl instanceof URLClassLoader ) {
       try {
         URLClassLoader cl1 = (URLClassLoader) cl;
-        Util.closeURLClassLoader(cl1);
+        Util.closeURLClassLoader( cl1 );
         Method closeMethod = cl1.getClass().getMethod( BAPluginService.CLOSE_METHOD_NAME );
         closeMethod.invoke( cl1 );
       } catch ( Throwable e ) {
@@ -347,7 +419,7 @@ public class BAPluginService extends BasePluginService {
   @Override
   protected boolean executeUninstall( IPlugin plugin ) {
     try {
-      Result result = this.executeUninstallPluginJob( plugin.getId() );
+      Result result = this.executeUninstallPluginJob(plugin.getId());
 
       if ( result == null || result.getNrErrors() > 0 ) {
         return false;
@@ -366,6 +438,7 @@ public class BAPluginService extends BasePluginService {
 
     JobMeta installMeta = this.getInstallJobMeta();
     if ( installMeta == null ) {
+      this.getLogger().error( "Unable to find install job meta." );
       return null;
     }
 
@@ -384,7 +457,7 @@ public class BAPluginService extends BasePluginService {
       job.getJobMeta().setParameterValue( "samplesDownloadUrl", samplesDownloadUrl );
       job.getJobMeta().setParameterValue( "samplesDir", "/public/plugin-samples" );
       job.getJobMeta().setParameterValue("samplesTargetDestination", this.getApplicationContext()
-          .getSolutionPath("plugin-samples/" + pluginId));
+          .getSolutionPath("plugin-samples/" + pluginId) );
       job.getJobMeta().setParameterValue( "samplesTargetBackup", this.getApplicationContext()
         .getSolutionPath( BACKUP_CACHE_FOLDER + pluginId + "_samples_" + new Date()
           .getTime() ) );
@@ -424,6 +497,7 @@ public class BAPluginService extends BasePluginService {
 
     JobMeta uninstallJobMeta = this.getUninstallJobMeta();
     if ( uninstallJobMeta == null ) {
+      this.getLogger().error( "Unable to find uninstall job meta." );
       return null;
     }
 
@@ -437,7 +511,7 @@ public class BAPluginService extends BasePluginService {
     job.getJobMeta().setParameterValue( "uninstallLocation", this.getApplicationContext()
       .getSolutionPath( "system/" + pluginId ) );
     job.getJobMeta().setParameterValue( "uninstallBackup", uninstallBackup );
-    job.getJobMeta().setParameterValue( "samplesDir", "/public/plugin-samples/" + pluginId );
+    job.getJobMeta().setParameterValue("samplesDir", "/public/plugin-samples/" + pluginId);
 
     job.copyParametersFrom( job.getJobMeta() );
     job.activateParameters();
@@ -447,6 +521,52 @@ public class BAPluginService extends BasePluginService {
 
     return result;
   }
+
+  private void copyKettleFilesToExecutionFolder() {
+    Path kettleExecutionFolderPath = this.getAbsoluteKettleExecutionFolderPath();
+    File targetKettleFilesFolder = new File( kettleExecutionFolderPath.toUri() );
+    if ( !targetKettleFilesFolder.exists()
+        && !targetKettleFilesFolder.mkdirs() ) {
+      this.getLogger().error( "Failed to create temporary folder for marketplace kettle transformations at "
+          + targetKettleFilesFolder.toString() );
+    }
+
+    String kettleResourcesSourcePath = this.getAbsoluteKettleResourcesSourcePath();
+    Iterable<String> kettleResourcePaths = Collections.list( bundle.getEntryPaths(kettleResourcesSourcePath) );
+    for ( String kettleResourcePath : kettleResourcePaths ) {
+      this.writeResourceToFolder( kettleResourcePath, kettleExecutionFolderPath );
+    }
+  }
+
+  private void deleteKettleFilesFromExecutionFolder() {
+    URI kettleExecutionFolder = this.getAbsoluteKettleExecutionFolderPath().toUri();
+    File targetKettleFilesFolder = new File( kettleExecutionFolder );
+    if ( targetKettleFilesFolder.exists() ) {
+      try {
+        FileUtils.deleteDirectory( targetKettleFilesFolder );
+      } catch ( IOException e ) {
+        this.getLogger().error( "Unable to delete marketplace temporary kettle execution folder: "
+            + targetKettleFilesFolder.toString(), e );
+      }
+    }
+  }
+
+  private void writeResourceToFolder( URL resourceUrl, Path destinationFolder ) {
+    try {
+      InputStream inputStream = resourceUrl.openConnection().getInputStream();
+      String fileName = FilenameUtils.getName( resourceUrl.toString() );
+      Path destinationFile = destinationFolder.resolve( fileName );
+      Files.copy( inputStream, destinationFile, StandardCopyOption.REPLACE_EXISTING );
+    } catch ( IOException e ) {
+      this.getLogger().error( "Error copying " + resourceUrl.toString() + " to destination folder " + destinationFolder, e );
+    }
+  }
+
+  private void writeResourceToFolder( String resourceUrl, Path destinationFolder ) {
+    URL url = this.getBundle().getResource( resourceUrl );
+    this.writeResourceToFolder( url, destinationFolder );
+  }
+
   //endregion
 
 

@@ -19,3 +19,4 @@ build-res/requireCfg.js
 dev-lib
 target/
 .idea
+*.orig

@@ -42,25 +42,21 @@ import org.pentaho.marketplace.domain.services.interfaces.IRemotePluginProvider;
 
 import org.pentaho.platform.api.engine.IApplicationContext;
 import org.pentaho.platform.api.engine.IPentahoSession;
-import org.pentaho.platform.api.engine.IPluginResourceLoader;
 import org.pentaho.platform.api.engine.ISecurityHelper;
 
 import org.pentaho.telemetry.ITelemetryService;
 import org.springframework.security.Authentication;
 import org.springframework.security.GrantedAuthority;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 public class PluginServiceTest {
 
-  private static final String SETTINGS_ROLES = "settings/marketplace-roles";
-  private static final String SETTINGS_USERS = "settings/marketplace-users";
-  private static final String SETTINGS_MARKETPLACE_SITE_ = "settings/marketplace-site";
 
   private String getSolutionPath() {
     return System.getProperty( "user.dir" ) + "/test-res/pentaho-solutions/";
@@ -86,12 +82,11 @@ public class PluginServiceTest {
     IRemotePluginProvider pluginProvider = mock( IRemotePluginProvider.class );
     MarketplaceXmlSerializer serializer = mock( MarketplaceXmlSerializer.class );
     ISecurityHelper securityHelper = mock( ISecurityHelper.class );
-    IPluginResourceLoader resourceLoader = mock( IPluginResourceLoader.class );
     ITelemetryService telemetryService = mock( ITelemetryService.class );
     Bundle bundle = mock( Bundle.class );
 
     BAPluginService service = new BAPluginService( pluginProvider, versionDataFactory,
-        domainStatusMessageFactory, telemetryService, serializer, securityHelper, bundle, resourceLoader );
+        domainStatusMessageFactory, telemetryService, serializer, securityHelper, bundle );
 
     IApplicationContext applicationContext = mock( IApplicationContext.class );
     final String solutionPath = this.getSolutionPath();
@@ -136,8 +131,7 @@ public class PluginServiceTest {
     BAPluginService service = this.createPluginService();
 
     // setup no roles
-    IPluginResourceLoader resourceLoader = service.getPluginResourceLoader();
-    when( resourceLoader.getPluginSetting( BAPluginService.class, SETTINGS_ROLES ) ).thenReturn( null );
+    service.setAuthorizedRoles( Collections.<String>emptyList() );
 
     // setup security helper for non admin user
     ISecurityHelper securityHelper = service.getSecurityHelper();
@@ -160,8 +154,7 @@ public class PluginServiceTest {
     BAPluginService service = this.createPluginService();
 
     // setup no roles
-    IPluginResourceLoader resourceLoader = service.getPluginResourceLoader();
-    when( resourceLoader.getPluginSetting( BAPluginService.class, SETTINGS_ROLES ) ).thenReturn( null );
+    service.setAuthorizedRoles( Collections.<String>emptyList() );
 
     // setup security helper for non admin user
     ISecurityHelper securityHelper = service.getSecurityHelper();
@@ -186,11 +179,10 @@ public class PluginServiceTest {
 
     // this is the role of the user which will be in the authorized roles
     String userRole = "peasant";
-    String authorizedRoles = "manager,lackey";
+    Collection<String> authorizedRoles = Arrays.asList( "manager", "lackey" );
 
     // setup roles
-    IPluginResourceLoader resourceLoader = service.getPluginResourceLoader();
-    when( resourceLoader.getPluginSetting( BAPluginService.class,  SETTINGS_ROLES ) ).thenReturn( authorizedRoles );
+    service.setAuthorizedRoles( authorizedRoles );
 
     Authentication userAuthentication = this.createMockUserAuthentication( userRole, null );
     // setup security helper
@@ -217,11 +209,10 @@ public class PluginServiceTest {
 
     // this is the role of the user which will be in the authorized roles
     String userRole = "peasant";
-    String authorizedRoles = "manager,lackey";
+    Collection<String> authorizedRoles = Arrays.asList( "manager", "lackey" );
 
     // setup roles
-    IPluginResourceLoader resourceLoader = service.getPluginResourceLoader();
-    when( resourceLoader.getPluginSetting( BAPluginService.class,  SETTINGS_ROLES ) ).thenReturn( authorizedRoles );
+    service.setAuthorizedRoles( authorizedRoles );
 
     Authentication userAuthentication = this.createMockUserAuthentication( userRole, null );
     // setup security helper
@@ -246,13 +237,12 @@ public class PluginServiceTest {
   public void testInstallDeniedUserNotInUsers( ) {
     // arrange
     String userName = "Dennis";
-    String authorizedUsers = "Joseph,David";
-    String authorizedRoles = "";
+    Collection<String> authorizedUsers = Arrays.asList( "Joseph", "David" );
+    Collection<String> authorizedRoles = Collections.emptyList();
     BAPluginService service = this.createPluginService();
 
-    IPluginResourceLoader resourceLoader = service.getPluginResourceLoader();
-    when( resourceLoader.getPluginSetting( BAPluginService.class,  SETTINGS_ROLES ) ).thenReturn( authorizedRoles );
-    when( resourceLoader.getPluginSetting( BAPluginService.class,  SETTINGS_USERS ) ).thenReturn( authorizedUsers );
+    service.setAuthorizedUsernames( authorizedUsers );
+    service.setAuthorizedRoles( authorizedRoles );
 
     Authentication userAuthentication = this.createMockUserAuthentication( null, userName );
     ISecurityHelper securityHelper = service.getSecurityHelper();
@@ -273,13 +263,12 @@ public class PluginServiceTest {
   public void testUninstallDeniedUserNotInUsers( ) {
     // arrange
     String userName = "Dennis";
-    String authorizedUsers = "Joseph,David";
-    String authorizedRoles = "";
+    Collection<String> authorizedUsers = Arrays.asList( "Joseph" , "David" );
+    Collection<String> authorizedRoles = Collections.emptyList();
     BAPluginService service = this.createPluginService();
 
-    IPluginResourceLoader resourceLoader = service.getPluginResourceLoader();
-    when( resourceLoader.getPluginSetting( BAPluginService.class,  SETTINGS_ROLES ) ).thenReturn( authorizedRoles );
-    when( resourceLoader.getPluginSetting( BAPluginService.class,  SETTINGS_USERS ) ).thenReturn( authorizedUsers );
+    service.setAuthorizedUsernames( authorizedUsers );
+    service.setAuthorizedRoles( authorizedRoles );
 
     Authentication userAuthentication = this.createMockUserAuthentication( null, userName );
     ISecurityHelper securityHelper = service.getSecurityHelper();
@@ -384,35 +373,7 @@ public class PluginServiceTest {
     assertThat( actualNotInstalledPlugin.isInstalled(), is( false ) );
   }
 
-  /**
-   * Tests that the metadata plugin provider fed into the PluginService is initialized
-   * with the URL specified in the settings.xml provided by the resource loader
-   */
-  @Test
-  public void testUsesUrlSpecifiedByPluginResourceLoader() throws MalformedURLException {
-    // arrange
-    IDomainStatusMessageFactory domainStatusMessageFactory = this.domainStatusMessageFactory;
-    IVersionDataFactory versionDataFactory = this.versionDataFactory;
 
-    IRemotePluginProvider pluginProvider = mock( IRemotePluginProvider.class );
-    MarketplaceXmlSerializer serializer = mock( MarketplaceXmlSerializer.class );
-    ISecurityHelper securityHelper = mock( ISecurityHelper.class );
-
-    IPluginResourceLoader resourceLoader = mock( IPluginResourceLoader.class );
-    String resourceMetadataUrl = "http://myresource.com/metadata.xml";
-    when(resourceLoader.getPluginSetting( BAPluginService.class, SETTINGS_MARKETPLACE_SITE_ ) )
-      .thenReturn( resourceMetadataUrl );
-
-    ITelemetryService telemetryService = mock ( ITelemetryService.class );
-    Bundle bundle = mock( Bundle.class );
-
-    // act
-    BAPluginService service = new BAPluginService( pluginProvider, versionDataFactory,
-        domainStatusMessageFactory, telemetryService, serializer, securityHelper, bundle, resourceLoader );
-
-    // assert
-    verify( pluginProvider, times( 1 ) ).setUrl( new URL( resourceMetadataUrl )  );
-  }
 
   // endregion
 

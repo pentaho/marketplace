@@ -8,7 +8,7 @@
     <version>6.0-SNAPSHOT</version>
   </parent>
 
-  <artifactId>pentaho-marketplace-pdi</artifactId>
+  <artifactId>pentaho-marketplace-di</artifactId>
   <packaging>bundle</packaging>
 
   <name>Pentaho Marketplace: ${project.artifactId}</name>
@@ -145,7 +145,7 @@
             <configuration>
               <artifacts>
                 <artifact>
-                  <file>src/main/resources/cfg/pentaho.pdi.marketplace.cfg</file>
+                  <file>src/main/resources/cfg/pentaho.marketplace.di.cfg</file>
                   <type>cfg</type>
                   <classifier>pentaho-marketplace-config</classifier>
                 </artifact>

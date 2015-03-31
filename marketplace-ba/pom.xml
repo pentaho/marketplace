@@ -163,7 +163,7 @@
             <configuration>
               <artifacts>
                 <artifact>
-                  <file>src/main/resources/cfg/pentaho.pdi.marketplace.cfg</file>
+                  <file>src/main/resources/cfg/pentaho.marketplace.ba.cfg</file>
                   <type>cfg</type>
                   <classifier>pentaho-marketplace-config</classifier>
                 </artifact>

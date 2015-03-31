@@ -17,8 +17,9 @@
 
 <features xmlns="http://karaf.apache.org/xmlns/features/v1.0.0">
 
-  <feature name="pentaho-marketplace" version="6.0">
-    <configfile finalname="/etc/pentaho.pdi.marketplace.cfg">mvn:org.pentaho/pentaho-osgi-marketplace/6.0-SNAPSHOT/cfg/pentaho-marketplace-config
+  <feature name="pentaho-marketplace-di" version="6.0">
+    <configfile finalname="/etc/pentaho.marketplace.di.cfg">
+      mvn:org.pentaho/pentaho-marketplace-di/6.0-SNAPSHOT/cfg/pentaho-marketplace-config
     </configfile>
 
     <feature>cxf-jaxrs</feature>
@@ -29,11 +30,6 @@
     <!-- Is this necessary ???
     <bundle>wrap:mvn:javax.xml/namespace/1.0.1</bundle>
     -->
-
-    <!--
-    <bundle>wrap:mvn:pentaho/pentaho-platform-core/6.0-SNAPSHOT</bundle>
-     <bundle>wrap:mvn:pentaho/pentaho-platform-api/6.0-SNAPSHOT</bundle>
-     -->
 
     <bundle>wrap:mvn:net.sf.flexjson/flexjson/2.1</bundle>
     <bundle>wrap:mvn:org.hibernate/hibernate/3.2.6.ga</bundle>
@@ -50,7 +46,7 @@
     <bundle>mvn:commons-collections/commons-collections/3.2.1</bundle>
     <bundle>wrap:mvn:commons-httpclient/commons-httpclient/3.1</bundle>
 
-    <bundle>mvn:org.pentaho/pentaho-osgi-marketplace/6.0-SNAPSHOT/</bundle>
+    <bundle>mvn:org.pentaho/pentaho-marketplace-di/6.0-SNAPSHOT/</bundle>
   </feature>
 
 </features>

@@ -18,6 +18,7 @@
 package org.pentaho.marketplace.domain.services;
 
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.filefilter.DirectoryFileFilter;
@@ -40,7 +41,6 @@ import org.pentaho.marketplace.domain.services.interfaces.IRemotePluginProvider;
 import org.pentaho.platform.api.engine.IApplicationContext;
 import org.pentaho.platform.api.engine.IPentahoSession;
 import org.pentaho.platform.api.engine.IPluginManager;
-import org.pentaho.platform.api.engine.IPluginResourceLoader;
 import org.pentaho.platform.api.engine.ISecurityHelper;
 import org.pentaho.platform.engine.core.system.PentahoSessionHolder;
 import org.pentaho.platform.engine.core.system.PentahoSystem;
@@ -66,15 +66,19 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 
 public class BAPluginService extends BasePluginService {
 
   //region Constants
 
   private static final String CLOSE_METHOD_NAME = "close";
+
+  private static final String PROPERTY_COLLECTION_SEPARATOR = ",";
 
   private static final String INSTALL_JOB_NAME = "download_and_install_plugin.kjb";
   private static final String UNINSTALL_JOB_NAME = "uninstall_plugin.kjb";
@@ -106,15 +110,6 @@ public class BAPluginService extends BasePluginService {
   }
   private ISecurityHelper securityHelper;
 
-
-  public IPluginResourceLoader getPluginResourceLoader() {
-    return this.pluginResourceLoader;
-  }
-  protected BAPluginService setPluginResourceLoader( IPluginResourceLoader pluginResourceLoader ) {
-    this.pluginResourceLoader = pluginResourceLoader;
-    return this;
-  }
-  private IPluginResourceLoader pluginResourceLoader;
 
   @Override
   protected String getServerVersion() {
@@ -156,25 +151,88 @@ public class BAPluginService extends BasePluginService {
     return this;
   }
 
+  /**
+   * Gets the Roles which are authorized to install / unintall plugins
+   * @return
+   */
+  public Collection<String> getAuthorizedRoles() {
+    return this.authorizedRoles;
+  }
+  /**
+   * Sets the Roles which are authorized to install / unintall plugins
+   * @return
+   */
+  public void setAuthorizedRoles( Collection<String> authorizedRoles ) {
+    if ( authorizedRoles == null ) {
+      authorizedRoles = Collections.emptyList();
+    }
+    this.authorizedRoles = authorizedRoles;
+  }
+  private Collection<String> authorizedRoles = Collections.emptyList();
+
+  /**
+   * Sets roles which authorized to install / uninstall plugins from a string of comma separated values.
+   * @param authorizedRolesString Comma separated string of roles ( e.g.: "roleA, roleB, roleC" )
+   */
+  public void setAuthorizedRoles( String authorizedRolesString ) {
+    this.setAuthorizedRoles( this.parseStringCollection( authorizedRolesString, PROPERTY_COLLECTION_SEPARATOR ) );
+  }
+
+  /**
+   * Gets the user names which are authorized to install / unintall plugins
+   * @return
+   */
+  public Collection<String> getAuthorizedUsernames() {
+    return authorizedUsernames;
+  }
+  /**
+   * Sets the user names which are authorized to install / unintall plugins
+   * @return
+   */
+  public void setAuthorizedUsernames( Collection<String> authorizedUsernames ) {
+    if ( authorizedUsernames == null ) {
+      authorizedUsernames = Collections.emptyList();
+    }
+    this.authorizedUsernames = authorizedUsernames;
+  }
+  private Collection<String> authorizedUsernames = Collections.emptyList();
+
+  /**
+   * Sets the user names which authorized to install / uninstall plugins from a string of comma separated values.
+   * @param authorizedUsernamesString Comma separated string of user names ( e.g.: "Jack, Lilly, Joe" )
+   */  public void setAuthorizedUsernames( String authorizedUsernamesString ) {
+    this.setAuthorizedUsernames( this.parseStringCollection( authorizedUsernamesString, PROPERTY_COLLECTION_SEPARATOR ) );
+  }
+
+  /**
+   * Gets the OSGI bundle this service belongs to
+   * @return
+   */
   public Bundle getBundle() {
     return this.bundle;
   }
+  /**
+   * Sets the OSGI bundle this service belongs to
+   * @return
+   */
   public void setBundle( Bundle bundle ) {
     this.bundle = bundle;
   }
   private Bundle bundle;
 
   /**
-   * Gets the relative path of the folder where the marketplace kettle transformations / jobs are stored.
-   * This path is relative to the bundle base folder supplied by {@link Bundle#getLocation()}
+   * Gets the relative path of the folder where the marketplace kettle transformations / jobs are stored. This path is
+   * relative to the bundle base folder supplied by {@link Bundle#getLocation()}
+   *
    * @return
    */
   public String getRelativeKettleExecutionFolderPath() {
     return relativeKettleExecutionFolderPath;
   }
   /**
-   * Sets the relative path of the folder where the marketplace kettle transformations / jobs are stored
-   * This path is relative to the bundle base folder supplied by {@link Bundle#getLocation()}
+   * Sets the relative path of the folder where the marketplace kettle transformations / jobs are stored This path is
+   * relative to the bundle base folder supplied by {@link Bundle#getLocation()}
+   *
    * @param folderPath
    */
   public void setRelativeKettleExecutionFolderPath( String folderPath ) {
@@ -183,7 +241,7 @@ public class BAPluginService extends BasePluginService {
   private String relativeKettleExecutionFolderPath;
 
   /**
-   * Gets the absolute path to the folder where the marketplace transformations / jobs are stored and executed.
+   * Gets the absolute path to the folder where the marketplace transformations / jobs are stored and executed.*
    * @return
    */
   public Path getAbsoluteKettleExecutionFolderPath() {
@@ -191,14 +249,13 @@ public class BAPluginService extends BasePluginService {
   }
 
   /**
-   * Gets the path to where the kettle files are within the Bundle.
-   * This path is relative to the bundle root.
+   * Gets the path to where the kettle files are within the Bundle. This path is relative to the bundle root.
    * @return
    */
   public String getAbsoluteKettleResourcesSourcePath() {
     return this.absoluteKettleResourcesSourcePath;
   }
-  public void setAbsoluteKettleResourcesSourcePath ( String path ) {
+  public void setAbsoluteKettleResourcesSourcePath( String path ) {
     this.absoluteKettleResourcesSourcePath = path;
   }
   private String absoluteKettleResourcesSourcePath;
@@ -209,9 +266,9 @@ public class BAPluginService extends BasePluginService {
    */
   public Path getBundleLocation() {
     try {
-      return Paths.get( new URI( this.getBundle().getLocation()) )
-          .getParent()
-          .toAbsolutePath();
+      return Paths.get( new URI( this.getBundle().getLocation() ) )
+        .getParent()
+        .toAbsolutePath();
     } catch ( URISyntaxException e ) {
       this.getLogger().error( "Invalid URI from marketplace bundle location: " + bundle.getLocation(), e );
       return null;
@@ -223,7 +280,7 @@ public class BAPluginService extends BasePluginService {
   }
 
   private JobMeta getUninstallJobMeta() {
-   return this.getJobMeta( UNINSTALL_JOB_NAME );
+    return this.getJobMeta( UNINSTALL_JOB_NAME );
   }
 
   private JobMeta getJobMeta( String jobFileName ) {
@@ -247,8 +304,7 @@ public class BAPluginService extends BasePluginService {
                           ITelemetryService telemetryService,
                           IMarketplaceXmlSerializer pluginsSerializer,
                           ISecurityHelper securityHelper,
-                          Bundle bundle,
-                          IPluginResourceLoader resourceLoader) {
+                          Bundle bundle ) {
     super( metadataPluginsProvider, versionDataFactory, domainStatusMessageFactory, telemetryService );
 
     this.setBundle( bundle );
@@ -258,18 +314,6 @@ public class BAPluginService extends BasePluginService {
     this.setXmlSerializer( serializer );
 
     this.setSecurityHelper( securityHelper );
-    this.setPluginResourceLoader( resourceLoader );
-  }
-
-  public BAPluginService( IRemotePluginProvider metadataPluginsProvider,
-                         IVersionDataFactory versionDataFactory,
-                         IDomainStatusMessageFactory domainStatusMessageFactory,
-                         ITelemetryService telemetryService,
-                         IMarketplaceXmlSerializer pluginsSerializer,
-                         ISecurityHelper securityHelper,
-                         Bundle bundle ) {
-    this ( metadataPluginsProvider, versionDataFactory, domainStatusMessageFactory, telemetryService,
-        pluginsSerializer, securityHelper, bundle, PentahoSystem.get( IPluginResourceLoader.class ) );
   }
 
   /**
@@ -291,48 +335,34 @@ public class BAPluginService extends BasePluginService {
   //region Methods
   @Override
   protected boolean hasMarketplacePermission() {
-    IPluginResourceLoader resLoader = this.getPluginResourceLoader();
-    String roles = null;
-    String users = null;
+    Collection<String> authorizedRoles = this.getAuthorizedRoles();
+    Collection<String> authorizedUsernames = this.getAuthorizedUsernames();
 
-    try {
-      roles = resLoader.getPluginSetting( getClass(), "settings/marketplace-roles" ); //$NON-NLS-1$
-      users = resLoader.getPluginSetting( getClass(), "settings/marketplace-users" ); //$NON-NLS-1$
-    } catch ( Exception e ) {
-      logger.debug( "Error getting data access plugin settings", e );
-    }
-
-    if ( roles == null ) {
+    if ( authorizedRoles.isEmpty() && authorizedUsernames.isEmpty() ) {
       // If it's true, we'll just check if the user is admin
       return this.getSecurityHelper().isPentahoAdministrator( this.getCurrentSession() );
     }
 
-    String[] roleArr = roles.split( "," ); //$NON-NLS-1$
+    Authentication authentication = this.getSecurityHelper().getAuthentication( this.getCurrentSession(), true );
+    Collection<String> userRoles = this.getRoles( authentication );
+    String userName = authentication.getName();
 
-    Authentication auth = this.getSecurityHelper().getAuthentication( this.getCurrentSession(), true );
-    for ( String role : roleArr ) {
-      for ( GrantedAuthority userRole : auth.getAuthorities() ) {
-        if ( role != null && role.trim().equals( userRole.getAuthority() ) ) {
-          return true;
-        }
-      }
-    }
-    if ( users != null ) {
-      String[] userArr = users.split( "," ); //$NON-NLS-1$
-      for ( String user : userArr ) {
-        if ( user != null && user.trim().equals( auth.getName() ) ) {
-          return true;
-        }
-      }
-    }
-    return false;
+    return authorizedUsernames.contains( userName )
+      || CollectionUtils.containsAny( authorizedRoles, userRoles );
   }
 
+  private Collection<String> getRoles( Authentication authentication ) {
+    Collection<String> roles = new ArrayList<>();
+    for ( GrantedAuthority grantedAuthority : authentication.getAuthorities() ) {
+      roles.add( grantedAuthority.getAuthority() );
+    }
+    return roles;
+  }
 
   @Override
   protected IPluginVersion getInstalledPluginVersion( IPlugin plugin ) {
-    String versionPath = this.getApplicationContext().getSolutionPath("system/" + plugin.getId()
-        + "/version.xml");
+    String versionPath = this.getApplicationContext().getSolutionPath( "system/" + plugin.getId()
+      + "/version.xml" );
     FileReader reader = null;
     try {
       File file = new File( versionPath );
@@ -379,7 +409,7 @@ public class BAPluginService extends BasePluginService {
 
   @Override
   protected void unloadPlugin( String pluginId ) {
-    IPluginManager pluginManager = this.getPluginManager(this.getCurrentSession());
+    IPluginManager pluginManager = this.getPluginManager( this.getCurrentSession() );
     ClassLoader cl = pluginManager.getClassLoader( pluginId );
     if ( cl != null && cl instanceof URLClassLoader ) {
       try {
@@ -390,7 +420,7 @@ public class BAPluginService extends BasePluginService {
       } catch ( Throwable e ) {
         if ( e instanceof NoSuchMethodException ) {
           logger.debug( "Probably running in java 6 so close method on URLClassLoader is not available" );
-        } else if ( e instanceof IOException) {
+        } else if ( e instanceof IOException ) {
           logger.error( "Unable to close class loader for plugin. Will try uninstalling plugin anyway", e );
         } else {
           logger.error( "Error while closing class loader", e );
@@ -403,7 +433,8 @@ public class BAPluginService extends BasePluginService {
   protected boolean executeInstall( IPlugin plugin, IPluginVersion version ) {
     try {
       Result result =
-        this.executeInstallPluginJob(plugin.getId(), version.getDownloadUrl(), version.getSamplesDownloadUrl(), version.getVersion());
+        this.executeInstallPluginJob( plugin.getId(), version.getDownloadUrl(), version.getSamplesDownloadUrl(),
+          version.getVersion() );
 
       if ( result == null || result.getNrErrors() > 0 ) {
         return false;
@@ -419,7 +450,7 @@ public class BAPluginService extends BasePluginService {
   @Override
   protected boolean executeUninstall( IPlugin plugin ) {
     try {
-      Result result = this.executeUninstallPluginJob(plugin.getId());
+      Result result = this.executeUninstallPluginJob( plugin.getId() );
 
       if ( result == null || result.getNrErrors() > 0 ) {
         return false;
@@ -456,8 +487,8 @@ public class BAPluginService extends BasePluginService {
     if ( samplesDownloadUrl != null ) {
       job.getJobMeta().setParameterValue( "samplesDownloadUrl", samplesDownloadUrl );
       job.getJobMeta().setParameterValue( "samplesDir", "/public/plugin-samples" );
-      job.getJobMeta().setParameterValue("samplesTargetDestination", this.getApplicationContext()
-          .getSolutionPath("plugin-samples/" + pluginId) );
+      job.getJobMeta().setParameterValue( "samplesTargetDestination", this.getApplicationContext()
+        .getSolutionPath( "plugin-samples/" + pluginId ) );
       job.getJobMeta().setParameterValue( "samplesTargetBackup", this.getApplicationContext()
         .getSolutionPath( BACKUP_CACHE_FOLDER + pluginId + "_samples_" + new Date()
           .getTime() ) );
@@ -511,7 +542,7 @@ public class BAPluginService extends BasePluginService {
     job.getJobMeta().setParameterValue( "uninstallLocation", this.getApplicationContext()
       .getSolutionPath( "system/" + pluginId ) );
     job.getJobMeta().setParameterValue( "uninstallBackup", uninstallBackup );
-    job.getJobMeta().setParameterValue("samplesDir", "/public/plugin-samples/" + pluginId);
+    job.getJobMeta().setParameterValue( "samplesDir", "/public/plugin-samples/" + pluginId );
 
     job.copyParametersFrom( job.getJobMeta() );
     job.activateParameters();
@@ -526,13 +557,13 @@ public class BAPluginService extends BasePluginService {
     Path kettleExecutionFolderPath = this.getAbsoluteKettleExecutionFolderPath();
     File targetKettleFilesFolder = new File( kettleExecutionFolderPath.toUri() );
     if ( !targetKettleFilesFolder.exists()
-        && !targetKettleFilesFolder.mkdirs() ) {
+      && !targetKettleFilesFolder.mkdirs() ) {
       this.getLogger().error( "Failed to create temporary folder for marketplace kettle transformations at "
-          + targetKettleFilesFolder.toString() );
+        + targetKettleFilesFolder.toString() );
     }
 
     String kettleResourcesSourcePath = this.getAbsoluteKettleResourcesSourcePath();
-    Iterable<String> kettleResourcePaths = Collections.list( bundle.getEntryPaths(kettleResourcesSourcePath) );
+    Iterable<String> kettleResourcePaths = Collections.list( bundle.getEntryPaths( kettleResourcesSourcePath ) );
     for ( String kettleResourcePath : kettleResourcePaths ) {
       this.writeResourceToFolder( kettleResourcePath, kettleExecutionFolderPath );
     }
@@ -546,7 +577,7 @@ public class BAPluginService extends BasePluginService {
         FileUtils.deleteDirectory( targetKettleFilesFolder );
       } catch ( IOException e ) {
         this.getLogger().error( "Unable to delete marketplace temporary kettle execution folder: "
-            + targetKettleFilesFolder.toString(), e );
+          + targetKettleFilesFolder.toString(), e );
       }
     }
   }
@@ -558,7 +589,8 @@ public class BAPluginService extends BasePluginService {
       Path destinationFile = destinationFolder.resolve( fileName );
       Files.copy( inputStream, destinationFile, StandardCopyOption.REPLACE_EXISTING );
     } catch ( IOException e ) {
-      this.getLogger().error( "Error copying " + resourceUrl.toString() + " to destination folder " + destinationFolder, e );
+      this.getLogger()
+        .error( "Error copying " + resourceUrl.toString() + " to destination folder " + destinationFolder, e );
     }
   }
 
@@ -566,6 +598,21 @@ public class BAPluginService extends BasePluginService {
     URL url = this.getBundle().getResource( resourceUrl );
     this.writeResourceToFolder( url, destinationFolder );
   }
+
+  private Collection<String> parseStringCollection( String string, String valueSeparator ) {
+    String[] splitString = string.split( valueSeparator );
+    Collection<String> parsedValues = new ArrayList<>( splitString.length );
+    for ( String authorizedRole : splitString ) {
+      if( authorizedRole != null ) {
+        authorizedRole = authorizedRole.trim();
+        if( !authorizedRole.isEmpty() ) {
+          parsedValues.add( authorizedRole );
+        }
+      }
+    }
+    return parsedValues;
+  }
+
 
   //endregion
 

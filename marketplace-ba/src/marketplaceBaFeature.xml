@@ -22,8 +22,6 @@
       mvn:org.pentaho/pentaho-marketplace-ba/6.0-SNAPSHOT/cfg/pentaho-marketplace-config
     </configfile>
 
-    <bundle>wrap:mvn:org.hibernate/hibernate/3.2.6.ga</bundle>
-
     <!-- START client side dependencies -->
     <bundle>mvn:pentaho/pentaho-requirejs-osgi-manager/6.0-SNAPSHOT</bundle>
     <bundle>mvn:pentaho/pentaho-angular-bundle/6.0-SNAPSHOT</bundle>

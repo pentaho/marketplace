@@ -32,7 +32,6 @@
     -->
 
     <bundle>wrap:mvn:net.sf.flexjson/flexjson/2.1</bundle>
-    <bundle>wrap:mvn:org.hibernate/hibernate/3.2.6.ga</bundle>
 
 
     <!-- START client side dependencies -->

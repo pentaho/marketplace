@@ -17,8 +17,6 @@
 
 package org.pentaho.marketplace.domain.services.helpers;
 
-import org.hibernate.util.ReflectHelper;
-
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -86,7 +84,7 @@ public class Util {
 
     try {
       Class factory =
-        getFieldObject( ReflectHelper.classForName( "sun.net.www.protocol.jar.JarURLConnection" ), "factory", null )
+        getFieldObject( classForName( "sun.net.www.protocol.jar.JarURLConnection" ), "factory", null )
           .getClass();
       try {
         fCache = (HashMap) getFieldObject( factory, "fileCache", null );
@@ -136,5 +134,15 @@ public class Util {
     } catch ( Exception e ) {
       // skip
     }
+  }
+
+  public static Class classForName( String name ) throws ClassNotFoundException {
+    try {
+      ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
+      if ( contextClassLoader != null ) {
+        return contextClassLoader.loadClass( name );
+      }
+    } catch ( Throwable ignore ) { }
+    return Class.forName( name );
   }
 }

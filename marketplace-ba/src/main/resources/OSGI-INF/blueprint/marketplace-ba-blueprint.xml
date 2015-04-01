@@ -58,7 +58,7 @@
 
     <property name="authorizedRoles" value="${authorized.roles}"/>
     <property name="authorizedUsernames" value="${authorized.usernames}"/>
-    <property name="relativeKettleExecutionFolderPath" value="marketplace/processes/"/>
+    <property name="relativeKettleExecutionFolderPath" value="processes/"/>
     <property name="absoluteKettleResourcesSourcePath" value="/processes/"/>
   </bean>
 

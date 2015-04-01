@@ -58,7 +58,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.file.Files;
@@ -86,6 +85,7 @@ public class BAPluginService extends BasePluginService {
   private static final String BACKUP_CACHE_FOLDER = CACHE_FOLDER + "backups/";
   private static final String STAGING_CACHE_FOLDER = CACHE_FOLDER + "staging/";
 
+  private static final String MARKETPLACE_FOLDER = "system/marketplace";
   //endregion
 
   //region Properties
@@ -243,7 +243,8 @@ public class BAPluginService extends BasePluginService {
    * @return
    */
   public Path getAbsoluteKettleExecutionFolderPath() {
-    return this.getBundleLocation().resolve( this.getRelativeKettleExecutionFolderPath() );
+    return this.getMarketplaceFolder()
+      .resolve( this.getRelativeKettleExecutionFolderPath() );
   }
 
   /**
@@ -258,19 +259,10 @@ public class BAPluginService extends BasePluginService {
   }
   private String absoluteKettleResourcesSourcePath;
 
-  /**
-   * Gets the marketplace bundle location
-   * @return
-   */
-  public Path getBundleLocation() {
-    try {
-      return Paths.get( new URI( this.getBundle().getLocation() ) )
-        .getParent()
-        .toAbsolutePath();
-    } catch ( URISyntaxException e ) {
-      this.getLogger().error( "Invalid URI from marketplace bundle location: " + bundle.getLocation(), e );
-      return null;
-    }
+
+  protected Path getMarketplaceFolder() {
+    String marketplacePath = this.getApplicationContext().getSolutionPath( MARKETPLACE_FOLDER );
+    return Paths.get( marketplacePath ).toAbsolutePath();
   }
 
   private JobMeta getInstallJobMeta() {

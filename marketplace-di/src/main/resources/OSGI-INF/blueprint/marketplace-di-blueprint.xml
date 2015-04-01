@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns:cm="http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.1.0"
+           xmlns:cxf="http://cxf.apache.org/blueprint/core"
+           xmlns:jaxrs="http://cxf.apache.org/blueprint/jaxrs" xmlns:jaxws="http://cxf.apache.org/blueprint/jaxws"
+           xsi:schemaLocation="
+  http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd
+  http://www.osgi.org/xmlns/blueprint-ext/v1.1.0 https://svn.apache.org/repos/asf/aries/tags/blueprint-0.3.1/blueprint-core/src/main/resources/org/apache/aries/blueprint/ext/blueprint-ext.xsd
+  http://cxf.apache.org/blueprint/jaxws http://cxf.apache.org/schemas/blueprint/jaxws.xsd
+  http://cxf.apache.org/blueprint/jaxrs http://cxf.apache.org/schemas/blueprint/jaxrs.xsd
+  http://cxf.apache.org/blueprint/core http://cxf.apache.org/schemas/blueprint/core.xsd
+  http://camel.apache.org/schema/blueprint http://camel.apache.org/schema/blueprint/camel-blueprint.xsd
+  http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.1.0 http://aries.apache.org/schemas/blueprint-cm/blueprint-cm-1.1.0.xsd
+  ">
+
+  <!-- START: Configuration -->
+  <cm:property-placeholder persistent-id="pentaho.marketplace.di"
+                           update-strategy="reload">
+    <cm:default-properties>
+      <cm:property name="marketplace.site" value="http://marketplace.pentaho.com/marketplace-plugins.xml"/>
+      <!--<cm:property name="telemetry.site" value="http://marketplace.pentaho.com/telemetry-servlet/telemetry"/>-->
+      <cm:property name="telemetry.site" value="http://localhost:8080/telemetry-servlet/telemetry"/>
+      <cm:property name="telemetry.enabled" value="true"/>
+    </cm:default-properties>
+  </cm:property-placeholder>
+  <!-- END: Configuration -->
+
+  <!-- Marketplace Spoon Plugin -->
+  <bean id="marketplaceSpoonPlugin" class="org.pentaho.marketplace.di.plugin.SpoonPlugin"
+        scope="singleton" destroy-method="removeFromContainer">
+  </bean>
+
+  <!-- Actual Plugin Class PluginInterface, references the Spoon Plugin above -->
+  <bean id="marketplacePlugin" class="org.pentaho.di.osgi.OSGIPlugin">
+    <property name="mainType" value="org.pentaho.di.ui.spoon.SpoonPluginInterface"/>
+    <property name="name" value="MarketplaceSpoonPlugin"/>
+    <property name="ID" value="MarketplaceSpoonPlugin"/>
+    <!-- <property name="imageFile" value="MGL.png"/> -->
+    <property name="description" value="Marketplace Spoon Plugin"/>
+    <property name="pluginTypeInterface" value="org.pentaho.di.ui.spoon.SpoonPluginType"/>
+    <property name="category" value="spoon"/>
+    <property name="classToBeanMap">
+      <map>
+        <entry key="org.pentaho.di.ui.spoon.SpoonPluginInterface" value="marketplaceSpoonPlugin"/>
+      </map>
+    </property>
+  </bean>
+
+  <!-- Register plugin with the Service Registry -->
+  <service id="spoonPluginService" interface="org.pentaho.di.core.plugins.PluginInterface" ref="marketplacePlugin">
+    <service-properties>
+      <entry key="PluginType" value="org.pentaho.di.ui.spoon.SpoonPluginType"/>
+    </service-properties>
+  </service>
+
+  <service id="marketplaceHttpContextService"
+           interface="org.osgi.service.http.HttpContext"
+           ref="marketplaceHttpContext">
+    <service-properties>
+      <entry key="contextId" value="marketplaceContextId"/>
+    </service-properties>
+  </service>
+
+  <bean id="marketplaceHttpContext"
+        class="org.pentaho.marketplace.util.web.MarketplaceHttpContext">
+    <property name="mimeTypes">
+      <map>
+        <entry key="woff"  value="application/font-woff"/>
+        <entry key="woff2" value="application/font-woff2"/>
+      </map>
+    </property>
+  </bean>
+
+  <bean id="marketplacePluginService" class="org.pentaho.marketplace.domain.services.KettlePluginService">
+    <argument ref="marketplaceRemotePluginProvider"/>
+    <argument ref="marketplaceVersionDataFactory"/>
+    <argument ref="marketplaceDomainStatusMessageFactory"/>
+    <argument ref="marketplacePluginVersionFactory"/>
+    <argument ref="diMarketplaceTelemetry"/>
+  </bean>
+
+
+  <!-- START: Telemetry -->
+  <bean id="diTelemetryHandler" class="org.pentaho.telemetry.DiTelemetryHandler"/>
+
+  <bean id="diMarketplaceTelemetry"
+        class="org.pentaho.telemetry.DiPluginTelemetry">
+    <argument value="marketplace"/>
+    <argument ref="diTelemetryHandler"/>
+    <argument value="${telemetry.site}"/>
+    <argument>
+      <value type="java.lang.Boolean">${telemetry.enabled}</value>
+    </argument>
+  </bean>
+  <!-- END: Telemetry -->
+
+</blueprint>

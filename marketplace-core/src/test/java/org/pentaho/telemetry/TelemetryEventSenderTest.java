@@ -311,9 +311,9 @@ public class TelemetryEventSenderTest extends TelemetryBaseTest {
     String lastSubmissionDir = TelemetryEventSender.LAST_SUBMISSION_FOLDER;
 
     // create 2 event files in the telemetry dir
-    createEventFileInTelemetryDir( ".", createTelemetryEvent() );
+    createEventFileInTelemetryDir( createTelemetryEvent() );
     Thread.sleep( 100 );
-    createEventFileInTelemetryDir( ".", createTelemetryEvent() );
+    createEventFileInTelemetryDir( createTelemetryEvent() );
     files = getFilesInTelemetryDir();
     Assert.assertEquals( files.length, 2 );
 

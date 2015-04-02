@@ -45,9 +45,8 @@ public class BaPluginTelemetry extends TelemetryService {
                            ITelemetryHandler telemetryHandler,
                            String telemetryUrl,
                            boolean telemetryEnabled) {
-    super(telemetryHandler, telemetryUrl, telemetryEnabled);
+    super(pluginName, telemetryUrl, telemetryEnabled, telemetryHandler);
 
-    this.setPluginName( pluginName );
     this.setPluginVersion( this.getBaPluginVersion(pluginName) );
     this.setPlatformVersion( this.getBaPlatformVersion() );
   }

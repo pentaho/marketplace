@@ -98,7 +98,8 @@ public class MarketplaceService {
     return result;
   }
 
-  @POST
+  //@POST
+  @GET
   @Path( "/plugin/{pluginId}/{versionBranch}" )
   @Produces( MediaType.APPLICATION_JSON )
   public OperationResultDTO installPlugin( @PathParam( "pluginId" ) String pluginId,
@@ -113,7 +114,8 @@ public class MarketplaceService {
     return result;
   }
 
-  @DELETE
+  //@DELETE
+  @GET
   @Path( "/plugin/{pluginId}" )
   @Produces( MediaType.APPLICATION_JSON )
   public OperationResultDTO uninstallPlugin( @PathParam( "pluginId" ) String pluginId ) {

@@ -30,10 +30,9 @@ public class DiPluginTelemetry extends TelemetryService {
                             ITelemetryHandler telemetryHandler,
                             String telemetryUrl,
                             boolean telemetryEnabled ) {
-    super( telemetryHandler, telemetryUrl, telemetryEnabled );
+    super(pluginName, telemetryUrl, telemetryEnabled, telemetryHandler);
 
     this.setPlatformVersion(this.getPlatformVersion());
-    this.setPluginName(pluginName);
     this.setPluginVersion(this.getPluginVersion());
   }
 

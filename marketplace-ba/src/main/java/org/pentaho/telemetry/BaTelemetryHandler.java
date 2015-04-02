@@ -19,35 +19,9 @@ package org.pentaho.telemetry;
 
 import org.pentaho.platform.engine.core.system.PentahoSystem;
 
-import java.io.File;
-
-
-/**
- * The telemetry package allows Pentaho plugins to publish telemetry events to a known location, so that developers can
- * track usage/updates of their work.
- * <p/>
- * Collected data for each telemetry event (described in {@link TelemetryEvent}) is: <ul>
- * <li>Plugin Name</li> <li>Plugin Version</li> <li>Platform Version</li> <li>Time stamp </li> <li>Event type: One of
- * Installation, removal, usage or other</li> </ul>
- * <p/>
- * Telemetry can be enabled/disabled using the element telemetry in the pentaho.xml file.
- * <p/>
- * For a BA Server plugin, the workflow for telemetry publishing is:
- * <p/>
- * 1. Create an instance of {@link BaPluginTelemetry2} providing the plugin name 2. Execute the {@
- * BaPlugin.Telemetry.sendTelemetryRequest} method. 3. The request is handled by TelemetryHelper, that stores it in a
- * queue. 4. A dedicated thread ({@link TelemetryEventKeeper}) reads this queue and stores the
- * telemetry events on the filesystem (under system/.telemetry). 5. Once a day, or whenever the BA server starts up,
- * another thread ({@link TelemetryEventSender}) reads these events from the filesystem and
- * publishes them (in blocks of 50) to a remote endpoint that will store the data. In case it succeeds, events are
- * removed from the filesystem In case it fails, events are kept for a maximum of 5 days. After this time, events will
- * be purged from the filesystem.
- *
- * @author pedrovale
- */
 public class BaTelemetryHandler extends TelemetryHandler {
 
-    public BaTelemetryHandler() {
+  public BaTelemetryHandler() {
         super(PentahoSystem.getApplicationContext().getSolutionPath("system/.telemetry"));
     }
 }

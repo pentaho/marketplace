@@ -14,18 +14,10 @@
 package org.pentaho.marketplace.domain.model.entities.serialization;
 
 import org.apache.commons.io.IOUtils;
-
-import static org.junit.Assert.assertThat;
 import org.junit.Before;
 import org.junit.Test;
-
-import static org.hamcrest.Matchers.*;
-
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.util.*;
-
 import org.pentaho.marketplace.domain.model.entities.DevelopmentStage;
+import org.pentaho.marketplace.domain.model.entities.MarketEntryType;
 import org.pentaho.marketplace.domain.model.entities.interfaces.ICategory;
 import org.pentaho.marketplace.domain.model.entities.interfaces.IPlugin;
 import org.pentaho.marketplace.domain.model.entities.interfaces.IPluginVersion;
@@ -38,6 +30,20 @@ import org.pentaho.marketplace.domain.model.factories.interfaces.IPluginFactory;
 import org.pentaho.marketplace.domain.model.factories.interfaces.IPluginVersionFactory;
 import org.pentaho.marketplace.domain.model.factories.interfaces.IVersionDataFactory;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.assertThat;
+
 public abstract class MarketplaceXmlSerializerTest<TSerializer extends IMarketplaceXmlSerializer> {
 
   private IPluginFactory pluginFactory;
@@ -46,7 +52,7 @@ public abstract class MarketplaceXmlSerializerTest<TSerializer extends IMarketpl
   private ICategoryFactory categoryFactory;
 
   protected abstract TSerializer create( IPluginFactory pluginFactory, IPluginVersionFactory pluginVersionFactory,
-                                                                IVersionDataFactory versionDataFactory, ICategoryFactory categoryFactory );
+                                         IVersionDataFactory versionDataFactory, ICategoryFactory categoryFactory );
 
   private TSerializer createSerializer() {
     return this.create( this.pluginFactory, this.pluginVersionFactory, this.versionDataFactory, this.categoryFactory );
@@ -67,23 +73,28 @@ public abstract class MarketplaceXmlSerializerTest<TSerializer extends IMarketpl
   /**
    * metadata.xml market entry ids of type "platform"
    */
-  private List<String> metadataXmlPlatformPluginIds = new ArrayList<String>( Arrays.asList( "marketplace", "pentaho-cdf", "cda", "languagePack_ja" ) );
+  private List<String> metadataXmlPlatformPluginIds =
+    new ArrayList<String>( Arrays.asList( "marketplace", "pentaho-cdf", "cda", "languagePack_ja", "pdi-mysql-plugin",
+      "ApplePushNotification", "KFF", "BucketPartitioner", "CiviCrmOutput", "idh23", "TableauExtractRefresh",
+      "GroovyConsoleSpoonPlugin"  ) );
 
   /**
    * Programatically creates the marketplace plugin that is in the metadata.xml test resource
    */
-  private IPlugin getMetadataXmlMarketplacePlugin( ) {
+  private IPlugin getMetadataXmlMarketplacePlugin() {
     IPlugin metadataXmlMarketplacePlugin = this.pluginFactory.create();
     metadataXmlMarketplacePlugin.setId( "marketplace" );
+    metadataXmlMarketplacePlugin.setType( MarketEntryType.Platform );
     metadataXmlMarketplacePlugin.setName( "Pentaho Marketplace" );
     metadataXmlMarketplacePlugin.setImg( "http://pentaho.com/sites/all/themes/pentaho/_media/logo-pentaho.svg" );
     metadataXmlMarketplacePlugin.setSmallImg( "http://www.webdetails.pt/ficheiros/mk_plugin.png" );
-    metadataXmlMarketplacePlugin.setDocumentationUrl( "http://wiki.pentaho.com/display/PMOPEN/Pentaho+BI+Server+Marketplace+Plugin" );
+    metadataXmlMarketplacePlugin
+      .setDocumentationUrl( "http://wiki.pentaho.com/display/PMOPEN/Pentaho+BI+Server+Marketplace+Plugin" );
     metadataXmlMarketplacePlugin.setDescription( "\n"
-        + "      Pentaho Marketplace allows users to explore and test the plugins\n"
-        + "      that are most relevant to them. This means high quality and useful\n"
-        + "      plugins that users can use to get the most out of their business.\n"
-        + "    " );
+      + "      Pentaho Marketplace allows users to explore and test the plugins\n"
+      + "      that are most relevant to them. This means high quality and useful\n"
+      + "      plugins that users can use to get the most out of their business.\n"
+      + "    " );
     metadataXmlMarketplacePlugin.setAuthorName( "Pentaho" );
     metadataXmlMarketplacePlugin.setAuthorUrl( "http://pentaho.com" );
     metadataXmlMarketplacePlugin.setAuthorLogo( "http://pentaho.com/sites/all/themes/pentaho/_media/logo-pentaho.svg" );
@@ -102,7 +113,9 @@ public abstract class MarketplaceXmlSerializerTest<TSerializer extends IMarketpl
     trunk4XVersion.setVersion( "TRUNK-SNAPSHOT" );
     trunk4XVersion.setBuildId( "1" );
     trunk4XVersion.setName( "Latest snapshot build" );
-    trunk4XVersion.setDownloadUrl( "http://ci.pentaho.com/job/marketplace-4.8/lastSuccessfulBuild/artifact/dist/marketplace-plugin-TRUNK-SNAPSHOT.zip" );
+    trunk4XVersion.setDownloadUrl(
+      "http://ci.pentaho.com/job/marketplace-4.8/lastSuccessfulBuild/artifact/dist/marketplace-plugin-TRUNK-SNAPSHOT"
+        + ".zip" );
     trunk4XVersion.setDescription( "The latest development snapshot build." );
     trunk4XVersion.setMinParentVersion( "1.0" );
     trunk4XVersion.setMaxParentVersion( "4.9" );
@@ -111,7 +124,9 @@ public abstract class MarketplaceXmlSerializerTest<TSerializer extends IMarketpl
     trunk5XVersion.setVersion( "TRUNK-SNAPSHOT" );
     trunk5XVersion.setBuildId( "49" );
     trunk5XVersion.setName( "Latest snapshot build" );
-    trunk5XVersion.setDownloadUrl( "http://repository.pentaho.org/artifactory/pentaho/pentaho/marketplace/5.1-SNAPSHOT/marketplace-5.1-SNAPSHOT.zip" );
+    trunk5XVersion.setDownloadUrl(
+      "http://repository.pentaho.org/artifactory/pentaho/pentaho/marketplace/5.1-SNAPSHOT/marketplace-5.1-SNAPSHOT"
+        + ".zip" );
     trunk5XVersion.setSamplesDownloadUrl( "http://testing.pentaho.com/mySamples.zip" );
     trunk5XVersion.setDescription( "Build for Pentaho 5.0" );
     trunk5XVersion.setMinParentVersion( "5.0" );
@@ -125,11 +140,11 @@ public abstract class MarketplaceXmlSerializerTest<TSerializer extends IMarketpl
     metadataXmlMarketplacePlugin.setVersions( versions );
 
     String[] screenshots = new String[] {
-        "https://raw2.github.com/pentaho/marketplace/master/marketplace-resources/marketplace-01.png",
-        "https://raw2.github.com/pentaho/marketplace/master/marketplace-resources/marketplace-02.png",
-        "https://raw2.github.com/pentaho/marketplace/master/marketplace-resources/marketplace-03.png",
-        "https://raw2.github.com/pentaho/marketplace/master/marketplace-resources/marketplace-04.png",
-        "https://raw2.github.com/pentaho/marketplace/master/marketplace-resources/marketplace-05.png"
+      "https://raw2.github.com/pentaho/marketplace/master/marketplace-resources/marketplace-01.png",
+      "https://raw2.github.com/pentaho/marketplace/master/marketplace-resources/marketplace-02.png",
+      "https://raw2.github.com/pentaho/marketplace/master/marketplace-resources/marketplace-03.png",
+      "https://raw2.github.com/pentaho/marketplace/master/marketplace-resources/marketplace-04.png",
+      "https://raw2.github.com/pentaho/marketplace/master/marketplace-resources/marketplace-05.png"
     };
     metadataXmlMarketplacePlugin.setScreenshots( screenshots );
 
@@ -146,7 +161,7 @@ public abstract class MarketplaceXmlSerializerTest<TSerializer extends IMarketpl
   // endregion
 
   // region installedVersion.xml test resource information
-  private IPluginVersion getInstalledVersionXmlInstalledVersion(  ) {
+  private IPluginVersion getInstalledVersionXmlInstalledVersion() {
     IPluginVersion version = this.pluginVersionFactory.create();
     version.setBranch( "testBranch" );
     version.setVersion( "testVersionName" );
@@ -167,17 +182,16 @@ public abstract class MarketplaceXmlSerializerTest<TSerializer extends IMarketpl
 
 
   @Test
-  public void oldTestGetPlugins( ) throws IOException {
+  public void oldTestGetPlugins() throws IOException {
 
     String pluginsXml = IOUtils.toString( new FileInputStream( "availableplugins.xml" ) );
     IMarketplaceXmlSerializer serializer = this.createSerializer();
 
-    Collection<IPlugin> plugins = serializer.getPlugins( pluginsXml ).values();
+    Map<String, IPlugin> plugins = serializer.getPlugins( pluginsXml );
 
     assertThat( plugins.size(), is( equalTo( 3 ) ) );
 
-    Iterator<IPlugin> iterator = plugins.iterator();
-    IPlugin cdePlugin = iterator.next();
+    IPlugin cdePlugin = plugins.get( "cde" );
     IPluginVersion cdeVersion = cdePlugin.getVersions().iterator().next();
 
     assertThat( cdePlugin.getId(), is( equalTo( "cde" ) ) );
@@ -185,18 +199,22 @@ public abstract class MarketplaceXmlSerializerTest<TSerializer extends IMarketpl
     assertThat( cdePlugin.getSmallImg(), is( equalTo( "wt_transparent_small.png" ) ) );
     assertThat( cdePlugin.getName(), is( equalTo( "Community Dashboard Editor" ) ) );
     assertThat( cdePlugin.getDocumentationUrl(), is( equalTo( "http://cde.webdetails.org" ) ) );
-    assertThat( cdePlugin.getDescription().trim(), is( equalTo( "The Community Dashboard Editor (CDE) is the outcome of real-world needs: It was born to greatly simplify the creation, edition and rendering of dashboards.\n\nCDE and the technology underneath (CDF, CDA and CCC) allows to develop and deploy dashboards in the Pentaho platform in a fast and effective way." ) ) );
+    assertThat( cdePlugin.getDescription().trim(), is( equalTo(
+      "The Community Dashboard Editor (CDE) is the outcome of real-world needs: It was born to greatly simplify the "
+        + "creation, edition and rendering of dashboards.\n\nCDE and the technology underneath (CDF, CDA and CCC) "
+        + "allows to develop and deploy dashboards in the Pentaho platform in a fast and effective way." ) ) );
     assertThat( cdePlugin.getAuthorName(), is( equalTo( "WebDetails" ) ) );
     assertThat( cdePlugin.getAuthorUrl(), is( equalTo( "http://webdetails.pt" ) ) );
-    assertThat( cdeVersion.getDownloadUrl(), is( equalTo( "http://www.webdetails.pt/ficheiros/CDE-bundle-1.0-RC3.tar.bz2" ) ) );
+    assertThat( cdeVersion.getDownloadUrl(),
+      is( equalTo( "http://www.webdetails.pt/ficheiros/CDE-bundle-1.0-RC3.tar.bz2" ) ) );
     assertThat( cdeVersion.getVersion(), is( equalTo( "1.0-RC3" ) ) );
     assertThat( cdePlugin.getInstallationNotes(), is( nullValue() ) );
 
-    IPlugin cdaPlugin = iterator.next();
+    IPlugin cdaPlugin = plugins.get( "cda" );
     IPluginVersion cdaVersion = cdaPlugin.getVersions().iterator().next();
     assertThat( cdaVersion.getChangelog(), is( nullValue() ) );
 
-    IPlugin cdfPlugin = iterator.next();
+    IPlugin cdfPlugin = plugins.get( "cdf" );
     IPluginVersion cdfVersion = cdfPlugin.getVersions().iterator().next();
     assertThat( cdfVersion.getChangelog(), is( equalTo( "Changelog" ) ) );
     assertThat( cdfVersion.getSamplesDownloadUrl(), is( equalTo( "http://localhost:8080/cdf-1.0.samples.zip" ) ) );
@@ -205,7 +223,7 @@ public abstract class MarketplaceXmlSerializerTest<TSerializer extends IMarketpl
   }
 
   @Test
-  public void oldTestGetPluginsAlternativeVersions( ) throws IOException {
+  public void oldTestGetPluginsAlternativeVersions() throws IOException {
 
     String pluginsXml = IOUtils.toString( new FileInputStream( "availableplugins_differentversions.xml" ) );
     IMarketplaceXmlSerializer serializer = this.createSerializer();
@@ -220,19 +238,22 @@ public abstract class MarketplaceXmlSerializerTest<TSerializer extends IMarketpl
     assertThat( alternativeVersions.size(), is( equalTo( 2 ) ) );
 
     Iterator<IPluginVersion> versionIterator = plugin.getVersions().iterator();
-    IPluginVersion releaseCandidateVersion =  versionIterator.next();
+    IPluginVersion releaseCandidateVersion = versionIterator.next();
 
     assertThat( releaseCandidateVersion.getBranch(), is( equalTo( "RC" ) ) );
     assertThat( releaseCandidateVersion.getName(), is( equalTo( "Release Candidate" ) ) );
     assertThat( releaseCandidateVersion.getChangelog(), is( equalTo( "ChangeLog for RC" ) ) );
-    assertThat( releaseCandidateVersion.getDescription(), is( equalTo( "This is RC1 - pretty cool version but still not quite there" ) ) );
-    assertThat( releaseCandidateVersion.getDownloadUrl(), is( equalTo( "http://www.webdetails.pt/RC/ficheiros/CDE-bundle-1.0-RC3.tar.bz2" ) ) );
-    assertThat( releaseCandidateVersion.getSamplesDownloadUrl(), is( equalTo( "http://www.webdetails.pt/RC/ficheiros/CDE-bundle-1.0-RC3-samples.tar.bz2" ) ) );
+    assertThat( releaseCandidateVersion.getDescription(),
+      is( equalTo( "This is RC1 - pretty cool version but still not quite there" ) ) );
+    assertThat( releaseCandidateVersion.getDownloadUrl(),
+      is( equalTo( "http://www.webdetails.pt/RC/ficheiros/CDE-bundle-1.0-RC3.tar.bz2" ) ) );
+    assertThat( releaseCandidateVersion.getSamplesDownloadUrl(),
+      is( equalTo( "http://www.webdetails.pt/RC/ficheiros/CDE-bundle-1.0-RC3-samples.tar.bz2" ) ) );
 
     assertThat( releaseCandidateVersion.getBuildId(), is( nullValue() ) );
 
     IPluginVersion trunkVersion = plugin.getVersionByBranch( "TRUNK" );
-    assertThat( trunkVersion , is( notNullValue() ) );
+    assertThat( trunkVersion, is( notNullValue() ) );
     assertThat( trunkVersion.getBranch(), is( equalTo( "TRUNK" ) ) );
     assertThat( trunkVersion.getName(), is( equalTo( "Trunk" ) ) );
     assertThat( trunkVersion.getChangelog(), is( equalTo( "Change Log for TRUNK" ) ) );
@@ -253,12 +274,18 @@ public abstract class MarketplaceXmlSerializerTest<TSerializer extends IMarketpl
     List<String> expectedIds = this.metadataXmlPlatformPluginIds;
 
     // act
-    Collection<IPlugin>  actualPlugins = serializer.getPlugins( pluginsXml ).values();
+    List<IPlugin> actualPlugins = new ArrayList<>( serializer.getPlugins( pluginsXml ).values() );
+    Collections.sort( actualPlugins, new Comparator<IPlugin>() {
+        @Override public int compare( IPlugin plugin1, IPlugin plugin2 ) {
+          return plugin1.getRank() - plugin2.getRank();
+        }
+      }
+    );
 
     // assert
-    String[] actualPluginIds = this.getPluginIds( actualPlugins ).toArray( new String[ actualPlugins.size() ]);
+    String[] actualPluginIds = this.getPluginIds( actualPlugins ).toArray( new String[ actualPlugins.size() ] );
     for ( int i = 0; i < actualPluginIds.length; i++ ) {
-      assertThat( actualPluginIds[i], is( equalTo( expectedIds.get( i ) ) ) );
+      assertThat( actualPluginIds[ i ], is( equalTo( expectedIds.get( i ) ) ) );
     }
 
     inputStream.close();
@@ -277,7 +304,13 @@ public abstract class MarketplaceXmlSerializerTest<TSerializer extends IMarketpl
     Collection<String> expectedPluginIds = this.metadataXmlPlatformPluginIds;
 
     // act
-    Collection<IPlugin> actualPlugins = serializer.getPlugins( pluginsXml ).values();
+    List<IPlugin> actualPlugins = new ArrayList<>( serializer.getPlugins( pluginsXml ).values() );
+    Collections.sort( actualPlugins, new Comparator<IPlugin>() {
+        @Override public int compare( IPlugin plugin1, IPlugin plugin2 ) {
+          return plugin1.getRank() - plugin2.getRank();
+        }
+      }
+    );
 
     // assert
     Collection<String> actualPluginIds = this.getPluginIds( actualPlugins );
@@ -300,7 +333,7 @@ public abstract class MarketplaceXmlSerializerTest<TSerializer extends IMarketpl
     IPlugin expectedPlugin = this.getMetadataXmlMarketplacePlugin();
 
     // act
-    Map<String, IPlugin> plugins = serializer.getPlugins(pluginsXml);
+    Map<String, IPlugin> plugins = serializer.getPlugins( pluginsXml );
     IPlugin actualPlugin = plugins.get( expectedPlugin.getId() );
 
     // assert

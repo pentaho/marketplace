@@ -55,11 +55,11 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-public class PluginServiceTest {
+public class BaPluginServiceTest {
 
 
   private String getSolutionPath() {
-    return System.getProperty( "user.dir" ) + "/test-res/pentaho-solutions/";
+    return System.getProperty( "user.dir" ) + "/target/test-classes/pentaho-solutions/";
   }
 
   IDomainStatusMessageFactory domainStatusMessageFactory;

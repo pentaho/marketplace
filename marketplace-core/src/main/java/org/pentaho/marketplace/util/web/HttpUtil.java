@@ -128,6 +128,7 @@ public class HttpUtil {
 
     try {
       GetMethod call = new GetMethod( url );
+      call.setFollowRedirects( true );
 
       int status = httpClient.executeMethod( call );
       if ( status == 200 ) {

@@ -368,16 +368,16 @@ public abstract class BasePluginService implements IPluginService {
   }
   //endregion
 
-  abstract protected boolean hasMarketplacePermission();
+  protected abstract boolean hasMarketplacePermission();
 
-  abstract protected void unloadPlugin( String pluginId );
+  protected abstract void unloadPlugin( String pluginId );
 
-  abstract protected boolean executeInstall( IPlugin plugin, IPluginVersion version );
+  protected abstract boolean executeInstall( IPlugin plugin, IPluginVersion version );
 
-  abstract protected boolean executeUninstall( IPlugin plugin );
+  protected abstract boolean executeUninstall( IPlugin plugin );
 
-  abstract protected IPluginVersion getInstalledPluginVersion( IPlugin plugin );
+  protected abstract IPluginVersion getInstalledPluginVersion( IPlugin plugin );
 
-  abstract protected Collection<String> getInstalledPluginIds();
+  protected abstract Collection<String> getInstalledPluginIds();
 
 }

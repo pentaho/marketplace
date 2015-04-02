@@ -1,86 +1,119 @@
-/*!
-* This program is free software; you can redistribute it and/or modify it under the
-* terms of the GNU Lesser General Public License, version 2.1 as published by the Free Software
-* Foundation.
-*
-* You should have received a copy of the GNU Lesser General Public License along with this
-* program; if not, you can obtain a copy at http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
-* or from the Free Software Foundation, Inc.,
-* 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*
-* This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
-* without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-* See the GNU Lesser General Public License for more details.
-*
-* Copyright (c) 2002-2013 Pentaho Corporation..  All rights reserved.
-*/
+/*
+ * This program is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License, version 2.1 as published by the Free Software
+ * Foundation.
+ *
+ * You should have received a copy of the GNU Lesser General Public License along with this
+ * program; if not, you can obtain a copy at http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+ * or from the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Lesser General Public License for more details.
+ *
+ * Copyright (c) 2015 Pentaho Corporation. All rights reserved.
+ */
 
 package org.pentaho.telemetry;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.concurrent.BlockingQueue;
 
 /**
- * Used by TelemetryService to manage storing telemetry events on file system
+ * Used by TelemetryService to manage storing telemetry events in the file system
  */
 public class TelemetryEventKeeper implements Runnable {
 
+  // region Constants
+
+  protected static final String FILE_EXT = ".tel";
+  private static final String UNABLE_TO_CREATE_FILE_MESSAGE = "Unable to create file for telemetry event";
+  private static final String ERROR_CREATING_FILE_MESSAGE = "Error while creating file for telemetry event";
+
+  // endregion
+
+  // region Properties
+
+  protected Log getLogger() {
+    return logger;
+  }
+
   private static final Log logger = LogFactory.getLog( TelemetryEventKeeper.class );
 
-    // region Constants
 
-    private static final String FILE_EXT = ".tel";
+  protected BlockingQueue<TelemetryEvent> getEventQueue() {
+    return this.eventQueue;
+  }
 
-    private static final String UNABLE_TO_CREATE_FILE_MESSAGE =
-            "Unable to create file for telemetry event";
+  protected void setEventQueue( BlockingQueue<TelemetryEvent> eventQueue ) {
+    this.eventQueue = eventQueue;
+  }
 
-    private static final String ERROR_CREATING_FILE_MESSAGE =
-            "Error while creating file for telemetry event";
-
-    // endregion
+  private BlockingQueue<TelemetryEvent> eventQueue;
 
 
-    private BlockingQueue<TelemetryEvent> eventQueue;
+  protected String getTelemetryDirPath() {
+    return this.telemetryDirPath;
+  }
+
+  protected void setTelemetryDirPath( String telemetryDirPath ) {
+    this.telemetryDirPath = telemetryDirPath;
+  }
+
   private String telemetryDirPath;
 
+  // endregion
+
+  // region Constructors
+
   public TelemetryEventKeeper( BlockingQueue<TelemetryEvent> eventQueue, File telemetryDir ) {
-      this.eventQueue = eventQueue;
-    this.telemetryDirPath = telemetryDir.getAbsolutePath();
+    this.setEventQueue( eventQueue );
+    this.setTelemetryDirPath( telemetryDir.getAbsolutePath() );
   }
+
+  // endregion
+
+  // region Methods
 
   @Override
   public void run() {
     try {
       do {
-        process();
+        processEvent();
       } while ( true );
     } catch ( InterruptedException ie ) {
-        // run until interrupted
+      // run until interrupted
     }
   }
 
   /**
-   * Takes an event from the event eventQueue and stores it in the filesystem.
+   * Takes an event from the event queue and stores it in the file system.
    *
    * @throws InterruptedException
    */
-  public void process() throws InterruptedException {
+  protected void processEvent() throws InterruptedException {
+    BlockingQueue<TelemetryEvent> eventQueue = this.getEventQueue();
     TelemetryEvent event = eventQueue.take();
-
     try {
-        String filename = System.currentTimeMillis() + FILE_EXT;
-      FileOutputStream fout = new FileOutputStream( telemetryDirPath + "/" + filename );
+      String filename = System.currentTimeMillis() + FILE_EXT;
+      FileOutputStream fout = new FileOutputStream( this.getTelemetryDirPath() + "/" + filename );
       ObjectOutputStream oos = new ObjectOutputStream( fout );
       oos.writeObject( event );
       oos.close();
     } catch ( FileNotFoundException fnfe ) {
-      logger.warn( UNABLE_TO_CREATE_FILE_MESSAGE, fnfe );
+      this.getLogger().warn( UNABLE_TO_CREATE_FILE_MESSAGE, fnfe );
     } catch ( IOException ioe ) {
-      logger.error( ERROR_CREATING_FILE_MESSAGE, ioe );
+      this.getLogger().error( ERROR_CREATING_FILE_MESSAGE, ioe );
     }
   }
 
+  // endregion
 }

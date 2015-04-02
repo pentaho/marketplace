@@ -16,73 +16,44 @@
   <url>http://www.pentaho.com/marketplace</url>
 
   <properties>
-    <dependency.pentaho-marketplace-core.id>pentaho-marketplace-core</dependency.pentaho-marketplace-core.id>
+    <dependency.pentaho.platform.version>${project.version}</dependency.pentaho.platform.version>
   </properties>
 
   <dependencies>
     <dependency>
-      <groupId>pentaho</groupId>
-      <artifactId>pentaho-xul-core</artifactId>
+      <groupId>org.pentaho</groupId>
+      <artifactId>${dependency.pentaho-marketplace-core.id}</artifactId>
+      <version>${project.version}</version>
     </dependency>
 
-    <dependency>
-      <groupId>pentaho</groupId>
-      <artifactId>pentaho-platform-core</artifactId>
-      <version>${dependency.pentaho.platform.version}</version>
-      <scope>provided</scope>
-    </dependency>
 
     <dependency>
       <groupId>pentaho</groupId>
       <artifactId>pentaho-platform-api</artifactId>
       <version>${dependency.pentaho.platform.version}</version>
     </dependency>
-
     <dependency>
-      <groupId>net.sf.flexjson</groupId>
-      <artifactId>flexjson</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>javax.ws.rs</groupId>
-      <artifactId>javax.ws.rs-api</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>commons-logging</groupId>
-      <artifactId>commons-logging</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>commons-httpclient</groupId>
-      <artifactId>commons-httpclient</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>commons-codec</groupId>
-      <artifactId>commons-codec</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>commons-collections</groupId>
-      <artifactId>commons-collections</artifactId>
+      <groupId>pentaho</groupId>
+      <artifactId>pentaho-platform-core</artifactId>
+      <version>${dependency.pentaho.platform.version}</version>
     </dependency>
 
-    <dependency>
-      <groupId>org.osgi</groupId>
-      <artifactId>org.osgi.enterprise</artifactId>
-    </dependency>
     <dependency>
       <groupId>org.osgi</groupId>
       <artifactId>org.osgi.core</artifactId>
     </dependency>
 
-    <!--
     <dependency>
-      <groupId>org.ops4j.pax.web</groupId>
-      <artifactId>pax-web-spi</artifactId>
+      <groupId>commons-logging</groupId>
+      <artifactId>commons-logging</artifactId>
     </dependency>
-    -->
-
     <dependency>
-      <groupId>org.pentaho</groupId>
-      <artifactId>${dependency.pentaho-marketplace-core.id}</artifactId>
-      <version>${project.version}</version>
+      <groupId>commons-collections</groupId>
+      <artifactId>commons-collections</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>commons-io</groupId>
+      <artifactId>commons-io</artifactId>
     </dependency>
 
 
@@ -115,13 +86,13 @@
             <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
             <Bundle-Version>${project.version}</Bundle-Version>
             <Export-Package>
-              org.pentaho.marketplace.*, org.pentaho.telemetry.*
+              org.pentaho.telemetry.*;-split-package:=merge-last
             </Export-Package>
             <Import-Package>
-               !javax.xml.namespace,  <!-- !org.eclipse.jface.action, --> *
+               !javax.xml.namespace, org.apache.felix.http.api, *
             </Import-Package>
-
             <Private-Package>
+              org.pentaho.marketplace.*;-split-package:=merge-last
             </Private-Package>
           </instructions>
         </configuration>
@@ -171,6 +142,5 @@
 
     </plugins>
   </build>
-
 
 </project>

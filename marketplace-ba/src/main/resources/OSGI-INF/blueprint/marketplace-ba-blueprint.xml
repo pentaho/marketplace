@@ -71,13 +71,13 @@
   <bean id="baTelemetryHandler" class="org.pentaho.telemetry.BaTelemetryHandler"/>
 
   <bean id="baMarketplaceTelemetry"
-        class="org.pentaho.telemetry.BaPluginTelemetry">
-    <argument value="marketplace"/>
-    <argument ref="baTelemetryHandler"/>
+        class="org.pentaho.telemetry.BaOsgiPluginTelemetry">
+    <argument ref="blueprintBundle"/>
     <argument value="${telemetry.site}"/>
     <argument>
       <value type="java.lang.Boolean">${telemetry.enabled}</value>
     </argument>
+    <argument ref="baTelemetryHandler"/>
   </bean>
   <!-- END: Telemetry -->
 

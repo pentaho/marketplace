@@ -17,8 +17,9 @@ require(
       'angular-sanitize',
       'underscore',
 
-      //'marketplace/js/app',
       'marketplaceApp',
+
+      'marketplace/js/constants',
 
       'marketplace/js/controllers/applicationController',
       'marketplace/js/models/plugin',

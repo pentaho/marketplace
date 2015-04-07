@@ -19,6 +19,10 @@
       "deps": [ "angular" ]
     },
 
+    "angular": {
+      "deps": [ "jquery" ]
+    },
+
     "ui-bootstrap": {
       "deps": [ "angular" ]
     }

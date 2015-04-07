@@ -22,16 +22,11 @@ define(
       console.log("Required services/appService.js");
 
       app.factory('appService',
-          [ '$http', 'dtoMapperService', '$q',
-            function( $http, dtoMapper, $q ) {
+          [ '$http', 'dtoMapperService', '$q', 'BASE_URL',
+            function( $http, dtoMapper, $q, BASE_URL ) {
 
-              // TODO: remove global variable CONTEXT_PATH
-              //var baseUrl = CONTEXT_PATH + 'plugin/marketplace/api';
-              // TODO: see how to generalize this for both PDI and BA
-              var baseUrl = CONTEXT_PATH + 'cxf/marketplace/services';
-
-              var pluginsUrl =  baseUrl + '/plugins';
-              var installPluginBaseUrl = baseUrl + '/plugin';
+              var pluginsUrl =  BASE_URL + '/plugins';
+              var installPluginBaseUrl = BASE_URL + '/plugin';
               var pluginsPromise = null;
 
               function isResponseError( response ) {

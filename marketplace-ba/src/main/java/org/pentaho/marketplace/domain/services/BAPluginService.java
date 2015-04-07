@@ -19,6 +19,7 @@ package org.pentaho.marketplace.domain.services;
 
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.Predicate;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.filefilter.DirectoryFileFilter;
@@ -30,6 +31,7 @@ import org.pentaho.di.core.logging.LogLevel;
 import org.pentaho.di.core.parameters.UnknownParamException;
 import org.pentaho.di.job.Job;
 import org.pentaho.di.job.JobMeta;
+import org.pentaho.marketplace.domain.model.entities.MarketEntryType;
 import org.pentaho.marketplace.domain.model.entities.interfaces.IPlugin;
 import org.pentaho.marketplace.domain.model.entities.interfaces.IPluginVersion;
 import org.pentaho.marketplace.domain.model.entities.serialization.IMarketplaceXmlSerializer;
@@ -68,6 +70,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
+import java.util.Map;
 
 public class BAPluginService extends BasePluginService {
 
@@ -323,6 +326,22 @@ public class BAPluginService extends BasePluginService {
 
 
   //region Methods
+  @Override
+  public Map<String, IPlugin> getPlugins() {
+    Map<String, IPlugin> plugins = super.getPlugins();
+
+    // remove non BA plugins
+    CollectionUtils.filter( plugins.entrySet(), new Predicate() {
+      @Override public boolean evaluate( Object mapEntry ) {
+        Map.Entry<String, IPlugin> mapEntryCasted = (Map.Entry<String, IPlugin>) mapEntry;
+        return mapEntryCasted.getValue().getType() == MarketEntryType.Platform;
+      }
+    } );
+
+    return plugins;
+  }
+
+
   @Override
   protected boolean hasMarketplacePermission() {
     Collection<String> authorizedRoles = this.getAuthorizedRoles();

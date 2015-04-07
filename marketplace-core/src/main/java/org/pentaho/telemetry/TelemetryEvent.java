@@ -39,7 +39,13 @@ public class TelemetryEvent implements Serializable {
     INSTALLATION, REMOVAL, USAGE, OTHER
   }
 
-  // endregion Properties
+  // endregion Inner Definitions
+
+  // region Constants
+
+  private static final long serialVersionUID = 1930549805476439703L;
+
+  // endregion Constants
 
   // region Properties
 

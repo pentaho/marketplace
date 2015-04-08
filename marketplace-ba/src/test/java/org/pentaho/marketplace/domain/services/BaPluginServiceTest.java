@@ -25,6 +25,7 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
 import org.osgi.framework.Bundle;
+import org.pentaho.marketplace.domain.model.entities.MarketEntryType;
 import org.pentaho.marketplace.domain.model.entities.interfaces.IDomainStatusMessage;
 import org.pentaho.marketplace.domain.model.entities.interfaces.IPlugin;
 import org.pentaho.marketplace.domain.model.entities.interfaces.IPluginVersion;
@@ -309,6 +310,7 @@ public class BaPluginServiceTest {
     String pluginId = "myPlugin";
     plugin.setId( pluginId );
     plugin.setVersions( versions );
+    plugin.setType( MarketEntryType.Platform );
     plugins.put(plugin.getId(), plugin );
 
     IPluginProvider pluginProvider = service.getMetadataPluginsProvider();
@@ -344,6 +346,7 @@ public class BaPluginServiceTest {
     String installedPluginId = "installedPlugin";
     installedPlugin.setId( installedPluginId );
     installedPlugin.setInstalled( false );
+    installedPlugin.setType( MarketEntryType.Platform );
     // have at least one compatible version so its not filtered out
     installedPlugin.getVersions().add( compatibleVersion );
 
@@ -351,6 +354,7 @@ public class BaPluginServiceTest {
     String notInstalledPluginId = "notInstalledPlugin";
     notInstalledPlugin.setId( notInstalledPluginId );
     notInstalledPlugin.setInstalled( false );
+    notInstalledPlugin.setType( MarketEntryType.Platform );
     // have at least one compatible version so its not filtered out
     notInstalledPlugin.getVersions().add( compatibleVersion );
 

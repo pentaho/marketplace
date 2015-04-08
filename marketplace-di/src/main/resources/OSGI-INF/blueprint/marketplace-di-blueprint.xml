@@ -19,8 +19,7 @@
                            update-strategy="reload">
     <cm:default-properties>
       <cm:property name="marketplace.site" value="http://marketplace.pentaho.com/marketplace-plugins.xml"/>
-      <!--<cm:property name="telemetry.site" value="http://marketplace.pentaho.com/telemetry-servlet/telemetry"/>-->
-      <cm:property name="telemetry.site" value="http://localhost:8080/telemetry-servlet/telemetry"/>
+      <cm:property name="telemetry.site" value="http://marketplace.pentaho.com/telemetry-servlet/telemetry"/>
       <cm:property name="telemetry.enabled" value="true"/>
     </cm:default-properties>
   </cm:property-placeholder>
@@ -82,7 +81,11 @@
 
 
   <!-- START: Telemetry -->
-  <bean id="diTelemetryHandler" class="org.pentaho.telemetry.DiTelemetryHandler"/>
+  <bean id="diTelemetryHandler"
+        class="org.pentaho.telemetry.DiTelemetryHandler"
+        init-method="init"
+        destroy-method="destroy">
+  </bean>
 
   <bean id="diMarketplaceTelemetry"
         class="org.pentaho.telemetry.DiPluginTelemetry">

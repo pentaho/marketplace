@@ -45,8 +45,9 @@ public class TelemetryBaseTest {
 
   protected TelemetryService createTelemetryService( final boolean telemetryEnabled,
                                                      final TelemetryHandler telemetryHandler ) {
-    return new TelemetryService( TEST_PLUGIN_NAME, TEST_PLUGIN_VERSION, TEST_PLATFORM_VERSION, telemetryEnabled,
-      TEST_TELEMETRY_URL, telemetryHandler );
+    return new TelemetryService( TEST_PLUGIN_NAME, TEST_PLUGIN_VERSION, TEST_PLATFORM_VERSION, TEST_TELEMETRY_URL,
+      telemetryEnabled,
+      telemetryHandler );
   }
 
   protected TelemetryEvent createTelemetryEvent() {

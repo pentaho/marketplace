@@ -27,26 +27,15 @@ import java.util.concurrent.TimeUnit;
 
 
 /**
- * The telemetry package allows Pentaho plugins to publish telemetry events to a known location, so that developers can
- * track usage/updates of their work.
+ * The telemetry handler publishes telemetry events to a known location, so that developers can track usage/updates
+ * of their work.
  * <p/>
- * Collected data for each telemetry event (described in {@link TelemetryEvent}) is: <ul> <li>Plugin Name</li>
- * <li>Plugin Version</li> <li>Platform Version</li> <li>Time stamp </li> <li>Event type: One of Installation, removal,
- * usage or other</li> </ul>
- * <p/>
- * Telemetry can be enabled/disabled using the element telemetry in the pentaho.xml file.
- * <p/>
- * For a BA Server plugin, the workflow for telemetry publishing is:
- * <p/>
- * 1. Create an instance of {@link org.pentaho.telemetry.BaPluginTelemetry} providing the plugin name 2. Execute the {@
- * BaPlugin.Telemetry.sendTelemetryRequest} method. 3. The request is handled by TelemetryHelper, that stores it in a
- * queue. 4. A dedicated thread ({@link TelemetryEventKeeper}) reads this queue and stores the telemetry events on the
- * filesystem (under system/.telemetry). 5. Once a day, or whenever the BA server starts up, another thread ({@link
- * TelemetryEventSender}) reads these events from the filesystem and publishes them (in blocks of 50) to a remote
- * endpoint that will store the data. In case it succeeds, events are removed from the filesystem In case it fails,
- * events are kept for a maximum of 5 days. After this time, events will be purged from the filesystem.
- *
- * @author pedrovale
+ * Collected data for each telemetry event (described in {@link TelemetryEvent}) is stored in a handler queue.
+ * A dedicated thread ({@link TelemetryEventKeeper}) reads this queue and stores the telemetry events in the filesystem.
+ * At periodic intervals (default = once a day) another thread ({@link TelemetryEventSender}) reads these events from
+ * the filesystem and publishes them to a remote endpoint. In case it succeeds, events are removed from the filesystem.
+ * In case it fails, events are kept for a maximum of 5 days. After this time, events will be purged from the
+ * filesystem.
  */
 public class TelemetryHandler implements ITelemetryHandler {
 
@@ -71,49 +60,133 @@ public class TelemetryHandler implements ITelemetryHandler {
 
   private BlockingQueue<TelemetryEvent> eventQueue;
 
+
+  public File getTelemetryDir() {
+    return this.telemetryDir;
+  }
+
+  protected void setTelemetryDir( File telemetryDir ) {
+    // ensure that the telemetry folder exists
+    if ( !telemetryDir.exists() ) {
+      telemetryDir.mkdir();
+    }
+    this.telemetryDir = telemetryDir;
+  }
+
+  private File telemetryDir;
+
+
+  public long getSendPeriodInMinutes() {
+    return this.sendPeriodInMinutes;
+  }
+
+  public void setSendPeriodInMinutes( long sendPeriodInMinutes ) {
+    this.sendPeriodInMinutes = sendPeriodInMinutes;
+  }
+
+  private long sendPeriodInMinutes;
+
+
+  protected Thread getEventKeeperThread() {
+    return this.eventKeeperThread;
+  }
+
+  protected void setEventKeeperThread( Thread eventKeeperThread ) {
+    this.eventKeeperThread = eventKeeperThread;
+  }
+
+  private Thread eventKeeperThread;
+
+
+  protected ScheduledThreadPoolExecutor getEventSenderThreadPoolExecutor() {
+    return eventSenderThreadPoolExecutor;
+  }
+
+  protected void setEventSenderThreadPoolExecutor(
+    ScheduledThreadPoolExecutor eventSenderThreadPoolExecutor ) {
+    this.eventSenderThreadPoolExecutor = eventSenderThreadPoolExecutor;
+  }
+
+  private ScheduledThreadPoolExecutor eventSenderThreadPoolExecutor;
+
   // endregion
 
   // region Constructors
 
   public TelemetryHandler( String telemetryDirPath, long sendPeriodInMinutes ) {
-    // ensure that the telemetry folder exists
-    File telemetryDir = new File( telemetryDirPath );
-    if ( !telemetryDir.exists() ) {
-      telemetryDir.mkdir();
-    }
-
     // initialize the event queue
     this.setEventQueue( new ArrayBlockingQueue<TelemetryEvent>( EVENT_QUEUE_CAPACITY ) );
 
-    // launch the thread that will store the events in the telemetry folder
-    this.launchEventKeeper( new TelemetryEventKeeper( this.eventQueue, telemetryDir ) );
-
-    // launch the thread that will send the events to the remote endpoint
-    this.launchEventSender( new TelemetryEventSender( telemetryDir ), sendPeriodInMinutes );
+    this.setTelemetryDir( new File( telemetryDirPath ) );
+    this.setSendPeriodInMinutes( sendPeriodInMinutes );
   }
 
   public TelemetryHandler( String telemetryDirPath ) {
     this( telemetryDirPath, DEFAULT_SEND_PERIOD_IN_MINUTES );
   }
 
+  /**
+   * Called after class is instantiated by dependency injection
+   */
+  public void init() {
+    this.startEventKeeper();
+    this.startEventSender();
+  }
+
+  /**
+   * Called on object destruction by dependency injection
+   */
+  public void destroy() {
+    this.stopEventKeeper();
+    this.stopEventSender();
+  }
+
   // endregion
 
   // region Methods
 
+  /**
+   * Add a telemetry event to the handler queue
+   */
   public boolean queueEvent( TelemetryEvent event ) {
     BlockingQueue<TelemetryEvent> eventQueue = this.getEventQueue();
     return eventQueue.offer( event );
   }
 
-  private void launchEventKeeper( TelemetryEventKeeper eventKeeper ) {
+  /**
+   * Starts a dedicated thread ({@link TelemetryEventKeeper}) that reads the handler queue and stores the telemetry
+   * events in the filesystem.
+   */
+  private void startEventKeeper() {
+    // create an event keeper that will store the events in the telemetry dir
+    TelemetryEventKeeper eventKeeper = new TelemetryEventKeeper( this.getEventQueue(), this.getTelemetryDir() );
+
     // create a thread to run the event keeper
     Thread thread = new Thread( eventKeeper );
     thread.setName( EVENT_KEEPER_THREAD_NAME );
     thread.setDaemon( true );
+    this.setEventKeeperThread( thread );
+
+    // start the thread
     thread.start();
   }
 
-  private void launchEventSender( TelemetryEventSender eventSender, long periodInMinutes ) {
+  /**
+   * Stops the event keeper thread.
+   */
+  private void stopEventKeeper() {
+    Thread thread = this.getEventKeeperThread();
+    thread.interrupt();
+  }
+
+  /**
+   * Starts a dedicated thread ({@link TelemetryEventSender}) that runs at periodic intervals, reads the events from
+   * the filesystem and publishes them to a remote endpoint.
+   */
+  private void startEventSender() {
+    // create an event sender that will send the events from the telemetry dir to the remote endpoint
+    TelemetryEventSender eventSender = new TelemetryEventSender( this.getTelemetryDir() );
+
     // create a thread pool for the event sender
     ScheduledThreadPoolExecutor threadPoolExecutor = new ScheduledThreadPoolExecutor(
       1,
@@ -128,9 +201,19 @@ public class TelemetryHandler implements ITelemetryHandler {
       },
       new ThreadPoolExecutor.DiscardPolicy()
     );
+    this.setEventSenderThreadPoolExecutor( threadPoolExecutor );
 
-    // schedule the event sender to run in a new thread at periodic intervals
-    threadPoolExecutor.scheduleAtFixedRate( eventSender, 0, periodInMinutes, TimeUnit.MINUTES );
+    // schedule the event sender to run at periodic intervals
+    threadPoolExecutor.scheduleAtFixedRate( eventSender, 0, this.getSendPeriodInMinutes(), TimeUnit.MINUTES );
+ }
+
+  /**
+   * Stops the event sender thread.
+   */
+  private void stopEventSender() {
+    // shutdown the event sender thread pool
+    ScheduledThreadPoolExecutor threadPoolExecutor = this.getEventSenderThreadPoolExecutor();
+    threadPoolExecutor.shutdown();
   }
 
   // endregion

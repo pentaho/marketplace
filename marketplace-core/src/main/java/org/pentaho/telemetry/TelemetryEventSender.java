@@ -206,6 +206,7 @@ public class TelemetryEventSender implements Runnable {
         f.delete();
       } catch ( IOException ioe ) {
         this.getLogger().error( "Error caught while deserializing telemetry event.", ioe );
+        f.delete();
       } catch ( ClassNotFoundException cnfe ) {
         this.getLogger().error( "Class not found while deserializing telemetry event.", cnfe );
       }

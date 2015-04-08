@@ -85,12 +85,13 @@ public class TelemetryEventKeeper implements Runnable {
 
   @Override
   public void run() {
+    // run until interrupted
     try {
       do {
         processEvent();
       } while ( true );
     } catch ( InterruptedException ie ) {
-      // run until interrupted
+      // interrupted, close thread
     }
   }
 

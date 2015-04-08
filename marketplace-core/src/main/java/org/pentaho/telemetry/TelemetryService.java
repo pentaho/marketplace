@@ -24,9 +24,9 @@ public class TelemetryService implements ITelemetryService {
 
   // region Constants
 
+  private static final String UNDEFINED = "Undefined";
   private static final String TELEMETRY_NOT_ENABLED_MESSAGE =
     "Telemetry is not enabled for plugin: ";
-
   private static final String TELEMETRY_HANDLER_NOT_DEFINED_MESSAGE =
     "Telemetry handler is not defined for plugin: ";
 
@@ -54,6 +54,7 @@ public class TelemetryService implements ITelemetryService {
 
   private String pluginName;
 
+
   /**
    * @return the plugin version
    */
@@ -66,6 +67,7 @@ public class TelemetryService implements ITelemetryService {
   }
 
   private String pluginVersion;
+
 
   /**
    * @return the platform version
@@ -80,6 +82,7 @@ public class TelemetryService implements ITelemetryService {
 
   private String platformVersion;
 
+
   /**
    * @return true if telemetry is enabled for this plugin
    */
@@ -93,6 +96,7 @@ public class TelemetryService implements ITelemetryService {
 
   private boolean telemetryEnabled;
 
+
   /**
    * @return the url for telemetry events to be posted
    */
@@ -105,7 +109,6 @@ public class TelemetryService implements ITelemetryService {
   }
 
   private String telemetryUrl;
-
 
 
   /**
@@ -128,8 +131,8 @@ public class TelemetryService implements ITelemetryService {
   public TelemetryService( String pluginName,
                            String pluginVersion,
                            String platformVersion,
-                           boolean telemetryEnabled,
                            String telemetryUrl,
+                           boolean telemetryEnabled,
                            ITelemetryHandler telemetryHandler ) {
     this.setTelemetryHandler( telemetryHandler );
     this.setPlatformVersion( platformVersion );
@@ -143,7 +146,7 @@ public class TelemetryService implements ITelemetryService {
                            String telemetryUrl,
                            boolean telemetryEnabled,
                            ITelemetryHandler telemetryHandler ) {
-    this( pluginName, "undefined", "undefined", telemetryEnabled, telemetryUrl, telemetryHandler );
+    this( pluginName, UNDEFINED, UNDEFINED, telemetryUrl, telemetryEnabled, telemetryHandler );
   }
 
   // endregion

@@ -201,9 +201,14 @@ public final class JAXBMarketplaceXmlSerializer implements IMarketplaceXmlSerial
     plugin.setLicenseName( entry.getLicenseName() );
     plugin.setLicenseText( entry.getLicenseText() );
 
-    List<Version> versions = ( entry.getVersions() != null ) ? entry.getVersions().getVersion() : new ArrayList<Version>(0);
+    List<Version> versions = ( entry.getVersions() != null )
+        ? entry.getVersions().getVersion()
+        : new ArrayList<Version>( 0 );
     plugin.setVersions( this.toVersions( versions ) );
-    List<String> screenshots = (entry.getScreenshots() != null) ? entry.getScreenshots().getScreenshot() : new ArrayList<String>(0);
+
+    List<String> screenshots = ( entry.getScreenshots() != null )
+        ? entry.getScreenshots().getScreenshot()
+        : new ArrayList<String>( 0 );
     plugin.setScreenshots( screenshots.toArray( new String[ screenshots.size() ] ) );
 
     plugin.setCategory( this.toCategory( entry.getCategory() ) );
@@ -214,7 +219,7 @@ public final class JAXBMarketplaceXmlSerializer implements IMarketplaceXmlSerial
   private Collection<IPluginVersion> toVersions( List<Version> versions ) {
     Collection<IPluginVersion> pluginVersions = new ArrayList<>( versions.size() );
 
-    for( Version version : versions ) {
+    for ( Version version : versions ) {
       pluginVersions.add( this.toVersion( version ) );
     }
 
@@ -242,7 +247,7 @@ public final class JAXBMarketplaceXmlSerializer implements IMarketplaceXmlSerial
     org.pentaho.marketplace.domain.model.entities.serialization.jaxb.dto.DevelopmentStage dtoDevStage = version.getDevelopmentStage();
     if ( dtoDevStage != null ) {
       IDevelopmentStage devStage = new DevelopmentStage( dtoDevStage.getLane().value(),
-        String.valueOf( dtoDevStage.getPhase() ) );
+          String.valueOf( dtoDevStage.getPhase() ) );
       pluginVersion.setDevelopmentStage( devStage );
     }
 
@@ -251,7 +256,7 @@ public final class JAXBMarketplaceXmlSerializer implements IMarketplaceXmlSerial
   }
 
   private MarketEntryType toEntryType(
-    org.pentaho.marketplace.domain.model.entities.serialization.jaxb.dto.MarketEntryType entryType ) {
+      org.pentaho.marketplace.domain.model.entities.serialization.jaxb.dto.MarketEntryType entryType ) {
     return MarketEntryType.getMarketEntryType( entryType.value() );
   }
 

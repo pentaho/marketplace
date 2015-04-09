@@ -25,14 +25,13 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * 
- *         The stage of development the version of the market entry is at.
- *       
- * 
+ * The stage of development the version of the market entry is at.
+ * <p/>
+ * <p/>
  * <p>Java class for development_stage complex type.
- * 
+ * <p/>
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ * <p/>
  * <pre>
  * &lt;complexType name="development_stage">
  *   &lt;complexContent>
@@ -45,57 +44,45 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
-@XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "development_stage", propOrder = {
-
-})
+@XmlAccessorType( XmlAccessType.FIELD )
+@XmlType( name = "development_stage", propOrder = {} )
 public class DevelopmentStage {
 
-    @XmlElement(required = true)
-    protected DevelopmentStageLane lane;
-    protected long phase;
+  @XmlElement( required = true )
+  protected DevelopmentStageLane lane;
+  protected long phase;
 
-    /**
-     * Gets the value of the lane property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link DevelopmentStageLane }
-     *     
-     */
-    public DevelopmentStageLane getLane() {
-        return lane;
-    }
+  /**
+   * Gets the value of the lane property.
+   *
+   * @return possible object is {@link DevelopmentStageLane }
+   */
+  public DevelopmentStageLane getLane() {
+    return lane;
+  }
 
-    /**
-     * Sets the value of the lane property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link DevelopmentStageLane }
-     *     
-     */
-    public void setLane(DevelopmentStageLane value) {
-        this.lane = value;
-    }
+  /**
+   * Sets the value of the lane property.
+   *
+   * @param value allowed object is {@link DevelopmentStageLane }
+   */
+  public void setLane( DevelopmentStageLane value ) {
+    this.lane = value;
+  }
 
-    /**
-     * Gets the value of the phase property.
-     * 
-     */
-    public long getPhase() {
-        return phase;
-    }
+  /**
+   * Gets the value of the phase property.
+   */
+  public long getPhase() {
+    return phase;
+  }
 
-    /**
-     * Sets the value of the phase property.
-     * 
-     */
-    public void setPhase(long value) {
-        this.phase = value;
-    }
+  /**
+   * Sets the value of the phase property.
+   */
+  public void setPhase( long value ) {
+    this.phase = value;
+  }
 
 }

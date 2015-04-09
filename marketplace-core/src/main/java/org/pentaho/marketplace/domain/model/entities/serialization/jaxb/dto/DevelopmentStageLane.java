@@ -25,9 +25,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for development_stage_lane.
- * 
+ * <p/>
  * <p>The following schema fragment specifies the expected content contained within this class.
- * <p>
+ * <p/>
  * <pre>
  * &lt;simpleType name="development_stage_lane">
  *   &lt;restriction base="{http://www.w3.org/2001/XMLSchema}normalizedString">
@@ -36,33 +36,32 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/restriction>
  * &lt;/simpleType>
  * </pre>
- * 
  */
-@XmlType(name = "development_stage_lane")
+@XmlType( name = "development_stage_lane" )
 @XmlEnum
 public enum DevelopmentStageLane {
 
-    @XmlEnumValue("Customer")
-    CUSTOMER("Customer"),
-    @XmlEnumValue("Community")
-    COMMUNITY("Community");
-    private final String value;
+  @XmlEnumValue( "Customer" )
+  CUSTOMER( "Customer" ),
+  @XmlEnumValue( "Community" )
+  COMMUNITY( "Community" );
+  private final String value;
 
-    DevelopmentStageLane(String v) {
-        value = v;
-    }
+  DevelopmentStageLane( String v ) {
+    value = v;
+  }
 
-    public String value() {
-        return value;
-    }
+  public String value() {
+    return value;
+  }
 
-    public static DevelopmentStageLane fromValue(String v) {
-        for (DevelopmentStageLane c: DevelopmentStageLane.values()) {
-            if (c.value.equals(v)) {
-                return c;
-            }
-        }
-        throw new IllegalArgumentException(v);
+  public static DevelopmentStageLane fromValue( String v ) {
+    for ( DevelopmentStageLane c : DevelopmentStageLane.values() ) {
+      if ( c.value.equals( v ) ) {
+        return c;
+      }
     }
+    throw new IllegalArgumentException( v );
+  }
 
 }

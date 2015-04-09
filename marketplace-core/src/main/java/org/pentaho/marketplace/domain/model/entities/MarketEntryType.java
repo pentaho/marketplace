@@ -18,13 +18,10 @@
 package org.pentaho.marketplace.domain.model.entities;
 
 /**
- * Describes the various types of market entries
- * 
- * @author matt
- * 
+ * Describes the various types of market entries (plugins)
  */
 public enum MarketEntryType {
-  Step, JobEntry, Partitioner, SpoonPlugin, Database, /*Repository, ImportRule,*/ Mixed, Platform, HadoopShim /*, General*/;
+  Step, JobEntry, Partitioner, SpoonPlugin, Database, Mixed, Platform, HadoopShim;
 
   public static MarketEntryType getMarketEntryType( String code ) {
     for ( MarketEntryType type : values() ) {

@@ -21,11 +21,13 @@ import org.pentaho.marketplace.domain.model.entities.MarketEntryType;
 
 import java.util.Collection;
 
+/**
+ * A plugin is something that can be (un)installed via marketplace
+ */
 public interface IPlugin {
 
   //region Properties
 
-  //id
   String getId();
   void setId( String value );
 
@@ -113,11 +115,23 @@ public interface IPlugin {
   MarketEntryType getType();
   void setType( MarketEntryType type );
 
+  /**
+   * Gets the rank of the plugin. This rank is used for the order by which plugins are shown in the marketplace.
+   * It usually reflects the order by which the plugins were defined in the marketplace metadata xml file.
+   * @return the rank of the plugin
+   */
   int getRank();
   void setRank( int rank );
   //endregion
 
   //region Methods
+
+  /**
+   * It is assumed that a plugin only has one compatible version with the running parent (server / spoon) per branch.
+   * This method returns that compatible version if it exists, null otherwise.
+   * @param branch the branch of the version to get.
+   * @return the compatible version with the running server / spoon for the specified branch.
+   */
   IPluginVersion getVersionByBranch( String branch );
   //endregion
 }

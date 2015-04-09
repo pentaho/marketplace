@@ -23,57 +23,50 @@ public interface IPluginVersion {
 
   //branch
   String getBranch();
-
   void setBranch( String value );
 
   //name
   String getName();
-
   void setName( String value );
 
   //version
   String getVersion();
-
   void setVersion( String value );
 
   //downloadUrl
   String getDownloadUrl();
-
   void setDownloadUrl( String value );
 
   //samplesDownloadUrl
   String getSamplesDownloadUrl();
-
   void setSamplesDownloadUrl( String value );
 
   //description
   String getDescription();
-
   void setDescription( String value );
 
   //changelog
   String getChangelog();
-
   void setChangelog( String value );
 
   //buildId
   String getBuildId();
-
   void setBuildId( String value );
 
   //releaseDate
   String getReleaseDate();
-
   void setReleaseDate( String value );
 
-  //minParentVersion
+  /**
+   * @return the minimum server / spoon version which is compatible with this version.
+   */
   String getMinParentVersion();
-
   void setMinParentVersion( String value );
 
-  //maxParentVersion
+  /**
+   * @return the maximum server / spoon version which is compatible with this version.
+   */
   String getMaxParentVersion();
-
   void setMaxParentVersion( String value );
 
   //development Stage

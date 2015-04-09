@@ -28,15 +28,13 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 
 /**
- * 
- *         The category the market entry is belongs to.
- *         A category can have a parent category.
- *       
- * 
+ * The category the market entry is belongs to. A category can have a parent category.
+ * <p/>
+ * <p/>
  * <p>Java class for category complex type.
- * 
+ * <p/>
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ * <p/>
  * <pre>
  * &lt;complexType name="category">
  *   &lt;complexContent>
@@ -49,67 +47,51 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
-@XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "category", propOrder = {
-
-})
+@XmlAccessorType( XmlAccessType.FIELD )
+@XmlType( name = "category", propOrder = {} )
 public class Category {
 
-    protected Category parent;
-    @XmlElement(required = true)
-    @XmlJavaTypeAdapter(NormalizedStringAdapter.class)
-    @XmlSchemaType(name = "normalizedString")
-    protected String name;
+  protected Category parent;
+  @XmlElement( required = true )
+  @XmlJavaTypeAdapter( NormalizedStringAdapter.class )
+  @XmlSchemaType( name = "normalizedString" )
+  protected String name;
 
-    /**
-     * Gets the value of the parent property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Category }
-     *     
-     */
-    public Category getParent() {
-        return parent;
-    }
+  /**
+   * Gets the value of the parent property.
+   *
+   * @return possible object is {@link Category }
+   */
+  public Category getParent() {
+    return parent;
+  }
 
-    /**
-     * Sets the value of the parent property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Category }
-     *     
-     */
-    public void setParent(Category value) {
-        this.parent = value;
-    }
+  /**
+   * Sets the value of the parent property.
+   *
+   * @param value allowed object is {@link Category }
+   */
+  public void setParent( Category value ) {
+    this.parent = value;
+  }
 
-    /**
-     * Gets the value of the name property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getName() {
-        return name;
-    }
+  /**
+   * Gets the value of the name property.
+   *
+   * @return possible object is {@link String }
+   */
+  public String getName() {
+    return name;
+  }
 
-    /**
-     * Sets the value of the name property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setName(String value) {
-        this.name = value;
-    }
+  /**
+   * Sets the value of the name property.
+   *
+   * @param value allowed object is {@link String }
+   */
+  public void setName( String value ) {
+    this.name = value;
+  }
 
 }

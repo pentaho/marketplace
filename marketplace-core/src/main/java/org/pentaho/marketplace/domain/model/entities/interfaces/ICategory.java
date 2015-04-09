@@ -29,7 +29,7 @@ public interface ICategory {
 
   /**
    * Sets the parent category of this category.
-   * @param parent
+   * @param parent the parent to set.
    * @return Returns this
    */
   ICategory setParent( ICategory parent );

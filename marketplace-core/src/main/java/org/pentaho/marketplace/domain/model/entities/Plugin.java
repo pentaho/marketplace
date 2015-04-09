@@ -58,7 +58,6 @@ public class Plugin implements IPlugin {
   public String getId() {
     return this.id;
   }
-
   @Override
   public void setId( String value ) {
     this.id = value;
@@ -68,7 +67,6 @@ public class Plugin implements IPlugin {
   public String getName() {
     return this.name;
   }
-
   @Override
   public void setName( String value ) {
     this.name = value;
@@ -78,7 +76,6 @@ public class Plugin implements IPlugin {
   public String getImg() {
     return this.img;
   }
-
   @Override
   public void setImg( String value ) {
     this.img = value;
@@ -88,7 +85,6 @@ public class Plugin implements IPlugin {
   public String getSmallImg() {
     return this.smallImg;
   }
-
   @Override
   public void setSmallImg( String value ) {
     this.smallImg = value;
@@ -98,7 +94,6 @@ public class Plugin implements IPlugin {
   public String getDocumentationUrl() {
     return this.documentationUrl;
   }
-
   @Override
   public void setDocumentationUrl( String value ) {
     this.documentationUrl = value;
@@ -108,7 +103,6 @@ public class Plugin implements IPlugin {
   public String getDescription() {
     return this.description;
   }
-
   @Override
   public void setDescription( String value ) {
     this.description = value;
@@ -118,7 +112,6 @@ public class Plugin implements IPlugin {
   public String getAuthorName() {
     return this.authorName;
   }
-
   @Override
   public void setAuthorName( String value ) {
     this.authorName = value;
@@ -128,7 +121,6 @@ public class Plugin implements IPlugin {
   public String getAuthorUrl() {
     return this.authorUrl;
   }
-
   @Override
   public void setAuthorUrl( String value ) {
     this.authorUrl = value;
@@ -138,7 +130,6 @@ public class Plugin implements IPlugin {
   public String getAuthorLogo() {
     return this.authorLogo;
   }
-
   @Override
   public void setAuthorLogo( String value ) {
     this.authorLogo = value;
@@ -148,7 +139,6 @@ public class Plugin implements IPlugin {
   public String getInstalledBranch() {
     return this.installedBranch;
   }
-
   @Override
   public void setInstalledBranch( String value ) {
     this.installedBranch = value;
@@ -158,7 +148,6 @@ public class Plugin implements IPlugin {
   public String getInstalledVersion() {
     return this.installedVersion;
   }
-
   @Override
   public void setInstalledVersion( String value ) {
     this.installedVersion = value;
@@ -168,7 +157,6 @@ public class Plugin implements IPlugin {
   public String getInstalledBuildId() {
     return this.installedBuildId;
   }
-
   @Override
   public void setInstalledBuildId( String value ) {
     this.installedBuildId = value;
@@ -178,7 +166,6 @@ public class Plugin implements IPlugin {
   public String getInstallationNotes() {
     return this.installationNotes;
   }
-
   @Override
   public void setInstallationNotes( String value ) {
     this.installationNotes = value;
@@ -188,7 +175,6 @@ public class Plugin implements IPlugin {
   public boolean isInstalled() {
     return this.installed;
   }
-
   @Override
   public void setInstalled( boolean value ) {
     this.installed = value;
@@ -197,11 +183,10 @@ public class Plugin implements IPlugin {
   @Override
   public Collection<IPluginVersion> getVersions() {
     if ( this.versions == null ) {
-      this.versions = new ArrayList<IPluginVersion>();
+      this.versions = new ArrayList<>();
     }
     return this.versions;
   }
-
   @Override
   public void setVersions( Collection<IPluginVersion> value ) {
     this.versions = value;
@@ -211,7 +196,6 @@ public class Plugin implements IPlugin {
   public String[] getScreenshots() {
     return this.screenshots;
   }
-
   @Override
   public void setScreenshots( String[] value ) {
     this.screenshots = value;
@@ -221,7 +205,6 @@ public class Plugin implements IPlugin {
   public String getDependencies() {
     return this.dependencies;
   }
-
   @Override
   public void setDependencies( String value ) {
     this.dependencies = value;
@@ -231,20 +214,31 @@ public class Plugin implements IPlugin {
   public String getLicense() {
     return this.license;
   }
-
   @Override
   public void setLicense( String value ) {
     this.license = value;
   }
 
-  @Override public String getLicenseName() { return this.licenseName; }
-  @Override public void setLicenseName( String value ) { this.licenseName = value; }
+  @Override public String getLicenseName() {
+    return this.licenseName;
+  }
+  @Override public void setLicenseName( String value ) {
+    this.licenseName = value;
+  }
 
-  @Override public String getLicenseText() { return this.licenseText; }
-  @Override public void setLicenseText( String value ) { this.licenseText = value; }
+  @Override public String getLicenseText() {
+    return this.licenseText;
+  }
+  @Override public void setLicenseText( String value ) {
+    this.licenseText = value;
+  }
 
-  @Override public ICategory getCategory() { return this.category; }
-  @Override public void setCategory( ICategory category ) { this.category = category; }
+  @Override public ICategory getCategory() {
+    return this.category;
+  }
+  @Override public void setCategory( ICategory category ) {
+    this.category = category;
+  }
 
   @Override
   public MarketEntryType getType() {
@@ -313,30 +307,37 @@ public class Plugin implements IPlugin {
     if ( description != null ? !description.equals( plugin.description ) : plugin.description != null ) {
       return false;
     }
-    if ( documentationUrl != null ? !documentationUrl.equals( plugin.documentationUrl ) :
-      plugin.documentationUrl != null ) {
+    if ( documentationUrl != null
+        ? !documentationUrl.equals( plugin.documentationUrl )
+        : plugin.documentationUrl != null ) {
       return false;
     }
-    if ( id != null ? !id.equals( plugin.id ) : plugin.id != null ) {
+    if ( id != null
+        ? !id.equals( plugin.id )
+        : plugin.id != null ) {
       return false;
     }
     if ( img != null ? !img.equals( plugin.img ) : plugin.img != null ) {
       return false;
     }
-    if ( installationNotes != null ? !installationNotes.equals( plugin.installationNotes ) :
-      plugin.installationNotes != null ) {
+    if ( installationNotes != null
+        ? !installationNotes.equals( plugin.installationNotes )
+        : plugin.installationNotes != null ) {
       return false;
     }
-    if ( installedBranch != null ? !installedBranch.equals( plugin.installedBranch ) :
-      plugin.installedBranch != null ) {
+    if ( installedBranch != null
+        ? !installedBranch.equals( plugin.installedBranch )
+        : plugin.installedBranch != null ) {
       return false;
     }
-    if ( installedBuildId != null ? !installedBuildId.equals( plugin.installedBuildId ) :
-      plugin.installedBuildId != null ) {
+    if ( installedBuildId != null
+        ? !installedBuildId.equals( plugin.installedBuildId )
+        : plugin.installedBuildId != null ) {
       return false;
     }
-    if ( installedVersion != null ? !installedVersion.equals( plugin.installedVersion ) :
-      plugin.installedVersion != null ) {
+    if ( installedVersion != null
+        ? !installedVersion.equals( plugin.installedVersion )
+        : plugin.installedVersion != null ) {
       return false;
     }
     if ( license != null ? !license.equals( plugin.license ) : plugin.license != null ) {

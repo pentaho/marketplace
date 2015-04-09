@@ -47,7 +47,9 @@ public class Category implements ICategory {
   // endregion
 
   // region Methods
-  @Override public ICategory getParent() { return this.parent; }
+  @Override public ICategory getParent() {
+    return this.parent;
+  }
   @Override public ICategory setParent( ICategory parent ) {
     this.parent = parent;
     return this;
@@ -56,7 +58,7 @@ public class Category implements ICategory {
   @Override public Map<String, ICategory> getChildren() {
     // lazy creation
     if ( this.children == null ) {
-      this.children = new Hashtable<String, ICategory>();
+      this.children = new Hashtable<>();
     }
 
     return this.children;
@@ -67,7 +69,8 @@ public class Category implements ICategory {
   }
 
   @Override public String toString() {
-    return "(Category - Name: " + this.getName() + "Parent: " + parent != null ? parent.getName() : "null" + ")";
+    String parentString = parent != null ? parent.getName() : "null";
+    return "(Category - Name: " + this.getName() + "Parent: " + parentString + ")";
   }
   // endregion
 

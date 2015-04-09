@@ -160,12 +160,12 @@ public class MarketplaceXmlSerializer implements IMarketplaceXmlSerializer {
     plugin.setCategory( this.getCategory( pluginElement ) );
 
     NodeList availableVersionsNode =
-      (NodeList) this.xpath.evaluate( "versions/version", pluginElement, XPathConstants.NODESET );
+        (NodeList) this.xpath.evaluate( "versions/version", pluginElement, XPathConstants.NODESET );
     Collection<IPluginVersion> versions = this.getPluginVersions( availableVersionsNode );
     plugin.setVersions( versions );
 
     NodeList availableScreenshotsNode = (NodeList) xpath.evaluate( "screenshots/screenshot", pluginElement,
-      XPathConstants.NODESET );
+        XPathConstants.NODESET );
     String[] screenshots = getScreenshots( availableScreenshotsNode );
     plugin.setScreenshots( screenshots );
 
@@ -196,7 +196,7 @@ public class MarketplaceXmlSerializer implements IMarketplaceXmlSerializer {
       return Collections.emptyList();
     }
 
-    Collection<IPluginVersion> versions = new ArrayList<IPluginVersion>();
+    Collection<IPluginVersion> versions = new ArrayList<>();
     for ( int j = 0; j < versionsElement.getLength(); j++ ) {
       Element versionElement = (Element) versionsElement.item( j );
       IPluginVersion pv = this.getPluginVersion( versionElement );
@@ -262,7 +262,7 @@ public class MarketplaceXmlSerializer implements IMarketplaceXmlSerializer {
    * Parses the version element to get the development stage
    *
    * @param versionElement where the development stage element is contained
-   * @return
+   * @return the parsed development stage
    */
   private IDevelopmentStage getDevelopmentStage( Element versionElement ) throws XPathExpressionException {
     final String DEVELOPMENT_STAGE_ELEMENT_NAME = "development_stage";
@@ -270,13 +270,13 @@ public class MarketplaceXmlSerializer implements IMarketplaceXmlSerializer {
     final String DEVELOPMENT_STAGE_PHASE_ELEMENT_NAME = "phase";
 
     Element devStageElement =
-      (Element) xpath.evaluate( DEVELOPMENT_STAGE_ELEMENT_NAME, versionElement, XPathConstants.NODE );
+        (Element) xpath.evaluate( DEVELOPMENT_STAGE_ELEMENT_NAME, versionElement, XPathConstants.NODE );
     if ( devStageElement == null ) {
       return null;
     }
 
     String lane = this.getElementChildValue( devStageElement, DEVELOPMENT_STAGE_LANE_ELEMENT_NAME );
-    String phase = this.getElementChildValue( devStageElement, DEVELOPMENT_STAGE_PHASE_ELEMENT_NAME ); ;
+    String phase = this.getElementChildValue( devStageElement, DEVELOPMENT_STAGE_PHASE_ELEMENT_NAME );
 
     // TODO: switch to factory to allow DI?
     return new DevelopmentStage( lane, phase );

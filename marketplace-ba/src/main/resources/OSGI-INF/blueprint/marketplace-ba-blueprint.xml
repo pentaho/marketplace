@@ -67,6 +67,25 @@
         factory-method="getInstance">
   </bean>
 
+
+  <bean id="marketplacePerspective"
+        class="org.pentaho.marketplace.ba.plugin.BaMarketplacePerspective"
+        init-method="init"
+        destroy-method="destroy">
+    <property name="id" value="marketplace.perspective.osgi"/>
+    <property name="title" value="MarketplaceOSGI"/>
+    <property name="contentUrl" value="osgi/marketplace/web/main.html"/>
+    <property name="layoutPriority" value="-1"/>
+    <!--
+        <property name="requiredSecurityActions">
+          <list>
+            <value>org.pentaho.security.administerSecurity</value>
+          </list>
+        </property>
+        resourcebundle="content/marketplace/marketplace/lang/messages"
+        -->
+  </bean>
+
   <!-- START: Telemetry -->
   <bean id="baTelemetryHandler"
         class="org.pentaho.telemetry.BaTelemetryHandler"

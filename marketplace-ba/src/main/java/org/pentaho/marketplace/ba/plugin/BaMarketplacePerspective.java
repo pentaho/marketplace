@@ -17,10 +17,7 @@
 
 package org.pentaho.marketplace.ba.plugin;
 
-import org.pentaho.platform.api.engine.IPentahoObjectRegistration;
-import org.pentaho.platform.api.engine.perspective.IPluginPerspectiveManager;
 import org.pentaho.platform.api.engine.perspective.pojo.IPluginPerspective;
-import org.pentaho.platform.engine.core.system.PentahoSystem;
 import org.pentaho.ui.xul.XulOverlay;
 
 import java.util.ArrayList;
@@ -84,20 +81,4 @@ public class BaMarketplacePerspective implements IPluginPerspective {
     this.requiredSecurityActions = requiredSecurityActions;
   }
   private ArrayList<String> requiredSecurityActions;
-  // endregion
-
-  // region Constructors / Initialization / Destruction
-  public void init() {
-     this.handle = PentahoSystem.registerObject( this, IPluginPerspective.class );
-    //PentahoSystem.get( IPluginPerspectiveManager.class ).addPluginPerspective( this );
-  }
-  private IPentahoObjectRegistration handle;
-
-  public void destroy() {
-    //PentahoSystem.get( IPluginPerspectiveManager.class ).removePluginPerspective( this );
-    if ( this.handle != null ) {
-      this.handle.remove();
-    }
-  }
-  // endregion
 }

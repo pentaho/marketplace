@@ -67,24 +67,21 @@
         factory-method="getInstance">
   </bean>
 
+  <service interface="org.pentaho.platform.api.engine.perspective.pojo.IPluginPerspective">
+    <bean class="org.pentaho.marketplace.ba.plugin.BaMarketplacePerspective">
+      <property name="id" value="marketplace.perspective.osgi"/>
+      <property name="title" value="${MarketplaceOSGI}"/> <!-- TODO: Check why title value needs to be a "variable" -->
+      <property name="contentUrl"     value="osgi/marketplace/web/main.html"/>
+      <property name="resourceBundleUri" value="osgi/marketplace/web/lang/messages"/>
+      <property name="requiredSecurityActions">
+        <list>
+          <value>org.pentaho.security.administerSecurity</value>
+        </list>
+      </property>
+      <property name="layoutPriority" value="-1"/>
+    </bean>
+  </service>
 
-  <bean id="marketplacePerspective"
-        class="org.pentaho.marketplace.ba.plugin.BaMarketplacePerspective"
-        init-method="init"
-        destroy-method="destroy">
-    <property name="id" value="marketplace.perspective.osgi"/>
-    <property name="title" value="MarketplaceOSGI"/>
-    <property name="contentUrl" value="osgi/marketplace/web/main.html"/>
-    <property name="layoutPriority" value="-1"/>
-    <!--
-        <property name="requiredSecurityActions">
-          <list>
-            <value>org.pentaho.security.administerSecurity</value>
-          </list>
-        </property>
-        resourcebundle="content/marketplace/marketplace/lang/messages"
-        -->
-  </bean>
 
   <!-- START: Telemetry -->
   <bean id="baTelemetryHandler"

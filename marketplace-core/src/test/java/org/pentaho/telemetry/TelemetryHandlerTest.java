@@ -25,8 +25,8 @@ public class TelemetryHandlerTest extends TelemetryBaseTest {
 
   @Test
   public void testQueueEvent() {
-    //ITelemetryHandler telemetryHandler = createTelemetryHandler();
-    //TelemetryEvent te = createTelemetryEvent();
-    //Assert.assertTrue( telemetryHandler.queueEvent( te ) );
+    ITelemetryHandler telemetryHandler = createTelemetryHandler();
+    TelemetryEvent te = createTelemetryEvent();
+    Assert.assertTrue( telemetryHandler.queueEvent( te ) );
   }
 }

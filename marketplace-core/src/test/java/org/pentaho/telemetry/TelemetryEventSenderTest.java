@@ -308,7 +308,7 @@ public class TelemetryEventSenderTest extends TelemetryBaseTest {
   @Test
   public void TestSend() throws InterruptedException, IOException {
     File[] files;
-    String lastSubmissionDir = TelemetryEventSender.LAST_SUBMISSION_FOLDER;
+    String lastSubmissionDir = TelemetryEventSender.LAST_SUBMISSION_DIR_NAME;
 
     // create 2 event files in the telemetry dir
     createEventFileInTelemetryDir( createTelemetryEvent() );

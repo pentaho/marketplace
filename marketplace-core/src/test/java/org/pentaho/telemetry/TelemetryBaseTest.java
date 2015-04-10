@@ -40,14 +40,14 @@ public class TelemetryBaseTest {
   public TemporaryFolder telemetryDir = new TemporaryFolder();
 
   protected TelemetryHandler createTelemetryHandler() {
-    return new TelemetryHandler( telemetryDir.getRoot().getAbsolutePath() );
+    return new TelemetryHandler( telemetryDir.getRoot().getAbsolutePath(),
+      TelemetryHandler.DEFAULT_SEND_PERIOD_IN_MINUTES );
   }
 
   protected TelemetryService createTelemetryService( final boolean telemetryEnabled,
                                                      final TelemetryHandler telemetryHandler ) {
     return new TelemetryService( TEST_PLUGIN_NAME, TEST_PLUGIN_VERSION, TEST_PLATFORM_VERSION, TEST_TELEMETRY_URL,
-      telemetryEnabled,
-      telemetryHandler );
+      telemetryEnabled, telemetryHandler );
   }
 
   protected TelemetryEvent createTelemetryEvent() {

@@ -50,8 +50,8 @@ public class TelemetryServiceTest extends TelemetryBaseTest {
     Assert.assertFalse( telemetryService.publishEvent( te ) );
 
     // test if publish event succeeds when the telemetry service is properly configured
-    //telemetryService = createTelemetryService( true, createTelemetryHandler() );
-    //te = telemetryService.createEvent( TelemetryEvent.Type.OTHER );
-    //Assert.assertTrue( telemetryService.publishEvent( te ) );
+    telemetryService = createTelemetryService( true, createTelemetryHandler() );
+    te = telemetryService.createEvent( TelemetryEvent.Type.OTHER );
+    Assert.assertTrue( telemetryService.publishEvent( te ) );
   }
 }

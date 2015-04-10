@@ -49,6 +49,9 @@ public class TelemetryEvent implements Serializable {
 
   // region Properties
 
+  /**
+   * @return the type of telemetry event
+   */
   public TelemetryEvent.Type getEventType() {
     return this.eventType;
   }
@@ -59,7 +62,9 @@ public class TelemetryEvent implements Serializable {
 
   private TelemetryEvent.Type eventType;
 
-
+  /**
+   * @return the plugin name
+   */
   public String getPluginName() {
     return this.pluginName;
   }
@@ -70,7 +75,9 @@ public class TelemetryEvent implements Serializable {
 
   private String pluginName;
 
-
+  /**
+   * @return the plugin version
+   */
   public String getPluginVersion() {
     return this.pluginVersion;
   }
@@ -81,7 +88,9 @@ public class TelemetryEvent implements Serializable {
 
   private String pluginVersion;
 
-
+  /**
+   * @return the platform version
+   */
   public String getPlatformVersion() {
     return this.platformVersion;
   }
@@ -92,7 +101,9 @@ public class TelemetryEvent implements Serializable {
 
   private String platformVersion;
 
-
+  /**
+   * @return the URL of the target remote endpoint
+   */
   public String getUrlToCall() {
     return this.urlToCall;
   }
@@ -103,7 +114,9 @@ public class TelemetryEvent implements Serializable {
 
   private String urlToCall;
 
-
+  /**
+   * @return a map with event specific information
+   */
   public Map<String, String> getExtraInfo() {
     return this.extraInfo;
   }
@@ -114,7 +127,9 @@ public class TelemetryEvent implements Serializable {
 
   private Map<String, String> extraInfo;
 
-
+  /**
+   * @return the timestamp for when the event was published
+   */
   public long getEventTimestamp() {
     return this.eventTimestamp;
   }

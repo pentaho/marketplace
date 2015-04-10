@@ -29,7 +29,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * The telemetry handler publishes telemetry events to a known location, so that developers can track usage/updates
  * of their work.
- * <p/>
+ *
  * Collected data for each telemetry event (described in {@link TelemetryEvent}) is stored in a handler queue.
  * A dedicated thread ({@link TelemetryEventKeeper}) reads this queue and stores the telemetry events in the filesystem.
  * At periodic intervals (default = once a day) another thread ({@link TelemetryEventSender}) reads these events from
@@ -42,9 +42,10 @@ public class TelemetryHandler implements ITelemetryHandler {
   // region Constants
 
   private static final int EVENT_QUEUE_CAPACITY = 100;
+  protected static final String DEFAULT_TELEMETRY_DIR_NAME = ".telemetry";
   private static final String EVENT_KEEPER_THREAD_NAME = "Telemetry Event Keeper Thread";
   private static final String EVENT_SENDER_THREAD_NAME = "Telemetry Event Sender Thread";
-  private static final long DEFAULT_SEND_PERIOD_IN_MINUTES = 1440; // once a day
+  protected static final long DEFAULT_SEND_PERIOD_IN_MINUTES = 1440; // once a day
 
   // endregion
 
@@ -66,7 +67,7 @@ public class TelemetryHandler implements ITelemetryHandler {
   }
 
   protected void setTelemetryDir( File telemetryDir ) {
-    // ensure that the telemetry folder exists
+    // ensure that the telemetry dir exists
     if ( !telemetryDir.exists() ) {
       telemetryDir.mkdir();
     }
@@ -80,7 +81,7 @@ public class TelemetryHandler implements ITelemetryHandler {
     return this.sendPeriodInMinutes;
   }
 
-  public void setSendPeriodInMinutes( long sendPeriodInMinutes ) {
+  protected void setSendPeriodInMinutes( long sendPeriodInMinutes ) {
     this.sendPeriodInMinutes = sendPeriodInMinutes;
   }
 
@@ -113,16 +114,16 @@ public class TelemetryHandler implements ITelemetryHandler {
 
   // region Constructors
 
+  public TelemetryHandler() {
+    this( DEFAULT_TELEMETRY_DIR_NAME, DEFAULT_SEND_PERIOD_IN_MINUTES );
+  }
+
   public TelemetryHandler( String telemetryDirPath, long sendPeriodInMinutes ) {
     // initialize the event queue
     this.setEventQueue( new ArrayBlockingQueue<TelemetryEvent>( EVENT_QUEUE_CAPACITY ) );
 
     this.setTelemetryDir( new File( telemetryDirPath ) );
     this.setSendPeriodInMinutes( sendPeriodInMinutes );
-  }
-
-  public TelemetryHandler( String telemetryDirPath ) {
-    this( telemetryDirPath, DEFAULT_SEND_PERIOD_IN_MINUTES );
   }
 
   /**
@@ -145,9 +146,7 @@ public class TelemetryHandler implements ITelemetryHandler {
 
   // region Methods
 
-  /**
-   * Add a telemetry event to the handler queue
-   */
+  @Override
   public boolean queueEvent( TelemetryEvent event ) {
     BlockingQueue<TelemetryEvent> eventQueue = this.getEventQueue();
     return eventQueue.offer( event );

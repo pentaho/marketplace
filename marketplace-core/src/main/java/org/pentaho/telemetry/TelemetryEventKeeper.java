@@ -27,8 +27,9 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.util.concurrent.BlockingQueue;
 
+
 /**
- * Used by TelemetryService to manage storing telemetry events in the file system
+ * Used by {@link TelemetryHandler} to store telemetry events in the file system
  */
 public class TelemetryEventKeeper implements Runnable {
 
@@ -48,7 +49,6 @@ public class TelemetryEventKeeper implements Runnable {
 
   private static final Log logger = LogFactory.getLog( TelemetryEventKeeper.class );
 
-
   protected BlockingQueue<TelemetryEvent> getEventQueue() {
     return this.eventQueue;
   }
@@ -58,7 +58,6 @@ public class TelemetryEventKeeper implements Runnable {
   }
 
   private BlockingQueue<TelemetryEvent> eventQueue;
-
 
   protected String getTelemetryDirPath() {
     return this.telemetryDirPath;

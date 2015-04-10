@@ -41,14 +41,14 @@ import java.util.List;
 
 
 /**
- * Used by TelemetryHelper to manage sending the telemetry requests to a server
+ * Used by {@link TelemetryHandler} to send telemetry events to a remote endpoint
  */
 public class TelemetryEventSender implements Runnable {
 
   // region Constants
 
   protected static final String FILE_EXT = ".tel";
-  protected static final String LAST_SUBMISSION_FOLDER = "lastsubmission";
+  protected static final String LAST_SUBMISSION_DIR_NAME = "lastsubmission";
   private static final int DAYS_TO_KEEP_FILES = 5;
   private static final int BLOCK_SIZE = 50;
   private static final int HTTP_CALL_TIMEOUT = 30000;
@@ -108,7 +108,7 @@ public class TelemetryEventSender implements Runnable {
 
   public TelemetryEventSender( File telemetryDir ) {
     this.setTelemetryDir( telemetryDir );
-    this.setLastSubmissionDir( new File( telemetryDir.getAbsolutePath() + "/" + LAST_SUBMISSION_FOLDER ) );
+    this.setLastSubmissionDir( new File( telemetryDir.getAbsolutePath() + "/" + LAST_SUBMISSION_DIR_NAME ) );
   }
 
   // endregion

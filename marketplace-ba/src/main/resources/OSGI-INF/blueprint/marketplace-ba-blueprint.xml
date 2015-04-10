@@ -51,7 +51,7 @@
     <argument ref="marketplaceRemotePluginProvider"/>
     <argument ref="marketplaceVersionDataFactory"/>
     <argument ref="marketplaceDomainStatusMessageFactory"/>
-    <argument ref="baMarketplaceTelemetry"/>
+    <argument ref="marketplaceTelemetry"/>
     <argument ref="marketplacePluginSerializer"/>
     <argument ref="marketplaceSecurityHelperFactory"/>
     <argument ref="blueprintBundle"/>
@@ -90,8 +90,8 @@
         destroy-method="destroy">
   </bean>
 
-  <bean id="baMarketplaceTelemetry"
-        class="org.pentaho.telemetry.BaOsgiPluginTelemetry">
+  <bean id="marketplaceTelemetry"
+        class="org.pentaho.telemetry.BaPluginTelemetry">
     <argument ref="blueprintBundle"/>
     <argument value="${telemetry.site}"/>
     <argument>

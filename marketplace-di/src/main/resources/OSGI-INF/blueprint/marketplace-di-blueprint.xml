@@ -76,25 +76,25 @@
     <argument ref="marketplaceVersionDataFactory"/>
     <argument ref="marketplaceDomainStatusMessageFactory"/>
     <argument ref="marketplacePluginVersionFactory"/>
-    <argument ref="diMarketplaceTelemetry"/>
+    <argument ref="marketplaceTelemetry"/>
   </bean>
 
 
   <!-- START: Telemetry -->
   <bean id="diTelemetryHandler"
-        class="org.pentaho.telemetry.DiTelemetryHandler"
+        class="org.pentaho.telemetry.TelemetryHandler"
         init-method="init"
         destroy-method="destroy">
   </bean>
 
-  <bean id="diMarketplaceTelemetry"
+  <bean id="marketplaceTelemetry"
         class="org.pentaho.telemetry.DiPluginTelemetry">
-    <argument value="marketplace"/>
-    <argument ref="diTelemetryHandler"/>
+    <argument ref="blueprintBundle"/>
     <argument value="${telemetry.site}"/>
     <argument>
       <value type="java.lang.Boolean">${telemetry.enabled}</value>
     </argument>
+    <argument ref="diTelemetryHandler"/>
   </bean>
   <!-- END: Telemetry -->
 

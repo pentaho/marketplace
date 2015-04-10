@@ -27,7 +27,7 @@ import java.util.Map;
 public class CategoryFactory implements ICategoryFactory {
 
   // region Attributes
-  private static Map<String, ICategory> categories = new Hashtable<String, ICategory>();
+  private static Map<String, ICategory> categories = new Hashtable<>();
   // endregion
 
   // region Methods
@@ -38,9 +38,9 @@ public class CategoryFactory implements ICategoryFactory {
   /**
    * Creates a new category. If category with the same name, in the parent namespace, already exists returns the previously created category.
    * Root categories have no parent with the namespace defined in the Category factory.
-   * @param name
-   * @param parent
-   * @return
+   * @param name the name of the category
+   * @param parent the parent category of the category to create
+   * @return the created category or the existing category that match the given name and parent category.
    */
   @Override public ICategory create( String name, ICategory parent ) {
     ICategory category = parent != null ? parent.getChildren().get( name ) : this.get( name );
@@ -54,8 +54,7 @@ public class CategoryFactory implements ICategoryFactory {
     // root category, store in factory namespace
     if ( parent == null ) {
       categories.put( name, category );
-    }
-    else {
+    } else {
       parent.getChildren().put( name, category );
     }
     return category;
@@ -63,8 +62,8 @@ public class CategoryFactory implements ICategoryFactory {
 
   /**
    * Creates a new root category. If a root category with the same name already exists returns the previously created category.
-   * @param name
-   * @return
+   * @param name the name of the category to create or get
+   * @return a new root category or an existing category with the given category name
    */
   @Override public ICategory create( String name ) {
     return create( name, null );

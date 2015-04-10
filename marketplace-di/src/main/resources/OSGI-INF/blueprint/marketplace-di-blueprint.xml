@@ -71,7 +71,7 @@
     </property>
   </bean>
 
-  <bean id="marketplacePluginService" class="org.pentaho.marketplace.domain.services.KettlePluginService">
+  <bean id="marketplacePluginService" class="org.pentaho.marketplace.domain.services.DiPluginService">
     <argument ref="marketplaceRemotePluginProvider"/>
     <argument ref="marketplaceVersionDataFactory"/>
     <argument ref="marketplaceDomainStatusMessageFactory"/>

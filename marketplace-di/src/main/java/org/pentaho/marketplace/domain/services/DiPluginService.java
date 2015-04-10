@@ -60,7 +60,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 
-public class KettlePluginService extends BasePluginService {
+public class DiPluginService extends BasePluginService {
 
   // region Properties
   private static final String BASE_PLUGINS_FOLDER_NAME = "plugins";
@@ -73,7 +73,7 @@ public class KettlePluginService extends BasePluginService {
   public IPluginVersionFactory getPluginVersionFactory() {
     return this.pluginVersionFactory;
   }
-  public KettlePluginService setPluginVersionFactory( IPluginVersionFactory factory ) {
+  public DiPluginService setPluginVersionFactory( IPluginVersionFactory factory ) {
     this.pluginVersionFactory = factory;
     return this;
   }
@@ -81,11 +81,11 @@ public class KettlePluginService extends BasePluginService {
   // endregion
 
   // region Constructor
-  public KettlePluginService( IRemotePluginProvider metadataPluginsProvider,
-                              IVersionDataFactory versionDataFactory,
-                              IDomainStatusMessageFactory domainStatusMessageFactory,
-                              IPluginVersionFactory pluginVersionFactory,
-                              ITelemetryService telemetryService ) {
+  public DiPluginService( IRemotePluginProvider metadataPluginsProvider,
+                          IVersionDataFactory versionDataFactory,
+                          IDomainStatusMessageFactory domainStatusMessageFactory,
+                          IPluginVersionFactory pluginVersionFactory,
+                          ITelemetryService telemetryService ) {
     super( metadataPluginsProvider, versionDataFactory, domainStatusMessageFactory, telemetryService );
 
 
@@ -407,10 +407,10 @@ public class KettlePluginService extends BasePluginService {
         FileWriter fw = new FileWriter( file.getAbsoluteFile() );
         bufferedWriter = new BufferedWriter( fw );
         bufferedWriter.write(
-          "<version " + buildAttribute( "branch", version.getBranch() ) + " "
-                      + buildAttribute( "buildId", version.getBuildId() ) + ">" +
-            version.getVersion() +
-          "</version>" );
+            "<version " + buildAttribute( "branch", version.getBranch() ) + " "
+                        + buildAttribute( "buildId", version.getBuildId() ) + ">"
+              + version.getVersion() +
+            "</version>" );
       } catch ( IOException ioe ) {
         throw new KettleException( ioe );
       } finally {
@@ -426,9 +426,7 @@ public class KettlePluginService extends BasePluginService {
   }
 
   private static String buildAttribute( String name, String value ) {
-    return nullOrEmpty( value ) ?
-      "" :
-      name + "='" + value + "'" ;
+    return nullOrEmpty( value ) ? "" : name + "='" + value + "'";
   }
 
   private static boolean nullOrEmpty( String string ) {
@@ -437,9 +435,6 @@ public class KettlePluginService extends BasePluginService {
 
   /**
    * Unzips the plugin to the file system The passed MarkeyEntry has the URL of the zip file.
-   *
-   * @param folderName
-   * @param marketEntry
    * @throws KettleException
    */
   private static void unzipMarketEntry( String folderName, String packageUrl ) throws KettleException {

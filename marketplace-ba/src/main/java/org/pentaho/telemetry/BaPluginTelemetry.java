@@ -65,7 +65,7 @@ public class BaPluginTelemetry extends TelemetryService {
   private static String getPluginVersion( String pluginName ) {
     try {
       String versionPath =
-        PentahoSystem.getApplicationContext().getSolutionPath( "system/" + pluginName + "/version.xml" );
+          PentahoSystem.getApplicationContext().getSolutionPath( "system/" + pluginName + "/version.xml" );
       InputStream versionFile = new FileInputStream( new File( versionPath ) );
       return parsePluginVersion( versionFile );
     } catch ( FileNotFoundException fnfe ) {

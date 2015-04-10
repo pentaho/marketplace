@@ -74,9 +74,9 @@ public class BaPluginServiceTest {
   /**
    * Creates a new plugin service.
    * Solution folder is set to "test-res/pentaho-solutions/"
-   * @return
+   * @return a new test plugin service
    */
-  private BAPluginService createPluginService() {
+  private BaPluginService createPluginService() {
     IDomainStatusMessageFactory domainStatusMessageFactory = this.domainStatusMessageFactory;
     IVersionDataFactory versionDataFactory = this.versionDataFactory;
 
@@ -86,7 +86,7 @@ public class BaPluginServiceTest {
     ITelemetryService telemetryService = mock( ITelemetryService.class );
     Bundle bundle = mock( Bundle.class );
 
-    BAPluginService service = new BAPluginService( pluginProvider, versionDataFactory,
+    BaPluginService service = new BaPluginService( pluginProvider, versionDataFactory,
         domainStatusMessageFactory, telemetryService, serializer, securityHelper, bundle );
 
     IApplicationContext applicationContext = mock( IApplicationContext.class );
@@ -129,7 +129,7 @@ public class BaPluginServiceTest {
   @Test
   public void testInstallDeniedNoRolesAndNonAdminUser( ) {
     // arrange
-    BAPluginService service = this.createPluginService();
+    BaPluginService service = this.createPluginService();
 
     // setup no roles
     service.setAuthorizedRoles( Collections.<String>emptyList() );
@@ -152,7 +152,7 @@ public class BaPluginServiceTest {
   @Test
   public void testUninstallDeniedNoRolesAndNonAdminUser( ) {
     // arrange
-    BAPluginService service = this.createPluginService();
+    BaPluginService service = this.createPluginService();
 
     // setup no roles
     service.setAuthorizedRoles( Collections.<String>emptyList() );
@@ -176,7 +176,7 @@ public class BaPluginServiceTest {
   @Test
   public void testInstallDeniedUserNotInRoles( ) {
     // region arrange
-    BAPluginService service = this.createPluginService();
+    BaPluginService service = this.createPluginService();
 
     // this is the role of the user which will be in the authorized roles
     String userRole = "peasant";
@@ -206,7 +206,7 @@ public class BaPluginServiceTest {
   @Test
   public void testUninstallDeniedUserNotInRoles( ) {
     // region arrange
-    BAPluginService service = this.createPluginService();
+    BaPluginService service = this.createPluginService();
 
     // this is the role of the user which will be in the authorized roles
     String userRole = "peasant";
@@ -240,7 +240,7 @@ public class BaPluginServiceTest {
     String userName = "Dennis";
     Collection<String> authorizedUsers = Arrays.asList( "Joseph", "David" );
     Collection<String> authorizedRoles = Collections.emptyList();
-    BAPluginService service = this.createPluginService();
+    BaPluginService service = this.createPluginService();
 
     service.setAuthorizedUsernames( authorizedUsers );
     service.setAuthorizedRoles( authorizedRoles );
@@ -266,7 +266,7 @@ public class BaPluginServiceTest {
     String userName = "Dennis";
     Collection<String> authorizedUsers = Arrays.asList( "Joseph" , "David" );
     Collection<String> authorizedRoles = Collections.emptyList();
-    BAPluginService service = this.createPluginService();
+    BaPluginService service = this.createPluginService();
 
     service.setAuthorizedUsernames( authorizedUsers );
     service.setAuthorizedRoles( authorizedRoles );
@@ -290,7 +290,7 @@ public class BaPluginServiceTest {
   @Test
   public void testGetPluginsOnlyCompatibleVersions( ) {
     // arrange
-    BAPluginService service = this.createPluginService();
+    BaPluginService service = this.createPluginService();
     service.setServerVersion( "5.2" );
 
     IPluginVersion compatibleVersion = this.pluginVersionFactory.create();
@@ -334,7 +334,7 @@ public class BaPluginServiceTest {
   @Test
   public void testGetPluginsInstalledPluginsAreIdentified() {
     // arrange
-    BAPluginService service = this.createPluginService();
+    BaPluginService service = this.createPluginService();
     service.setServerVersion( "5.2" );
 
     IPluginVersion compatibleVersion = this.pluginVersionFactory.create();

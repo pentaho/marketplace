@@ -56,18 +56,15 @@ public abstract class BasePluginService implements IPluginService {
   // Error messages codes should begin with ERROR
 
   protected static final String UNAUTHORIZED_ACCESS_MESSAGE =
-    "Unauthorized Access.";
+      "Unauthorized Access.";
   protected static final String UNAUTHORIZED_ACCESS_ERROR_CODE =
-    "ERROR_0002_UNAUTHORIZED_ACCESS";
+      "ERROR_0002_UNAUTHORIZED_ACCESS";
   protected static final String NO_PLUGIN_ERROR_CODE = "ERROR_0001_NO_PLUGIN";
   protected static final String FAIL_ERROR_CODE = "ERROR_0003_FAIL";
   protected static final String PLUGIN_INSTALLED_CODE = "PLUGIN_INSTALLED";
   protected static final String PLUGIN_UNINSTALLED_CODE = "PLUGIN_UNINSTALLED";
 
   // endregion
-
-  public static final String PLUGIN_NAME = "marketplace";
-
 
   //endregion
 
@@ -100,13 +97,13 @@ public abstract class BasePluginService implements IPluginService {
   private String serverVersion;
 
 
-    public ITelemetryService getTelemetryService() {
-        return this.telemetryService;
-    }
-    protected void setTelemetryService(ITelemetryService telemetryService) {
-        this.telemetryService = telemetryService;
-    }
-    private ITelemetryService telemetryService;
+  public ITelemetryService getTelemetryService() {
+    return this.telemetryService;
+  }
+  protected void setTelemetryService( ITelemetryService telemetryService ) {
+    this.telemetryService = telemetryService;
+  }
+  private ITelemetryService telemetryService;
 
   //endregion
 
@@ -121,7 +118,7 @@ public abstract class BasePluginService implements IPluginService {
     this.domainStatusMessageFactory = domainStatusMessageFactory;
 
     this.setMetadataPluginsProvider( metadataPluginsProvider );
-      this.setTelemetryService( telemetryService );
+    this.setTelemetryService( telemetryService );
   }
   //endregion
 
@@ -152,9 +149,6 @@ public abstract class BasePluginService implements IPluginService {
   /**
    * Filters out plugins without a compatible version to server. Removes non compatible versions for the plugins which
    * pass the filter.
-   *
-   * @param plugins
-   * @return
    */
   private Map<String, IPlugin> removeNonCompatibleVersions( Iterable<IPlugin> plugins ) {
     Map<String, IPlugin> pluginsWithCompatibleVersions = new HashMap<>(  );
@@ -183,10 +177,6 @@ public abstract class BasePluginService implements IPluginService {
 
   /**
    * Filters plugins by plugin id
-   *
-   * @param plugins
-   * @param pluginIds
-   * @return
    */
   private Map<String, IPlugin> filterPlugins( Map<String, IPlugin> plugins, Collection<String> pluginIds ) {
     if ( pluginIds.size() < 1 ) {
@@ -207,8 +197,7 @@ public abstract class BasePluginService implements IPluginService {
 
   /**
    * Sets plugins as installed as well as the installed version
-   *
-   * @param plugins
+   * @param plugins the plugins to be marked as installed
    */
   private void setPluginsAsInstalled( Collection<IPlugin> plugins ) {
     for ( IPlugin plugin : plugins ) {
@@ -261,11 +250,11 @@ public abstract class BasePluginService implements IPluginService {
     event.getExtraInfo().put( "installedBranch", versionBranch );
 
     IDomainStatusMessage successMessage =
-      this.domainStatusMessageFactory.create( PLUGIN_INSTALLED_CODE, toInstall.getName()
+        this.domainStatusMessageFactory.create( PLUGIN_INSTALLED_CODE, toInstall.getName()
         + " was successfully installed.  Please restart your BI Server. \n" + toInstall.getInstallationNotes() );
 
     IDomainStatusMessage failureMessage = this.domainStatusMessageFactory
-      .create( FAIL_ERROR_CODE, "Failed to execute install, see log for details." );
+        .create( FAIL_ERROR_CODE, "Failed to execute install, see log for details." );
 
     // before install, close class loader in case it's a reinstall
     this.unloadPlugin( toInstall.getId() );
@@ -275,7 +264,7 @@ public abstract class BasePluginService implements IPluginService {
     }
 
     try {
-        telemetryService.publishEvent( event );
+      telemetryService.publishEvent( event );
     } catch ( NoClassDefFoundError e ) {
       this.getLogger().debug( "Failed to find class definitions. Most likely reason is reinstalling marketplace.", e );
     }
@@ -303,11 +292,11 @@ public abstract class BasePluginService implements IPluginService {
     event.getExtraInfo().put( "uninstalledPluginBranch", toUninstall.getInstalledBranch() );
 
     IDomainStatusMessage successMessage =
-      this.domainStatusMessageFactory.create( PLUGIN_UNINSTALLED_CODE, toUninstall.getName()
+        this.domainStatusMessageFactory.create( PLUGIN_UNINSTALLED_CODE, toUninstall.getName()
         + " was successfully uninstalled.  Please restart your BI Server." );
 
     IDomainStatusMessage failureMessage = this.domainStatusMessageFactory
-      .create( FAIL_ERROR_CODE, "Failed to execute uninstall, see log for details." );
+        .create( FAIL_ERROR_CODE, "Failed to execute uninstall, see log for details." );
 
     // before deletion, close class loader
     this.unloadPlugin( toUninstall.getId() );

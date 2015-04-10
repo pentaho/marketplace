@@ -28,7 +28,7 @@ public interface ICategoryFactory {
    */
   ICategory get( String name );
 
-  ICategory create ( String name, ICategory parent );
-  ICategory create ( String name );
+  ICategory create( String name, ICategory parent );
+  ICategory create( String name );
 
 }

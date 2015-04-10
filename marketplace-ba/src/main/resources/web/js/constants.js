@@ -20,7 +20,7 @@
 define( [ 'marketplaceApp' ],
 
     function ( marketplace ) {
-      // TODO: remove global variable CONTEXT_PATH
+      // TODO: remove global variable CONTEXT_PATH which is injected by webcontext.js
       var baseUrl = CONTEXT_PATH + 'osgi/cxf/marketplace/services';
       marketplace.constant( 'BASE_URL', baseUrl );
     }

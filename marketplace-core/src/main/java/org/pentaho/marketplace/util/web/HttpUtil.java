@@ -82,17 +82,14 @@ public class HttpUtil {
         String proxyPassword = System.getProperty( PROXY_PASSWORD_PROPERTY_NAME );
         if ( proxyUser != null && proxyUser.trim().length() > 0 ) {
           httpClient.getState().setProxyCredentials(
-            new AuthScope( proxyHost, proxyPort ),
-            new UsernamePasswordCredentials( proxyUser, proxyPassword )
+              new AuthScope( proxyHost, proxyPort ),
+              new UsernamePasswordCredentials( proxyUser, proxyPassword )
           );
         }
       }
-    } catch ( Exception e ) {
-
-    }
+    } catch ( Exception ignored ) { }
 
     return httpClient;
-
   }
 
   public static boolean getURLContent( final String url, final StringBuffer content ) {
@@ -118,9 +115,9 @@ public class HttpUtil {
   }
 
   public static String getURLContent( final String uri ) {
-      StringBuffer content = new StringBuffer();
-      HttpUtil.getURLContent( uri, content );
-      return content.toString();
+    StringBuffer content = new StringBuffer();
+    HttpUtil.getURLContent( uri, content );
+    return content.toString();
   }
 
   public static InputStream getURLInputStream( final String url ) {
@@ -199,7 +196,7 @@ public class HttpUtil {
     char c;
     for ( int i = 0; i < s.length(); i++ ) {
       c = s.charAt( i );
-      switch( c ) {
+      switch ( c ) {
         case 43: { // '+'
           sb.append( ' ' );
           break;

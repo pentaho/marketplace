@@ -32,7 +32,7 @@ import java.util.jar.JarFile;
  *
  * @author Will Gorman (wgorman@pentaho.com)
  */
-@SuppressWarnings("rawtypes")
+@SuppressWarnings( "rawtypes" )
 public class Util {
 
   private static Object getFieldObject( Class clazz, String name, Object obj ) throws Exception {
@@ -47,7 +47,7 @@ public class Util {
    * @param clazzLdr class loader to clean up
    */
   public static void closeURLClassLoader( URLClassLoader clazzLdr ) {
-    HashSet<String> closedFiles = new HashSet<String>();
+    HashSet<String> closedFiles = new HashSet<>();
     try {
       Object obj = getFieldObject( URLClassLoader.class, "ucp", clazzLdr );
       ArrayList loaders = (ArrayList) getFieldObject( obj.getClass(), "loaders", obj );
@@ -84,7 +84,7 @@ public class Util {
 
     try {
       Class factory =
-        getFieldObject( classForName( "sun.net.www.protocol.jar.JarURLConnection" ), "factory", null )
+          getFieldObject( classForName( "sun.net.www.protocol.jar.JarURLConnection" ), "factory", null )
           .getClass();
       try {
         fCache = (HashMap) getFieldObject( factory, "fileCache", null );

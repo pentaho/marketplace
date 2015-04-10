@@ -26,8 +26,6 @@ public class RDO implements IRDO {
 
   //region Constructors
   public RDO( IPluginService pluginService ) {
-
-    //dependency obtained via constructor dependency injection from spring framework
     this.pluginService = pluginService;
   }
   //endregion

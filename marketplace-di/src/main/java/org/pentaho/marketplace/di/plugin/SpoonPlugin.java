@@ -126,14 +126,14 @@ public class SpoonPlugin implements SpoonPluginInterface {
 
       private void closeMarketplaceTab() {
         TabMapEntry marketplaceTab = getMarketplaceTab();
-        if( marketplaceTab != null ) {
+        if ( marketplaceTab != null ) {
           spoon.delegates.tabs.removeTab( marketplaceTab );
         }
       }
 
       private TabMapEntry getMarketplaceTab() {
         TabMapEntry marketplaceTab = null;
-        for( TabMapEntry tabMapEntry : spoon.delegates.tabs.getTabs() ) {
+        for ( TabMapEntry tabMapEntry : spoon.delegates.tabs.getTabs() ) {
           if ( tabMapEntry.getTabItem().getId().equalsIgnoreCase( "Marketplace" ) ) {
             marketplaceTab = tabMapEntry;
             break;
@@ -141,7 +141,7 @@ public class SpoonPlugin implements SpoonPluginInterface {
         }
         return marketplaceTab;
       }
-    });
+    } );
   }
 }
 

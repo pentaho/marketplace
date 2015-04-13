@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ This program is free software; you can redistribute it and/or modify it under the
+  ~ terms of the GNU Lesser General Public License, version 2.1 as published by the Free Software
+  ~ Foundation.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public License along with this
+  ~ program; if not, you can obtain a copy at http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+  ~ or from the Free Software Foundation, Inc.,
+  ~ 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+  ~
+  ~ This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+  ~ without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+  ~ See the GNU Lesser General Public License for more details.
+  ~
+  ~ Copyright (c) 2015 Pentaho Corporation. All rights reserved.
+  -->
+
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns:cm="http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.1.0"
+           xmlns:cxf="http://cxf.apache.org/blueprint/core"
+           xmlns:jaxrs="http://cxf.apache.org/blueprint/jaxrs" xmlns:jaxws="http://cxf.apache.org/blueprint/jaxws"
+           xsi:schemaLocation="
+  http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd
+  http://www.osgi.org/xmlns/blueprint-ext/v1.1.0 https://svn.apache.org/repos/asf/aries/tags/blueprint-0.3.1/blueprint-core/src/main/resources/org/apache/aries/blueprint/ext/blueprint-ext.xsd
+  http://cxf.apache.org/blueprint/jaxws http://cxf.apache.org/schemas/blueprint/jaxws.xsd
+  http://cxf.apache.org/blueprint/jaxrs http://cxf.apache.org/schemas/blueprint/jaxrs.xsd
+  http://cxf.apache.org/blueprint/core http://cxf.apache.org/schemas/blueprint/core.xsd
+  http://camel.apache.org/schema/blueprint http://camel.apache.org/schema/blueprint/camel-blueprint.xsd
+  http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.1.0 http://aries.apache.org/schemas/blueprint-cm/blueprint-cm-1.1.0.xsd
+  ">
+
+  <!-- START: Configuration -->
+  <cm:property-placeholder persistent-id="pentaho.marketplace.ba"
+                           update-strategy="reload">
+    <cm:default-properties>
+      <cm:property name="marketplace.site" value="http://marketplace.pentaho.com/marketplace-plugins.xml"/>
+      <cm:property name="telemetry.site" value="http://marketplace.pentaho.com/telemetry-servlet/telemetry"/>
+      <cm:property name="telemetry.site" value="http://localhost:8080/telemetry-servlet/telemetry"/>
+      <cm:property name="telemetry.enabled" value="true"/>
+      <cm:property name="authorized.roles" value=""/>
+      <cm:property name="authorized.usernames" value=""/>
+    </cm:default-properties>
+  </cm:property-placeholder>
+  <!-- END: Configuration -->
+
+  <bean id="marketplacePluginService"
+        class="org.pentaho.marketplace.domain.services.BaPluginService"
+        init-method="init"
+        destroy-method="destroy">
+    <argument ref="marketplaceRemotePluginProvider"/>
+    <argument ref="marketplaceVersionDataFactory"/>
+    <argument ref="marketplaceDomainStatusMessageFactory"/>
+    <argument ref="marketplaceTelemetry"/>
+    <argument ref="marketplacePluginSerializer"/>
+    <argument ref="marketplaceSecurityHelperFactory"/>
+    <argument ref="blueprintBundle"/>
+
+    <property name="authorizedRoles" value="${authorized.roles}"/>
+    <property name="authorizedUsernames" value="${authorized.usernames}"/>
+    <property name="relativeKettleExecutionFolderPath" value="processes/"/>
+    <property name="absoluteKettleResourcesSourcePath" value="/processes/"/>
+  </bean>
+
+  <bean id="marketplaceSecurityHelperFactory"
+        class="org.pentaho.platform.engine.security.SecurityHelper"
+        factory-method="getInstance">
+  </bean>
+
+  <service interface="org.pentaho.platform.api.engine.perspective.pojo.IPluginPerspective">
+    <bean class="org.pentaho.marketplace.ba.plugin.BaMarketplacePerspective">
+      <property name="id" value="marketplace.perspective.osgi"/>
+      <property name="title" value="${MarketplaceOSGI}"/> <!-- TODO: Check why title value needs to be a "variable" -->
+      <property name="contentUrl"     value="osgi/marketplace/web/main.html"/>
+      <property name="resourceBundleUri" value="osgi/marketplace/web/lang/messages"/>
+      <property name="requiredSecurityActions">
+        <list>
+          <value>org.pentaho.security.administerSecurity</value>
+        </list>
+      </property>
+      <property name="layoutPriority" value="-1"/>
+    </bean>
+  </service>
+
+
+  <!-- START: Telemetry -->
+  <bean id="baTelemetryHandler"
+        class="org.pentaho.telemetry.BaTelemetryHandler"
+        init-method="init"
+        destroy-method="destroy">
+  </bean>
+
+  <bean id="marketplaceTelemetry"
+        class="org.pentaho.telemetry.BaPluginTelemetry">
+    <argument ref="blueprintBundle"/>
+    <argument value="${telemetry.site}"/>
+    <argument>
+      <value type="java.lang.Boolean">${telemetry.enabled}</value>
+    </argument>
+    <argument ref="baTelemetryHandler"/>
+  </bean>
+  <!-- END: Telemetry -->
+
+</blueprint>

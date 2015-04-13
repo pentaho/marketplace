@@ -1,0 +1,23 @@
+<div class="dialog">
+  <div class="title">{{dialog.title}}</div>
+  <div class="body">
+		<div>
+			{{dialog.body}}
+		</div>
+		<div class="notes" data-ng-show="dialog.notes">
+			<div class="title">{{ 'marketplace.installationDialog.notes' | translate }}</div>
+			<div data-ng-bind-html="dialog.notes"></div>
+		</div>
+	</div>
+
+
+	<div class="buttonsContainer">
+	  <button class="pentaho-button"
+	          data-ng-repeat="button in dialog.buttons"
+	          data-ng-click="button.onClick()"
+	          data-ng-disabled="button.disabled">
+	    {{button.text}}
+	  </button>
+  </div>
+
+</div>

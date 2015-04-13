@@ -28,7 +28,7 @@ import org.pentaho.di.ui.spoon.TabMapEntry;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulException;
 
-@org.pentaho.di.ui.spoon.SpoonPlugin( id = "PdiMarketplaceOSGI", image = "" )
+@org.pentaho.di.ui.spoon.SpoonPlugin( id = "pentaho-marketplace-di", image = "" )
 @SpoonPluginCategories( { "spoon" } )
 public class SpoonPlugin implements SpoonPluginInterface {
 

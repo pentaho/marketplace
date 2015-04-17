@@ -394,6 +394,7 @@ button {
    ========================================================================== */
 .pentaho-tab-bar {
   margin-top: 15px;
+  height: 36px;
 }
 
 .admin-perspective .pentaho-tabWidget {

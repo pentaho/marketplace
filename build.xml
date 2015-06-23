@@ -7,6 +7,8 @@
   ***************** START: IMPORTS ***************
   *********************************************-->
 
+  <property name="js.build.failonerror" value="false"/>
+
   <!-- other subfloors are imported by this one -->
   <import file="build-res/subfloor-js.xml"/>
 

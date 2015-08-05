@@ -31,8 +31,8 @@
 		<dependency org="com.sun.jersey" name="jersey-bundle" rev="1.16" conf="default->default" transitive="false"/>
 		
 		<!-- Spring Framework -->
-		<dependency org="org.springframework" name="spring" rev="2.5.6" conf="default->default" transitive="false" />
-    <dependency org="org.springframework.security" name="spring-security-core" rev="2.0.5.RELEASE" transitive="false"/>
+		<dependency org="org.springframework" name="spring-beans" rev="${dependency.spring.framework.revision}" conf="default->default" transitive="false" />
+    <dependency org="org.springframework.security" name="spring-security-core" rev="${dependency.spring.security.revision}" transitive="false"/>
 
     <!-- Hibernate -->
     <dependency org="org.hibernate" name="hibernate" rev="3.2.6.ga" transitive="false"/>

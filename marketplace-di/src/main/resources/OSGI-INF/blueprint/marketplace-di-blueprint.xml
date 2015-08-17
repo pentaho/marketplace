@@ -3,7 +3,8 @@
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xmlns:cm="http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.1.0"
            xmlns:cxf="http://cxf.apache.org/blueprint/core"
-           xmlns:jaxrs="http://cxf.apache.org/blueprint/jaxrs" xmlns:jaxws="http://cxf.apache.org/blueprint/jaxws"
+           xmlns:jaxrs="http://cxf.apache.org/blueprint/jaxrs"
+           xmlns:jaxws="http://cxf.apache.org/blueprint/jaxws"
            xsi:schemaLocation="
   http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd
   http://www.osgi.org/xmlns/blueprint-ext/v1.1.0 https://svn.apache.org/repos/asf/aries/tags/blueprint-0.3.1/blueprint-core/src/main/resources/org/apache/aries/blueprint/ext/blueprint-ext.xsd
@@ -71,15 +72,6 @@
     </property>
   </bean>
 
-  <bean id="marketplacePluginService" class="org.pentaho.marketplace.domain.services.DiPluginService">
-    <argument ref="marketplaceRemotePluginProvider"/>
-    <argument ref="marketplaceVersionDataFactory"/>
-    <argument ref="marketplaceDomainStatusMessageFactory"/>
-    <argument ref="marketplacePluginVersionFactory"/>
-    <argument ref="marketplaceTelemetry"/>
-  </bean>
-
-
   <!-- START: Telemetry -->
   <bean id="diTelemetryHandler"
         class="org.pentaho.telemetry.TelemetryHandler"
@@ -97,5 +89,15 @@
     <argument ref="diTelemetryHandler"/>
   </bean>
   <!-- END: Telemetry -->
+
+  <bean id="marketplacePluginService" class="org.pentaho.marketplace.domain.services.DiPluginService">
+    <argument ref="marketplaceRemotePluginProvider"/>
+    <argument ref="marketplaceVersionDataFactory"/>
+    <argument ref="marketplacePluginVersionFactory"/>
+    <argument ref="karService"/>
+    <argument ref="featuresService"/>
+    <argument ref="marketplaceTelemetry"/>
+    <argument ref="marketplaceDomainStatusMessageFactory"/>
+  </bean>
 
 </blueprint>

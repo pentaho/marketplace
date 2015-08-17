@@ -36,7 +36,7 @@ public class TelemetryEvent implements Serializable {
    * Represents the type of telemetry event
    */
   public enum Type {
-    INSTALLATION, REMOVAL, USAGE, OTHER
+    INSTALLATION, REMOVAL, UPGRADE, USAGE, OTHER
   }
 
   // endregion Inner Definitions

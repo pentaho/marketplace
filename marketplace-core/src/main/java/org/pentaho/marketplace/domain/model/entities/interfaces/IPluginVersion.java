@@ -73,5 +73,10 @@ public interface IPluginVersion {
   IDevelopmentStage getDevelopmentStage();
   IPluginVersion setDevelopmentStage( IDevelopmentStage stage );
 
+  /**
+   * @return true if it is an OSGi plugin; false otherwise.
+   */
+  boolean isOsgi();
+
   //endregion
 }

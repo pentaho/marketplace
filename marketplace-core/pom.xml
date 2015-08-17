@@ -43,6 +43,16 @@
       <artifactId>flexjson</artifactId>
     </dependency>
 
+    <dependency>
+      <groupId>org.apache.karaf.kar</groupId>
+      <artifactId>org.apache.karaf.kar.core</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.karaf.features</groupId>
+      <artifactId>org.apache.karaf.features.core</artifactId>
+    </dependency>
+
 
     <!-- Test Dependencies -->
     <dependency>

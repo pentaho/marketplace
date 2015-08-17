@@ -19,20 +19,25 @@ package org.pentaho.marketplace.domain.services;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
+import org.apache.karaf.features.Feature;
+import org.apache.karaf.features.FeaturesService;
+import org.apache.karaf.kar.KarService;
+import org.pentaho.marketplace.domain.model.entities.PluginVersion;
 import org.pentaho.marketplace.domain.model.entities.interfaces.IDomainStatusMessage;
 import org.pentaho.marketplace.domain.model.entities.interfaces.IPlugin;
 import org.pentaho.marketplace.domain.model.entities.interfaces.IPluginVersion;
 import org.pentaho.marketplace.domain.model.entities.interfaces.IVersionData;
 import org.pentaho.marketplace.domain.model.factories.interfaces.IDomainStatusMessageFactory;
+import org.pentaho.marketplace.domain.model.factories.interfaces.IPluginVersionFactory;
 import org.pentaho.marketplace.domain.model.factories.interfaces.IVersionDataFactory;
 import org.pentaho.marketplace.domain.services.interfaces.IPluginProvider;
 import org.pentaho.marketplace.domain.services.interfaces.IPluginService;
-
 import org.pentaho.marketplace.domain.services.interfaces.IRemotePluginProvider;
 import org.pentaho.telemetry.ITelemetryService;
 import org.pentaho.telemetry.TelemetryEvent;
 
+import java.net.URI;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -41,8 +46,7 @@ import java.util.Map;
 
 public abstract class BasePluginService implements IPluginService {
 
-
-    //region Inner Definitions
+  //region Inner Definitions
   protected static class MarketplaceSecurityException extends Exception {
 
     private static final long serialVersionUID = -1852471739131561628L;
@@ -51,74 +55,145 @@ public abstract class BasePluginService implements IPluginService {
 
   //region Constants
 
-  // region Message codes
-
   // Error messages codes should begin with ERROR
-
-  protected static final String UNAUTHORIZED_ACCESS_MESSAGE =
-      "Unauthorized Access.";
-  protected static final String UNAUTHORIZED_ACCESS_ERROR_CODE =
-      "ERROR_0002_UNAUTHORIZED_ACCESS";
+  protected static final String UNAUTHORIZED_ACCESS_MESSAGE = "Unauthorized Access.";
+  protected static final String UNAUTHORIZED_ACCESS_ERROR_CODE = "ERROR_0002_UNAUTHORIZED_ACCESS";
   protected static final String NO_PLUGIN_ERROR_CODE = "ERROR_0001_NO_PLUGIN";
   protected static final String FAIL_ERROR_CODE = "ERROR_0003_FAIL";
   protected static final String PLUGIN_INSTALLED_CODE = "PLUGIN_INSTALLED";
   protected static final String PLUGIN_UNINSTALLED_CODE = "PLUGIN_UNINSTALLED";
 
-  // endregion
-
   //endregion
 
   //region Properties
+
+  //region logger
   protected Log getLogger() {
     return this.logger;
   }
   protected Log logger = LogFactory.getLog( this.getClass() );
+  //endregion
 
-  private IVersionDataFactory versionDataFactory;
-  private IDomainStatusMessageFactory domainStatusMessageFactory;
-
+  //region metadataPluginsProvider
   public IPluginProvider getMetadataPluginsProvider() {
     return this.metadataPluginsProvider;
   }
+
   protected BasePluginService setMetadataPluginsProvider( IPluginProvider provider ) {
     this.metadataPluginsProvider = provider;
     return this;
   }
+
   private IPluginProvider metadataPluginsProvider;
+  //endregion
 
+  //region versionDataFactory
+  public IVersionDataFactory getVersionDataFactory() {
+    return this.versionDataFactory;
+  }
 
+  protected void setVersionDataFactory(
+    IVersionDataFactory versionDataFactory ) {
+    this.versionDataFactory = versionDataFactory;
+  }
+
+  private IVersionDataFactory versionDataFactory;
+  //endregion
+
+  //region pluginVersionFactory
+  public IPluginVersionFactory getPluginVersionFactory() {
+    return pluginVersionFactory;
+  }
+
+  protected void setPluginVersionFactory( IPluginVersionFactory pluginVersionFactory ) {
+    this.pluginVersionFactory = pluginVersionFactory;
+  }
+
+  private IPluginVersionFactory pluginVersionFactory;
+  //endregion
+
+  //region karService
+  public KarService getKarService() {
+    return this.karService;
+  }
+
+  protected void setKarService( KarService karService ) {
+    this.karService = karService;
+  }
+
+  private KarService karService;
+  //endregion karService
+
+  //region featureService
+  public FeaturesService getFeaturesService() {
+    return this.featuresService;
+  }
+
+  protected void setFeaturesService( FeaturesService featuresService ) {
+    this.featuresService = featuresService;
+  }
+
+  private FeaturesService featuresService;
+  //endregion
+
+  //region telemetryService
+  public ITelemetryService getTelemetryService() {
+    return this.telemetryService;
+  }
+
+  protected void setTelemetryService( ITelemetryService telemetryService ) {
+    this.telemetryService = telemetryService;
+  }
+
+  private ITelemetryService telemetryService;
+  //endregion
+
+  //region getDomainStatusMessageFactory
+  public IDomainStatusMessageFactory getDomainStatusMessageFactory() {
+    return this.domainStatusMessageFactory;
+  }
+
+  protected BasePluginService setDomainStatusMessageFactory( IDomainStatusMessageFactory domainStatusMessageFactory ) {
+    this.domainStatusMessageFactory = domainStatusMessageFactory;
+    return this;
+  }
+
+  private IDomainStatusMessageFactory domainStatusMessageFactory;
+  //endregion
+
+  //region serverVersion
+  // TODO: only used in BA?
   protected String getServerVersion() {
     return this.serverVersion;
   }
+
   protected BasePluginService setServerVersion( String serverVersion ) {
     this.serverVersion = serverVersion;
     return this;
   }
+
   private String serverVersion;
-
-
-  public ITelemetryService getTelemetryService() {
-    return this.telemetryService;
-  }
-  protected void setTelemetryService( ITelemetryService telemetryService ) {
-    this.telemetryService = telemetryService;
-  }
-  private ITelemetryService telemetryService;
+  //endregion
 
   //endregion
 
   //region Constructors
   protected BasePluginService( IRemotePluginProvider metadataPluginsProvider,
                                IVersionDataFactory versionDataFactory,
-                               IDomainStatusMessageFactory domainStatusMessageFactory,
-                               ITelemetryService telemetryService
+                               IPluginVersionFactory pluginVersionFactory,
+                               KarService karService,
+                               FeaturesService featuresService,
+                               ITelemetryService telemetryService,
+                               IDomainStatusMessageFactory domainStatusMessageFactory
   ) {
     //initialize dependencies
-    this.versionDataFactory = versionDataFactory;
-    this.domainStatusMessageFactory = domainStatusMessageFactory;
-
     this.setMetadataPluginsProvider( metadataPluginsProvider );
+    this.setVersionDataFactory( versionDataFactory );
+    this.setPluginVersionFactory( pluginVersionFactory );
+    this.setKarService( karService );
+    this.setFeaturesService( featuresService );
     this.setTelemetryService( telemetryService );
+    this.setDomainStatusMessageFactory( domainStatusMessageFactory );
   }
   //endregion
 
@@ -128,9 +203,9 @@ public abstract class BasePluginService implements IPluginService {
     // need to compare plugin version min and max parent with system version.
     // replace the version of the xml url path with the current release version:
     String v = this.getServerVersion();
-    IVersionData pvMax = this.versionDataFactory.create( pv.getMaxParentVersion() );
-    IVersionData pvMin = this.versionDataFactory.create( pv.getMinParentVersion() );
-    IVersionData version = this.versionDataFactory.create( v );
+    IVersionData pvMax = this.getVersionDataFactory().create( pv.getMaxParentVersion() );
+    IVersionData pvMin = this.getVersionDataFactory().create( pv.getMinParentVersion() );
+    IVersionData version = this.getVersionDataFactory().create( v );
 
     return version.within( pvMin, pvMax );
   }
@@ -151,7 +226,7 @@ public abstract class BasePluginService implements IPluginService {
    * pass the filter.
    */
   private Map<String, IPlugin> removeNonCompatibleVersions( Iterable<IPlugin> plugins ) {
-    Map<String, IPlugin> pluginsWithCompatibleVersions = new HashMap<>(  );
+    Map<String, IPlugin> pluginsWithCompatibleVersions = new HashMap<>();
 
     for ( IPlugin plugin : plugins ) {
       // filter out plugin versions that are not compatible with parent version
@@ -173,6 +248,18 @@ public abstract class BasePluginService implements IPluginService {
       // this checks to make sure the plugin metadata isn't attempting to overwrite a folder on the system.
       // TODO: Test a .. encoded in UTF8, etc to see if there is a way to thwart this check
       && pluginId.indexOf( "." ) < 0;
+  }
+
+  public IPlugin getPlugin( String id ) {
+    return this.getPlugins().get( id );
+  }
+
+  // TODO: only allows one version per branch
+  public IPluginVersion getPluginVersion( IPlugin plugin, String versionBranch ) {
+    if ( versionBranch != null && versionBranch.length() > 0 ) {
+      return plugin.getVersionByBranch( versionBranch );
+    }
+    return null;
   }
 
   /**
@@ -197,6 +284,7 @@ public abstract class BasePluginService implements IPluginService {
 
   /**
    * Sets plugins as installed as well as the installed version
+   *
    * @param plugins the plugins to be marked as installed
    */
   private void setPluginsAsInstalled( Collection<IPlugin> plugins ) {
@@ -212,6 +300,83 @@ public abstract class BasePluginService implements IPluginService {
     }
   }
 
+
+  private void publishTelemetryEvent( TelemetryEvent.Type eventType, IPlugin plugin, IPluginVersion version ) {
+    try {
+      ITelemetryService telemetryService = this.getTelemetryService();
+      TelemetryEvent event = telemetryService.createEvent( eventType );
+      event.getExtraInfo().put( "installedPlugin", plugin.getId() );
+      event.getExtraInfo().put( "installedBranch", version.getBranch() );
+      event.getExtraInfo().put( "installedVersion", version.getVersion() );
+      telemetryService.publishEvent( event );
+    } catch ( NoClassDefFoundError e ) {
+      this.getLogger().debug( "Failed to find class definitions. Most likely reason is reinstalling marketplace.", e );
+    }
+  }
+
+  private IDomainStatusMessage upgradePluginAux( String pluginId, String versionBranch ) {
+
+    if ( !hasMarketplacePermission() ) {
+      return this.getDomainStatusMessageFactory()
+        .create( UNAUTHORIZED_ACCESS_ERROR_CODE, UNAUTHORIZED_ACCESS_MESSAGE );
+    }
+
+    if ( !isPluginIdValid( pluginId ) ) {
+      return this.getDomainStatusMessageFactory()
+        .create( NO_PLUGIN_ERROR_CODE, "Invalid plugin id" );
+    }
+
+    IPlugin plugin = this.getPlugin( pluginId );
+    if ( plugin == null ) {
+      return this.getDomainStatusMessageFactory()
+        .create( NO_PLUGIN_ERROR_CODE, "Plugin not found" );
+    }
+
+    IPluginVersion pluginVersionToInstall = plugin.getVersionByBranch( versionBranch );
+    if ( pluginVersionToInstall == null ) {
+      return this.getDomainStatusMessageFactory()
+        .create( NO_PLUGIN_ERROR_CODE, "Plugin version for branch " + versionBranch + " not found" );
+    }
+
+    // before install, close class loader in case it's a reinstall
+    // TODO: put inside uninstall
+    this.unloadPlugin( plugin.getId() );
+
+    boolean upgrade = false;
+    if ( plugin.isInstalled() ) {
+      IPluginVersion installedPluginVersion = this.getInstalledPluginVersion( plugin );
+
+      // it's an upgrade, uninstall old version first
+      if ( !this.doUninstall( plugin, installedPluginVersion ) ) {
+        return this.getDomainStatusMessageFactory()
+          .create( FAIL_ERROR_CODE, "Failed to remove old version of plugin before upgrade, see log for details." );
+      }
+
+      upgrade = true;
+    }
+
+    // install new version
+    if ( !this.executeInstall( plugin, pluginVersionToInstall ) ) {
+      return this.getDomainStatusMessageFactory()
+        .create( FAIL_ERROR_CODE, "Failed to upgrade plugin, see log for details." );
+    }
+
+    IDomainStatusMessage successMessage;
+    if ( upgrade ) {
+      publishTelemetryEvent( TelemetryEvent.Type.UPGRADE, plugin, pluginVersionToInstall );
+      successMessage = this.getDomainStatusMessageFactory()
+        .create( PLUGIN_INSTALLED_CODE, plugin.getName() + " was successfully upgraded.\n" +
+          plugin.getInstallationNotes() );
+    } else {
+      publishTelemetryEvent( TelemetryEvent.Type.INSTALLATION, plugin, pluginVersionToInstall );
+      successMessage = this.getDomainStatusMessageFactory()
+        .create( PLUGIN_INSTALLED_CODE, plugin.getName() + " was successfully installed.\n" +
+          plugin.getInstallationNotes() );
+    }
+
+    return successMessage;
+  }
+
   private IDomainStatusMessage installPluginAux( String pluginId, String versionBranch )
     throws MarketplaceSecurityException {
 
@@ -220,8 +385,7 @@ public abstract class BasePluginService implements IPluginService {
     }
 
     if ( !isPluginIdValid( pluginId ) ) {
-      return this.domainStatusMessageFactory.create( NO_PLUGIN_ERROR_CODE,
-        "Invalid Plugin Id." );
+      return this.domainStatusMessageFactory.create( NO_PLUGIN_ERROR_CODE, "Invalid Plugin Id." );
     }
 
     IPlugin toInstall = this.getPlugin( pluginId );
@@ -244,17 +408,17 @@ public abstract class BasePluginService implements IPluginService {
     // Perhaps we are reinstalling the marketplace.
     // Create telemetry event and messages before closing class loader just in case.
     ITelemetryService telemetryService = this.getTelemetryService();
-    TelemetryEvent event =  telemetryService.createEvent( TelemetryEvent.Type.INSTALLATION );
+    TelemetryEvent event = telemetryService.createEvent( TelemetryEvent.Type.INSTALLATION );
     event.getExtraInfo().put( "installedPlugin", toInstall.getId() );
     event.getExtraInfo().put( "installedVersion", versionToInstall.getVersion() );
     event.getExtraInfo().put( "installedBranch", versionBranch );
 
     IDomainStatusMessage successMessage =
-        this.domainStatusMessageFactory.create( PLUGIN_INSTALLED_CODE, toInstall.getName()
+      this.domainStatusMessageFactory.create( PLUGIN_INSTALLED_CODE, toInstall.getName()
         + " was successfully installed.  Please restart your BI Server. \n" + toInstall.getInstallationNotes() );
 
     IDomainStatusMessage failureMessage = this.domainStatusMessageFactory
-        .create( FAIL_ERROR_CODE, "Failed to execute install, see log for details." );
+      .create( FAIL_ERROR_CODE, "Failed to execute install, see log for details." );
 
     // before install, close class loader in case it's a reinstall
     this.unloadPlugin( toInstall.getId() );
@@ -292,11 +456,11 @@ public abstract class BasePluginService implements IPluginService {
     event.getExtraInfo().put( "uninstalledPluginBranch", toUninstall.getInstalledBranch() );
 
     IDomainStatusMessage successMessage =
-        this.domainStatusMessageFactory.create( PLUGIN_UNINSTALLED_CODE, toUninstall.getName()
+      this.domainStatusMessageFactory.create( PLUGIN_UNINSTALLED_CODE, toUninstall.getName()
         + " was successfully uninstalled.  Please restart your BI Server." );
 
     IDomainStatusMessage failureMessage = this.domainStatusMessageFactory
-        .create( FAIL_ERROR_CODE, "Failed to execute uninstall, see log for details." );
+      .create( FAIL_ERROR_CODE, "Failed to execute uninstall, see log for details." );
 
     // before deletion, close class loader
     this.unloadPlugin( toUninstall.getId() );
@@ -316,10 +480,6 @@ public abstract class BasePluginService implements IPluginService {
   //endregion
 
   //region IPluginService implementation
-  public IPlugin getPlugin( String id ) {
-    return this.getPlugins().get( id );
-  }
-
   @Override public Map<String, IPlugin> getPlugins() {
     Map<String, IPlugin> marketplacePlugins = this.getMetadataPluginsProvider().getPlugins();
 
@@ -335,27 +495,97 @@ public abstract class BasePluginService implements IPluginService {
   @Override
   public IDomainStatusMessage installPlugin( String pluginId, String versionBranch ) {
     try {
-      IDomainStatusMessage msg = this.installPluginAux( pluginId, versionBranch );
-      return msg;
+      IPlugin plugin = this.getPlugin( pluginId );
+
+      if ( plugin != null && plugin.isInstalled() ) {
+        return this.upgradePluginAux( pluginId, versionBranch );
+      } else {
+        return this.installPluginAux( pluginId, versionBranch );
+      }
+
     } catch ( MarketplaceSecurityException e ) {
       this.getLogger().debug( e.getMessage(), e );
-      return this.domainStatusMessageFactory.create( UNAUTHORIZED_ACCESS_ERROR_CODE,
-        UNAUTHORIZED_ACCESS_MESSAGE );
+      return this.domainStatusMessageFactory.create( UNAUTHORIZED_ACCESS_ERROR_CODE, UNAUTHORIZED_ACCESS_MESSAGE );
     }
   }
 
   @Override
   public IDomainStatusMessage uninstallPlugin( String pluginId ) {
     try {
-      IDomainStatusMessage msg = uninstallPluginAux( pluginId );
-      return msg;
+      return uninstallPluginAux( pluginId );
     } catch ( MarketplaceSecurityException e ) {
       this.getLogger().debug( e.getMessage(), e );
-      return this.domainStatusMessageFactory.create( UNAUTHORIZED_ACCESS_ERROR_CODE,
-        UNAUTHORIZED_ACCESS_MESSAGE );
+      return this.domainStatusMessageFactory.create( UNAUTHORIZED_ACCESS_ERROR_CODE, UNAUTHORIZED_ACCESS_MESSAGE );
     }
   }
   //endregion
+
+
+
+
+  protected boolean doInstall( IPlugin plugin, IPluginVersion versionToInstall ) {
+    if ( versionToInstall.isOsgi() ) {
+      this.getLogger().debug( "## Install Osgi Plugin ##" );
+      try {
+        URI uri = new URL( versionToInstall.getDownloadUrl() ).toURI();
+        this.getKarService().install( uri );
+        // TODO: check if it was successful or not
+        return true;
+      } catch ( Exception e ) {
+        this.getLogger().warn( "Failed to install OSGi plugin.", e );
+        return false;
+      }
+    }
+    return false;
+  }
+
+  protected boolean doUninstall( IPlugin plugin, IPluginVersion installedVersion ) {
+    if ( installedVersion.isOsgi() ) {
+      this.getLogger().debug( "## Uninstall Osgi Plugin ##" );
+      try {
+        this.getKarService().uninstall( plugin.getId() );
+        // TODO: check if it was successful or not
+        return true;
+      } catch ( Exception e ) {
+        this.getLogger().warn( "Failed to uninstall OSGi plugin.", e );
+        return false;
+      }
+    }
+    return false;
+  }
+
+  protected IPluginVersion doGetInstalledPluginVersion( IPlugin plugin ) {
+    // TODO: first try to get info from version.xml stored by the markeplace upon install
+
+    this.getLogger().debug( "## Infer Version from installed Osgi Plugin ##" );
+    try {
+      if ( this.getKarService().list().contains( plugin.getId() ) ) {
+        Feature feature = this.getFeaturesService().getFeature( plugin.getId() );
+        if ( feature != null ) {
+          IPluginVersion installedPluginVersion = this.getPluginVersionFactory().create();
+          installedPluginVersion.setName( feature.getName() );
+          installedPluginVersion.setVersion( feature.getVersion() );
+          installedPluginVersion.setBranch( null );
+          installedPluginVersion.setBuildId( null );
+          return installedPluginVersion;
+        }
+      }
+    } catch ( Exception e ) {
+      this.getLogger().warn( "Failed to infer version of installed OSGi plugin.", e );
+      return null;
+    }
+    return null;
+  }
+
+  protected Collection<String> doGetInstalledPluginIds() {
+    try {
+      return this.getKarService().list();
+    } catch ( Exception e ) {
+      this.getLogger().warn( "Failed to get list of OSGi plugins.", e );
+      return Collections.emptyList();
+    }
+  }
+
 
   protected abstract boolean hasMarketplacePermission();
 
@@ -368,5 +598,4 @@ public abstract class BasePluginService implements IPluginService {
   protected abstract IPluginVersion getInstalledPluginVersion( IPlugin plugin );
 
   protected abstract Collection<String> getInstalledPluginIds();
-
 }

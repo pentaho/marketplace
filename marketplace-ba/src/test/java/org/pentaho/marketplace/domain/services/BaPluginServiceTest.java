@@ -16,6 +16,8 @@ package org.pentaho.marketplace.domain.services;
 import static org.junit.Assert.assertThat;
 import static org.hamcrest.CoreMatchers.*;
 
+import org.apache.karaf.features.FeaturesService;
+import org.apache.karaf.kar.KarService;
 import org.junit.Test;
 import org.junit.Before;
 
@@ -79,15 +81,18 @@ public class BaPluginServiceTest {
   private BaPluginService createPluginService() {
     IDomainStatusMessageFactory domainStatusMessageFactory = this.domainStatusMessageFactory;
     IVersionDataFactory versionDataFactory = this.versionDataFactory;
+    IPluginVersionFactory pluginVersionFactory = this.pluginVersionFactory;
 
     IRemotePluginProvider pluginProvider = mock( IRemotePluginProvider.class );
     MarketplaceXmlSerializer serializer = mock( MarketplaceXmlSerializer.class );
     ISecurityHelper securityHelper = mock( ISecurityHelper.class );
     ITelemetryService telemetryService = mock( ITelemetryService.class );
+    KarService karService = mock( KarService.class );
+    FeaturesService featuresService = mock( FeaturesService.class );
     Bundle bundle = mock( Bundle.class );
 
-    BaPluginService service = new BaPluginService( pluginProvider, versionDataFactory,
-        domainStatusMessageFactory, telemetryService, serializer, securityHelper, bundle );
+    BaPluginService service = new BaPluginService( pluginProvider, versionDataFactory, pluginVersionFactory,
+      karService, featuresService, telemetryService, domainStatusMessageFactory, serializer, securityHelper, bundle );
 
     IApplicationContext applicationContext = mock( IApplicationContext.class );
     final String solutionPath = this.getSolutionPath();

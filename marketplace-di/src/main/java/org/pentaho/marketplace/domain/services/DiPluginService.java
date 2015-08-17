@@ -20,6 +20,9 @@ package org.pentaho.marketplace.domain.services;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Predicate;
 
+import org.apache.commons.io.filefilter.DirectoryFileFilter;
+import org.apache.karaf.features.FeaturesService;
+import org.apache.karaf.kar.KarService;
 import org.pentaho.di.core.Const;
 import org.pentaho.di.core.exception.KettleException;
 import org.pentaho.di.core.plugins.KettleURLClassLoader;
@@ -64,33 +67,26 @@ public class DiPluginService extends BasePluginService {
 
   // region Properties
   private static final String BASE_PLUGINS_FOLDER_NAME = "plugins";
+  private static final String BASE_OSGI_PLUGINS_FOLDER_NAME = "plugins/pdi-osgi-bridge/karaf/deploy";
 
   // TODO turn into explicit dependency
   private PluginRegistry getPluginRegistry() {
     return PluginRegistry.getInstance();
   }
 
-  public IPluginVersionFactory getPluginVersionFactory() {
-    return this.pluginVersionFactory;
-  }
-  public DiPluginService setPluginVersionFactory( IPluginVersionFactory factory ) {
-    this.pluginVersionFactory = factory;
-    return this;
-  }
-  private IPluginVersionFactory pluginVersionFactory;
   // endregion
 
   // region Constructor
   public DiPluginService( IRemotePluginProvider metadataPluginsProvider,
                           IVersionDataFactory versionDataFactory,
-                          IDomainStatusMessageFactory domainStatusMessageFactory,
                           IPluginVersionFactory pluginVersionFactory,
-                          ITelemetryService telemetryService ) {
-    super( metadataPluginsProvider, versionDataFactory, domainStatusMessageFactory, telemetryService );
-
-
-
-    this.setPluginVersionFactory( pluginVersionFactory );
+                          KarService karService, FeaturesService featuresService,
+                          IDomainStatusMessageFactory domainStatusMessageFactory,
+                          ITelemetryService telemetryService
+  ) {
+    super( metadataPluginsProvider, versionDataFactory, pluginVersionFactory, karService, featuresService,
+      telemetryService, domainStatusMessageFactory
+    );
   }
   // endregion
 
@@ -170,7 +166,8 @@ public class DiPluginService extends BasePluginService {
    */
   @Override
   protected Collection<String> getInstalledPluginIds() {
-    Collection<String> pluginIds = new HashSet<>();
+    // get ids of OSGi plugins
+    Collection<String> pluginIds = new HashSet<>( super.doGetInstalledPluginIds() );
 
     pluginIds.addAll( this.getInstalledPluginIdsFromFolders() );
     pluginIds.addAll( this.getInstalledPluginIdsFromPluginRegistry() );
@@ -229,7 +226,7 @@ public class DiPluginService extends BasePluginService {
     }
 
     File pluginFolder = new File( parentFolderName + File.separator + plugin.getId() );
-    this.getLogger().info("Installing plugin in folder: " + pluginFolder.getAbsolutePath());
+    this.getLogger().info( "Installing plugin in folder: " + pluginFolder.getAbsolutePath() );
 
     try {
 
@@ -250,7 +247,7 @@ public class DiPluginService extends BasePluginService {
 
   @Override
   protected boolean executeUninstall( IPlugin plugin ) {
-    String parentFolderName = buildPluginsFolderPath(plugin);
+    String parentFolderName = buildPluginsFolderPath( plugin );
     File pluginFolder = new File( parentFolderName + File.separator + plugin.getId() );
     this.getLogger().info( "Uninstalling plugin in folder: " + pluginFolder.getAbsolutePath() );
 
@@ -349,7 +346,7 @@ public class DiPluginService extends BasePluginService {
    * @param marketEntryType
    * @return
    */
-  public static String getInstallationSubfolder( MarketEntryType marketEntryType ) {
+  public String getInstallationSubfolder( MarketEntryType marketEntryType ) {
     String subfolder;
     switch ( marketEntryType ) {
       case Step:

@@ -106,6 +106,12 @@
     </property>
   </bean>
 
+  <reference id="karService"
+             interface="org.apache.karaf.kar.KarService"/>
+
+  <reference id="featuresService"
+             interface="org.apache.karaf.features.FeaturesService"/>
+
   <!-- START: DTO Mappers -->
   <bean id="marketplaceStatusMessageMapper"
         class="org.pentaho.marketplace.endpoints.dtos.mappers.StatusMessageDTOMapper">

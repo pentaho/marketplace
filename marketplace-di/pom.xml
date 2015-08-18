@@ -51,12 +51,27 @@
     </dependency>
 
     <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>servlet-api</artifactId>
+    </dependency>
+
+    <dependency>
       <groupId>commons-collections</groupId>
       <artifactId>commons-collections</artifactId>
     </dependency>
 
-
-
+    <dependency>
+      <groupId>pentaho</groupId>
+      <artifactId>pentaho-platform-extensions</artifactId>
+      <version>${project.version}</version>
+      <scope>provided</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>org.apache.xbean</groupId>
+          <artifactId>xbean</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
 
   </dependencies>
 

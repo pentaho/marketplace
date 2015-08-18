@@ -21,14 +21,18 @@ package org.pentaho.marketplace.di.plugin;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.pentaho.di.ui.spoon.Spoon;
+import org.pentaho.platform.settings.ServerPort;
 import org.pentaho.ui.xul.impl.AbstractXulEventHandler;
+
+import org.pentaho.platform.settings.ServerPortRegistry;
 
 import java.net.MalformedURLException;
 import java.net.URL;
 
 public class MenuHandler extends AbstractXulEventHandler {
   public static final String MARKETPLACE_MENU_EVENT_HANDLER = "marketplaceMenuEventHandler";
-  private static final String WEB_CLIENT_PATH =  "http://localhost:8181/marketplace/web/main.html";
+  private static final String WEB_CLIENT_PATH =  "/marketplace/web/main.html";
+  private static final String OSGI_SERVICE_PORT = "OSGI_SERVICE_PORT";
 
   private static Class<?> PKG = MenuHandler.class; // for i18n purposes, needed by Translator2!!
 
@@ -41,6 +45,15 @@ public class MenuHandler extends AbstractXulEventHandler {
     this.spoon = spoon;
   }
   private Spoon spoon;
+
+  public Integer getOsgiServicePort() {
+    // if no service port is specified try getting it from
+    ServerPort osgiServicePort = ServerPortRegistry.getPort( OSGI_SERVICE_PORT );
+    if ( osgiServicePort != null ) {
+      return osgiServicePort.getValue();
+    }
+    return null;
+  }
 
   protected Log getLogger() {
     return this.logger;
@@ -61,7 +74,9 @@ public class MenuHandler extends AbstractXulEventHandler {
   public void openMarketplace() {
     try {
       Spoon spoon = this.getSpoon();
-      URL url = new URL( WEB_CLIENT_PATH );
+      String urlString = "http://localhost:" + this.getOsgiServicePort() + WEB_CLIENT_PATH;
+      URL url = new URL( urlString );
+
       // TODO: i18n
       //String tabLabel = BaseMessages.getString( PKG, "marketplace_tab_label" );
       String tabLabel = "Marketplace";

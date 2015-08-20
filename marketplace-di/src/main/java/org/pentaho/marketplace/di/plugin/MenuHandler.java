@@ -39,6 +39,9 @@ public class MenuHandler extends AbstractXulEventHandler {
 
   // region Properties
   public Spoon getSpoon() {
+    if ( this.spoon == null ) {
+      return Spoon.getInstance();
+    }
     return this.spoon;
   }
   public void setSpoon( Spoon spoon ) {
@@ -64,9 +67,6 @@ public class MenuHandler extends AbstractXulEventHandler {
   // region Constructors
   public MenuHandler() {
     this.setName( MARKETPLACE_MENU_EVENT_HANDLER );
-
-    // TODO: spoon instance should be injected
-    this.setSpoon( Spoon.getInstance() );
   }
   // endregion
 

@@ -49,6 +49,9 @@ public class SpoonPlugin implements SpoonPluginInterface {
   }
 
   public Spoon getSpoon() {
+    if( this.spoon == null ) {
+      return Spoon.getInstance();
+    }
     return this.spoon;
   }
   public void setSpoon( Spoon spoon ) {
@@ -73,9 +76,6 @@ public class SpoonPlugin implements SpoonPluginInterface {
   // region Constructors
   public SpoonPlugin() {
     this.setMenuHandler( new MenuHandler() );
-
-    // TODO: dependency injection
-    this.setSpoon( Spoon.getInstance() );
   }
   // endregion
 

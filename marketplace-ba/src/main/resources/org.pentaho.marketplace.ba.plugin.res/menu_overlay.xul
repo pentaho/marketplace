@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+
+<overlay id="admin.perspective.overlay.ee">
+
+  <treechildren id="adminCatTreeChildren">
+
+    <treeitem id="marketplaceOsgi" container="true"
+              command="mantleXulHandler.loadAdminContent('marketplaceOsgi', 'osgi/marketplace/web/main.html')">
+      <treerow>
+        <treecell label="${title}" />
+      </treerow>
+    </treeitem>
+
+  </treechildren>
+</overlay>

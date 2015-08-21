@@ -18,6 +18,7 @@
 package org.pentaho.telemetry;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.File;
@@ -31,6 +32,7 @@ import java.util.concurrent.BlockingQueue;
 public class TelemetryEventKeeperTest extends TelemetryBaseTest {
 
   @Test
+  @Ignore("Depends on processEvent() thread finishing before assert. Needs to be changed to accommodate this.")
   public void testWriteEventToFile() throws InterruptedException {
     TelemetryEvent te;
     BlockingQueue<TelemetryEvent> eventQueue = new ArrayBlockingQueue<TelemetryEvent>( 2 );
@@ -51,6 +53,7 @@ public class TelemetryEventKeeperTest extends TelemetryBaseTest {
   }
 
   @Test
+  @Ignore("Depends on processEvent() thread finishing before assert. Needs to be changed to accommodate this.")
   public void testEventReadFromFile() throws InterruptedException, IOException, ClassNotFoundException {
     TelemetryEvent te;
     BlockingQueue<TelemetryEvent> eventQueue = new ArrayBlockingQueue<TelemetryEvent>( 2 );

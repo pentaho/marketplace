@@ -60,6 +60,8 @@
   <properties>
     <dependency.pentaho.pentaho-xul-core.version>${project.version}</dependency.pentaho.pentaho-xul-core.version>
     <dependency.pentaho-kettle.version>${project.version}</dependency.pentaho-kettle.version>
+    <dependency.pentaho-osgi-bundles.revision>${project.version}</dependency.pentaho-osgi-bundles.revision>
+
     <dependency.pentaho-marketplace-core.id>pentaho-marketplace-core</dependency.pentaho-marketplace-core.id>
     <paxexamversion>4.1.0</paxexamversion>
     <plugin.org.codehaus.mojo.build-helper-maven-plugin.version>1.5</plugin.org.codehaus.mojo.build-helper-maven-plugin.version>
@@ -152,6 +154,12 @@
         <version>2.1</version>
       </dependency>
 
+      <!-- Client Side -->
+      <dependency>
+        <groupId>pentaho</groupId>
+        <artifactId>pentaho-angular-bundle</artifactId>
+        <version>${dependency.pentaho-osgi-bundles.revision}</version>
+      </dependency>
 
       <!-- Test Dependencies -->
       <dependency>

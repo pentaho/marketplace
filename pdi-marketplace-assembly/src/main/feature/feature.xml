@@ -1,0 +1,11 @@
+<features name="${project.artifactId}-repo" xmlns="http://karaf.apache.org/xmlns/features/v1.2.1">
+
+  <feature name="${project.artifactId}" version="${project.version}">
+
+    <!-- START client side dependencies -->
+    <bundle>pentaho-webjars:mvn:org.webjars/angular-sanitize/1.2.15</bundle>
+    <bundle>pentaho-webjars:mvn:org.webjars/underscorejs/1.7.0</bundle>
+    <!-- END -->
+  </feature>
+
+</features>

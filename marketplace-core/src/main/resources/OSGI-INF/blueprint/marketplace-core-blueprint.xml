@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ This program is free software; you can redistribute it and/or modify it under the
+  ~ terms of the GNU Lesser General Public License, version 2.1 as published by the Free Software
+  ~ Foundation.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public License along with this
+  ~ program; if not, you can obtain a copy at http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+  ~ or from the Free Software Foundation, Inc.,
+  ~ 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+  ~
+  ~ This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+  ~ without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+  ~ See the GNU Lesser General Public License for more details.
+  ~
+  ~ Copyright (c) 2015 Pentaho Corporation. All rights reserved.
+  -->
+
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns:cm="http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.1.0"
+           xmlns:cxf="http://cxf.apache.org/blueprint/core"
+           xmlns:jaxrs="http://cxf.apache.org/blueprint/jaxrs" xmlns:jaxws="http://cxf.apache.org/blueprint/jaxws"
+           xsi:schemaLocation="
+  http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd
+  http://www.osgi.org/xmlns/blueprint-ext/v1.1.0 https://svn.apache.org/repos/asf/aries/tags/blueprint-0.3.1/blueprint-core/src/main/resources/org/apache/aries/blueprint/ext/blueprint-ext.xsd
+  http://cxf.apache.org/blueprint/jaxws http://cxf.apache.org/schemas/blueprint/jaxws.xsd
+  http://cxf.apache.org/blueprint/jaxrs http://cxf.apache.org/schemas/blueprint/jaxrs.xsd
+  http://cxf.apache.org/blueprint/core http://cxf.apache.org/schemas/blueprint/core.xsd
+  http://camel.apache.org/schema/blueprint http://camel.apache.org/schema/blueprint/camel-blueprint.xsd
+  http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.1.0 http://aries.apache.org/schemas/blueprint-cm/blueprint-cm-1.1.0.xsd
+  ">
+
+  <!-- HttpService Whiteboard registration of web assets -->
+  <service id="marketplaceWeb"
+           interface="org.ops4j.pax.web.extender.whiteboard.ResourceMapping">
+    <bean class="org.ops4j.pax.web.extender.whiteboard.runtime.DefaultResourceMapping">
+      <property name="alias" value="/marketplace/web"/>
+      <property name="path" value="/web"/>
+    </bean>
+  </service>
+
+  <cxf:bus id="marketplaceImplBus">
+  </cxf:bus>
+
+  <jaxrs:server address="/marketplace" id="marketplaceService">
+    <jaxrs:serviceBeans>
+      <ref component-id="marketplaceServiceEndpoint"/>
+    </jaxrs:serviceBeans>
+    <jaxrs:providers>
+      <bean class="org.apache.cxf.jaxrs.provider.json.JSONProvider">
+        <property name="dropRootElement" value="true"/>
+        <property name="dropCollectionWrapperElement" value="true"/>
+        <property name="serializeAsArray" value="true"/>
+        <property name="supportUnwrapped" value="true"/>
+      </bean>
+    </jaxrs:providers>
+  </jaxrs:server>
+
+  <!-- START: Service Endpoints -->
+  <bean id="marketplaceServiceEndpoint"
+        class="org.pentaho.marketplace.endpoints.MarketplaceService">
+    <argument ref="marketplaceRDO"/>
+    <argument ref="marketplacePluginMapper"/>
+    <argument ref="marketplaceStatusMessageMapper"/>
+  </bean>
+  <!-- END: Service Endpoints -->
+
+  <!-- START: RDO -->
+  <bean id="marketplaceRDO"
+        class="org.pentaho.marketplace.domain.services.RDO">
+    <argument ref="marketplacePluginService"/>
+  </bean>
+  <!-- END: RDO -->
+
+  <!-- START: Domain Entity Factories -->
+  <bean id="marketplacePluginFactory"
+        class="org.pentaho.marketplace.domain.model.factories.PluginFactory"/>
+
+  <bean id="marketplacePluginVersionFactory"
+        class="org.pentaho.marketplace.domain.model.factories.PluginVersionFactory"/>
+
+  <bean id="marketplaceDomainStatusMessageFactory"
+        class="org.pentaho.marketplace.domain.model.factories.DomainStatusMessageFactory"/>
+
+  <bean id="marketplaceVersionDataFactory"
+        class="org.pentaho.marketplace.domain.model.factories.VersionDataFactory"/>
+
+  <bean id="marketplaceCategoryFactory"
+        class="org.pentaho.marketplace.domain.model.factories.CategoryFactory"/>
+  <!-- END: Domain Entity Factories -->
+
+  <bean id="marketplacePluginSerializer"
+        class="org.pentaho.marketplace.domain.model.entities.serialization.jaxb.JAXBMarketplaceXmlSerializer">
+    <argument ref="marketplacePluginFactory"/>
+    <argument ref="marketplacePluginVersionFactory"/>
+    <argument ref="marketplaceCategoryFactory"/>
+  </bean>
+
+  <bean id="marketplaceRemotePluginProvider"
+        class="org.pentaho.marketplace.domain.services.RemoteMetadataPluginProvider">
+    <argument ref="marketplacePluginSerializer"/>
+    <property name="url">
+      <bean class="java.net.URL">
+        <argument value="${marketplace.site}"/>
+      </bean>
+    </property>
+  </bean>
+
+  <!-- START: DTO Mappers -->
+  <bean id="marketplaceStatusMessageMapper"
+        class="org.pentaho.marketplace.endpoints.dtos.mappers.StatusMessageDTOMapper">
+    <argument ref="marketplaceDomainStatusMessageFactory"/>
+  </bean>
+
+  <bean id="marketplacePluginVersionMapper"
+        class="org.pentaho.marketplace.endpoints.dtos.mappers.PluginVersionDTOMapper">
+    <argument ref="marketplacePluginVersionFactory"/>
+  </bean>
+
+  <bean id="marketplaceCategoryMapper"
+        class="org.pentaho.marketplace.endpoints.dtos.mappers.CategoryDTOMapper">
+    <argument ref="marketplaceCategoryFactory"/>
+  </bean>
+
+  <bean id="marketplacePluginMapper"
+        class="org.pentaho.marketplace.endpoints.dtos.mappers.PluginDTOMapper">
+    <argument ref="marketplacePluginFactory"/>
+    <argument ref="marketplacePluginVersionMapper"/>
+    <argument ref="marketplaceCategoryMapper"/>
+  </bean>
+  <!-- END: DTO Mappers -->
+
+</blueprint>

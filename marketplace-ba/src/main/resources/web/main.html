@@ -20,12 +20,18 @@
   <head>
     <title>Marketplace</title>
 
-      <!-- this is important, it provides theming and the base url -->
-      <script type="text/javascript" src="webcontext.js?context=marketplace"></script>
+    <!-- this is important, it provides theming and the base url -->
+    <script type="text/javascript" src="webcontext.js?context=marketplace"></script>
 
-      <script src="/pentaho/osgi/requirejs-manager/js/require-init.js"></script>
+    <script type="text/javascript" language="JavaScript">
+      document.write("<script language='javascript' type='text/javascript' src='" + CONTEXT_PATH + "osgi/requirejs-manager/js/require-init.js'></scr"+"ipt>");
+    </script>
+    <script>
+      requireCfg.baseUrl = CONTEXT_PATH + "osgi/";
+      require.config(requireCfg);
+    </script>
 
-      <link rel="stylesheet" href="css/marketplace.css">
+    <link rel="stylesheet" href="css/marketplace.css">
 
   </head>
 

@@ -1,19 +1,17 @@
 <?xml version="1.0"?>
-<?xml-stylesheet href="file://E:/workspaces/sprint_workspace/pentaho-xul/test/resource/documents/xul.css" type="text/css"?>
-<overlay id="label-test" title="Flow Test"
+<overlay id="marketplace-overlay" title="Marketplace overlay"
          xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
          xmlns:HTML="http://www.w3.org/Profiles/XHTML-transitional" height="600" width="800" onload="modeler.init()"
          xmlns:pen="http://www.pentaho.org/2008/xul">
 
   <menupopup id="tools-popup">
-    <menu id="tools-plugins" label="${menu_tools_plugins_label}" insertbefore="edit-options" >
-      <menupopup id="tools-plugins-popup">
-        <menuitem id="tools-plugins-marketplace-item" label="${menu_tools_marketplace_label}"
-                  command="marketplaceMenuEventHandler.openMarketplace()"/>
-        <menuitem id="tools-plugins-plugin-information-item" label="${menu_tools_plugin_information_label}"
-                  command="marketplaceMenuEventHandler.openPluginInformation()"/>
-      </menupopup>
-    </menu>
+
+      <menuseparator />
+      <menuitem id="tools-plugins-marketplace-item" label="${menu_tools_marketplace_label}"
+                command="marketplaceMenuEventHandler.openMarketplace()" />
+      <menuitem id="tools-plugins-plugin-information-item" label="${Spoon.Menu.ShowPluginInfo}"
+                command="marketplaceMenuEventHandler.openPluginInformation()" />
+
   </menupopup>
 
 </overlay>

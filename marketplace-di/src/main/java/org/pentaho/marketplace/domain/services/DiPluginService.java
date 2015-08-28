@@ -172,6 +172,15 @@ public class DiPluginService extends BasePluginService {
   protected Collection<String> getInstalledPluginIds() {
     Collection<String> pluginIds = new HashSet<>();
 
+    pluginIds.addAll( this.getInstalledPluginIdsFromFolders() );
+    pluginIds.addAll( this.getInstalledPluginIdsFromPluginRegistry() );
+
+    return pluginIds;
+  }
+
+  private Collection<String> getInstalledPluginIdsFromFolders() {
+    Collection<String> pluginIds = new HashSet<>();
+
     for( MarketEntryType type : MarketEntryType.values() ) {
       String pluginTypeFolderName = this.getInstallationSubfolder( type );
       pluginTypeFolderName = BASE_PLUGINS_FOLDER_NAME + ( pluginTypeFolderName == null ? "" : Const.FILE_SEPARATOR + pluginTypeFolderName );
@@ -183,6 +192,21 @@ public class DiPluginService extends BasePluginService {
             String folderNamePotentialPluginId = file.getName();
             pluginIds.add( folderNamePotentialPluginId );
           }
+        }
+      }
+    }
+
+    return pluginIds;
+  }
+
+  private Collection<String> getInstalledPluginIdsFromPluginRegistry() {
+    Collection<String> pluginIds = new HashSet<>();
+    PluginRegistry pluginRegistry = this.getPluginRegistry();
+
+    for ( Class<? extends PluginTypeInterface> pluginType : pluginRegistry.getPluginTypes() ) {
+      for( PluginInterface pluginInterface : pluginRegistry.getPlugins( pluginType ) ) {
+        for( String pluginId : pluginInterface.getIds() ) {
+          pluginIds.add( pluginId );
         }
       }
     }
@@ -205,7 +229,7 @@ public class DiPluginService extends BasePluginService {
     }
 
     File pluginFolder = new File( parentFolderName + File.separator + plugin.getId() );
-    this.getLogger().info( "Installing plugin in folder: " + pluginFolder.getAbsolutePath() );
+    this.getLogger().info("Installing plugin in folder: " + pluginFolder.getAbsolutePath());
 
     try {
 
@@ -226,7 +250,7 @@ public class DiPluginService extends BasePluginService {
 
   @Override
   protected boolean executeUninstall( IPlugin plugin ) {
-    String parentFolderName = buildPluginsFolderPath( plugin );
+    String parentFolderName = buildPluginsFolderPath(plugin);
     File pluginFolder = new File( parentFolderName + File.separator + plugin.getId() );
     this.getLogger().info( "Uninstalling plugin in folder: " + pluginFolder.getAbsolutePath() );
 

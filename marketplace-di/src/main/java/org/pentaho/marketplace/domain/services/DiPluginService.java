@@ -20,7 +20,6 @@ package org.pentaho.marketplace.domain.services;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Predicate;
 
-import org.apache.commons.io.filefilter.DirectoryFileFilter;
 import org.apache.karaf.features.FeaturesService;
 import org.apache.karaf.kar.KarService;
 import org.pentaho.di.core.Const;
@@ -114,7 +113,7 @@ public class DiPluginService extends BasePluginService {
   }
 
   @Override
-  protected IPluginVersion getInstalledPluginVersion( IPlugin plugin ) {
+  protected IPluginVersion getInstalledNonOsgiPluginVersion( IPlugin plugin ) {
     String pluginFolder = buildPluginsFolderPath( plugin ) + File.separator + plugin.getId();
     File pluginFolderFile = new File( pluginFolder );
 
@@ -141,6 +140,7 @@ public class DiPluginService extends BasePluginService {
         version.setBuildId( versionElement.getAttribute( "buildId" ) );
         version.setBranch( versionElement.getAttribute( "branch" ) );
         version.setVersion( versionElement.getTextContent() );
+        version.setIsOsgi( false );
 
         return version;
       }
@@ -165,11 +165,10 @@ public class DiPluginService extends BasePluginService {
    * @return
    */
   @Override
-  protected Collection<String> getInstalledPluginIds() {
+  protected Collection<String> getInstalledNonOsgiPluginIds() {
     // get ids of OSGi plugins
-    Collection<String> pluginIds = new HashSet<>( super.doGetInstalledPluginIds() );
+    Collection<String> pluginIds = this.getInstalledPluginIdsFromFolders();
 
-    pluginIds.addAll( this.getInstalledPluginIdsFromFolders() );
     pluginIds.addAll( this.getInstalledPluginIdsFromPluginRegistry() );
 
     return pluginIds;
@@ -212,7 +211,7 @@ public class DiPluginService extends BasePluginService {
   }
 
   @Override
-  protected boolean executeInstall( IPlugin plugin, IPluginVersion version ) {
+  protected boolean executeNonOsgiInstall( IPlugin plugin, IPluginVersion version ) {
     String parentFolderName = buildPluginsFolderPath( plugin );
 
     // Until plugin dependencies are implemented, check that the pentaho-big-data-plugin directory exists
@@ -234,7 +233,7 @@ public class DiPluginService extends BasePluginService {
         deleteDirectory( pluginFolder );
       }
       unzipMarketEntry( parentFolderName, version.getDownloadUrl() );
-      if ( this.getInstalledPluginVersion( plugin ) == null ) {
+      if ( this.getInstalledNonOsgiPluginVersion( plugin ) == null ) {
         createVersionXML( plugin, version );
       }
     } catch ( KettleException e ) {
@@ -246,7 +245,7 @@ public class DiPluginService extends BasePluginService {
   }
 
   @Override
-  protected boolean executeUninstall( IPlugin plugin ) {
+  protected boolean executeNonOsgiUninstall( IPlugin plugin ) {
     String parentFolderName = buildPluginsFolderPath( plugin );
     File pluginFolder = new File( parentFolderName + File.separator + plugin.getId() );
     this.getLogger().info( "Uninstalling plugin in folder: " + pluginFolder.getAbsolutePath() );

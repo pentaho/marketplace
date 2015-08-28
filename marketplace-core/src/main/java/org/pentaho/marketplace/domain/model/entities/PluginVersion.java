@@ -25,8 +25,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class PluginVersion implements IPluginVersion {
 
-  protected static final String OSGI_URL_SUFFIX = ".kar";
-
   //region Attributes
   private String branch;
   private String name;
@@ -39,6 +37,7 @@ public class PluginVersion implements IPluginVersion {
   private String releaseDate;
   private String minParentVersion;
   private String maxParentVersion;
+  private boolean isOsgi = false;
   private IDevelopmentStage developmentStage;
   //endregion
 
@@ -160,7 +159,11 @@ public class PluginVersion implements IPluginVersion {
   }
 
   @Override public boolean isOsgi() {
-    return ( this.getDownloadUrl().endsWith( OSGI_URL_SUFFIX ) );
+    return this.isOsgi;
+  }
+  @Override public PluginVersion setIsOsgi( boolean isOsgi ) {
+    this.isOsgi = isOsgi;
+    return this;
   }
   //endregion
 

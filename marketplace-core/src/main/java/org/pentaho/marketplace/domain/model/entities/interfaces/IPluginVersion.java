@@ -77,6 +77,7 @@ public interface IPluginVersion {
    * @return true if it is an OSGi plugin; false otherwise.
    */
   boolean isOsgi();
+  IPluginVersion setIsOsgi( boolean isOsgi );
 
   //endregion
 }

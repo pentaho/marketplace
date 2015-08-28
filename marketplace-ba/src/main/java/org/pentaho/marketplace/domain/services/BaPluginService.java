@@ -73,6 +73,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Map;
 
 /**
@@ -319,14 +320,14 @@ public class BaPluginService extends BasePluginService {
   }
 
   /**
-   * Called after class is instantiated by DI
+   * Called after class is instantiated by Dependency Injector
    */
   public void init() {
     this.copyKettleFilesToExecutionFolder();
   }
 
   /**
-   * Called on object destruction by DI
+   * Called on object destruction by Dependency Injector
    */
   public void destroy() {
     this.deleteKettleFilesFromExecutionFolder();
@@ -378,7 +379,7 @@ public class BaPluginService extends BasePluginService {
   }
 
   @Override
-  protected IPluginVersion getInstalledPluginVersion( IPlugin plugin ) {
+  protected IPluginVersion getInstalledNonOsgiPluginVersion( IPlugin plugin ) {
     String versionPath = this.getApplicationContext().getSolutionPath( "system/" + plugin.getId()
       + "/version.xml" );
     FileReader reader = null;
@@ -389,6 +390,7 @@ public class BaPluginService extends BasePluginService {
       }
       reader = new FileReader( versionPath );
       IPluginVersion version = this.getXmlSerializer().getInstalledVersion( new InputSource( reader ) );
+      version.setIsOsgi( false );
       return version;
 
     } catch ( Exception e ) {
@@ -413,9 +415,8 @@ public class BaPluginService extends BasePluginService {
   }
 
   @Override
-  protected Collection<String> getInstalledPluginIds() {
-    // get ids of OSGi plugins
-    Collection<String> plugins = super.doGetInstalledPluginIds();
+  protected Collection<String> getInstalledNonOsgiPluginIds() {
+    Collection<String> plugins = new HashSet<>();
 
     // search and add ids for non-OSGi legacy plugins
     File systemDir = new File( this.getApplicationContext().getSolutionPath( SYSTEM_FOLDER ) );
@@ -453,13 +454,7 @@ public class BaPluginService extends BasePluginService {
   }
 
   @Override
-  protected boolean doInstall( IPlugin plugin, IPluginVersion versionToInstall ) {
-    return super.doInstall( plugin, versionToInstall )
-      || executeInstall( plugin, versionToInstall );
-  }
-
-  @Override
-  protected boolean executeInstall( IPlugin plugin, IPluginVersion version ) {
+  protected boolean executeNonOsgiInstall( IPlugin plugin, IPluginVersion version ) {
     try {
       Result result =
           this.executeInstallPluginJob( plugin.getId(), version.getDownloadUrl(), version.getSamplesDownloadUrl(),
@@ -477,13 +472,7 @@ public class BaPluginService extends BasePluginService {
   }
 
   @Override
-  protected boolean doUninstall( IPlugin plugin, IPluginVersion installedVersion ) {
-    return super.doUninstall( plugin, installedVersion )
-      || executeUninstall( plugin );
-  }
-
-  @Override
-  protected boolean executeUninstall( IPlugin plugin ) {
+  protected boolean executeNonOsgiUninstall( IPlugin plugin ) {
     try {
       Result result = this.executeUninstallPluginJob( plugin.getId() );
 

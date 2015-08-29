@@ -22,6 +22,10 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.karaf.features.Feature;
 import org.apache.karaf.features.FeaturesService;
 import org.apache.karaf.kar.KarService;
+
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
+
 import org.pentaho.marketplace.domain.model.entities.interfaces.IDomainStatusMessage;
 import org.pentaho.marketplace.domain.model.entities.interfaces.IPlugin;
 import org.pentaho.marketplace.domain.model.entities.interfaces.IPluginVersion;
@@ -35,6 +39,7 @@ import org.pentaho.marketplace.domain.services.interfaces.IRemotePluginProvider;
 import org.pentaho.telemetry.ITelemetryService;
 import org.pentaho.telemetry.TelemetryEvent;
 
+import java.io.File;
 import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
@@ -62,6 +67,8 @@ public abstract class BasePluginService implements IPluginService {
   protected static final String FAIL_ERROR_CODE = "ERROR_0003_FAIL";
   protected static final String PLUGIN_INSTALLED_CODE = "PLUGIN_INSTALLED";
   protected static final String PLUGIN_UNINSTALLED_CODE = "PLUGIN_UNINSTALLED";
+
+  protected static final String KARAF_FEATURES_CONFIG_PID = "org.apache.karaf.features.cfg";
 
   //endregion
 
@@ -511,7 +518,7 @@ public abstract class BasePluginService implements IPluginService {
   }
   //endregion
 
-  protected boolean executeOsgiInstall( IPlugin plugin, IPluginVersion versionToInstall ) {
+  protected boolean executeOsgiInstallViaKarService( IPlugin plugin, IPluginVersion versionToInstall ) {
     if ( versionToInstall.isOsgi() ) {
       this.getLogger().debug( "## Install Osgi Plugin ##" );
       try {
@@ -527,7 +534,33 @@ public abstract class BasePluginService implements IPluginService {
     return false;
   }
 
-  protected boolean executeOsgiUninstall( IPlugin plugin ) {
+  private String getKarafDeployFolder() {
+    //TODO: hardcoded deploy folder. Check for better alternative
+    return System.getProperty( "karaf.base" ) + File.separator + "deploy";
+  }
+
+  protected boolean executeOsgiInstall( IPlugin plugin, IPluginVersion versionToInstall ) {
+    if ( versionToInstall.isOsgi() ) {
+      this.getLogger().debug( "## PDI Install Osgi Plugin ##" );
+      try {
+        String deployFolderName = this.getKarafDeployFolder();
+        String downloadUrl = versionToInstall.getDownloadUrl();
+        //String karName = FilenameUtils.getName( downloadUrl );
+        File dlKarFile = new File( deployFolderName + File.separator + plugin.getId() + ".kar" );
+        FileUtils.copyURLToFile( new URL( downloadUrl ), dlKarFile );
+
+        // TODO: check if it was successful or not
+        return true;
+      } catch ( Exception e ) {
+        this.getLogger().warn( "PDI Failed to install OSGi plugin.", e );
+        return false;
+      }
+    }
+    return false;
+  }
+
+
+  protected boolean executeOsgiUninstallViaKarService( IPlugin plugin ) {
     this.getLogger().debug( "## Uninstall Osgi Plugin ##" );
     try {
       this.getKarService().uninstall( plugin.getId() );
@@ -537,6 +570,21 @@ public abstract class BasePluginService implements IPluginService {
       this.getLogger().warn( "Failed to uninstall OSGi plugin.", e );
       return false;
     }
+  }
+
+  protected boolean executeOsgiUninstall( IPlugin plugin ) {
+    //TODO unsintall features in case plugin is system. Remove from features boot
+
+    String deployFolder = this.getKarafDeployFolder();
+    File karFile = new File( deployFolder + File.separator + plugin.getId() + ".kar" );
+    if( karFile.exists() && karFile.isFile() ) {
+      return FileUtils.deleteQuietly( karFile );
+    }
+    return false;
+  }
+
+  private void removeFeatureFromKarafBoot( String featureName ) {
+    //TODO
   }
 
   private IPluginVersion getInstalledOsgiPluginVersion( IPlugin plugin ) {
@@ -571,11 +619,18 @@ public abstract class BasePluginService implements IPluginService {
   }
 
   private Collection<String> getInstalledOsgiPluginIds() {
-    Collection<String> potentialPluginIdsFromFeatures = new HashSet<>();
+    Collection<String> potentialOsgiPluginIds = new HashSet<>();
+
+    try {
+      for( String installedKar : this.getKarService().list() ) {
+       potentialOsgiPluginIds.add( installedKar );
+      }
+    } catch ( Exception e ) { }
+
     for( Feature feature : this.getFeaturesService().listInstalledFeatures() ) {
-      potentialPluginIdsFromFeatures.add( feature.getName() );
+      potentialOsgiPluginIds.add( feature.getName() );
     }
-    return potentialPluginIdsFromFeatures;
+    return potentialOsgiPluginIds;
   }
 
   private Collection<String> getInstalledPluginIds() {

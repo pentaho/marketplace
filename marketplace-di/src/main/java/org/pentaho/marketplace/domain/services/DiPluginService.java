@@ -22,6 +22,7 @@ import org.apache.commons.collections.Predicate;
 
 import org.apache.karaf.features.FeaturesService;
 import org.apache.karaf.kar.KarService;
+import org.osgi.service.cm.ConfigurationAdmin;
 import org.pentaho.di.core.Const;
 import org.pentaho.di.core.exception.KettleException;
 import org.pentaho.di.core.plugins.KettleURLClassLoader;
@@ -80,11 +81,12 @@ public class DiPluginService extends BasePluginService {
                           IVersionDataFactory versionDataFactory,
                           IPluginVersionFactory pluginVersionFactory,
                           KarService karService, FeaturesService featuresService,
+                          ConfigurationAdmin configurationAdmin,
                           IDomainStatusMessageFactory domainStatusMessageFactory,
                           ITelemetryService telemetryService
   ) {
     super( metadataPluginsProvider, versionDataFactory, pluginVersionFactory, karService, featuresService,
-      telemetryService, domainStatusMessageFactory
+      configurationAdmin, telemetryService, domainStatusMessageFactory
     );
   }
   // endregion

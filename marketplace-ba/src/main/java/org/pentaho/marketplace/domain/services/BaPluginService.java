@@ -25,7 +25,10 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.filefilter.DirectoryFileFilter;
 import org.apache.karaf.features.FeaturesService;
 import org.apache.karaf.kar.KarService;
+
 import org.osgi.framework.Bundle;
+import org.osgi.service.cm.ConfigurationAdmin;
+
 import org.pentaho.di.core.Result;
 import org.pentaho.di.core.exception.KettleException;
 import org.pentaho.di.core.exception.KettleXMLException;
@@ -305,12 +308,13 @@ public class BaPluginService extends BasePluginService {
                           IVersionDataFactory versionDataFactory,
                           IPluginVersionFactory pluginVersionFactory,
                           KarService karService, FeaturesService featuresService,
+                          ConfigurationAdmin configurationAdmin,
                           ITelemetryService telemetryService, IDomainStatusMessageFactory domainStatusMessageFactory,
                           IMarketplaceXmlSerializer pluginsSerializer,
                           ISecurityHelper securityHelper,
                           Bundle bundle ) {
     super( metadataPluginsProvider, versionDataFactory, pluginVersionFactory, karService, featuresService,
-      telemetryService, domainStatusMessageFactory
+      configurationAdmin, telemetryService, domainStatusMessageFactory
     );
 
     //initialize dependencies

@@ -112,6 +112,9 @@
   <reference id="featuresService"
              interface="org.apache.karaf.features.FeaturesService"/>
 
+  <reference id="configurationAdmin"
+             interface="org.osgi.service.cm.ConfigurationAdmin"/>
+
   <!-- START: DTO Mappers -->
   <bean id="marketplaceStatusMessageMapper"
         class="org.pentaho.marketplace.endpoints.dtos.mappers.StatusMessageDTOMapper">

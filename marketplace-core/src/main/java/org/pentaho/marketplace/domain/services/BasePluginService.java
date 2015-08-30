@@ -24,7 +24,9 @@ import org.apache.karaf.features.FeaturesService;
 import org.apache.karaf.kar.KarService;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
+
+import org.osgi.service.cm.Configuration;
+import org.osgi.service.cm.ConfigurationAdmin;
 
 import org.pentaho.marketplace.domain.model.entities.interfaces.IDomainStatusMessage;
 import org.pentaho.marketplace.domain.model.entities.interfaces.IPlugin;
@@ -40,11 +42,13 @@ import org.pentaho.telemetry.ITelemetryService;
 import org.pentaho.telemetry.TelemetryEvent;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -68,7 +72,8 @@ public abstract class BasePluginService implements IPluginService {
   protected static final String PLUGIN_INSTALLED_CODE = "PLUGIN_INSTALLED";
   protected static final String PLUGIN_UNINSTALLED_CODE = "PLUGIN_UNINSTALLED";
 
-  protected static final String KARAF_FEATURES_CONFIG_PID = "org.apache.karaf.features.cfg";
+  protected static final String KARAF_FEATURES_CONFIG_PID = "org.apache.karaf.features";
+  protected static final String KARAF_FEATURES_BOOT_PROPERTY_ID = "featuresBoot";
 
   //endregion
 
@@ -182,6 +187,14 @@ public abstract class BasePluginService implements IPluginService {
   private String serverVersion;
   //endregion
 
+  protected ConfigurationAdmin getConfigurationAdmin() {
+    return this.configurationAdmin;
+  }
+  protected BasePluginService setConfigurationAdmin( ConfigurationAdmin configurationAdmin ) {
+    this.configurationAdmin = configurationAdmin;
+    return this;
+  }
+  private ConfigurationAdmin configurationAdmin;
   //endregion
 
   //region Constructors
@@ -190,6 +203,7 @@ public abstract class BasePluginService implements IPluginService {
                                IPluginVersionFactory pluginVersionFactory,
                                KarService karService,
                                FeaturesService featuresService,
+                               ConfigurationAdmin configurationAdmin,
                                ITelemetryService telemetryService,
                                IDomainStatusMessageFactory domainStatusMessageFactory
   ) {
@@ -199,6 +213,7 @@ public abstract class BasePluginService implements IPluginService {
     this.setPluginVersionFactory( pluginVersionFactory );
     this.setKarService( karService );
     this.setFeaturesService( featuresService );
+    this.setConfigurationAdmin( configurationAdmin );
     this.setTelemetryService( telemetryService );
     this.setDomainStatusMessageFactory( domainStatusMessageFactory );
   }
@@ -297,7 +312,6 @@ public abstract class BasePluginService implements IPluginService {
   private void setPluginsAsInstalled( Collection<IPlugin> plugins ) {
     for ( IPlugin plugin : plugins ) {
       plugin.setInstalled( true );
-      // TODO: assumes plugin is installed in a folder named with the plugin id
       IPluginVersion installedVersion = getInstalledPluginVersion( plugin );
       if ( installedVersion != null ) {
         plugin.setInstalledBranch( installedVersion.getBranch() );
@@ -573,18 +587,35 @@ public abstract class BasePluginService implements IPluginService {
   }
 
   protected boolean executeOsgiUninstall( IPlugin plugin ) {
-    //TODO unsintall features in case plugin is system. Remove from features boot
+    String pluginId = plugin.getId();
+    this.removeFeatureFromKarafBoot( pluginId );
+    try {
+      this.getFeaturesService().uninstallFeature( pluginId );
+    } catch ( Exception e ) {
+      this.getLogger().debug( "No installed feature found with name " + pluginId + " when uninstalling OSGI plugin." );
+    }
 
     String deployFolder = this.getKarafDeployFolder();
-    File karFile = new File( deployFolder + File.separator + plugin.getId() + ".kar" );
+    File karFile = new File( deployFolder + File.separator + pluginId + ".kar" );
     if( karFile.exists() && karFile.isFile() ) {
       return FileUtils.deleteQuietly( karFile );
     }
-    return false;
+    return true;
   }
 
   private void removeFeatureFromKarafBoot( String featureName ) {
-    //TODO
+    ConfigurationAdmin configurationAdmin = this.getConfigurationAdmin();
+
+    try {
+      Configuration configuration = configurationAdmin.getConfiguration( KARAF_FEATURES_CONFIG_PID );
+      Dictionary<String, Object> properties = configuration.getProperties();
+      String featuresBoot = (String) properties.get( KARAF_FEATURES_BOOT_PROPERTY_ID );
+      String newFeaturesBoot = featuresBoot.replaceFirst( "," + featureName, "" );
+      if( !featuresBoot.equals( newFeaturesBoot ) ) {
+        properties.put( KARAF_FEATURES_BOOT_PROPERTY_ID, newFeaturesBoot );
+        configuration.update( properties );
+      }
+    } catch ( IOException e ) {}
   }
 
   private IPluginVersion getInstalledOsgiPluginVersion( IPlugin plugin ) {

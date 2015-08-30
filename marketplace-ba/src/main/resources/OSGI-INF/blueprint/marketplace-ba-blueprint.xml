@@ -91,6 +91,7 @@
     <argument ref="marketplacePluginVersionFactory"/>
     <argument ref="karService"/>
     <argument ref="featuresService"/>
+    <argument ref="configurationAdmin"/>
     <argument ref="marketplaceTelemetry"/>
     <argument ref="marketplaceDomainStatusMessageFactory"/>
     <argument ref="marketplacePluginSerializer"/>

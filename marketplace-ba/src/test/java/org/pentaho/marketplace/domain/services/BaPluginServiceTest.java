@@ -16,7 +16,9 @@ package org.pentaho.marketplace.domain.services;
 import static org.junit.Assert.assertThat;
 import static org.hamcrest.CoreMatchers.*;
 
+import org.apache.karaf.features.Feature;
 import org.apache.karaf.features.FeaturesService;
+import org.apache.karaf.features.Repository;
 import org.apache.karaf.kar.KarService;
 import org.junit.Test;
 import org.junit.Before;
@@ -90,6 +92,12 @@ public class BaPluginServiceTest {
     ITelemetryService telemetryService = mock( ITelemetryService.class );
     KarService karService = mock( KarService.class );
     FeaturesService featuresService = mock( FeaturesService.class );
+    Feature[] emtptyFeatures = {};
+    when( featuresService.listInstalledFeatures() ).thenReturn( emtptyFeatures );
+    try {
+      when( featuresService.listFeatures() ).thenReturn( emtptyFeatures );
+    } catch ( Exception e ) {}
+    when( featuresService.listRepositories() ).thenReturn( new Repository[0] );
     Bundle bundle = mock( Bundle.class );
     ConfigurationAdmin configurationAdmin = mock( ConfigurationAdmin.class );
 

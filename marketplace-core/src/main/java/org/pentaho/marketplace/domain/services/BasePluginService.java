@@ -359,18 +359,10 @@ public abstract class BasePluginService implements IPluginService {
         .create( NO_PLUGIN_ERROR_CODE, "Plugin version for branch " + versionBranch + " not found" );
     }
 
-
-    boolean upgrade = false;
-    if ( plugin.isInstalled() ) {
-      IPluginVersion installedPluginVersion = this.getInstalledPluginVersion( plugin );
-
-      // it's an upgrade, uninstall old version first
-      if ( !this.executeUninstall( plugin ) ) {
-        return this.getDomainStatusMessageFactory()
-          .create( FAIL_ERROR_CODE, "Failed to remove old version of plugin before upgrade, see log for details." );
-      }
-
-      upgrade = true;
+    // it's an upgrade, uninstall old version first
+    if ( !this.executeUninstall( plugin ) ) {
+      return this.getDomainStatusMessageFactory()
+        .create( FAIL_ERROR_CODE, "Failed to remove old version of plugin before upgrade, see log for details." );
     }
 
     // install new version
@@ -379,18 +371,10 @@ public abstract class BasePluginService implements IPluginService {
         .create( FAIL_ERROR_CODE, "Failed to upgrade plugin, see log for details." );
     }
 
-    IDomainStatusMessage successMessage;
-    if ( upgrade ) {
-      publishTelemetryEvent( TelemetryEvent.Type.UPGRADE, plugin, pluginVersionToInstall );
-      successMessage = this.getDomainStatusMessageFactory()
-        .create( PLUGIN_INSTALLED_CODE, plugin.getName() + " was successfully upgraded.\n" +
-          plugin.getInstallationNotes() );
-    } else {
-      publishTelemetryEvent( TelemetryEvent.Type.INSTALLATION, plugin, pluginVersionToInstall );
-      successMessage = this.getDomainStatusMessageFactory()
-        .create( PLUGIN_INSTALLED_CODE, plugin.getName() + " was successfully installed.\n" +
-          plugin.getInstallationNotes() );
-    }
+    publishTelemetryEvent( TelemetryEvent.Type.UPGRADE, plugin, pluginVersionToInstall );
+    IDomainStatusMessage successMessage = this.getDomainStatusMessageFactory()
+      .create( PLUGIN_INSTALLED_CODE, plugin.getName() + " was successfully upgraded.\n" +
+        plugin.getInstallationNotes() );
 
     return successMessage;
   }
@@ -595,6 +579,7 @@ public abstract class BasePluginService implements IPluginService {
       this.getLogger().debug( "No installed feature found with name " + pluginId + " when uninstalling OSGI plugin." );
     }
 
+    // remove KAR file from deploy folder if it exists
     String deployFolder = this.getKarafDeployFolder();
     File karFile = new File( deployFolder + File.separator + pluginId + ".kar" );
     if( karFile.exists() && karFile.isFile() ) {
@@ -620,6 +605,31 @@ public abstract class BasePluginService implements IPluginService {
 
   private IPluginVersion getInstalledOsgiPluginVersion( IPlugin plugin ) {
     this.getLogger().debug( "## Infer Version from installed Osgi Plugin ##" );
+    // search installed features for plugin id
+    IPluginVersion installedOsgiPluginVersion = this.getInstalledOsgiPluginVersionFromFeatures( plugin );
+    if( installedOsgiPluginVersion == null ) {
+      // If no feature with the plugin id is found, check installed KARs
+      installedOsgiPluginVersion = this.getInstalledOsgiPluginVersionFromKars( plugin );
+    }
+    return installedOsgiPluginVersion;
+  }
+
+  private IPluginVersion getInstalledOsgiPluginVersionFromKars( IPlugin plugin ) {
+    try {
+      if ( this.getKarService().list().contains( plugin.getId() ) ) {
+        IPluginVersion installedPluginVersion = this.getPluginVersionFactory().create();
+        installedPluginVersion.setIsOsgi( true );
+        // TODO: add branch / version / buildId information that currently is not available
+        return installedPluginVersion;
+      }
+    } catch ( Exception e ) {
+      return null;
+    }
+    return null;
+  }
+
+    private IPluginVersion getInstalledOsgiPluginVersionFromFeatures( IPlugin plugin ) {
+    this.getLogger().debug( "## Infer Version from Karaf features ##" );
     try {
       String pluginId = plugin.getId();
       Feature feature = this.getFeaturesService().getFeature( pluginId );
@@ -634,11 +644,12 @@ public abstract class BasePluginService implements IPluginService {
         return installedPluginVersion;
       }
     } catch ( Exception e ) {
-      this.getLogger().warn( "Failed to infer version of installed OSGi plugin.", e );
+      this.getLogger().warn( "Failed to infer version of installed OSGi plugin from features.", e );
       return null;
     }
     return null;
   }
+
 
   private IPluginVersion getInstalledPluginVersion( IPlugin plugin ) {
     IPluginVersion osgiPluginVersion = this.getInstalledOsgiPluginVersion( plugin );

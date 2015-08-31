@@ -20,6 +20,9 @@ package org.pentaho.marketplace.domain.services;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Predicate;
 
+import org.apache.karaf.features.FeaturesService;
+import org.apache.karaf.kar.KarService;
+import org.osgi.service.cm.ConfigurationAdmin;
 import org.pentaho.di.core.Const;
 import org.pentaho.di.core.exception.KettleException;
 import org.pentaho.di.core.plugins.KettleURLClassLoader;
@@ -64,33 +67,27 @@ public class DiPluginService extends BasePluginService {
 
   // region Properties
   private static final String BASE_PLUGINS_FOLDER_NAME = "plugins";
+  private static final String BASE_OSGI_PLUGINS_FOLDER_NAME = "plugins/pdi-osgi-bridge/karaf/deploy";
 
   // TODO turn into explicit dependency
   private PluginRegistry getPluginRegistry() {
     return PluginRegistry.getInstance();
   }
 
-  public IPluginVersionFactory getPluginVersionFactory() {
-    return this.pluginVersionFactory;
-  }
-  public DiPluginService setPluginVersionFactory( IPluginVersionFactory factory ) {
-    this.pluginVersionFactory = factory;
-    return this;
-  }
-  private IPluginVersionFactory pluginVersionFactory;
   // endregion
 
   // region Constructor
   public DiPluginService( IRemotePluginProvider metadataPluginsProvider,
                           IVersionDataFactory versionDataFactory,
-                          IDomainStatusMessageFactory domainStatusMessageFactory,
                           IPluginVersionFactory pluginVersionFactory,
-                          ITelemetryService telemetryService ) {
-    super( metadataPluginsProvider, versionDataFactory, domainStatusMessageFactory, telemetryService );
-
-
-
-    this.setPluginVersionFactory( pluginVersionFactory );
+                          KarService karService, FeaturesService featuresService,
+                          ConfigurationAdmin configurationAdmin,
+                          IDomainStatusMessageFactory domainStatusMessageFactory,
+                          ITelemetryService telemetryService
+  ) {
+    super( metadataPluginsProvider, versionDataFactory, pluginVersionFactory, karService, featuresService,
+      configurationAdmin, telemetryService, domainStatusMessageFactory
+    );
   }
   // endregion
 
@@ -118,7 +115,7 @@ public class DiPluginService extends BasePluginService {
   }
 
   @Override
-  protected IPluginVersion getInstalledPluginVersion( IPlugin plugin ) {
+  protected IPluginVersion getInstalledNonOsgiPluginVersion( IPlugin plugin ) {
     String pluginFolder = buildPluginsFolderPath( plugin ) + File.separator + plugin.getId();
     File pluginFolderFile = new File( pluginFolder );
 
@@ -145,6 +142,7 @@ public class DiPluginService extends BasePluginService {
         version.setBuildId( versionElement.getAttribute( "buildId" ) );
         version.setBranch( versionElement.getAttribute( "branch" ) );
         version.setVersion( versionElement.getTextContent() );
+        version.setIsOsgi( false );
 
         return version;
       }
@@ -169,7 +167,16 @@ public class DiPluginService extends BasePluginService {
    * @return
    */
   @Override
-  protected Collection<String> getInstalledPluginIds() {
+  protected Collection<String> getInstalledNonOsgiPluginIds() {
+    // get ids of OSGi plugins
+    Collection<String> pluginIds = this.getInstalledPluginIdsFromFolders();
+
+    pluginIds.addAll( this.getInstalledPluginIdsFromPluginRegistry() );
+
+    return pluginIds;
+  }
+
+  private Collection<String> getInstalledPluginIdsFromFolders() {
     Collection<String> pluginIds = new HashSet<>();
 
     for( MarketEntryType type : MarketEntryType.values() ) {
@@ -190,8 +197,23 @@ public class DiPluginService extends BasePluginService {
     return pluginIds;
   }
 
+  private Collection<String> getInstalledPluginIdsFromPluginRegistry() {
+    Collection<String> pluginIds = new HashSet<>();
+    PluginRegistry pluginRegistry = this.getPluginRegistry();
+
+    for ( Class<? extends PluginTypeInterface> pluginType : pluginRegistry.getPluginTypes() ) {
+      for( PluginInterface pluginInterface : pluginRegistry.getPlugins( pluginType ) ) {
+        for( String pluginId : pluginInterface.getIds() ) {
+          pluginIds.add( pluginId );
+        }
+      }
+    }
+
+    return pluginIds;
+  }
+
   @Override
-  protected boolean executeInstall( IPlugin plugin, IPluginVersion version ) {
+  protected boolean executeNonOsgiInstall( IPlugin plugin, IPluginVersion version ) {
     String parentFolderName = buildPluginsFolderPath( plugin );
 
     // Until plugin dependencies are implemented, check that the pentaho-big-data-plugin directory exists
@@ -213,7 +235,7 @@ public class DiPluginService extends BasePluginService {
         deleteDirectory( pluginFolder );
       }
       unzipMarketEntry( parentFolderName, version.getDownloadUrl() );
-      if ( this.getInstalledPluginVersion( plugin ) == null ) {
+      if ( this.getInstalledNonOsgiPluginVersion( plugin ) == null ) {
         createVersionXML( plugin, version );
       }
     } catch ( KettleException e ) {
@@ -225,7 +247,7 @@ public class DiPluginService extends BasePluginService {
   }
 
   @Override
-  protected boolean executeUninstall( IPlugin plugin ) {
+  protected boolean executeNonOsgiUninstall( IPlugin plugin ) {
     String parentFolderName = buildPluginsFolderPath( plugin );
     File pluginFolder = new File( parentFolderName + File.separator + plugin.getId() );
     this.getLogger().info( "Uninstalling plugin in folder: " + pluginFolder.getAbsolutePath() );
@@ -325,7 +347,7 @@ public class DiPluginService extends BasePluginService {
    * @param marketEntryType
    * @return
    */
-  public static String getInstallationSubfolder( MarketEntryType marketEntryType ) {
+  public String getInstallationSubfolder( MarketEntryType marketEntryType ) {
     String subfolder;
     switch ( marketEntryType ) {
       case Step:

@@ -23,7 +23,12 @@ import org.apache.commons.collections.Predicate;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.filefilter.DirectoryFileFilter;
+import org.apache.karaf.features.FeaturesService;
+import org.apache.karaf.kar.KarService;
+
 import org.osgi.framework.Bundle;
+import org.osgi.service.cm.ConfigurationAdmin;
+
 import org.pentaho.di.core.Result;
 import org.pentaho.di.core.exception.KettleException;
 import org.pentaho.di.core.exception.KettleXMLException;
@@ -36,6 +41,7 @@ import org.pentaho.marketplace.domain.model.entities.interfaces.IPlugin;
 import org.pentaho.marketplace.domain.model.entities.interfaces.IPluginVersion;
 import org.pentaho.marketplace.domain.model.entities.serialization.IMarketplaceXmlSerializer;
 import org.pentaho.marketplace.domain.model.factories.interfaces.IDomainStatusMessageFactory;
+import org.pentaho.marketplace.domain.model.factories.interfaces.IPluginVersionFactory;
 import org.pentaho.marketplace.domain.model.factories.interfaces.IVersionDataFactory;
 import org.pentaho.marketplace.domain.services.helpers.Util;
 import org.pentaho.marketplace.domain.services.interfaces.IRemotePluginProvider;
@@ -70,6 +76,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Map;
 
 /**
@@ -92,6 +99,9 @@ public class BaPluginService extends BasePluginService {
   private static final String STAGING_CACHE_FOLDER = CACHE_FOLDER + "staging/";
 
   private static final String MARKETPLACE_FOLDER = "system/marketplace";
+
+  private static final String SYSTEM_FOLDER = "system/";
+  private static final String PLUGIN_XML_FILE = "plugin.xml";
   //endregion
 
   //region Properties
@@ -296,31 +306,32 @@ public class BaPluginService extends BasePluginService {
   //region Constructors
   public BaPluginService( IRemotePluginProvider metadataPluginsProvider,
                           IVersionDataFactory versionDataFactory,
-                          IDomainStatusMessageFactory domainStatusMessageFactory,
-                          ITelemetryService telemetryService,
+                          IPluginVersionFactory pluginVersionFactory,
+                          KarService karService, FeaturesService featuresService,
+                          ConfigurationAdmin configurationAdmin,
+                          ITelemetryService telemetryService, IDomainStatusMessageFactory domainStatusMessageFactory,
                           IMarketplaceXmlSerializer pluginsSerializer,
                           ISecurityHelper securityHelper,
                           Bundle bundle ) {
-    super( metadataPluginsProvider, versionDataFactory, domainStatusMessageFactory, telemetryService );
-
-    this.setBundle( bundle );
+    super( metadataPluginsProvider, versionDataFactory, pluginVersionFactory, karService, featuresService,
+      configurationAdmin, telemetryService, domainStatusMessageFactory
+    );
 
     //initialize dependencies
-    IMarketplaceXmlSerializer serializer = pluginsSerializer;
-    this.setXmlSerializer( serializer );
-
+    this.setXmlSerializer( pluginsSerializer );
     this.setSecurityHelper( securityHelper );
+    this.setBundle( bundle );
   }
 
   /**
-   * Called after class is instantiated by DI
+   * Called after class is instantiated by Dependency Injector
    */
   public void init() {
     this.copyKettleFilesToExecutionFolder();
   }
 
   /**
-   * Called on object destruction by DI
+   * Called on object destruction by Dependency Injector
    */
   public void destroy() {
     this.deleteKettleFilesFromExecutionFolder();
@@ -372,9 +383,9 @@ public class BaPluginService extends BasePluginService {
   }
 
   @Override
-  protected IPluginVersion getInstalledPluginVersion( IPlugin plugin ) {
+  protected IPluginVersion getInstalledNonOsgiPluginVersion( IPlugin plugin ) {
     String versionPath = this.getApplicationContext().getSolutionPath( "system/" + plugin.getId()
-        + "/version.xml" );
+      + "/version.xml" );
     FileReader reader = null;
     try {
       File file = new File( versionPath );
@@ -383,6 +394,7 @@ public class BaPluginService extends BasePluginService {
       }
       reader = new FileReader( versionPath );
       IPluginVersion version = this.getXmlSerializer().getInstalledVersion( new InputSource( reader ) );
+      version.setIsOsgi( false );
       return version;
 
     } catch ( Exception e ) {
@@ -400,17 +412,21 @@ public class BaPluginService extends BasePluginService {
   }
 
 
+  private boolean isLegacyPlugin( String pluginId ) {
+    String pluginConfigPath = this.getApplicationContext().getSolutionPath(
+      SYSTEM_FOLDER + File.separator + pluginId + File.separator + PLUGIN_XML_FILE );
+    return ( new File( pluginConfigPath ).isFile() );
+  }
+
   @Override
-  protected Collection<String> getInstalledPluginIds() {
-    Collection<String> plugins = new ArrayList<>();
+  protected Collection<String> getInstalledNonOsgiPluginIds() {
+    Collection<String> plugins = new HashSet<>();
 
-    File systemDir = new File( this.getApplicationContext().getSolutionPath( "system/" ) );
-
+    // search and add ids for non-OSGi legacy plugins
+    File systemDir = new File( this.getApplicationContext().getSolutionPath( SYSTEM_FOLDER ) );
     String[] dirs = systemDir.list( DirectoryFileFilter.INSTANCE );
-
     for ( String dir : dirs ) {
-      if ( ( new File( systemDir.getAbsolutePath() + File.separator + dir + File.separator
-          + "plugin.xml" ) ).isFile() ) {
+      if ( isLegacyPlugin( dir ) && !plugins.contains( dir ) ) {
         plugins.add( dir );
       }
     }
@@ -442,7 +458,7 @@ public class BaPluginService extends BasePluginService {
   }
 
   @Override
-  protected boolean executeInstall( IPlugin plugin, IPluginVersion version ) {
+  protected boolean executeNonOsgiInstall( IPlugin plugin, IPluginVersion version ) {
     try {
       Result result =
           this.executeInstallPluginJob( plugin.getId(), version.getDownloadUrl(), version.getSamplesDownloadUrl(),
@@ -460,7 +476,7 @@ public class BaPluginService extends BasePluginService {
   }
 
   @Override
-  protected boolean executeUninstall( IPlugin plugin ) {
+  protected boolean executeNonOsgiUninstall( IPlugin plugin ) {
     try {
       Result result = this.executeUninstallPluginJob( plugin.getId() );
 

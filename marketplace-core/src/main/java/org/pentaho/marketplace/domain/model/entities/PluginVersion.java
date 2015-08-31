@@ -37,6 +37,7 @@ public class PluginVersion implements IPluginVersion {
   private String releaseDate;
   private String minParentVersion;
   private String maxParentVersion;
+  private boolean isOsgi = false;
   private IDevelopmentStage developmentStage;
   //endregion
 
@@ -157,6 +158,13 @@ public class PluginVersion implements IPluginVersion {
     return this;
   }
 
+  @Override public boolean isOsgi() {
+    return this.isOsgi;
+  }
+  @Override public PluginVersion setIsOsgi( boolean isOsgi ) {
+    this.isOsgi = isOsgi;
+    return this;
+  }
   //endregion
 
 

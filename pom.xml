@@ -63,6 +63,7 @@
     <dependency.pentaho-osgi-bundles.revision>${project.version}</dependency.pentaho-osgi-bundles.revision>
 
     <dependency.pentaho-marketplace-core.id>pentaho-marketplace-core</dependency.pentaho-marketplace-core.id>
+    <dependency.pentaho-marketplace-di.id>pentaho-marketplace-di</dependency.pentaho-marketplace-di.id>
     <paxexamversion>4.1.0</paxexamversion>
     <plugin.org.codehaus.mojo.build-helper-maven-plugin.version>1.5</plugin.org.codehaus.mojo.build-helper-maven-plugin.version>
     <karaf.version>3.0.3</karaf.version>
@@ -159,6 +160,23 @@
         <groupId>pentaho</groupId>
         <artifactId>pentaho-angular-bundle</artifactId>
         <version>${dependency.pentaho-osgi-bundles.revision}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.webjars</groupId>
+        <artifactId>angular-sanitize</artifactId>
+        <version>1.2.15</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.apache.karaf.kar</groupId>
+        <artifactId>org.apache.karaf.kar.core</artifactId>
+        <version>3.0.3</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.apache.karaf.features</groupId>
+        <artifactId>org.apache.karaf.features.core</artifactId>
+        <version>3.0.3</version>
       </dependency>
 
       <!-- Test Dependencies -->

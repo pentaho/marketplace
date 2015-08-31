@@ -44,24 +44,6 @@
   </cm:property-placeholder>
   <!-- END: Configuration -->
 
-  <bean id="marketplacePluginService"
-        class="org.pentaho.marketplace.domain.services.BaPluginService"
-        init-method="init"
-        destroy-method="destroy">
-    <argument ref="marketplaceRemotePluginProvider"/>
-    <argument ref="marketplaceVersionDataFactory"/>
-    <argument ref="marketplaceDomainStatusMessageFactory"/>
-    <argument ref="marketplaceTelemetry"/>
-    <argument ref="marketplacePluginSerializer"/>
-    <argument ref="marketplaceSecurityHelperFactory"/>
-    <argument ref="blueprintBundle"/>
-
-    <property name="authorizedRoles" value="${authorized.roles}"/>
-    <property name="authorizedUsernames" value="${authorized.usernames}"/>
-    <property name="relativeKettleExecutionFolderPath" value="processes/"/>
-    <property name="absoluteKettleResourcesSourcePath" value="/processes/"/>
-  </bean>
-
   <bean id="marketplaceSecurityHelperFactory"
         class="org.pentaho.platform.engine.security.SecurityHelper"
         factory-method="getInstance">
@@ -82,7 +64,6 @@
     </bean>
   </service>
 
-
   <!-- START: Telemetry -->
   <bean id="baTelemetryHandler"
         class="org.pentaho.telemetry.BaTelemetryHandler"
@@ -100,5 +81,27 @@
     <argument ref="baTelemetryHandler"/>
   </bean>
   <!-- END: Telemetry -->
+
+  <bean id="marketplacePluginService"
+        class="org.pentaho.marketplace.domain.services.BaPluginService"
+        init-method="init"
+        destroy-method="destroy">
+    <argument ref="marketplaceRemotePluginProvider"/>
+    <argument ref="marketplaceVersionDataFactory"/>
+    <argument ref="marketplacePluginVersionFactory"/>
+    <argument ref="karService"/>
+    <argument ref="featuresService"/>
+    <argument ref="configurationAdmin"/>
+    <argument ref="marketplaceTelemetry"/>
+    <argument ref="marketplaceDomainStatusMessageFactory"/>
+    <argument ref="marketplacePluginSerializer"/>
+    <argument ref="marketplaceSecurityHelperFactory"/>
+    <argument ref="blueprintBundle"/>
+
+    <property name="authorizedRoles" value="${authorized.roles}"/>
+    <property name="authorizedUsernames" value="${authorized.usernames}"/>
+    <property name="relativeKettleExecutionFolderPath" value="processes/"/>
+    <property name="absoluteKettleResourcesSourcePath" value="/processes/"/>
+  </bean>
 
 </blueprint>

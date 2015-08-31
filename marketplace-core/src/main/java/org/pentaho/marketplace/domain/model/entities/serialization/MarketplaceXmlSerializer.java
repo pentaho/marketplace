@@ -51,6 +51,7 @@ public class MarketplaceXmlSerializer implements IMarketplaceXmlSerializer {
 
   // region constants
   private static final String[] EMPTY_STRING_ARRAY = new String[ 0 ];
+  protected static final String OSGI_URL_SUFFIX = ".kar";
   // endregion
 
   // region Properties
@@ -178,7 +179,11 @@ public class MarketplaceXmlSerializer implements IMarketplaceXmlSerializer {
     version.setBranch( getElementChildValue( versionElement, "branch" ) );
     version.setName( getElementChildValue( versionElement, "name" ) );
     version.setVersion( getElementChildValue( versionElement, "version" ) );
-    version.setDownloadUrl( getElementChildValue( versionElement, "package_url" ) );
+    String downloadUrl = getElementChildValue( versionElement, "package_url" );
+    if ( downloadUrl != null ) {
+      version.setDownloadUrl( downloadUrl );
+      version.setIsOsgi( downloadUrl.endsWith( OSGI_URL_SUFFIX ) );
+    }
     version.setSamplesDownloadUrl( getElementChildValue( versionElement, "samples_url" ) );
     version.setDescription( getElementChildValue( versionElement, "description" ) );
     version.setChangelog( getElementChildValue( versionElement, "changelog" ) );

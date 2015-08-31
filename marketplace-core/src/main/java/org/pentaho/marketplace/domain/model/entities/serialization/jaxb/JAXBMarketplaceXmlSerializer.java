@@ -59,6 +59,10 @@ import java.util.Map;
 
 public final class JAXBMarketplaceXmlSerializer implements IMarketplaceXmlSerializer {
 
+  // region Constants
+  private static final String OSGI_URL_SUFFIX = ".kar";
+  // endregion
+
   // region Properties
   private JAXBContext jaxbContext;
   private Unmarshaller jaxbUnmarshaller;
@@ -233,8 +237,12 @@ public final class JAXBMarketplaceXmlSerializer implements IMarketplaceXmlSerial
     //fill the instance
     pluginVersion.setBranch( version.getBranch() );
     pluginVersion.setName( version.getName() );
+    String downloadUrl = version.getPackageUrl();
+    if( downloadUrl != null ) {
+      pluginVersion.setDownloadUrl( downloadUrl );
+      pluginVersion.setIsOsgi( downloadUrl.endsWith( OSGI_URL_SUFFIX ) );
+    }
     pluginVersion.setVersion( version.getVersion() );
-    pluginVersion.setDownloadUrl( version.getPackageUrl() );
     pluginVersion.setSamplesDownloadUrl( version.getSamplesUrl() );
     pluginVersion.setDescription( version.getDescription() );
     pluginVersion.setChangelog( version.getChangelog() );

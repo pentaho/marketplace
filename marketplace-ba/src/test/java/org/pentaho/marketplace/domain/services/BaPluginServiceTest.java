@@ -27,6 +27,7 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
 import org.osgi.framework.Bundle;
+import org.osgi.service.cm.ConfigurationAdmin;
 import org.pentaho.marketplace.domain.model.entities.MarketEntryType;
 import org.pentaho.marketplace.domain.model.entities.interfaces.IDomainStatusMessage;
 import org.pentaho.marketplace.domain.model.entities.interfaces.IPlugin;
@@ -90,9 +91,10 @@ public class BaPluginServiceTest {
     KarService karService = mock( KarService.class );
     FeaturesService featuresService = mock( FeaturesService.class );
     Bundle bundle = mock( Bundle.class );
+    ConfigurationAdmin configurationAdmin = mock( ConfigurationAdmin.class );
 
     BaPluginService service = new BaPluginService( pluginProvider, versionDataFactory, pluginVersionFactory,
-      karService, featuresService, telemetryService, domainStatusMessageFactory, serializer, securityHelper, bundle );
+      karService, featuresService, configurationAdmin, telemetryService, domainStatusMessageFactory, serializer, securityHelper, bundle );
 
     IApplicationContext applicationContext = mock( IApplicationContext.class );
     final String solutionPath = this.getSolutionPath();

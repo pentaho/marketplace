@@ -134,6 +134,10 @@ public class PluginVersion implements IPluginVersion {
 
   @Override
   public String getMinParentVersion() {
+    if( this.minParentVersion == null || this.minParentVersion.equals( "" ) ) {
+      // if no min value is set, assume minimum value possible
+      this.minParentVersion = "0.0.0";
+    }
     return this.minParentVersion;
   }
 
@@ -144,6 +148,10 @@ public class PluginVersion implements IPluginVersion {
 
   @Override
   public String getMaxParentVersion() {
+    if( this.maxParentVersion == null || this.maxParentVersion.equals( "" ) ) {
+      // if no max value is set, assume largest value possible
+      this.maxParentVersion = Integer.MAX_VALUE + "." + Integer.MAX_VALUE + "." + Integer.MAX_VALUE;
+    }
     return this.maxParentVersion;
   }
 

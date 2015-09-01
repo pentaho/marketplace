@@ -30,6 +30,8 @@ import org.pentaho.di.core.plugins.PluginInterface;
 import org.pentaho.di.core.plugins.PluginRegistry;
 import org.pentaho.di.core.plugins.PluginTypeInterface;
 
+import org.pentaho.di.core.util.StringUtil;
+import org.pentaho.di.version.BuildVersion;
 import org.pentaho.marketplace.domain.model.entities.MarketEntryType;
 import org.pentaho.marketplace.domain.model.entities.interfaces.IPlugin;
 import org.pentaho.marketplace.domain.model.entities.interfaces.IPluginVersion;
@@ -74,6 +76,20 @@ public class DiPluginService extends BasePluginService {
     return PluginRegistry.getInstance();
   }
 
+  private BuildVersion getBuildVersion() {
+    return BuildVersion.getInstance();
+  }
+
+  @Override
+  protected String getServerVersion() {
+    String version = super.getServerVersion();
+    if ( StringUtil.isEmpty( version ) ) {
+      version = this.getBuildVersion().getVersion();
+      this.setServerVersion( version );
+    }
+
+    return version;
+  }
   // endregion
 
   // region Constructor

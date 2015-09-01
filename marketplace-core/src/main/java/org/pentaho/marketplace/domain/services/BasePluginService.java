@@ -174,7 +174,6 @@ public abstract class BasePluginService implements IPluginService {
   //endregion
 
   //region serverVersion
-  // TODO: only used in BA?
   protected String getServerVersion() {
     return this.serverVersion;
   }

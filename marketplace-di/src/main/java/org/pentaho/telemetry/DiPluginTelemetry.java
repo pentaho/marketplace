@@ -20,6 +20,7 @@ package org.pentaho.telemetry;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.osgi.framework.Bundle;
+import org.pentaho.di.version.BuildVersion;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -64,7 +65,7 @@ public class DiPluginTelemetry extends TelemetryService {
       InputStream versionFile = new FileInputStream( new File( versionPath ) );
       return parsePluginVersion( versionFile );
     } catch ( FileNotFoundException fnfe ) {
-      logger.warn( "Could not find file version.xml", fnfe );
+      logger.debug( "Could not find file version.xml", fnfe );
     }
     return UNKNOWN;
   }
@@ -75,9 +76,9 @@ public class DiPluginTelemetry extends TelemetryService {
       InputStream versionFile = versionFileUrl.openConnection().getInputStream();
       return parsePluginVersion( versionFile );
     } catch ( NullPointerException npe ) {
-      logger.warn( "Could not find resource file version.xml", npe );
+      logger.debug( "Could not find resource file version.xml", npe );
     } catch ( IOException ioe ) {
-      logger.warn( "Could not open file version.xml", ioe );
+      logger.debug( "Could not open file version.xml", ioe );
     }
     return UNKNOWN;
   }
@@ -93,12 +94,12 @@ public class DiPluginTelemetry extends TelemetryService {
         return versionElement.getAttribute( "branch" ) + "-" + versionElement.getTextContent();
       }
     } catch ( Exception e ) {
-      logger.warn( "Could not parse plugin version from version.xml", e );
+      logger.debug( "Could not parse plugin version from version.xml", e );
     }
     return UNKNOWN;
   }
 
   private static String getDiVersion() {
-    return "DI-6.0";
+    return BuildVersion.getInstance().getVersion();
   }
 }

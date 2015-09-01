@@ -40,7 +40,15 @@ public class SpoonPlugin implements SpoonPluginInterface {
   private XulDomContainer container;
 
   public SpoonLifecycleListener getLifecycleListener() {
-    return null;
+    return new SpoonLifecycleListener() {
+      public void onEvent( SpoonLifeCycleEvent evt ) {
+        if ( evt.equals( SpoonLifeCycleEvent.STARTUP ) ) {
+          MenuHandler mh = new MenuHandler();
+          System.setProperty( "market-url", mh.getMarketplaceURL() );
+          System.setProperty( "market-tab-label", mh.getMarketplaceTabLabel() );
+        }
+      }
+    };
   }
 
   // May be called more than once, don't construct your perspective here.

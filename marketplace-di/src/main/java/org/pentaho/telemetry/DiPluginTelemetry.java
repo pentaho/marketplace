@@ -20,6 +20,7 @@ package org.pentaho.telemetry;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.osgi.framework.Bundle;
+import org.pentaho.di.version.BuildVersion;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -99,6 +100,6 @@ public class DiPluginTelemetry extends TelemetryService {
   }
 
   private static String getDiVersion() {
-    return "DI-6.0";
+    return BuildVersion.getInstance().getVersion();
   }
 }

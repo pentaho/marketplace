@@ -52,7 +52,7 @@
   <service interface="org.pentaho.platform.api.engine.perspective.pojo.IPluginPerspective">
     <bean class="org.pentaho.marketplace.ba.plugin.BaMarketplacePerspective">
       <property name="id" value="marketplace.perspective.osgi"/>
-      <property name="title" value="${MarketplaceOSGI}"/> <!-- TODO: Check why title value needs to be a "variable" -->
+      <property name="title" value="${Marketplace}"/> <!-- TODO: Check why title value needs to be a "variable" -->
       <property name="contentUrl"     value="osgi/marketplace/web/main.html"/>
       <property name="resourceBundleUri" value="osgi/marketplace/web/lang/messages"/>
       <property name="requiredSecurityActions">

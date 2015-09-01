@@ -70,17 +70,24 @@ public class MenuHandler extends AbstractXulEventHandler {
   }
   // endregion
 
+  public String getMarketplaceURL() {
+    return "http://localhost:" + this.getOsgiServicePort() + WEB_CLIENT_PATH;
+  }
+
+  public String getMarketplaceTabLabel() {
+    // TODO: i18n
+    //String tabLabel = BaseMessages.getString( PKG, "marketplace_tab_label" );
+    String tabLabel = "Marketplace";
+    return tabLabel;
+  }
+
   // region Methods
   public void openMarketplace() {
     try {
       Spoon spoon = this.getSpoon();
-      String urlString = "http://localhost:" + this.getOsgiServicePort() + WEB_CLIENT_PATH;
-      URL url = new URL( urlString );
+      URL url = new URL( getMarketplaceURL() );
 
-      // TODO: i18n
-      //String tabLabel = BaseMessages.getString( PKG, "marketplace_tab_label" );
-      String tabLabel = "Marketplace";
-      spoon.addSpoonBrowser( tabLabel, url.toString() );
+      spoon.addSpoonBrowser( getMarketplaceTabLabel(), url.toString() );
 
     } catch ( MalformedURLException e ) {
       this.getLogger().error( "Error on marketplace URL: " + WEB_CLIENT_PATH, e );

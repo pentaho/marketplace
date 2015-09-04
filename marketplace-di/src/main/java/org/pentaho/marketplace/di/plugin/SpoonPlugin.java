@@ -43,9 +43,12 @@ public class SpoonPlugin implements SpoonPluginInterface {
     return new SpoonLifecycleListener() {
       public void onEvent( SpoonLifeCycleEvent evt ) {
         if ( evt.equals( SpoonLifeCycleEvent.STARTUP ) ) {
-          MenuHandler mh = new MenuHandler();
-          System.setProperty( "market-url", mh.getMarketplaceURL() );
-          System.setProperty( "market-tab-label", mh.getMarketplaceTabLabel() );
+          try {
+            getSpoon().setMarketMethod( MenuHandler.class.getMethod( "openMarketplace" ) );
+          } catch ( Throwable e ) {
+            // under no circumstance allow the failure to prevent market load
+            logger.warn( e.getMessage(), e );
+          }
         }
       }
     };

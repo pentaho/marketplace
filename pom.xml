@@ -8,7 +8,7 @@
     <version>1.0.13</version>
   </parent>
 
-  <artifactId>pentaho-marketplace-modules</artifactId>
+  <artifactId>pentaho-marketplace</artifactId>
   <version>6.0-SNAPSHOT</version>
   <packaging>pom</packaging>
 
@@ -160,7 +160,6 @@
         <groupId>pentaho</groupId>
         <artifactId>pentaho-angular-bundle</artifactId>
         <version>${dependency.pentaho-osgi-bundles.revision}</version>
-        <scope>provided</scope>
       </dependency>
       <dependency>
         <groupId>org.webjars</groupId>
@@ -172,14 +171,12 @@
         <groupId>org.apache.karaf.kar</groupId>
         <artifactId>org.apache.karaf.kar.core</artifactId>
         <version>3.0.3</version>
-        <scope>provided</scope>
       </dependency>
 
       <dependency>
         <groupId>org.apache.karaf.features</groupId>
         <artifactId>org.apache.karaf.features.core</artifactId>
         <version>3.0.3</version>
-        <scope>provided</scope>
       </dependency>
 
       <!-- Test Dependencies -->
@@ -227,7 +224,6 @@
     <module>marketplace-di</module>
     <module>marketplace-ba</module>
     <module>pdi-marketplace-assembly</module>
-    <module>pentaho-marketplace-assembly</module>
   </modules>
 
 </project>

@@ -16,11 +16,12 @@
 define(
     [
       'marketplaceApp',
-      'underscore'
+      'underscore',
+      'marketplace-lib/Logger'
     ],
-    function ( app, _ ) {
+    function ( app, _, logger ) {
 
-      console.log("Required controllers/applicationController.js");
+      logger.log("Required controllers/applicationController.js");
 
       app.controller('applicationController',
           ['$scope', 'appService', '$modal', 'developmentStageService', '$filter',

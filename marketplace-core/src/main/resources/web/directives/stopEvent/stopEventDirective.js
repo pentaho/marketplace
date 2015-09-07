@@ -12,9 +12,9 @@
  */
 
 'use strict';
-define( [ 'marketplaceApp' ],
-    function ( app ) {
-      console.log("Required stopEvent/stopEventDirective.js");
+define( [ 'marketplaceApp', 'marketplace-lib/Logger' ],
+    function ( app, logger ) {
+      logger.log("Required stopEvent/stopEventDirective.js");
 
       app.directive('stopEvent', function () {
         return {

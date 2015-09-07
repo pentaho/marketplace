@@ -26,9 +26,9 @@
 
 'use strict';
 
-define( [ 'marketplaceApp' ],
-    function ( app ) {
-      console.log("Required multiselectDropdown/multiselectDropdownDirective.js");
+define( [ 'marketplaceApp', 'marketplace-lib/Logger' ],
+    function ( app, logger ) {
+      logger.log("Required multiselectDropdown/multiselectDropdownDirective.js");
 
       app.directive('multiselectDropdown',
           function() {

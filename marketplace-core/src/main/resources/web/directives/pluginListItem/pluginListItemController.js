@@ -13,9 +13,9 @@
 
 'use strict';
 
-define( [ 'marketplaceApp' ],
-    function ( app ) {
-      console.log("Required pluginListItem/pluginListItemController.js");
+define( [ 'marketplaceApp', 'marketplace-lib/Logger' ],
+    function ( app, logger ) {
+      logger.log("Required pluginListItem/pluginListItemController.js");
 
       app.controller('pluginListItemController',
           ['$scope',

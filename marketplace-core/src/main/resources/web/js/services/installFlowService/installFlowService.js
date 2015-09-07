@@ -15,10 +15,10 @@
 
 define(
     [
-      'marketplaceApp'
+      'marketplaceApp', 'marketplace-lib/Logger'
     ],
-    function ( app ) {
-      console.log("Required services/installFlowService/installFlowService.js");
+    function ( app, logger ) {
+      logger.log("Required services/installFlowService/installFlowService.js");
 
       var installFlowService = app.factory( 'installFlowService',
           [ 'appService', '$modal', '$translate',

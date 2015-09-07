@@ -16,11 +16,12 @@
 
 define( [
       'marketplaceApp',
-      'underscore'
+      'underscore',
+      'marketplace-lib/Logger'
     ],
-    function ( app, _ ) {
+    function ( app, _, logger ) {
 
-      console.log("Required pluginDetail/pluginDetailController.js");
+      logger.log("Required pluginDetail/pluginDetailController.js");
 
       app.controller( 'pluginDetailController',
           ['$scope', 'installFlowService', '$translate',

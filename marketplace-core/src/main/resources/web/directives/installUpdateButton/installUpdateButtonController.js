@@ -14,9 +14,9 @@
 'use strict';
 
 define( [
-      'marketplaceApp' ],
-    function ( app ) {
-      console.log("Required installUpdateButton/installUpdateButton.js");
+      'marketplaceApp', 'marketplace-lib/Logger' ],
+    function ( app, logger ) {
+      logger.log("Required installUpdateButton/installUpdateButton.js");
 
       app.controller('installUpdateButtonController',
           ['$scope', 'installFlowService',

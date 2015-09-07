@@ -13,9 +13,9 @@
 
 'use strict';
 
-define( [ 'marketplaceApp' ],
-    function ( app ) {
-      console.log("Required pluginList/pluginListDirective.js");
+define( [ 'marketplaceApp', 'marketplace-lib/Logger' ],
+    function ( app, logger ) {
+      logger.log("Required pluginList/pluginListDirective.js");
 
       app.directive('pluginList',
           function() {

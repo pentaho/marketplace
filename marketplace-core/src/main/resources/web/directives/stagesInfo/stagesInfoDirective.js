@@ -13,9 +13,9 @@
 
 'use strict';
 
-define( [ 'marketplaceApp' ],
-    function ( app ) {
-      console.log("Required stagesInfo/stagesInfoDirective.js");
+define( [ 'marketplaceApp', 'marketplace-lib/Logger' ],
+    function ( app, logger ) {
+      logger.log("Required stagesInfo/stagesInfoDirective.js");
 
       app.directive('stagesInfo',
           function() {

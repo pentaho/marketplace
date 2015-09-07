@@ -16,10 +16,11 @@
 define(
     [
       'marketplaceApp',
-      'underscore'
+      'underscore',
+      'marketplace-lib/Logger'
     ],
-    function ( app, _ ) {
-      console.log("Required multiselectDropdown/multiselectDropdownController.js");
+    function ( app, _, logger ) {
+      logger.log("Required multiselectDropdown/multiselectDropdownController.js");
 
       app.controller('multiselectDropdownController',
           ['$scope',

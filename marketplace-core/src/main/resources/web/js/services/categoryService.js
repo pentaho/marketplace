@@ -17,10 +17,11 @@
 define(
     [
       'marketplaceApp',
-      'underscore'
+      'underscore',
+      'marketplace-lib/Logger'
     ],
-    function ( app, _ ) {
-      console.log("Required services/categoryService.js");
+    function ( app, _, logger ) {
+      logger.log("Required services/categoryService.js");
 
       var service = app.factory( 'categoryService',
           [ '$translate',

@@ -17,10 +17,11 @@
 define(
     [
       'marketplaceApp',
-      'underscore'
+      'underscore',
+      'marketplace-lib/Logger'
     ],
-    function ( app, _ ) {
-      console.log("Required services/dtoMapperService.js");
+    function ( app, _, logger ) {
+      logger.log("Required services/dtoMapperService.js");
 
       var service = app.factory( 'dtoMapperService',
           [ 'Plugin', 'developmentStageService', 'categoryService',

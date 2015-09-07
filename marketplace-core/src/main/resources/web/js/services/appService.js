@@ -16,10 +16,11 @@
 define(
     [
       'marketplaceApp',
-      'underscore'
+      'underscore',
+      'marketplace-lib/Logger'
     ],
-    function ( app, _ ) {
-      console.log("Required services/appService.js");
+    function ( app, _, logger ) {
+      logger.log("Required services/appService.js");
 
       app.factory('appService',
           [ '$http', 'dtoMapperService', '$q', 'BASE_URL',
@@ -44,7 +45,7 @@ define(
                         function ( response ) {
                           var dto = response.data;
                           if ( isResponseError( response ) ) {
-                            console.log( "Failed getting plugins from server." );
+                            logger.log( "Failed getting plugins from server." );
                             return $q.reject( dto.statusMessage );
                           }
                           return _.map( dto.plugins, dtoMapper.toPlugin );
@@ -64,42 +65,42 @@ define(
                 },
 
                 installPlugin: function ( plugin, version ) {
-                  console.log("Installing " + plugin.id + " " + version.branch );
+                  logger.log("Installing " + plugin.id + " " + version.branch );
                   return $http.post( installPluginBaseUrl + '/' + plugin.id + '/' + version.branch)
                       .then( function ( response ) {
                         if ( isResponseError( response ) ) {
-                          console.log("Install NOT OK. plugin Id: " + plugin.id + " branch: " + version.branch);
+                          logger.log("Install NOT OK. plugin Id: " + plugin.id + " branch: " + version.branch);
                           return $q.reject(response.data.statusMessage);
                         }
                         // TODO: verify in response if everything is actually ok
-                        console.log("Install OK. plugin Id: " + plugin.id + " branch: " + version.branch);
+                        logger.log("Install OK. plugin Id: " + plugin.id + " branch: " + version.branch);
                         plugin.isInstalled = true;
                         plugin.installedVersion = version;
 
                       },
                       function ( response ) {
-                        console.log("Install NOT OK. plugin Id: " + plugin.id + " branch: " + version.branch);
+                        logger.log("Install NOT OK. plugin Id: " + plugin.id + " branch: " + version.branch);
                         return $q.reject( response );
                       });
                 },
 
                 uninstallPlugin: function ( plugin ) {
                   // TODO: change to log when dialogs are handled
-                  console.log( "Uninstalling " + plugin.id );
+                  logger.log( "Uninstalling " + plugin.id );
                   // Not using the shortcut method $http.delete because it does not work in IE8
                   return $http( { method: 'DELETE', url: installPluginBaseUrl + '/' + plugin.id } )
                       .then( function ( response ) {
                         if ( isResponseError( response ) ) {
-                          console.log( "Uninstall NOT OK. plugin Id: " + plugin.id );
+                          logger.log( "Uninstall NOT OK. plugin Id: " + plugin.id );
                           return $q.reject(response.data.statusMessage);
                         }
                         // TODO: verify in response if everything is actually ok
-                        console.log( "Uninstall OK. plugin Id: " + plugin.id );
+                        logger.log( "Uninstall OK. plugin Id: " + plugin.id );
                         plugin.isInstalled = false;
                         plugin.installedVersion = undefined;
                       },
                       function ( response ) {
-                        console.log( "Uninstall NOT OK. plugin Id: " + plugin.id );
+                        logger.log( "Uninstall NOT OK. plugin Id: " + plugin.id );
                         return $q.reject( response );
                       });
                 }

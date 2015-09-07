@@ -13,9 +13,9 @@
 
 'use strict';
 
-define( [ 'marketplaceApp' ],
-    function ( app ) {
-      console.log("Required devStageIcon/devStageIconController.js");
+define( [ 'marketplaceApp', 'marketplace-lib/Logger' ],
+    function ( app, logger ) {
+      logger.log("Required devStageIcon/devStageIconController.js");
 
       app.controller('devStageIconController',
           ['$scope', 'developmentStageService',

@@ -13,9 +13,9 @@
 
 'use strict';
 
-define( [ 'marketplaceApp' ],
-    function ( app ) {
-      console.log("Required devStageIcon/devStageIconDirective.js");
+define( [ 'marketplaceApp', 'marketplace-lib/Logger' ],
+    function ( app, logger ) {
+      logger.log("Required devStageIcon/devStageIconDirective.js");
 
       app.directive('devStageIcon',
           function() {

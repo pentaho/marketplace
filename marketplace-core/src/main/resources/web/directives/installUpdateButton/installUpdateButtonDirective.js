@@ -13,10 +13,10 @@
 
 'use strict';
 
-define( [ 'marketplaceApp' ],
-    function ( app ) {
+define( [ 'marketplaceApp', 'marketplace-lib/Logger' ],
+    function ( app, logger ) {
 
-      console.log("Required installUpdateButton/installUpdateButtonDirective.js");
+      logger.log("Required installUpdateButton/installUpdateButtonDirective.js");
 
       app.directive('installUpdateButton', function() {
         return {

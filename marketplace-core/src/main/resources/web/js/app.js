@@ -16,12 +16,13 @@
 define( [ 'angular',
           'angular-route',
           'ui-bootstrap',
-          'angular-translate'
+          'angular-translate',
+          'marketplace-lib/Logger'
     ],
 
-    function ( angular, angularRoute, uiBootstrap ) {
+    function ( angular, angularRoute, uiBootstrap, angularTranslate, logger ) {
 
-      console.log("Required app.js ");
+      logger.log("Required app.js ");
 
       // define application module
       var app = angular.module( 'marketplace', [ 'ngRoute', 'ui.bootstrap', 'ngSanitize', 'pascalprecht.translate' ] );

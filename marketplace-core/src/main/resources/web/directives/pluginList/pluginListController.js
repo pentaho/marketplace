@@ -13,10 +13,10 @@
 
 'use strict';
 
-define( [ 'marketplaceApp' ],
-    function ( app ) {
+define( [ 'marketplaceApp', 'marketplace-lib/Logger' ],
+    function ( app, logger ) {
 
-      console.log("Required pluginList/pluginListController.js");
+      logger.log("Required pluginList/pluginListController.js");
 
       app.controller('pluginListController',
           ['$scope', 'appService',

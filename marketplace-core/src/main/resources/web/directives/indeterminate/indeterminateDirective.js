@@ -19,9 +19,10 @@
  * @example <input type="checkbox" data-indeterminate="isUnknown">
  */
 define( [ 'marketplaceApp',
-          'angular' ],
-    function ( app, angular ) {
-      console.log("Required directives/indeterminate/indeterminateDirective.js");
+          'angular',
+          'marketplace-lib/Logger' ],
+    function ( app, angular, logger ) {
+      logger.log("Required directives/indeterminate/indeterminateDirective.js");
 
       app.directive('indeterminate', function () {
           return {

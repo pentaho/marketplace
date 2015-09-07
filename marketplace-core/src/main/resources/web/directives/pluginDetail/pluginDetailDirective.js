@@ -13,10 +13,10 @@
 
 'use strict';
 
-define( [ 'marketplaceApp' ],
-    function ( app ) {
+define( [ 'marketplaceApp', 'marketplace-lib/Logger' ],
+    function ( app, logger ) {
 
-      console.log("Required pluginDetail/pluginDetailDirective.js");
+      logger.log("Required pluginDetail/pluginDetailDirective.js");
 
       app.directive('pluginDetail', function() {
         return {

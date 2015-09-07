@@ -14,10 +14,11 @@
 'use strict';
 
 define( [ 'marketplaceApp',
-      'underscore'
+      'underscore',
+      'marketplace-lib/Logger'
     ],
-    function ( app, _ ) {
-      console.log("Required stagesInfo/stagesInfoController.js");
+    function ( app, _, logger ) {
+      logger.log("Required stagesInfo/stagesInfoController.js");
 
       app.controller('stagesInfoController',
           ['$scope', 'developmentStageService',

@@ -14,11 +14,12 @@
 define(
     [
       'marketplaceApp',
-      'underscore'
+      'underscore',
+      'marketplace-lib/Logger'
     ],
-    function ( app, _ ) {
+    function ( app, _, logger ) {
 
-      console.log("Required models/plugin.js");
+      logger.log("Required models/plugin.js");
 
       app.factory('Plugin',
           [

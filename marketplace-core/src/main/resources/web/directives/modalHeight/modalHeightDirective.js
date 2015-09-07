@@ -15,10 +15,11 @@
 
 define( [
       'marketplaceApp',
-      'angular'
+      'angular',
+      'marketplace-lib/Logger'
     ],
-    function ( app, angular ) {
-      console.log("Required modalHeightDirective.js");
+    function ( app, angular, logger ) {
+      logger.log("Required modalHeightDirective.js");
 
       app.directive('modalHeight', ['$timeout', '$window',
           function( timer, window ) {

@@ -139,14 +139,19 @@ public class DiPluginService extends BasePluginService {
       return null;
     }
 
+    // if plugin folder exists then non osgi plugin exists
+    IPluginVersion pluginVersion = this.getPluginVersionFactory().create();
+    pluginVersion.setIsOsgi( false );
+
     String versionPath = pluginFolder + File.separator + "version.xml";
-    DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+    File file = new File( versionPath );
+    if ( !file.exists() ) {
+      return pluginVersion;
+    }
+
     FileReader reader = null;
     try {
-      File file = new File( versionPath );
-      if ( !file.exists() ) {
-        return null;
-      }
+      DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
       DocumentBuilder db = dbf.newDocumentBuilder();
       reader = new FileReader( versionPath );
       Document dom = db.parse( new InputSource( reader ) );
@@ -154,13 +159,9 @@ public class DiPluginService extends BasePluginService {
       if ( versionElements.getLength() >= 1 ) {
         Element versionElement = (Element) versionElements.item( 0 );
 
-        IPluginVersion version = this.getPluginVersionFactory().create();
-        version.setBuildId( versionElement.getAttribute( "buildId" ) );
-        version.setBranch( versionElement.getAttribute( "branch" ) );
-        version.setVersion( versionElement.getTextContent() );
-        version.setIsOsgi( false );
-
-        return version;
+        pluginVersion.setBuildId(versionElement.getAttribute("buildId"));
+        pluginVersion.setBranch(versionElement.getAttribute("branch"));
+        pluginVersion.setVersion(versionElement.getTextContent());
       }
 
     } catch ( Exception e ) {
@@ -175,23 +176,21 @@ public class DiPluginService extends BasePluginService {
       }
     }
 
-    return null;
+    return pluginVersion;
+  }
+
+  @Override
+  protected Collection<String> getInstalledNonOsgiPluginIds() {
+    // get ids of OSGi plugins
+    Collection<String> pluginIds = this.getInstalledPluginIdsFromFolders();
+
+    return pluginIds;
   }
 
   /***
    * Goes to every folder where market entries may be installed and assumes each sub-folder is a market entry id
    * @return
    */
-  @Override
-  protected Collection<String> getInstalledNonOsgiPluginIds() {
-    // get ids of OSGi plugins
-    Collection<String> pluginIds = this.getInstalledPluginIdsFromFolders();
-
-    pluginIds.addAll( this.getInstalledPluginIdsFromPluginRegistry() );
-
-    return pluginIds;
-  }
-
   private Collection<String> getInstalledPluginIdsFromFolders() {
     Collection<String> pluginIds = new HashSet<>();
 

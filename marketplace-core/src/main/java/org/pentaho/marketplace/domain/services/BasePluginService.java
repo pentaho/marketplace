@@ -687,7 +687,7 @@ public abstract class BasePluginService implements IPluginService {
       return this.executeOsgiInstall( plugin, version );
     } else {
       // before install, close class loader in case it's a reinstall
-      this.unloadPlugin( plugin.getId() );
+      this.unloadPlugin( plugin );
       return this.executeNonOsgiInstall( plugin, version );
     }
   }
@@ -698,7 +698,7 @@ public abstract class BasePluginService implements IPluginService {
       return this.executeOsgiUninstall( plugin );
     } else {
       // before install, close class loader in case it's a reinstall
-      this.unloadPlugin( plugin.getId() );
+      this.unloadPlugin( plugin );
       return this.executeNonOsgiUninstall( plugin );
     }
   }
@@ -706,7 +706,7 @@ public abstract class BasePluginService implements IPluginService {
 
   protected abstract boolean hasMarketplacePermission();
 
-  protected abstract void unloadPlugin( String pluginId );
+  protected abstract void unloadPlugin( IPlugin pluginId );
 
   protected abstract boolean executeNonOsgiInstall( IPlugin plugin, IPluginVersion version );
 

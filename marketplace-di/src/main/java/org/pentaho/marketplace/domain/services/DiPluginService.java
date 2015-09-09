@@ -25,6 +25,7 @@ import org.apache.karaf.kar.KarService;
 import org.osgi.service.cm.ConfigurationAdmin;
 import org.pentaho.di.core.Const;
 import org.pentaho.di.core.exception.KettleException;
+import org.pentaho.di.core.exception.KettlePluginException;
 import org.pentaho.di.core.plugins.KettleURLClassLoader;
 import org.pentaho.di.core.plugins.PluginInterface;
 import org.pentaho.di.core.plugins.PluginRegistry;
@@ -60,6 +61,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -113,20 +115,31 @@ public class DiPluginService extends BasePluginService {
   }
 
   @Override
-  protected void unloadPlugin( String pluginId ) {
-    PluginInterface pluginObj = this.getPluginObject( pluginId );
-    if ( pluginObj == null ) {
-      this.getLogger().debug( "Plugin " + pluginId + " not found. Skipping unload." );
+  protected void unloadPlugin( IPlugin plugin ) {
+    String parentFolderName = this.buildPluginsFolderPath( plugin );
+    File pluginFolder = new File( parentFolderName + File.separator + plugin.getId() );
+
+    PluginRegistry pluginRegistry = this.getPluginRegistry();
+    List<PluginInterface> spoonPlugins;
+    try {
+      // get all spoon plugins provided by the marketplace plugin
+      spoonPlugins = pluginRegistry.findPluginsByFolder( pluginFolder.toURI().toURL() );
+    } catch ( MalformedURLException malformedUrlException ) {
+      this.getLogger().error( "Malformed url from folder of plugin to uninstall: " + plugin.getId(), malformedUrlException );
       return;
     }
 
-    try {
-      ClassLoader classLoader = this.getPluginRegistry().getClassLoader( pluginObj );
-      if ( classLoader instanceof KettleURLClassLoader ) {
-        ( (KettleURLClassLoader) classLoader ).closeClassLoader();
+    for ( PluginInterface spoonPlugin : spoonPlugins ) {
+      // unload plugin
+      try {
+        ClassLoader cl = pluginRegistry.getClassLoader( spoonPlugin );
+        if ( cl instanceof KettleURLClassLoader ) {
+          ( (KettleURLClassLoader) cl ).closeClassLoader();
+        }
+      } catch ( KettlePluginException e ) {
+        this.getLogger().debug( "Unable to get classloader for plugin " );
       }
-    } catch ( KettleException e ) {
-      this.getLogger().error( "Failed unloading plugin " + pluginId, e );
+      pluginRegistry.removePlugin( spoonPlugin.getPluginType(), spoonPlugin );
     }
   }
 
@@ -270,28 +283,6 @@ public class DiPluginService extends BasePluginService {
     if ( !pluginFolder.exists() ) {
       this.getLogger().error( "No plugin was found in the expected folder : " + pluginFolder.getAbsolutePath() );
       return false;
-    }
-
-    try {
-      URL pluginFolderURL = pluginFolder.toURI().toURL();
-      PluginRegistry pluginRegistry = this.getPluginRegistry();
-      Iterable<PluginInterface> pdiPlugins = pluginRegistry.findPluginsByFolder( pluginFolderURL );
-      for ( PluginInterface pdiPlugin : pdiPlugins ) {
-
-        // Do this on unloadPlugin method
-        /*
-        // unload plugin
-        ClassLoader cl = PluginRegistry.getInstance().getClassLoader( plugin );
-        if ( cl instanceof KettleURLClassLoader ) {
-          ( (KettleURLClassLoader) cl ).closeClassLoader();
-        }
-        */
-
-        // remove plugin from registry
-        pluginRegistry.removePlugin( pdiPlugin.getPluginType(), pdiPlugin );
-      }
-    } catch ( MalformedURLException e1 ) {
-      this.getLogger().error( e1.getLocalizedMessage(), e1 );
     }
 
     // delete plugin folder

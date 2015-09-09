@@ -436,7 +436,8 @@ public class BaPluginService extends BasePluginService {
 
 
   @Override
-  protected void unloadPlugin( String pluginId ) {
+  protected void unloadPlugin( IPlugin plugin ) {
+    String pluginId = plugin.getId();
     IPluginManager pluginManager = this.getPluginManager( this.getCurrentSession() );
     ClassLoader cl = pluginManager.getClassLoader( pluginId );
     if ( cl != null && cl instanceof URLClassLoader ) {

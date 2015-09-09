@@ -1175,6 +1175,24 @@ button.refreshButton {
   }
 }
 
+.IE #floatingBarsG {
+  background-image: url(../img/spinner.gif);
+  background-position: center center;
+  background-repeat: no-repeat;
+  border-radius: 50%; /* Rounds out the halo */
+  opacity: .7; /* Some subtle opacity to help blend with variable background colors */
+
+  position:relative;
+  width:32px;
+  height:32px;
+  margin: 40px auto 20px;
+}
+
+.IE .blockG {
+  display: none;
+}
+
+
 /* ==========================================================================
    Generic Dialog
    ========================================================================== */

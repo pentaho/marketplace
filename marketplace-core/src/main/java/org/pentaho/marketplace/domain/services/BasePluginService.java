@@ -668,8 +668,12 @@ public abstract class BasePluginService implements IPluginService {
       }
     } catch ( Exception e ) { }
 
-    for( Feature feature : this.getFeaturesService().listInstalledFeatures() ) {
-      potentialOsgiPluginIds.add( feature.getName() );
+    try {
+      for( Feature feature : this.getFeaturesService().listInstalledFeatures() ) {
+        potentialOsgiPluginIds.add( feature.getName() );
+      }
+    } catch ( Exception e ) {
+      throw new IllegalStateException( e );
     }
     return potentialOsgiPluginIds;
   }

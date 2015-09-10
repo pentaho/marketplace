@@ -143,12 +143,18 @@ define(
               }
 
               function toVersion ( versionDTO ) {
+                function toString( object ) {
+                  if ( object === undefined || object === null ) {
+                    return object;
+                  }
+                  return object.toString();
+                }
                 var version = new Plugin.Version();
 
-                version.branch = versionDTO.branch;
-                version.version = versionDTO.version;
+                version.branch = toString( versionDTO.branch );
+                version.version = toString( versionDTO.version );
                 version.buildId = versionDTO.buildId;
-                version.name = versionDTO.name;
+                version.name = toString( versionDTO.name );
                 version.downloadUrl = versionDTO.downloadUrl;
                 version.samplesDownloadUrl = versionDTO.samplesDownloadUrl;
                 // TODO description i8ln;

@@ -149,6 +149,7 @@ public class DiPluginService extends BasePluginService {
     File pluginFolderFile = new File( pluginFolder );
 
     if ( !pluginFolderFile.exists() ) {
+      this.getLogger().debug( "Plugin " + plugin.getId() + " not found at expected folder " + pluginFolderFile.getPath() );
       return null;
     }
 

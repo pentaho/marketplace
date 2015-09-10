@@ -32,7 +32,9 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -75,7 +77,7 @@ public class MarketplaceService {
   @GET
   @Path( "/plugins" )
   @Produces( MediaType.APPLICATION_JSON )
-  public IterablePluginOperationResultDTO getPlugins() {
+  public IterablePluginOperationResultDTO getPlugins( @Context HttpServletResponse response ) {
 
     //get plugins from the domain model
     List<IPlugin> plugins = new ArrayList<>( this.RDO.getPluginService().getPlugins().values() );
@@ -94,6 +96,8 @@ public class MarketplaceService {
     //status message
     result.statusMessage.code = "OK_CODE";
     result.statusMessage.message = "OK_MESSAGE";
+
+    response.addHeader( "Cache-Control", "no-cache, no-store" );
 
     return result;
   }

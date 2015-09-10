@@ -194,7 +194,7 @@ public class DiPluginService extends BasePluginService {
 
   @Override
   protected Collection<String> getInstalledNonOsgiPluginIds() {
-    // get ids of OSGi plugins
+    // get ids of Non OSGi plugins
     Collection<String> pluginIds = this.getInstalledPluginIdsFromFolders();
 
     return pluginIds;
@@ -263,9 +263,7 @@ public class DiPluginService extends BasePluginService {
         deleteDirectory( pluginFolder );
       }
       unzipMarketEntry( parentFolderName, version.getDownloadUrl() );
-      if ( this.getInstalledNonOsgiPluginVersion( plugin ) == null ) {
-        createVersionXML( plugin, version );
-      }
+      createVersionXML( plugin, version );
     } catch ( KettleException e ) {
       this.getLogger().error( "ERROR on delete or create", e );
       return false;

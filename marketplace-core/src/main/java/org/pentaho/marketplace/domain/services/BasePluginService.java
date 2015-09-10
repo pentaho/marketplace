@@ -694,6 +694,11 @@ public abstract class BasePluginService implements IPluginService {
 
   private boolean executeUninstall( IPlugin plugin ) {
     IPluginVersion version =  this.getInstalledPluginVersion( plugin );
+    if ( version == null ) {
+      this.getLogger().debug( "Did not find plugin version for installed plugin: " + plugin.getId() );
+      return false;
+    }
+
     if ( version.isOsgi() ) {
       return this.executeOsgiUninstall( plugin );
     } else {

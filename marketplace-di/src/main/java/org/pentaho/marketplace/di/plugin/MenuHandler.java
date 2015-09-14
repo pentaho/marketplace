@@ -87,7 +87,7 @@ public class MenuHandler extends AbstractXulEventHandler {
       Spoon spoon = this.getSpoon();
       URL url = new URL( getMarketplaceURL() );
 
-      spoon.addSpoonBrowser( getMarketplaceTabLabel(), url.toString() );
+      spoon.addSpoonBrowser( getMarketplaceTabLabel(), url.toString(), false );
 
     } catch ( MalformedURLException e ) {
       this.getLogger().error( "Error on marketplace URL: " + WEB_CLIENT_PATH, e );

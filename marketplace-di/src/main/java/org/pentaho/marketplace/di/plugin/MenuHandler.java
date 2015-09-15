@@ -94,8 +94,5 @@ public class MenuHandler extends AbstractXulEventHandler {
     }
   }
 
-  public void openPluginInformation() {
-    this.getSpoon().showPluginInfo();
-  }
   // endregion
 }

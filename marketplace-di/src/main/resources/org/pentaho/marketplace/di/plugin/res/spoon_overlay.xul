@@ -6,10 +6,8 @@
 
   <menupopup id="tools-popup">
 
-      <menuseparator />
-      <menuitem id="tools-plugins-plugin-information-item" label="${Spoon.Menu.ShowPluginInfo}"
-                command="marketplaceMenuEventHandler.openPluginInformation()" />
       <menuitem id="tools-plugins-marketplace-item" label="${menu_tools_marketplace_label}"
+                insertafter="help-plugins"
                 command="marketplaceMenuEventHandler.openMarketplace()" />
 
   </menupopup>

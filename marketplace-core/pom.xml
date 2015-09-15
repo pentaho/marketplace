@@ -39,6 +39,11 @@
     </dependency>
 
     <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>javax.servlet-api</artifactId>
+    </dependency>
+
+    <dependency>
       <groupId>net.sf.flexjson</groupId>
       <artifactId>flexjson</artifactId>
     </dependency>

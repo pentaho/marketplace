@@ -1,0 +1,88 @@
+<div>
+
+  <div class="pentaho-tab-bar">
+
+    <div class="pentaho-tabWidget"
+         data-ng-click="selectTab( 'availableTab' )"
+         data-ng-class="{ 'pentaho-tabWidget-selected': isTabSelected(  'availableTab'  ) }" >
+      <div class="pentaho-tabWidgetLabel"> {{ 'marketplace.tab.available' | translate }} </div>
+    </div>
+
+    <div class="pentaho-tabWidget"
+         data-ng-click="selectTab(  'installedTab' )"
+         data-ng-class="{ 'pentaho-tabWidget-selected': isTabSelected(  'installedTab' ) }" >
+      <div class="pentaho-tabWidgetLabel"> {{ 'marketplace.tab.installed' | translate }} </div>
+    </div>
+
+    <button class="pull-right refreshButton" data-ng-click="refreshPluginsFromServer()" title="{{ 'marketplace.refreshButton.title' | translate }}"></button>
+
+  </div>
+
+
+    <div class="pentaho-tab-deck-panel">
+
+      <div class="filterBar clearfix">
+
+        <div class="filterContainer">
+
+          <div data-multiselect-dropdown
+              data-selected-options="selectedTypes"  data-options="pluginTypes"
+              data-group-by="mainName" data-display="subName"
+              data-prefix="{{ 'marketplace.filter.category.prefix' | translate }}"
+              data-no-option-selected="{{ 'marketplace.filter.category.noneSelected' | translate }}"
+              data-all-options-selected="{{ 'marketplace.filter.category.allSelected' | translate }}"
+              data-option-delimiter=", ">
+          </div>
+
+          <div data-multiselect-dropdown
+              data-selected-options="selectedStages" data-options="developmentStages"
+              data-group-by="lane" data-display="name" data-select="stage"
+              data-use-divider="true"
+              data-prefix="{{ 'marketplace.filter.devStage.prefix' | translate }}"
+              data-no-option-selected="{{ 'marketplace.filter.category.noneSelected' | translate }}"
+              data-all-options-selected="{{ 'marketplace.filter.category.allSelected' | translate }}"
+              data-option-delimiter=", ">
+          </div>
+
+          <input placeholder="{{ 'marketplace.search.placeholder' | translate }}" data-ng-model="searchText" class="search">
+
+        </div>
+
+        <div class="stagesInfo">
+          <span class="icon info"></span>
+          <a class="stagesInfoLink" href="" data-ng-click="onWhatAreStagesClicked()"> {{ 'marketplace.devStage.infoLinkText' | translate }}</a>
+        </div>
+
+      </div>
+
+      <div class="statusMessage">
+
+        <div data-ng-show="isGettingPluginsFromServer">
+          <div id="floatingBarsG">
+            <div class="blockG" id="rotateG_01"></div>
+            <div class="blockG" id="rotateG_02"></div>
+            <div class="blockG" id="rotateG_03"></div>
+            <div class="blockG" id="rotateG_04"></div>
+            <div class="blockG" id="rotateG_05"></div>
+            <div class="blockG" id="rotateG_06"></div>
+            <div class="blockG" id="rotateG_07"></div>
+            <div class="blockG" id="rotateG_08"></div>
+          </div>
+          <span>{{ 'marketplace.statusMessage.gettingPlugins' | translate }}</span>
+        </div>
+
+        <div data-ng-show="!isGettingPluginsFromServer && filteredPlugins.length == 0" class="message">
+          {{ 'marketplace.statusMessage.noPluginMatch' | translate }}
+        </div>
+
+        <div data-ng-show="errorMessageId" class="message">
+          {{ errorMessageId | translate }}
+        </div>
+
+      </div>
+
+      <div data-plugin-list data-plugins="filteredPlugins" data-on-plugin-clicked="pluginWasClicked" class="filteredPluginsContainer"/>
+
+    </div>
+
+</div>

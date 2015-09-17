@@ -74,6 +74,8 @@ public abstract class BasePluginService implements IPluginService {
 
   protected static final String KARAF_FEATURES_CONFIG_PID = "org.apache.karaf.features";
   protected static final String KARAF_FEATURES_BOOT_PROPERTY_ID = "featuresBoot";
+  protected static final String PENTAHO_FEATURES_CONFIG_PID = "org.pentaho.features";
+  protected static final String PENTAHO_RUNTIME_FEATURES_PROPERTY_ID = "runtimeFeatures";
 
   //endregion
 
@@ -358,22 +360,40 @@ public abstract class BasePluginService implements IPluginService {
         .create( NO_PLUGIN_ERROR_CODE, "Plugin version for branch " + versionBranch + " not found" );
     }
 
+    // Perhaps we are reinstalling the marketplace.
+    // Create telemetry event and messages before closing class loader just in case.
+    ITelemetryService telemetryService = this.getTelemetryService();
+    TelemetryEvent event = telemetryService.createEvent( TelemetryEvent.Type.UPGRADE );
+    event.getExtraInfo().put( "installedPlugin", plugin.getId() );
+    event.getExtraInfo().put( "installedVersion", pluginVersionToInstall.getVersion() );
+    event.getExtraInfo().put( "installedBranch", versionBranch );
+
+    IDomainStatusMessage successMessage =
+            this.domainStatusMessageFactory.create( PLUGIN_INSTALLED_CODE, plugin.getName()
+                    + " was successfully Upgraded.  Please restart. \n" + plugin.getInstallationNotes() );
+
+    IDomainStatusMessage upgradeInstallFailureMessage = this.domainStatusMessageFactory
+            .create(FAIL_ERROR_CODE, "Failed to install on plugin upgrade, see log for details.");
+
+    IDomainStatusMessage upgradeUninstallFailureMessage = this.domainStatusMessageFactory
+            .create(FAIL_ERROR_CODE, "Failed to uninstall on plugin upgrade, see log for details.");
+
+
     // it's an upgrade, uninstall old version first
-    if ( !this.executeUninstall( plugin ) ) {
-      return this.getDomainStatusMessageFactory()
-        .create( FAIL_ERROR_CODE, "Failed to remove old version of plugin before upgrade, see log for details." );
+    if ( !this.executeUninstall(plugin) ) {
+      return upgradeUninstallFailureMessage;
     }
 
     // install new version
     if ( !this.executeInstall( plugin, pluginVersionToInstall ) ) {
-      return this.getDomainStatusMessageFactory()
-        .create( FAIL_ERROR_CODE, "Failed to upgrade plugin, see log for details." );
+      return upgradeInstallFailureMessage;
     }
 
-    publishTelemetryEvent( TelemetryEvent.Type.UPGRADE, plugin, pluginVersionToInstall );
-    IDomainStatusMessage successMessage = this.getDomainStatusMessageFactory()
-      .create( PLUGIN_INSTALLED_CODE, plugin.getName() + " was successfully upgraded.\n" +
-        plugin.getInstallationNotes() );
+    try {
+      telemetryService.publishEvent( event );
+    } catch ( NoClassDefFoundError e ) {
+      this.getLogger().debug( "Failed to find class definitions. Most likely reason is reinstalling marketplace.", e );
+    }
 
     return successMessage;
   }
@@ -588,15 +608,20 @@ public abstract class BasePluginService implements IPluginService {
   }
 
   private void removeFeatureFromKarafBoot( String featureName ) {
+    this.removeFeatureFromKarafBoot( featureName, KARAF_FEATURES_CONFIG_PID, KARAF_FEATURES_BOOT_PROPERTY_ID );
+    this.removeFeatureFromKarafBoot( featureName, PENTAHO_FEATURES_CONFIG_PID, PENTAHO_RUNTIME_FEATURES_PROPERTY_ID );
+  }
+  
+  private void removeFeatureFromKarafBoot( String featureName, String configurationPid, String propertyId ) {
     ConfigurationAdmin configurationAdmin = this.getConfigurationAdmin();
 
     try {
-      Configuration configuration = configurationAdmin.getConfiguration( KARAF_FEATURES_CONFIG_PID );
+      Configuration configuration = configurationAdmin.getConfiguration( configurationPid );
       Dictionary<String, Object> properties = configuration.getProperties();
-      String featuresBoot = (String) properties.get( KARAF_FEATURES_BOOT_PROPERTY_ID );
-      String newFeaturesBoot = featuresBoot.replaceFirst( "," + featureName, "" );
-      if( !featuresBoot.equals( newFeaturesBoot ) ) {
-        properties.put( KARAF_FEATURES_BOOT_PROPERTY_ID, newFeaturesBoot );
+      String propertyValue = (String) properties.get( propertyId );
+      String newPropertyValue = propertyValue.replaceFirst( "," + featureName, "" );
+      if( !propertyValue.equals( newPropertyValue ) ) {
+        properties.put( propertyId, newPropertyValue );
         configuration.update( properties );
       }
     } catch ( IOException e ) {}

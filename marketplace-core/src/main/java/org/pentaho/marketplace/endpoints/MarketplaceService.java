@@ -107,12 +107,11 @@ public class MarketplaceService {
   @Produces( MediaType.APPLICATION_JSON )
   public OperationResultDTO installPlugin( @PathParam( "pluginId" ) String pluginId,
                                            @PathParam( "versionBranch" ) String versionBranch ) {
-
+    OperationResultDTO result = new OperationResultDTO();
     //install plugin
     IDomainStatusMessage statusMessage = this.RDO.getPluginService().installPlugin( pluginId, versionBranch );
 
     //send installation string
-    OperationResultDTO result = new OperationResultDTO();
     result.statusMessage = this.statusMessageDTOMapper.toDTO( statusMessage );
     return result;
   }
@@ -122,11 +121,11 @@ public class MarketplaceService {
   @Produces( MediaType.APPLICATION_JSON )
   public OperationResultDTO uninstallPlugin( @PathParam( "pluginId" ) String pluginId ) {
 
+    OperationResultDTO result = new OperationResultDTO();
     //uninstall plugin
     IDomainStatusMessage statusMessage = this.RDO.getPluginService().uninstallPlugin( pluginId );
 
     //send installation string
-    OperationResultDTO result = new OperationResultDTO();
     result.statusMessage = this.statusMessageDTOMapper.toDTO( statusMessage );
     return result;
   }

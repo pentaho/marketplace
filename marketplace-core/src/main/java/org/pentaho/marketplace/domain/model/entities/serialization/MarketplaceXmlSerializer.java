@@ -181,6 +181,7 @@ public class MarketplaceXmlSerializer implements IMarketplaceXmlSerializer {
     version.setVersion( getElementChildValue( versionElement, "version" ) );
     String downloadUrl = getElementChildValue( versionElement, "package_url" );
     if ( downloadUrl != null ) {
+      downloadUrl = downloadUrl.trim();
       version.setDownloadUrl( downloadUrl );
       version.setIsOsgi( downloadUrl.endsWith( OSGI_URL_SUFFIX ) );
     }

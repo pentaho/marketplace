@@ -558,7 +558,7 @@ public abstract class BasePluginService implements IPluginService {
 
   protected boolean executeOsgiInstall( IPlugin plugin, IPluginVersion versionToInstall ) {
     if ( versionToInstall.isOsgi() ) {
-      this.getLogger().debug( "## PDI Install Osgi Plugin ##" );
+      this.getLogger().debug( "Installing Osgi Plugin " + plugin.getId() );
       try {
         String deployFolderName = this.getKarafDeployFolder();
         String downloadUrl = versionToInstall.getDownloadUrl();
@@ -569,7 +569,7 @@ public abstract class BasePluginService implements IPluginService {
         // TODO: check if it was successful or not
         return true;
       } catch ( Exception e ) {
-        this.getLogger().warn( "PDI Failed to install OSGi plugin.", e );
+        this.getLogger().warn( "Failed to install OSGi plugin " + plugin.getId(), e );
         return false;
       }
     }
@@ -578,13 +578,13 @@ public abstract class BasePluginService implements IPluginService {
 
 
   protected boolean executeOsgiUninstallViaKarService( IPlugin plugin ) {
-    this.getLogger().debug( "## Uninstall Osgi Plugin ##" );
+    this.getLogger().debug( "Uninstalling Osgi Plugin " + plugin.getId() );
     try {
       this.getKarService().uninstall( plugin.getId() );
       // TODO: check if it was successful or not
       return true;
     } catch ( Exception e ) {
-      this.getLogger().warn( "Failed to uninstall OSGi plugin.", e );
+      this.getLogger().warn( "Failed to uninstall OSGi plugin " + plugin.getId(), e );
       return false;
     }
   }
@@ -614,21 +614,33 @@ public abstract class BasePluginService implements IPluginService {
   
   private void removeFeatureFromKarafBoot( String featureName, String configurationPid, String propertyId ) {
     ConfigurationAdmin configurationAdmin = this.getConfigurationAdmin();
+    Log logger = this.getLogger();
 
     try {
       Configuration configuration = configurationAdmin.getConfiguration( configurationPid );
       Dictionary<String, Object> properties = configuration.getProperties();
+      if( properties == null ) {
+        logger.debug( "Configuration " + configurationPid + " has no properties." );
+        return;
+      }
       String propertyValue = (String) properties.get( propertyId );
-      String newPropertyValue = propertyValue.replaceFirst( "," + featureName, "" );
+      if( propertyValue == null ) {
+        logger.debug( "Property " + propertyId + " not set in configuration " + configurationPid + "." );
+        return;
+      }
+
+      String newPropertyValue = propertyValue.replaceFirst("," + featureName, "");
       if( !propertyValue.equals( newPropertyValue ) ) {
         properties.put( propertyId, newPropertyValue );
         configuration.update( properties );
       }
-    } catch ( IOException e ) {}
+    } catch ( IOException e ) {
+      logger.debug( "Unable to access configuration " + configurationPid + "." );
+    }
   }
 
   private IPluginVersion getInstalledOsgiPluginVersion( IPlugin plugin ) {
-    this.getLogger().debug( "## Infer Version from installed Osgi Plugin ##" );
+    this.getLogger().debug( "Infer Version from installed Osgi Plugin" );
     // search installed features for plugin id
     IPluginVersion installedOsgiPluginVersion = this.getInstalledOsgiPluginVersionFromFeatures( plugin );
     if( installedOsgiPluginVersion == null ) {

@@ -239,6 +239,7 @@ public final class JAXBMarketplaceXmlSerializer implements IMarketplaceXmlSerial
     pluginVersion.setName( version.getName() );
     String downloadUrl = version.getPackageUrl();
     if( downloadUrl != null ) {
+      downloadUrl = downloadUrl.trim();
       pluginVersion.setDownloadUrl( downloadUrl );
       pluginVersion.setIsOsgi( downloadUrl.endsWith( OSGI_URL_SUFFIX ) );
     }

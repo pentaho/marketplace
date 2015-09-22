@@ -30,6 +30,9 @@ define(
               var installPluginBaseUrl = BASE_URL + '/plugin';
               var pluginsPromise = null;
 
+              var PENTAHO_MARKETPLACE_ID = "pentaho-marketplace";
+              var PDI_MARKETPLACE_ID = "pdi-marketplace";
+
               function isResponseError( response ) {
                 return response.data.statusMessage.code.substring(0,5).toLowerCase() == 'error';
               }
@@ -79,6 +82,12 @@ define(
 
                       },
                       function ( response ) {
+                        // FIXME: marketplace upgrade raises exceptions due to serialization issues on the server side
+                        // even when the upgrade is OK
+                        if ( plugin.id === PENTAHO_MARKETPLACE_ID || plugin.id === PDI_MARKETPLACE_ID ) {
+                            logger.debug("Got error while upgrading marketplace but everything should be ok. " );
+                            return;
+                        }
                         logger.log("Install NOT OK. plugin Id: " + plugin.id + " branch: " + version.branch);
                         return $q.reject( response );
                       });
@@ -100,6 +109,12 @@ define(
                         plugin.installedVersion = undefined;
                       },
                       function ( response ) {
+                        // FIXME: marketplace uninstall raises exceptions due to serialization issues on the server side
+                        // even when the uninstall is OK.
+                        if ( plugin.id === PENTAHO_MARKETPLACE_ID || plugin.id === PDI_MARKETPLACE_ID ) {
+                            logger.debug("Got error while uninstalling marketplace but everything should be ok. " );
+                            return;
+                        }
                         logger.log( "Uninstall NOT OK. plugin Id: " + plugin.id );
                         return $q.reject( response );
                       });

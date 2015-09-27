@@ -1492,6 +1492,19 @@ body.bootstrap .modal.pluginDetailDialog .pluginDescriptionContent blockquote p 
 	padding: 0;
 }
 
+body.bootstrap .modal.pluginDetailDialog .pluginDescriptionContent pre {
+  font-family: inherit;
+  display: inherit;
+  padding: inherit;
+  margin: inherit;
+  word-break: inherit;
+  word-wrap: inherit;
+  white-space: pre-wrap;
+  background-color: inherit;
+  border: inherit;
+  border-radius: inherit;
+}
+
 /* ==========================================================================
    Version Select Dropdown
    ========================================================================== */

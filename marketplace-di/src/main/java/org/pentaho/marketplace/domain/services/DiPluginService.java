@@ -17,37 +17,6 @@
 
 package org.pentaho.marketplace.domain.services;
 
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.collections.Predicate;
-
-import org.apache.karaf.features.FeaturesService;
-import org.apache.karaf.kar.KarService;
-import org.osgi.service.cm.ConfigurationAdmin;
-import org.pentaho.di.core.Const;
-import org.pentaho.di.core.exception.KettleException;
-import org.pentaho.di.core.exception.KettlePluginException;
-import org.pentaho.di.core.plugins.KettleURLClassLoader;
-import org.pentaho.di.core.plugins.PluginInterface;
-import org.pentaho.di.core.plugins.PluginRegistry;
-import org.pentaho.di.core.plugins.PluginTypeInterface;
-
-import org.pentaho.di.core.util.StringUtil;
-import org.pentaho.di.version.BuildVersion;
-import org.pentaho.marketplace.domain.model.entities.MarketEntryType;
-import org.pentaho.marketplace.domain.model.entities.interfaces.IPlugin;
-import org.pentaho.marketplace.domain.model.entities.interfaces.IPluginVersion;
-import org.pentaho.marketplace.domain.model.factories.interfaces.IDomainStatusMessageFactory;
-import org.pentaho.marketplace.domain.model.factories.interfaces.IPluginVersionFactory;
-import org.pentaho.marketplace.domain.model.factories.interfaces.IVersionDataFactory;
-import org.pentaho.marketplace.domain.services.interfaces.IRemotePluginProvider;
-import org.pentaho.telemetry.ITelemetryService;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
-import org.xml.sax.InputSource;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
@@ -66,12 +35,41 @@ import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.Predicate;
+import org.apache.karaf.features.FeaturesService;
+import org.apache.karaf.kar.KarService;
+import org.osgi.service.cm.ConfigurationAdmin;
+import org.pentaho.di.core.Const;
+import org.pentaho.di.core.exception.KettleException;
+import org.pentaho.di.core.exception.KettlePluginException;
+import org.pentaho.di.core.plugins.KettleURLClassLoader;
+import org.pentaho.di.core.plugins.PluginInterface;
+import org.pentaho.di.core.plugins.PluginRegistry;
+import org.pentaho.di.core.plugins.PluginTypeInterface;
+import org.pentaho.di.core.util.StringUtil;
+import org.pentaho.di.version.BuildVersion;
+import org.pentaho.marketplace.domain.model.entities.MarketEntryType;
+import org.pentaho.marketplace.domain.model.entities.interfaces.IPlugin;
+import org.pentaho.marketplace.domain.model.entities.interfaces.IPluginVersion;
+import org.pentaho.marketplace.domain.model.factories.interfaces.IDomainStatusMessageFactory;
+import org.pentaho.marketplace.domain.model.factories.interfaces.IPluginVersionFactory;
+import org.pentaho.marketplace.domain.model.factories.interfaces.IVersionDataFactory;
+import org.pentaho.marketplace.domain.services.interfaces.IRemotePluginProvider;
+import org.pentaho.telemetry.ITelemetryService;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
+
 
 public class DiPluginService extends BasePluginService {
 
   // region Properties
   private static final String BASE_PLUGINS_FOLDER_NAME = "plugins";
-  private static final String BASE_OSGI_PLUGINS_FOLDER_NAME = "plugins/pdi-osgi-bridge/karaf/deploy";
 
   // TODO turn into explicit dependency
   private PluginRegistry getPluginRegistry() {
@@ -145,17 +143,24 @@ public class DiPluginService extends BasePluginService {
 
   @Override
   protected IPluginVersion getInstalledNonOsgiPluginVersion( IPlugin plugin ) {
+
+    // if plugin folder exists then non osgi plugin exists
+    IPluginVersion pluginVersion = this.getPluginVersionFactory().create();
+    pluginVersion.setIsOsgi( false );
+
     String pluginFolder = buildPluginsFolderPath( plugin ) + File.separator + plugin.getId();
     File pluginFolderFile = new File( pluginFolder );
 
     if ( !pluginFolderFile.exists() ) {
       this.getLogger().debug( "Plugin " + plugin.getId() + " not found at expected folder " + pluginFolderFile.getPath() );
-      return null;
-    }
 
-    // if plugin folder exists then non osgi plugin exists
-    IPluginVersion pluginVersion = this.getPluginVersionFactory().create();
-    pluginVersion.setIsOsgi( false );
+      pluginFolder = BASE_PLUGINS_FOLDER_NAME + File.separator + plugin.getId();
+      pluginFolderFile = new File( pluginFolder );
+      if ( !pluginFolderFile.exists() ) {
+        this.getLogger().debug( "Plugin " + plugin.getId() + " not found at expected folder " + pluginFolderFile.getPath() );
+        return null;
+      }
+    }
 
     String versionPath = pluginFolder + File.separator + "version.xml";
     File file = new File( versionPath );
@@ -226,21 +231,6 @@ public class DiPluginService extends BasePluginService {
     return pluginIds;
   }
 
-  private Collection<String> getInstalledPluginIdsFromPluginRegistry() {
-    Collection<String> pluginIds = new HashSet<>();
-    PluginRegistry pluginRegistry = this.getPluginRegistry();
-
-    for ( Class<? extends PluginTypeInterface> pluginType : pluginRegistry.getPluginTypes() ) {
-      for( PluginInterface pluginInterface : pluginRegistry.getPlugins( pluginType ) ) {
-        for( String pluginId : pluginInterface.getIds() ) {
-          pluginIds.add( pluginId );
-        }
-      }
-    }
-
-    return pluginIds;
-  }
-
   @Override
   protected boolean executeNonOsgiInstall( IPlugin plugin, IPluginVersion version ) {
     String parentFolderName = buildPluginsFolderPath( plugin );
@@ -280,8 +270,13 @@ public class DiPluginService extends BasePluginService {
     this.getLogger().info( "Uninstalling plugin in folder: " + pluginFolder.getAbsolutePath() );
 
     if ( !pluginFolder.exists() ) {
-      this.getLogger().error( "No plugin was found in the expected folder : " + pluginFolder.getAbsolutePath() );
-      return false;
+      // try plugins/plugin-id
+      File rootPluginFolder = new File( BASE_PLUGINS_FOLDER_NAME + File.separator + plugin.getId() );
+      if ( !rootPluginFolder.exists() ) {
+        this.getLogger().error( "No plugin was found in the expected folder : " + pluginFolder.getAbsolutePath() );
+        return false;
+      }
+      pluginFolder = rootPluginFolder;
     }
 
     // delete plugin folder
@@ -301,6 +296,7 @@ public class DiPluginService extends BasePluginService {
 
     // remove non PDI plugins
     CollectionUtils.filter( plugins.entrySet(), new Predicate() {
+      @SuppressWarnings( "unchecked" )
       @Override public boolean evaluate( Object mapEntry ) {
         Map.Entry<String, IPlugin> mapEntryCasted = (Map.Entry<String, IPlugin>) mapEntry;
         return mapEntryCasted.getValue().getType() != MarketEntryType.Platform;

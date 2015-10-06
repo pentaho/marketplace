@@ -1,57 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
-
   <parent>
     <groupId>org.pentaho</groupId>
     <artifactId>pentaho-marketplace-modules</artifactId>
-    <version>6.0-SNAPSHOT</version>
+    <version>6.1-SNAPSHOT</version>
   </parent>
-
   <artifactId>pdi-marketplace</artifactId>
+  <version>6.1-SNAPSHOT</version>
   <packaging>kar</packaging>
-
   <name>Pentaho Marketplace for PDI Assembly</name>
   <description>Pentaho Marketplace for PDI Assembly</description>
   <url>http://www.pentaho.com/</url>
-
   <dependencies>
     <dependency>
       <groupId>org.pentaho</groupId>
       <artifactId>pentaho-marketplace-di</artifactId>
       <version>${project.version}</version>
     </dependency>
-
     <dependency>
       <groupId>org.pentaho</groupId>
       <artifactId>pentaho-marketplace-core</artifactId>
       <version>${project.version}</version>
       <scope>provided</scope>
     </dependency>
-
     <dependency>
       <groupId>pentaho</groupId>
       <artifactId>pentaho-angular-bundle</artifactId>
     </dependency>
-
     <dependency>
       <groupId>net.sf.flexjson</groupId>
       <artifactId>flexjson</artifactId>
     </dependency>
-    
   </dependencies>
-
   <build>
     <plugins>
-
       <plugin>
         <groupId>org.apache.karaf.tooling</groupId>
         <artifactId>karaf-maven-plugin</artifactId>
       </plugin>
-
     </plugins>
   </build>
-
 </project>

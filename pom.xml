@@ -1,21 +1,18 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<?xml version="1.0"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
-
   <parent>
     <groupId>org.pentaho</groupId>
     <artifactId>pentaho-ce-jar-parent-pom</artifactId>
     <version>1.0.13</version>
   </parent>
-
   <artifactId>pentaho-marketplace-modules</artifactId>
-  <version>6.0-SNAPSHOT</version>
+  <version>6.0.1.0-386</version>
   <packaging>pom</packaging>
-
   <name>Pentaho Marketplace: ${project.artifactId}</name>
   <description>Pentaho Marketplace project</description>
   <url>http://www.pentaho.com/marketplace</url>
-
   <developers>
     <developer>
       <name>Guilherme Raimundo</name>
@@ -39,7 +36,6 @@
       </roles>
     </developer>
   </developers>
-
   <contributors>
     <contributor>
       <name>Pedro Vale</name>
@@ -56,20 +52,23 @@
       </roles>
     </contributor>
   </contributors>
-
+  <modules>
+    <module>marketplace-core</module>
+    <module>marketplace-di</module>
+    <module>marketplace-ba</module>
+    <module>pdi-marketplace-assembly</module>
+    <module>pentaho-marketplace-assembly</module>
+  </modules>
   <properties>
-    <dependency.pentaho.pentaho-xul-core.version>${project.version}</dependency.pentaho.pentaho-xul-core.version>
-    <dependency.pentaho-kettle.version>${project.version}</dependency.pentaho-kettle.version>
-    <dependency.pentaho-osgi-bundles.revision>${project.version}</dependency.pentaho-osgi-bundles.revision>
-
+    <dependency.pentaho-osgi-bundles.revision>6.0.1.0-386</dependency.pentaho-osgi-bundles.revision>
+    <dependency.pentaho-kettle.version>6.0.1.0-386</dependency.pentaho-kettle.version>
     <dependency.pentaho-marketplace-core.id>pentaho-marketplace-core</dependency.pentaho-marketplace-core.id>
-    <dependency.pentaho-marketplace-di.id>pentaho-marketplace-di</dependency.pentaho-marketplace-di.id>
-    <paxexamversion>4.1.0</paxexamversion>
     <plugin.org.codehaus.mojo.build-helper-maven-plugin.version>1.5</plugin.org.codehaus.mojo.build-helper-maven-plugin.version>
+    <paxexamversion>4.1.0</paxexamversion>
+    <dependency.pentaho-marketplace-di.id>pentaho-marketplace-di</dependency.pentaho-marketplace-di.id>
     <karaf.version>3.0.3</karaf.version>
+    <dependency.pentaho.pentaho-xul-core.version>${project.version}</dependency.pentaho.pentaho-xul-core.version>
   </properties>
-
-
   <dependencyManagement>
     <dependencies>
       <dependency>
@@ -84,7 +83,6 @@
         <version>${dependency.pentaho-kettle.version}</version>
         <scope>provided</scope>
       </dependency>
-
       <dependency>
         <groupId>org.osgi</groupId>
         <artifactId>org.osgi.core</artifactId>
@@ -103,21 +101,18 @@
         <version>3.1.4</version>
         <scope>provided</scope>
       </dependency>
-
       <dependency>
         <groupId>javax.ws.rs</groupId>
         <artifactId>javax.ws.rs-api</artifactId>
         <version>2.0</version>
         <scope>provided</scope>
       </dependency>
-
       <dependency>
         <groupId>javax.servlet</groupId>
         <artifactId>javax.servlet-api</artifactId>
         <version>3.0.1</version>
         <scope>provided</scope>
       </dependency>
-
       <dependency>
         <groupId>commons-logging</groupId>
         <artifactId>commons-logging</artifactId>
@@ -148,14 +143,11 @@
         <artifactId>commons-io</artifactId>
         <version>2.4</version>
       </dependency>
-
       <dependency>
         <groupId>net.sf.flexjson</groupId>
         <artifactId>flexjson</artifactId>
         <version>2.1</version>
       </dependency>
-
-      <!-- Client Side -->
       <dependency>
         <groupId>pentaho</groupId>
         <artifactId>pentaho-angular-bundle</artifactId>
@@ -167,22 +159,18 @@
         <artifactId>angular-sanitize</artifactId>
         <version>1.2.15</version>
       </dependency>
-
       <dependency>
         <groupId>org.apache.karaf.kar</groupId>
         <artifactId>org.apache.karaf.kar.core</artifactId>
         <version>3.0.3</version>
         <scope>provided</scope>
       </dependency>
-
       <dependency>
         <groupId>org.apache.karaf.features</groupId>
         <artifactId>org.apache.karaf.features.core</artifactId>
         <version>3.0.3</version>
         <scope>provided</scope>
       </dependency>
-
-      <!-- Test Dependencies -->
       <dependency>
         <groupId>junit</groupId>
         <artifactId>junit</artifactId>
@@ -201,10 +189,8 @@
         <version>1.3</version>
         <scope>test</scope>
       </dependency>
-
     </dependencies>
   </dependencyManagement>
-
   <build>
     <pluginManagement>
       <plugins>
@@ -218,16 +204,6 @@
           </configuration>
         </plugin>
       </plugins>
-
     </pluginManagement>
   </build>
-
-  <modules>
-    <module>marketplace-core</module>
-    <module>marketplace-di</module>
-    <module>marketplace-ba</module>
-    <module>pdi-marketplace-assembly</module>
-    <module>pentaho-marketplace-assembly</module>
-  </modules>
-
 </project>

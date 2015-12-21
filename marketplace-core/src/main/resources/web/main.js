@@ -11,51 +11,64 @@
  * the license for the specific language governing your rights and limitations.
  */
 
-require(
+define(
     [
-      'angular',
-      'angular-sanitize',
-      'underscore',
+        'angular',
+        'angular-sanitize',
+        'underscore',
 
-      'marketplaceApp',
+        'marketplaceApp',
 
-      'marketplace/js/constants',
+        'marketplace/js/constants',
 
-      'marketplace/js/controllers/applicationController',
-      'marketplace/js/models/plugin',
+        'marketplace/js/controllers/applicationController',
+        'marketplace/js/models/plugin',
 
-      'marketplace/js/services/appService',
-      'marketplace/js/services/installFlowService/installFlowService',
-      'marketplace/js/services/dtoMapperService',
-      'marketplace/js/services/developmentStageService',
-      'marketplace/js/services/categoryService',
+        'marketplace/js/services/appService',
+        'marketplace/js/services/installFlowService/installFlowService',
+        'marketplace/js/services/dtoMapperService',
+        'marketplace/js/services/developmentStageService',
+        'marketplace/js/services/categoryService',
 
-      'marketplace/directives/installUpdateButton/installUpdateButtonController',
-      'marketplace/directives/installUpdateButton/installUpdateButtonDirective',
+        'marketplace/directives/installUpdateButton/installUpdateButtonController',
+        'marketplace/directives/installUpdateButton/installUpdateButtonDirective',
 
-      'marketplace/directives/multiselectDropdown/multiselectDropdownController',
-      'marketplace/directives/multiselectDropdown/multiselectDropdownDirective',
+        'marketplace/directives/multiselectDropdown/multiselectDropdownController',
+        'marketplace/directives/multiselectDropdown/multiselectDropdownDirective',
 
-      'marketplace/directives/stagesInfo/stagesInfoController',
-      'marketplace/directives/stagesInfo/stagesInfoDirective',
+        'marketplace/directives/stagesInfo/stagesInfoController',
+        'marketplace/directives/stagesInfo/stagesInfoDirective',
 
-      'marketplace/directives/pluginDetail/pluginDetailController',
-      'marketplace/directives/pluginDetail/pluginDetailDirective',
-      'marketplace/directives/pluginList/pluginListController',
-      'marketplace/directives/pluginList/pluginListDirective',
-      'marketplace/directives/pluginListItem/pluginListItemController',
-      'marketplace/directives/pluginListItem/pluginListItemDirective',
-      'marketplace/directives/devStageIcon/devStageIconController',
-      'marketplace/directives/devStageIcon/devStageIconDirective',
+        'marketplace/directives/pluginDetail/pluginDetailController',
+        'marketplace/directives/pluginDetail/pluginDetailDirective',
+        'marketplace/directives/pluginList/pluginListController',
+        'marketplace/directives/pluginList/pluginListDirective',
+        'marketplace/directives/pluginListItem/pluginListItemController',
+        'marketplace/directives/pluginListItem/pluginListItemDirective',
+        'marketplace/directives/devStageIcon/devStageIconController',
+        'marketplace/directives/devStageIcon/devStageIconDirective',
 
-      'marketplace/directives/stopEvent/stopEventDirective',
-      'marketplace/directives/indeterminate/indeterminateDirective',
-      'marketplace/directives/modalHeight/modalHeightDirective'
+        'marketplace/directives/stopEvent/stopEventDirective',
+        'marketplace/directives/indeterminate/indeterminateDirective',
+        'marketplace/directives/modalHeight/modalHeightDirective'
 
-    ] ,
+    ],
 
-    function( angular ) {
-      angular.bootstrap( document, [ 'marketplace' ]);
+    function (angular) {
+        'use strict';
+
+        var module = {
+            name: 'marketplace',
+            init: marketplaceInit
+        };
+
+        return module;
+
+        function marketplaceInit(element) {
+            angular.element(element).ready(function () {
+                angular.bootstrap(element, [module.name]);
+            });
+        }
     }
 );
 

@@ -31,6 +31,15 @@
         <link rel="stylesheet" href="css/globalCrystal.css">
         <link rel="stylesheet" href="css/bootstrap-namespaced.css">
 
+        <script>
+            (function(w) {
+                'use strict';
+
+                require(['marketplace_6.1'], function(app) {
+                    app.init(document);
+                });
+            }(window));
+        </script>
     </head>
 
 <!--[if lt IE 7]>
@@ -53,5 +62,4 @@
       </div>
 
     </body>
-    <script src="main.js"></script>
 </html>

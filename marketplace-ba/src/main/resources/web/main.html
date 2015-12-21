@@ -23,12 +23,24 @@
     <!-- this is important, it provides theming and the base url -->
     <script type="text/javascript" src="webcontext.js?context=marketplace"></script>
 
-    <script type="text/javascript" language="JavaScript">
-      document.write("<script language='javascript' type='text/javascript' src='" + CONTEXT_PATH + "osgi/requirejs-manager/js/require-init.js'></scr"+"ipt>");
-    </script>
     <script>
-      requireCfg.baseUrl = CONTEXT_PATH + "osgi/";
-      require.config(requireCfg);
+      (function(w) {
+        'use strict';
+
+        require.config({
+          baseUrl: w.CONTEXT_PATH + 'osgi/'
+        });
+
+        require(['requirejs-manager/js/require-init'], function() {
+          require.config({
+            baseUrl: w.CONTEXT_PATH + 'osgi/'
+          });
+
+          require(['marketplace_6.1'], function(app) {
+            app.init(document);
+          });
+        });
+      }(window));
     </script>
 
     <link rel="stylesheet" href="css/marketplace.css">
@@ -41,5 +53,4 @@
     </div>
 
   </body>
-  <script src="main.js"></script>
 </html>

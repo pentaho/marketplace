@@ -1,37 +1,55 @@
 {
-  "deps": [ "jquery" ],
-
   "paths": {
     "org.pentaho.marketplace.di.plugin.web": "marketplace/web",
-    "marketplace": "marketplace/web",
-    "marketplace-lib": "marketplace/web/lib/marketplace",
-    "marketplaceApp": "marketplace/web/js/app",
-    "angular-translate": "marketplace/web/lib/angular-translate/angular-translate",
-    "ui-bootstrap": "marketplace/web/lib/ui-bootstrap-tpls-0.6.0.min",
-    "jquery": "marketplace/web/lib/jquery/jquery-1.9.1.min"
+    "marketplace_6.1": "marketplace/web",
+    "marketplace-lib_6.1": "marketplace/web/lib/marketplace"
   },
 
-  "shim": {
-    "jquery": {
-      "exports": "$"
+  "packages": [
+    {
+      "name": "marketplace_6.1",
+      "location": "marketplace/web",
+      "main": "main.js"
     },
+    {
+      "name": "marketplaceApp_6.1",
+      "location": "marketplace/web/js",
+      "main": "app.js"
+    }
+  ],
 
-    "angular-translate": {
-      "deps": [ "angular" ]
+  "map": {
+    "marketplace_6.1": {
+      "underscore": "underscorejs_1.7.0",
+      "jquery": "common-ui/jquery",
+      "angular-sanitize": "angular-sanitize_1.2.15",
+      "angular-translate": "marketplace/web/lib/angular-translate/angular-translate",
+      "ui-bootstrap": "marketplace/web/lib/ui-bootstrap-tpls-0.6.0.min",
+      "marketplace": "marketplace_6.1",
+      "marketplaceApp": "marketplaceApp_6.1",
+      "marketplace-lib": "marketplace-lib_6.1"
     },
-
-    "angular": {
-      "deps": [ "jquery" ]
-    },
-
-    "ui-bootstrap": {
-      "deps": [ "angular" ]
+    "marketplaceApp_6.1": {
+      "underscore": "underscorejs_1.7.0",
+      "jquery": "common-ui/jquery",
+      "angular-sanitize": "angular-sanitize_1.2.15",
+      "angular-translate": "marketplace/web/lib/angular-translate/angular-translate",
+      "ui-bootstrap": "marketplace/web/lib/ui-bootstrap-tpls-0.6.0.min",
+      "marketplace": "marketplace_6.1",
+      "marketplaceApp": "marketplaceApp_6.1",
+      "marketplace-lib": "marketplace-lib_6.1"
     }
   },
 
-  "map": {
-    "*": {
-      "underscore": "underscorejs"
+  "shim": {
+    "angular": {
+      "deps": [ "common-ui/jquery" ]
+    },
+    "marketplace/web/lib/angular-translate/angular-translate": {
+      "deps": [ "angular" ]
+    },
+    "marketplace/web/lib/ui-bootstrap-tpls-0.6.0.min": {
+      "deps": [ "angular" ]
     }
   }
 }

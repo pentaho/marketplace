@@ -1,32 +1,27 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<?xml version="1.0"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
-
   <parent>
     <groupId>org.pentaho</groupId>
     <artifactId>pentaho-marketplace-modules</artifactId>
-    <version>6.0-SNAPSHOT</version>
+    <version>6.0.1.1-398</version>
   </parent>
-
   <artifactId>pentaho-marketplace-ba</artifactId>
+  <version>6.0.1.1-398</version>
   <packaging>bundle</packaging>
-
   <name>Pentaho Marketplace: ${project.artifactId}</name>
   <description>Pentaho Marketplace project</description>
   <url>http://www.pentaho.com/marketplace</url>
-
   <properties>
     <dependency.pentaho.platform.version>${project.version}</dependency.pentaho.platform.version>
   </properties>
-
   <dependencies>
     <dependency>
       <groupId>org.pentaho</groupId>
       <artifactId>${dependency.pentaho-marketplace-core.id}</artifactId>
       <version>${project.version}</version>
     </dependency>
-
-
     <dependency>
       <groupId>pentaho</groupId>
       <artifactId>pentaho-platform-api</artifactId>
@@ -39,17 +34,14 @@
       <version>${dependency.pentaho.platform.version}</version>
       <scope>provided</scope>
     </dependency>
-
     <dependency>
       <groupId>org.osgi</groupId>
       <artifactId>org.osgi.core</artifactId>
     </dependency>
-
     <dependency>
       <groupId>org.osgi</groupId>
       <artifactId>org.osgi.compendium</artifactId>
     </dependency>
-
     <dependency>
       <groupId>commons-logging</groupId>
       <artifactId>commons-logging</artifactId>
@@ -62,19 +54,14 @@
       <groupId>commons-io</groupId>
       <artifactId>commons-io</artifactId>
     </dependency>
-
     <dependency>
       <groupId>org.apache.karaf.kar</groupId>
       <artifactId>org.apache.karaf.kar.core</artifactId>
     </dependency>
-
     <dependency>
       <groupId>org.apache.karaf.features</groupId>
       <artifactId>org.apache.karaf.features.core</artifactId>
     </dependency>
-
-
-    <!-- Test Dependencies -->
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
@@ -87,9 +74,7 @@
       <groupId>org.hamcrest</groupId>
       <artifactId>hamcrest-all</artifactId>
     </dependency>
-
   </dependencies>
-
   <build>
     <plugins>
       <plugin>
@@ -101,19 +86,12 @@
           <instructions>
             <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
             <Bundle-Version>${project.version}</Bundle-Version>
-            <Export-Package>
-              org.pentaho.telemetry.*;-split-package:=merge-last
-            </Export-Package>
-            <Import-Package>
-               !javax.xml.namespace, org.apache.felix.http.api, *
-            </Import-Package>
-            <Private-Package>
-              org.pentaho.marketplace.*;-split-package:=merge-last
-            </Private-Package>
+            <Export-Package>org.pentaho.telemetry.*;-split-package:=merge-last</Export-Package>
+            <Import-Package>!javax.xml.namespace, org.apache.felix.http.api, *</Import-Package>
+            <Private-Package>org.pentaho.marketplace.*;-split-package:=merge-last</Private-Package>
           </instructions>
         </configuration>
       </plugin>
-
       <plugin>
         <artifactId>maven-remote-resources-plugin</artifactId>
         <version>1.5</version>
@@ -131,7 +109,6 @@
           </execution>
         </executions>
       </plugin>
-
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>build-helper-maven-plugin</artifactId>
@@ -155,8 +132,6 @@
           </execution>
         </executions>
       </plugin>
-
     </plugins>
   </build>
-
 </project>

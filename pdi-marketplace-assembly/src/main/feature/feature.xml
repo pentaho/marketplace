@@ -5,9 +5,12 @@
       mvn:org.pentaho/pentaho-marketplace-di/${project.version}/cfg/pentaho-marketplace-config
     </configfile>
 
+    <feature>pentaho-requirejs-osgi-manager</feature>
+
     <!-- START client side dependencies -->
     <bundle>pentaho-webjars:mvn:org.webjars/angular-sanitize/1.2.15</bundle>
     <bundle>pentaho-webjars:mvn:org.webjars/underscorejs/1.7.0</bundle>
+    <bundle dependency="false">pentaho-platform-plugin-mvn:pentaho/common-ui/${project.version}/zip</bundle>
     <!-- END -->
   </feature>
 

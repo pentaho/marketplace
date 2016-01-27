@@ -60,6 +60,11 @@
       <artifactId>angular-sanitize</artifactId>
     </dependency>
     <dependency>
+      <groupId>pentaho</groupId>
+      <artifactId>common-ui</artifactId>
+      <type>zip</type>
+    </dependency>
+    <dependency>
       <groupId>org.apache.karaf.kar</groupId>
       <artifactId>org.apache.karaf.kar.core</artifactId>
     </dependency>

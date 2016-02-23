@@ -59,6 +59,7 @@ import org.pentaho.marketplace.domain.model.factories.interfaces.IDomainStatusMe
 import org.pentaho.marketplace.domain.model.factories.interfaces.IPluginVersionFactory;
 import org.pentaho.marketplace.domain.model.factories.interfaces.IVersionDataFactory;
 import org.pentaho.marketplace.domain.services.interfaces.IRemotePluginProvider;
+import org.pentaho.marketplace.util.web.HttpUtil;
 import org.pentaho.telemetry.ITelemetryService;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -469,8 +470,13 @@ public class DiPluginService extends BasePluginService {
     ZipInputStream zis = null;
 
     try {
+      // using HttpUtil to handle http redirects
+      InputStream urlInputStream = HttpUtil.getURLInputStream( packageUrl );
+      if ( urlInputStream == null ) {
+        throw new KettleException( "Unable get file from " + packageUrl );
+      }
       tmpFile = File.createTempFile( "plugin", ".zip" );
-      org.apache.commons.io.FileUtils.copyURLToFile( new URL( packageUrl ), tmpFile );
+      org.apache.commons.io.FileUtils.copyInputStreamToFile( urlInputStream, tmpFile );
 
       // Read the package, extract in folder
       //

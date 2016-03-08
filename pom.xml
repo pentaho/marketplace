@@ -8,7 +8,7 @@
     <version>1.1.6</version>
   </parent>
   <artifactId>pentaho-marketplace-modules</artifactId>
-  <version>6.1-SNAPSHOT</version>
+  <version>7.0-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>Pentaho Marketplace: ${project.artifactId}</name>
   <description>Pentaho Marketplace project</description>
@@ -60,11 +60,11 @@
     <module>pentaho-marketplace-assembly</module>
   </modules>
   <properties>
-    <dependency.pentaho-osgi-bundles.revision>6.1-SNAPSHOT</dependency.pentaho-osgi-bundles.revision>
-    <dependency.pentaho-kettle.version>6.1-SNAPSHOT</dependency.pentaho-kettle.version>
+    <dependency.pentaho-osgi-bundles.revision>7.0-SNAPSHOT</dependency.pentaho-osgi-bundles.revision>
+    <dependency.pentaho-kettle.version>7.0-SNAPSHOT</dependency.pentaho-kettle.version>
     <dependency.pentaho-marketplace-core.id>pentaho-marketplace-core</dependency.pentaho-marketplace-core.id>
-    <plugin.org.codehaus.mojo.build-helper-maven-plugin.version>1.5</plugin.org.codehaus.mojo.build-helper-maven-plugin.version>
     <paxexamversion>4.1.0</paxexamversion>
+    <plugin.org.codehaus.mojo.build-helper-maven-plugin.version>1.5</plugin.org.codehaus.mojo.build-helper-maven-plugin.version>
     <dependency.pentaho-marketplace-di.id>pentaho-marketplace-di</dependency.pentaho-marketplace-di.id>
     <karaf.version>3.0.3</karaf.version>
     <dependency.pentaho.pentaho-xul-core.version>${project.version}</dependency.pentaho.pentaho-xul-core.version>

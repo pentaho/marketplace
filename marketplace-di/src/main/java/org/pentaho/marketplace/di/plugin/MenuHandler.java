@@ -53,7 +53,7 @@ public class MenuHandler extends AbstractXulEventHandler {
     // if no service port is specified try getting it from
     ServerPort osgiServicePort = ServerPortRegistry.getPort( OSGI_SERVICE_PORT );
     if ( osgiServicePort != null ) {
-      return osgiServicePort.getValue();
+      return osgiServicePort.getAssignedPort();
     }
     return null;
   }

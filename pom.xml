@@ -68,6 +68,8 @@
     <dependency.pentaho-marketplace-di.id>pentaho-marketplace-di</dependency.pentaho-marketplace-di.id>
     <karaf.version>3.0.3</karaf.version>
     <dependency.pentaho.pentaho-xul-core.version>${project.version}</dependency.pentaho.pentaho-xul-core.version>
+    <dependency.org.springframework.version>4.3.2.RELEASE</dependency.org.springframework.version>
+    <dependency.org.springframework.security.version>4.1.3.RELEASE</dependency.org.springframework.security.version>
   </properties>
   <dependencyManagement>
     <dependencies>

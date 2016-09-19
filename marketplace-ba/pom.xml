@@ -78,6 +78,16 @@
       <groupId>org.webjars</groupId>
       <artifactId>angular-sanitize</artifactId>
     </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-core</artifactId>
+      <version>${dependency.org.springframework.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.security</groupId>
+      <artifactId>spring-security-core</artifactId>
+      <version>${dependency.org.springframework.security.version}</version>
+    </dependency>
   </dependencies>
   <build>
     <plugins>

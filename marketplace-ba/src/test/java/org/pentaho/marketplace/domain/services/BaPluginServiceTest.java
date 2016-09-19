@@ -51,9 +51,10 @@ import org.pentaho.platform.api.engine.IPentahoSession;
 import org.pentaho.platform.api.engine.ISecurityHelper;
 
 import org.pentaho.telemetry.ITelemetryService;
-import org.springframework.security.Authentication;
-import org.springframework.security.GrantedAuthority;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 
+import java.util.List;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -121,7 +122,9 @@ public class BaPluginServiceTest {
     GrantedAuthority userAuthority = mock( GrantedAuthority.class );
     when( userAuthority.getAuthority() ).thenReturn( role );
     Authentication userAuthentication = mock( Authentication.class );
-    when( userAuthentication.getAuthorities() ).thenReturn( new GrantedAuthority[] { userAuthority } );
+    List<GrantedAuthority> authList = new ArrayList<GrantedAuthority>();
+    authList.add( userAuthority );
+    doReturn( authList ).when( userAuthentication ).getAuthorities();
     when( userAuthentication.getName() ).thenReturn( userName );
 
     return  userAuthentication;

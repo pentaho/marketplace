@@ -1,6 +1,6 @@
 <div class="multiselect">
-    <div class="btn-group" data-dropdown data-is-open="status.isopen">
-      <button class="btn btn-primary dropdown-toggle" type="button" data-ng-disabled="disabled"
+    <div class="btn-group" data-uib-dropdown data-is-open="status.isopen">
+      <button class="btn btn-primary dropdown-toggle" data-uib-dropdown-toggle type="button" data-ng-disabled="disabled"
           data-popover="{{optionsDisplayString}}" data-popover-popup-delay="500"
           data-popover-trigger="mouseenter" data-popover-placement="bottom">
         <span class="multiselectButtonText">
@@ -9,7 +9,7 @@
         </span>
         <span class="caret"></span>
       </button>
-      <ul class="dropdown-menu" role="menu">
+      <ul class="dropdown-menu" data-uib-dropdown-menu role="menu">
 
           <li class="group"
               data-ng-repeat-start="group in groups"

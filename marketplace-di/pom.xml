@@ -87,7 +87,33 @@
       </exclusions>
     </dependency>
   </dependencies>
+
   <build>
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+        <filtering>false</filtering>
+        <includes>
+          <include>**/*</include>
+        </includes>
+        <excludes>
+          <exclude>META-INF/**/*</exclude>
+          <exclude>OSGI-INF/**/*</exclude>
+          <exclude>web/*.html</exclude>
+        </excludes>
+      </resource>
+
+      <resource>
+        <directory>src/main/resources</directory>
+        <filtering>true</filtering>
+        <includes>
+          <include>META-INF/**/*</include>
+          <include>OSGI-INF/**/*</include>
+          <include>web/*.html</include>
+        </includes>
+      </resource>
+    </resources>
+
     <plugins>
       <plugin>
         <groupId>org.apache.felix</groupId>

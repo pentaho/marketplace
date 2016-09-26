@@ -18,10 +18,14 @@
 
 <html>
   <head>
+    <meta http-equiv='x-ua-compatible' content='IE=edge' />
+
     <title>Marketplace</title>
 
     <!-- this is important, it provides theming and the base url -->
     <script type="text/javascript" src="webcontext.js?context=marketplace"></script>
+
+    <link rel="stylesheet" href="css/marketplace.css">
 
     <script>
       (function(w) {
@@ -33,18 +37,27 @@
 
         require(['requirejs-manager/js/require-init'], function() {
           require.config({
-            baseUrl: w.CONTEXT_PATH + 'osgi/'
+            baseUrl: w.CONTEXT_PATH + 'osgi/',
+            map: {
+              "pentaho-marketplace_${project.version}": {
+                "marketplaceApp": "pentaho-marketplace_${project.version}/js/app",
+                "marketplace-lib": "pentaho-marketplace_${project.version}/lib/marketplace",
+                "angular-translate": "pentaho-marketplace_${project.version}/lib/angular-translate/angular-translate"
+              }
+            },
+            shim: {
+              "pentaho-marketplace_${project.version}/lib/angular-translate/angular-translate": {
+                deps: ["angular_${angular.version}"]
+              }
+            }
           });
 
-          require(['marketplace_6.1'], function(app) {
+          require(['pentaho-marketplace_${project.version}'], function(app) {
             app.init(document);
           });
         });
       }(window));
     </script>
-
-    <link rel="stylesheet" href="css/marketplace.css">
-
   </head>
 
   <body class="bootstrap admin-perspective" >

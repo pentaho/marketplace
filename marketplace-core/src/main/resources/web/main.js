@@ -13,48 +13,49 @@
 
 define(
     [
+        'jquery', // load jquery before angular
         'angular',
         'angular-sanitize',
         'underscore',
 
         'marketplaceApp',
 
-        'marketplace/js/constants',
+        './js/constants',
 
-        'marketplace/js/controllers/applicationController',
-        'marketplace/js/models/plugin',
+        './js/controllers/applicationController',
+        './js/models/plugin',
 
-        'marketplace/js/services/appService',
-        'marketplace/js/services/installFlowService/installFlowService',
-        'marketplace/js/services/dtoMapperService',
-        'marketplace/js/services/developmentStageService',
-        'marketplace/js/services/categoryService',
+        './js/services/appService',
+        './js/services/installFlowService/installFlowService',
+        './js/services/dtoMapperService',
+        './js/services/developmentStageService',
+        './js/services/categoryService',
 
-        'marketplace/directives/installUpdateButton/installUpdateButtonController',
-        'marketplace/directives/installUpdateButton/installUpdateButtonDirective',
+        './directives/installUpdateButton/installUpdateButtonController',
+        './directives/installUpdateButton/installUpdateButtonDirective',
 
-        'marketplace/directives/multiselectDropdown/multiselectDropdownController',
-        'marketplace/directives/multiselectDropdown/multiselectDropdownDirective',
+        './directives/multiselectDropdown/multiselectDropdownController',
+        './directives/multiselectDropdown/multiselectDropdownDirective',
 
-        'marketplace/directives/stagesInfo/stagesInfoController',
-        'marketplace/directives/stagesInfo/stagesInfoDirective',
+        './directives/stagesInfo/stagesInfoController',
+        './directives/stagesInfo/stagesInfoDirective',
 
-        'marketplace/directives/pluginDetail/pluginDetailController',
-        'marketplace/directives/pluginDetail/pluginDetailDirective',
-        'marketplace/directives/pluginList/pluginListController',
-        'marketplace/directives/pluginList/pluginListDirective',
-        'marketplace/directives/pluginListItem/pluginListItemController',
-        'marketplace/directives/pluginListItem/pluginListItemDirective',
-        'marketplace/directives/devStageIcon/devStageIconController',
-        'marketplace/directives/devStageIcon/devStageIconDirective',
+        './directives/pluginDetail/pluginDetailController',
+        './directives/pluginDetail/pluginDetailDirective',
+        './directives/pluginList/pluginListController',
+        './directives/pluginList/pluginListDirective',
+        './directives/pluginListItem/pluginListItemController',
+        './directives/pluginListItem/pluginListItemDirective',
+        './directives/devStageIcon/devStageIconController',
+        './directives/devStageIcon/devStageIconDirective',
 
-        'marketplace/directives/stopEvent/stopEventDirective',
-        'marketplace/directives/indeterminate/indeterminateDirective',
-        'marketplace/directives/modalHeight/modalHeightDirective'
+        './directives/stopEvent/stopEventDirective',
+        './directives/indeterminate/indeterminateDirective',
+        './directives/modalHeight/modalHeightDirective'
 
     ],
 
-    function (angular) {
+    function (jq, angular) {
         'use strict';
 
         var module = {

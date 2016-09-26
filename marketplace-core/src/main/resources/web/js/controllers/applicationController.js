@@ -24,7 +24,7 @@ define(
       logger.log("Required controllers/applicationController.js");
 
       app.controller('applicationController',
-          ['$scope', 'appService', '$modal', 'developmentStageService', '$filter',
+          ['$scope', 'appService', '$uibModal', 'developmentStageService', '$filter',
             function ( $scope, appService, $modal, devStagesService, $filter ) {
 
               var installedTab = 'installedTab';
@@ -198,9 +198,9 @@ define(
               }
 
               function openStagesInfoModal () {
-                function modalController( $scope, $modalInstance ) {
+                function modalController( $scope, $uibModalInstance ) {
                   $scope.closeModal = function () {
-                    $modalInstance.close();
+                    $uibModalInstance.close();
                   }
                 }
 

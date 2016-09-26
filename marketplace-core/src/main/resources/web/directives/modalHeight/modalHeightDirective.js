@@ -68,7 +68,7 @@ define( [
                 // Controller Logic
                 var $modal = element.parents('.modal');
                 var $modalBody = $modal.find('.modal-body');
-                var $modalContainer = $modal.find('.modal-container');
+                var $modalContainer = $modal.find('.modal-content');
                 var $window = angular.element( window );
 
                 if ( isBrowserIE8() ) {

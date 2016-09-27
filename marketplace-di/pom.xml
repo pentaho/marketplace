@@ -71,11 +71,6 @@
     </dependency>
     <dependency>
       <groupId>pentaho</groupId>
-      <artifactId>pentaho-angular-bundle</artifactId>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>pentaho</groupId>
       <artifactId>pentaho-platform-extensions</artifactId>
       <version>${project.version}</version>
       <scope>provided</scope>

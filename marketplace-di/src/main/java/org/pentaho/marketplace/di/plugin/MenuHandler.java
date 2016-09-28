@@ -31,7 +31,7 @@ import java.net.URL;
 
 public class MenuHandler extends AbstractXulEventHandler {
   public static final String MARKETPLACE_MENU_EVENT_HANDLER = "marketplaceMenuEventHandler";
-  private static final String WEB_CLIENT_PATH =  "/marketplace/web/main.html";
+  public static String WEB_CLIENT_PATH =  "/marketplace/web/main.html";
   private static final String OSGI_SERVICE_PORT = "OSGI_SERVICE_PORT";
 
   private static Class<?> PKG = MenuHandler.class; // for i18n purposes, needed by Translator2!!

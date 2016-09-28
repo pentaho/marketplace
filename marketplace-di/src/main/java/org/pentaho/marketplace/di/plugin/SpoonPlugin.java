@@ -39,6 +39,10 @@ public class SpoonPlugin implements SpoonPluginInterface {
   // region Properties
   private XulDomContainer container;
 
+  public void setUrl( String url ) {
+    MenuHandler.WEB_CLIENT_PATH = url;
+  }
+
   public SpoonLifecycleListener getLifecycleListener() {
     return new SpoonLifecycleListener() {
       public void onEvent( SpoonLifeCycleEvent evt ) {

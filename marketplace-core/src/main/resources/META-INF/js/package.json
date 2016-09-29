@@ -9,7 +9,7 @@
     "angular": "${angular.version}",
     "angular-route": "${angular-sanitize.version}",
     "angular-sanitize": "${angular-sanitize.version}",
-    "angular-translate": "2.2.0-MOD",
+    "angular-translate": "${angular-translate.version}",
     "angular-bootstrap": "${angular-ui-bootstrap.version}"
   }
 }

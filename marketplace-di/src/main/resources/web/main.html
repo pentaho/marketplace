@@ -36,18 +36,25 @@
                 'use strict';
 
                 // overrides just for this app
+                // manual configuration of angular-translate mapping and shim needed because of BACKLOG-11236
                 require.config({
                     map: {
                         "pentaho-marketplace_${project.version}": {
                             "marketplaceApp": "pentaho-marketplace_${project.version}/js/app",
-                            "marketplace-lib": "pentaho-marketplace_${project.version}/lib/marketplace",
-                            "angular-translate": "pentaho-marketplace_${project.version}/lib/angular-translate/angular-translate"
+                            "marketplace-lib": "pentaho-marketplace_${project.version}/lib/marketplace"
+                        },
+                        "angular-translate_${angular-translate.version}": {
+                          "angular-translate": "angular-translate_${angular-translate.version}",
+                          "angular": "angular_${angular.version}"
                         }
                     },
                     shim: {
-                        "pentaho-marketplace_${project.version}/lib/angular-translate/angular-translate": {
-                            deps: ["angular_${angular.version}"]
-                        }
+                      "angular-translate_${angular-translate.version}": {
+                        deps: ["angular_${angular.version}"]
+                      },
+                      "angular-translate_${angular-translate.version}/angular-translate": {
+                        deps: ["angular_${angular.version}"]
+                      }
                     }
                 });
 

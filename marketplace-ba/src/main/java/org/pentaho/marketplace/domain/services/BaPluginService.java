@@ -56,8 +56,8 @@ import org.pentaho.platform.util.VersionHelper;
 import org.pentaho.platform.util.VersionInfo;
 
 import org.pentaho.telemetry.ITelemetryService;
-import org.springframework.security.Authentication;
-import org.springframework.security.GrantedAuthority;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.xml.sax.InputSource;
 
 import java.io.File;

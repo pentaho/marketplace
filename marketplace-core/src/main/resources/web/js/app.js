@@ -15,9 +15,10 @@
 
 define( [ 'angular',
           'angular-route',
-          'ui-bootstrap',
+          'angular-bootstrap',
           'angular-translate',
-          'marketplace-lib/Logger'
+          'marketplace-lib/Logger',
+          'marketplace-lib/angular-translate-static-loader'
     ],
 
     function ( angular, angularRoute, uiBootstrap, angularTranslate, logger ) {

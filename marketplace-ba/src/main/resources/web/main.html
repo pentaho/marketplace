@@ -18,10 +18,14 @@
 
 <html>
   <head>
+    <meta http-equiv='x-ua-compatible' content='IE=edge' />
+
     <title>Marketplace</title>
 
     <!-- this is important, it provides theming and the base url -->
     <script type="text/javascript" src="webcontext.js?context=marketplace"></script>
+
+    <link rel="stylesheet" href="css/marketplace.css">
 
     <script>
       (function(w) {
@@ -32,19 +36,36 @@
         });
 
         require(['requirejs-manager/js/require-init'], function() {
+          // overrides just for this app
+          // manual configuration of angular-translate mapping and shim needed because of BACKLOG-11236
           require.config({
-            baseUrl: w.CONTEXT_PATH + 'osgi/'
+            baseUrl: w.CONTEXT_PATH + 'osgi/',
+            map: {
+              "pentaho-marketplace_${project.version}": {
+                "marketplaceApp": "pentaho-marketplace_${project.version}/js/app",
+                "marketplace-lib": "pentaho-marketplace_${project.version}/lib/marketplace"
+              },
+              "angular-translate_${angular-translate.version}": {
+                "angular-translate": "angular-translate_${angular-translate.version}",
+                "angular": "angular_${angular.version}"
+              }
+            },
+            shim: {
+              "angular-translate_${angular-translate.version}": {
+                deps: ["angular_${angular.version}"]
+              },
+              "angular-translate_${angular-translate.version}/angular-translate": {
+                deps: ["angular_${angular.version}"]
+              }
+            }
           });
 
-          require(['marketplace_6.1'], function(app) {
+          require(['pentaho-marketplace_${project.version}'], function(app) {
             app.init(document);
           });
         });
       }(window));
     </script>
-
-    <link rel="stylesheet" href="css/marketplace.css">
-
   </head>
 
   <body class="bootstrap admin-perspective" >

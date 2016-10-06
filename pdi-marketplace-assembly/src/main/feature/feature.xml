@@ -1,6 +1,7 @@
 <features name="${project.artifactId}-repo" xmlns="http://karaf.apache.org/xmlns/features/v1.2.1">
 
   <feature name="${project.artifactId}" version="${project.version}">
+    <feature>kar</feature>
     <configfile finalname="/etc/pentaho.marketplace.di.cfg">
       mvn:org.pentaho/pentaho-marketplace-di/${project.version}/cfg/pentaho-marketplace-config
     </configfile>

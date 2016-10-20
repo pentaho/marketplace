@@ -1265,6 +1265,10 @@ body.bootstrap .modal.confirmationDialog {
   margin-left: -205px;
 }
 
+body.bootstrap .modal.confirmationDialog .modal-dialog {
+  border: 0 none;
+}
+
 body.bootstrap .modal.confirmationDialog .dialog .title {
   font-size: 16px;
   padding-bottom: 20px;
@@ -1663,6 +1667,10 @@ body.bootstrap .modal.pluginDetailDialog .pluginScreenshots  .carousel-indicator
 	background-color: #fff \9;
 	background-color: rgba(0,0,0,0);
 	float: none;
+}
+
+body.bootstrap .modal.pluginDetailDialog .pluginScreenshots  .carousel-indicators li .sr-only {
+  display: none;
 }
 
 body.bootstrap .modal.pluginDetailDialog .pluginScreenshots  .carousel-indicators li.active {

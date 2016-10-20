@@ -74,8 +74,8 @@
 
         <div data-ng-if="plugin.screenshotUrls && plugin.screenshotUrls.length > 0" class="pluginScreenshots">
           <div class="sectionHeader">{{ 'marketplace.pluginDetail.section.screenshots.title' | translate }}</div>
-          <div data-carousel data-interval="5000">
-            <div data-slide data-ng-repeat="screenshotUrl in plugin.screenshotUrls">
+          <div data-uib-carousel data-interval="5000" data-active="0">
+            <div data-uib-slide data-ng-repeat="screenshotUrl in plugin.screenshotUrls" data-index="$index">
               <img data-ng-src="{{screenshotUrl}}">
             </div>
           </div>

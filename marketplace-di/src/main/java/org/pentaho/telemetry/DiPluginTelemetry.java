@@ -12,7 +12,7 @@
  * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU Lesser General Public License for more details.
  *
- * Copyright (c) 2015 Pentaho Corporation. All rights reserved.
+ * Copyright (c) 2016 Pentaho Corporation. All rights reserved.
  */
 
 package org.pentaho.telemetry;
@@ -21,6 +21,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.osgi.framework.Bundle;
 import org.pentaho.di.version.BuildVersion;
+import org.pentaho.marketplace.util.XmlParserFactoryProducer;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -84,8 +85,8 @@ public class DiPluginTelemetry extends TelemetryService {
   }
 
   private static String parsePluginVersion( InputStream versionFile ) {
-    DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
     try {
+      DocumentBuilderFactory dbf = XmlParserFactoryProducer.createSecureDocBuilderFactory();
       DocumentBuilder db = dbf.newDocumentBuilder();
       Document doc = db.parse( versionFile );
       NodeList nodes = doc.getElementsByTagName( "version" );

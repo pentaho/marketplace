@@ -12,7 +12,7 @@
  * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU Lesser General Public License for more details.
  *
- * Copyright (c) 2015 Pentaho Corporation. All rights reserved.
+ * Copyright (c) 2016 Pentaho Corporation. All rights reserved.
  */
 
 package org.pentaho.marketplace.domain.services;
@@ -27,7 +27,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -59,6 +58,7 @@ import org.pentaho.marketplace.domain.model.factories.interfaces.IDomainStatusMe
 import org.pentaho.marketplace.domain.model.factories.interfaces.IPluginVersionFactory;
 import org.pentaho.marketplace.domain.model.factories.interfaces.IVersionDataFactory;
 import org.pentaho.marketplace.domain.services.interfaces.IRemotePluginProvider;
+import org.pentaho.marketplace.util.XmlParserFactoryProducer;
 import org.pentaho.marketplace.util.web.HttpUtil;
 import org.pentaho.telemetry.ITelemetryService;
 import org.w3c.dom.Document;
@@ -171,7 +171,7 @@ public class DiPluginService extends BasePluginService {
 
     FileReader reader = null;
     try {
-      DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+      DocumentBuilderFactory dbf = XmlParserFactoryProducer.createSecureDocBuilderFactory();
       DocumentBuilder db = dbf.newDocumentBuilder();
       reader = new FileReader( versionPath );
       Document dom = db.parse( new InputSource( reader ) );
@@ -179,9 +179,9 @@ public class DiPluginService extends BasePluginService {
       if ( versionElements.getLength() >= 1 ) {
         Element versionElement = (Element) versionElements.item( 0 );
 
-        pluginVersion.setBuildId(versionElement.getAttribute("buildId"));
-        pluginVersion.setBranch(versionElement.getAttribute("branch"));
-        pluginVersion.setVersion(versionElement.getTextContent());
+        pluginVersion.setBuildId( versionElement.getAttribute( "buildId" ) );
+        pluginVersion.setBranch( versionElement.getAttribute( "branch" ) );
+        pluginVersion.setVersion( versionElement.getTextContent() );
       }
 
     } catch ( Exception e ) {
@@ -214,7 +214,7 @@ public class DiPluginService extends BasePluginService {
   private Collection<String> getInstalledPluginIdsFromFolders() {
     Collection<String> pluginIds = new HashSet<>();
 
-    for( MarketEntryType type : MarketEntryType.values() ) {
+    for ( MarketEntryType type : MarketEntryType.values() ) {
       String pluginTypeFolderName = this.getInstallationSubfolder( type );
       pluginTypeFolderName = BASE_PLUGINS_FOLDER_NAME + ( pluginTypeFolderName == null ? "" : Const.FILE_SEPARATOR + pluginTypeFolderName );
       File pluginTypeFolder = new File( pluginTypeFolderName );
@@ -433,8 +433,8 @@ public class DiPluginService extends BasePluginService {
         bufferedWriter.write(
             "<version " + buildAttribute( "branch", version.getBranch() ) + " "
                         + buildAttribute( "buildId", version.getBuildId() ) + ">"
-              + version.getVersion() +
-            "</version>" );
+              + version.getVersion()
+                + "</version>" );
       } catch ( IOException ioe ) {
         throw new KettleException( ioe );
       } finally {

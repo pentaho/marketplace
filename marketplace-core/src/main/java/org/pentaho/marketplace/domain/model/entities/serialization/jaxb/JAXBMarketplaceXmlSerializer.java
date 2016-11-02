@@ -12,7 +12,7 @@
  * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU Lesser General Public License for more details.
  *
- * Copyright (c) 2015 Pentaho Corporation. All rights reserved.
+ * Copyright (c) 2016 Pentaho Corporation. All rights reserved.
  */
 
 package org.pentaho.marketplace.domain.model.entities.serialization.jaxb;
@@ -35,10 +35,13 @@ import org.pentaho.marketplace.domain.model.factories.interfaces.ICategoryFactor
 import org.pentaho.marketplace.domain.model.factories.interfaces.IPluginFactory;
 import org.pentaho.marketplace.domain.model.factories.interfaces.IPluginVersionFactory;
 
+import org.pentaho.marketplace.util.XmlParserFactoryProducer;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -46,6 +49,10 @@ import javax.xml.bind.Unmarshaller;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParserFactory;
+import javax.xml.transform.Source;
+import javax.xml.transform.sax.SAXSource;
 import javax.xml.xpath.XPathExpressionException;
 
 import java.io.InputStream;
@@ -98,11 +105,13 @@ public final class JAXBMarketplaceXmlSerializer implements IMarketplaceXmlSerial
   // regions Methods
   @Override public Map<String, IPlugin> getPlugins( InputStream xmlInputStream ) {
     try {
-      Market market = (Market) jaxbUnmarshaller.unmarshal( xmlInputStream );
+      SAXParserFactory spf = XmlParserFactoryProducer.createSecureSAXParserFactory();
+      Source xmlSource = new SAXSource( spf.newSAXParser().getXMLReader(), new InputSource( xmlInputStream ) );
+      Market market = (Market) jaxbUnmarshaller.unmarshal( xmlSource );
       Map<String, IPlugin> plugins = this.toPlugins( market );
       return plugins;
 
-    } catch ( JAXBException e ) {
+    } catch ( JAXBException | SAXException | ParserConfigurationException e ) {
       this.getLogger().debug( "Failed trying to parse invalid marketplace metadata." );
       return Collections.emptyMap();
     }
@@ -110,11 +119,13 @@ public final class JAXBMarketplaceXmlSerializer implements IMarketplaceXmlSerial
 
   @Override public Map<String, IPlugin> getPlugins( String xml ) {
     try {
-      Market market = (Market) jaxbUnmarshaller.unmarshal( new StringReader( xml ) );
+      SAXParserFactory spf = XmlParserFactoryProducer.createSecureSAXParserFactory();
+      Source xmlSource = new SAXSource( spf.newSAXParser().getXMLReader(), new InputSource( new StringReader( xml ) ) );
+      Market market = (Market) jaxbUnmarshaller.unmarshal( xmlSource );
       Map<String, IPlugin> plugins = this.toPlugins( market );
       return plugins;
 
-    } catch ( JAXBException e ) {
+    } catch ( JAXBException | SAXException | ParserConfigurationException e ) {
       this.getLogger().debug( "Failed trying to parse invalid marketplace metadata." );
       return Collections.emptyMap();
     }
@@ -140,7 +151,8 @@ public final class JAXBMarketplaceXmlSerializer implements IMarketplaceXmlSerial
   @Override public IPluginVersion getInstalledVersion( InputSource inputDocument ) {
     IPluginVersion version = null;
     try {
-      DocumentBuilder db = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+      DocumentBuilderFactory dbf = XmlParserFactoryProducer.createSecureDocBuilderFactory();
+      DocumentBuilder db = dbf.newDocumentBuilder();
       Document document = db.parse( inputDocument );
 
       version = this.getInstalledVersion( document );
@@ -238,7 +250,7 @@ public final class JAXBMarketplaceXmlSerializer implements IMarketplaceXmlSerial
     pluginVersion.setBranch( version.getBranch() );
     pluginVersion.setName( version.getName() );
     String downloadUrl = version.getPackageUrl();
-    if( downloadUrl != null ) {
+    if ( downloadUrl != null ) {
       downloadUrl = downloadUrl.trim();
       pluginVersion.setDownloadUrl( downloadUrl );
       pluginVersion.setIsOsgi( downloadUrl.endsWith( OSGI_URL_SUFFIX ) );

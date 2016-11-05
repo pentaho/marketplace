@@ -5,10 +5,10 @@
   <parent>
     <groupId>org.pentaho</groupId>
     <artifactId>pentaho-marketplace-modules</artifactId>
-    <version>7.0-SNAPSHOT</version>
+    <version>7.0.0.0-25</version>
   </parent>
   <artifactId>pentaho-marketplace-di</artifactId>
-  <version>7.0-SNAPSHOT</version>
+  <version>7.0.0.0-25</version>
   <packaging>bundle</packaging>
   <name>Pentaho Marketplace: ${project.artifactId}</name>
   <description>Pentaho Marketplace project</description>
@@ -82,12 +82,11 @@
       </exclusions>
     </dependency>
   </dependencies>
-
   <build>
     <resources>
       <resource>
-        <directory>src/main/resources</directory>
         <filtering>false</filtering>
+        <directory>src/main/resources</directory>
         <includes>
           <include>**/*</include>
         </includes>
@@ -97,10 +96,9 @@
           <exclude>web/*.html</exclude>
         </excludes>
       </resource>
-
       <resource>
-        <directory>src/main/resources</directory>
         <filtering>true</filtering>
+        <directory>src/main/resources</directory>
         <includes>
           <include>META-INF/**/*</include>
           <include>OSGI-INF/**/*</include>
@@ -108,7 +106,6 @@
         </includes>
       </resource>
     </resources>
-
     <plugins>
       <plugin>
         <groupId>org.apache.felix</groupId>

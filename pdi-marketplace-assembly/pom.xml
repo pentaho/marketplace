@@ -5,10 +5,10 @@
   <parent>
     <groupId>org.pentaho</groupId>
     <artifactId>pentaho-marketplace-modules</artifactId>
-    <version>7.0-SNAPSHOT</version>
+    <version>7.0.0.0-25</version>
   </parent>
   <artifactId>pdi-marketplace</artifactId>
-  <version>7.0-SNAPSHOT</version>
+  <version>7.0.0.0-25</version>
   <packaging>kar</packaging>
   <name>Pentaho Marketplace for PDI Assembly</name>
   <description>Pentaho Marketplace for PDI Assembly</description>
@@ -25,7 +25,6 @@
       <version>${project.version}</version>
       <scope>provided</scope>
     </dependency>
-
     <dependency>
       <groupId>net.sf.flexjson</groupId>
       <artifactId>flexjson</artifactId>

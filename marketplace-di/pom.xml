@@ -56,15 +56,6 @@
       <artifactId>commons-codec</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.webjars</groupId>
-      <artifactId>angular-sanitize</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>pentaho</groupId>
-      <artifactId>common-ui</artifactId>
-      <type>zip</type>
-    </dependency>
-    <dependency>
       <groupId>org.apache.karaf.kar</groupId>
       <artifactId>org.apache.karaf.kar.core</artifactId>
     </dependency>
@@ -80,11 +71,6 @@
     </dependency>
     <dependency>
       <groupId>pentaho</groupId>
-      <artifactId>pentaho-angular-bundle</artifactId>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>pentaho</groupId>
       <artifactId>pentaho-platform-extensions</artifactId>
       <version>${project.version}</version>
       <scope>provided</scope>
@@ -96,7 +82,33 @@
       </exclusions>
     </dependency>
   </dependencies>
+
   <build>
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+        <filtering>false</filtering>
+        <includes>
+          <include>**/*</include>
+        </includes>
+        <excludes>
+          <exclude>META-INF/**/*</exclude>
+          <exclude>OSGI-INF/**/*</exclude>
+          <exclude>web/*.html</exclude>
+        </excludes>
+      </resource>
+
+      <resource>
+        <directory>src/main/resources</directory>
+        <filtering>true</filtering>
+        <includes>
+          <include>META-INF/**/*</include>
+          <include>OSGI-INF/**/*</include>
+          <include>web/*.html</include>
+        </includes>
+      </resource>
+    </resources>
+
     <plugins>
       <plugin>
         <groupId>org.apache.felix</groupId>

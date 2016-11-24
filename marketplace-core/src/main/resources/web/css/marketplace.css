@@ -1201,7 +1201,7 @@ button.refreshButton {
   max-height: 80%;
 }
 
-.bootstrap .modal .modal-container {
+.bootstrap .modal .modal-dialog {
   border: 1px solid #cbdde8;
   height: 100%;
   overflow-y: auto;
@@ -1218,7 +1218,7 @@ button.refreshButton {
 	overflow-y: initial;
 }
 
-.bootstrap .modal .modal-container .closeButton {
+.bootstrap .modal .modal-content .closeButton {
   position: absolute;
   right: 6px;
   top: -6px;
@@ -1235,8 +1235,8 @@ button.refreshButton {
   z-index: 3000;
 }
 
-.no-svg.bootstrap .modal .modal-container .closeButton,
-.IE.IE8.bootstrap .modal .modal-container .closeButton {
+.no-svg.bootstrap .modal .modal-content .closeButton,
+.IE.IE8.bootstrap .modal .modal-content .closeButton {
   background-image: url(../img/close-details.png);
 }
 

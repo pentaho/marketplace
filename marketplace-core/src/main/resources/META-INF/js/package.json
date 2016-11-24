@@ -1,0 +1,15 @@
+{
+  "name": "pentaho-marketplace",
+  "version": "${project.version}",
+  "description": "${project.description}",
+  "main": "main.js",
+  "dependencies": {
+    "underscore": "${underscore.version}",
+    "jquery": "${jquery.version}",
+    "angular": "${angular.version}",
+    "angular-route": "${angular-sanitize.version}",
+    "angular-sanitize": "${angular-sanitize.version}",
+    "angular-translate": "${angular-translate.version}",
+    "angular-bootstrap": "${angular-ui-bootstrap.version}"
+  }
+}

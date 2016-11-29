@@ -12,7 +12,7 @@
  * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU Lesser General Public License for more details.
  *
- * Copyright (c) 2016 Pentaho Corporation. All rights reserved.
+ * Copyright (c) 2015 Pentaho Corporation. All rights reserved.
  */
 
 package org.pentaho.marketplace.di.plugin;
@@ -31,7 +31,7 @@ import java.net.URL;
 
 public class MenuHandler extends AbstractXulEventHandler {
   public static final String MARKETPLACE_MENU_EVENT_HANDLER = "marketplaceMenuEventHandler";
-  public static String WEB_CLIENT_PATH =  "/marketplace/web/main.html";
+  private static final String WEB_CLIENT_PATH =  "/marketplace/web/main.html";
   private static final String OSGI_SERVICE_PORT = "OSGI_SERVICE_PORT";
 
   private static Class<?> PKG = MenuHandler.class; // for i18n purposes, needed by Translator2!!

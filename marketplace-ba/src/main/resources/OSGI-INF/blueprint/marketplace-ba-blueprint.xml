@@ -53,8 +53,8 @@
     <bean class="org.pentaho.marketplace.ba.plugin.BaMarketplacePerspective">
       <property name="id" value="marketplace.perspective.osgi"/>
       <property name="title" value="${Marketplace}"/> <!-- TODO: Check why title value needs to be a "variable" -->
-      <property name="contentUrl"     value="osgi/pentaho-marketplace/${project.version}/main.html"/>
-      <property name="resourceBundleUri" value="osgi/pentaho-marketplace/${project.version}/lang/messages"/>
+      <property name="contentUrl"     value="osgi/marketplace/web/main.html"/>
+      <property name="resourceBundleUri" value="osgi/marketplace/web/lang/messages"/>
       <property name="requiredSecurityActions">
         <list>
           <value>org.pentaho.security.administerSecurity</value>

@@ -12,7 +12,7 @@
  * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU Lesser General Public License for more details.
  *
- * Copyright (c) 2016 Pentaho Corporation. All rights reserved.
+ * Copyright (c) 2015 Pentaho Corporation. All rights reserved.
  */
 
 package org.pentaho.marketplace.di.plugin;
@@ -39,10 +39,6 @@ public class SpoonPlugin implements SpoonPluginInterface {
   // region Properties
   private XulDomContainer container;
 
-  public void setUrl( String url ) {
-    MenuHandler.WEB_CLIENT_PATH = url;
-  }
-
   public SpoonLifecycleListener getLifecycleListener() {
     return new SpoonLifecycleListener() {
       public void onEvent( SpoonLifeCycleEvent evt ) {
@@ -64,7 +60,7 @@ public class SpoonPlugin implements SpoonPluginInterface {
   }
 
   public Spoon getSpoon() {
-    if ( this.spoon == null ) {
+    if( this.spoon == null ) {
       return Spoon.getInstance();
     }
     return this.spoon;

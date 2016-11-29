@@ -65,64 +65,8 @@
       <groupId>org.hamcrest</groupId>
       <artifactId>hamcrest-all</artifactId>
     </dependency>
-
-    <!-- Webjars -->
-    <dependency>
-      <groupId>org.webjars.npm</groupId>
-      <artifactId>underscore</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.webjars</groupId>
-      <artifactId>jquery</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.webjars.bower</groupId>
-      <artifactId>angular</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.webjars.bower</groupId>
-      <artifactId>angular-route</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.webjars.bower</groupId>
-      <artifactId>angular-sanitize</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.webjars.bower</groupId>
-      <artifactId>angular-translate</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.webjars.bower</groupId>
-      <artifactId>angular-ui-bootstrap-bower</artifactId>
-    </dependency>
   </dependencies>
-
   <build>
-    <resources>
-      <resource>
-        <directory>src/main/resources</directory>
-        <filtering>false</filtering>
-        <includes>
-          <include>**/*</include>
-        </includes>
-        <excludes>
-          <exclude>META-INF/**/*</exclude>
-          <exclude>OSGI-INF/**/*</exclude>
-          <exclude>web/*.html</exclude>
-        </excludes>
-      </resource>
-
-      <resource>
-        <directory>src/main/resources</directory>
-        <filtering>true</filtering>
-        <includes>
-          <include>META-INF/**/*</include>
-          <include>OSGI-INF/**/*</include>
-          <include>web/*.html</include>
-        </includes>
-      </resource>
-    </resources>
-
     <plugins>
       <plugin>
         <artifactId>maven-remote-resources-plugin</artifactId>

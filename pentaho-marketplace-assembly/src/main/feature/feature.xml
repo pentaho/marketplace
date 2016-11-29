@@ -8,13 +8,8 @@
     <feature>pentaho-requirejs-osgi-manager</feature>
 
     <!-- START client side dependencies -->
-    <bundle>pentaho-webjars:mvn:org.webjars.npm/underscore/${underscore.version}</bundle>
-    <bundle>pentaho-webjars:mvn:org.webjars/jquery/${jquery.version}</bundle>
-    <bundle>pentaho-webjars:mvn:org.webjars.bower/angular/${angular.version}</bundle>
-    <bundle>pentaho-webjars:mvn:org.webjars.bower/angular-route/${angular-route.version}</bundle>
-    <bundle>pentaho-webjars:mvn:org.webjars.bower/angular-sanitize/${angular-sanitize.version}</bundle>
-    <bundle>pentaho-webjars:mvn:org.webjars.bower/angular-translate/${angular-translate.version}</bundle>
-    <bundle>pentaho-webjars:mvn:org.webjars.bower/angular-ui-bootstrap-bower/${angular-ui-bootstrap.version}</bundle>
+    <bundle>pentaho-webjars:mvn:org.webjars/angular-sanitize/1.2.15</bundle>
+    <bundle>pentaho-webjars:mvn:org.webjars/underscorejs/1.7.0</bundle>
     <!-- END -->
   </feature>
 

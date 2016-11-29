@@ -21,7 +21,7 @@ define(
       logger.log("Required services/installFlowService/installFlowService.js");
 
       var installFlowService = app.factory( 'installFlowService',
-          [ 'appService', '$uibModal', '$translate',
+          [ 'appService', '$modal', '$translate',
             function( appService, $modal, $translate ) {
 
               function onOperationResult ( message , dialog, modalInstance ) {
@@ -116,10 +116,10 @@ define(
                 return dialogModal;
               };
 
-              function ModalInstanceCtrl ( $scope, $uibModalInstance, title, body, onOk, onCancel ) {
+              function ModalInstanceCtrl ( $scope, $modalInstance, title, body, onOk, onCancel ) {
                 var buttons = [];
-                if( onOk ) { buttons.push( { text: $translate.instant( 'marketplace.okButton.text' ), onClick: function() { onOk( $scope, $uibModalInstance ); } } ) };
-                if( onCancel ) { buttons.push (  { text: $translate.instant( 'marketplace.cancelButton.text' ), onClick: function() { onCancel( $scope, $uibModalInstance ); } })};
+                if( onOk ) { buttons.push( { text: $translate.instant( 'marketplace.okButton.text' ), onClick: function() { onOk( $scope, $modalInstance ); } } ) };
+                if( onCancel ) { buttons.push (  { text: $translate.instant( 'marketplace.cancelButton.text' ), onClick: function() { onCancel( $scope, $modalInstance ); } })};
 
                 $scope.dialog = {
                   title: title,

@@ -43,8 +43,16 @@
       <artifactId>org.osgi.compendium</artifactId>
     </dependency>
     <dependency>
+      <groupId>commons-logging</groupId>
+      <artifactId>commons-logging</artifactId>
+    </dependency>
+    <dependency>
       <groupId>commons-collections</groupId>
       <artifactId>commons-collections</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>commons-io</groupId>
+      <artifactId>commons-io</artifactId>
     </dependency>
     <dependency>
       <groupId>org.apache.karaf.kar</groupId>
@@ -66,35 +74,12 @@
       <groupId>org.hamcrest</groupId>
       <artifactId>hamcrest-all</artifactId>
     </dependency>
+    <dependency>
+      <groupId>org.webjars</groupId>
+      <artifactId>angular-sanitize</artifactId>
+    </dependency>
   </dependencies>
   <build>
-    <resources>
-      <resource>
-        <directory>src/main/resources</directory>
-        <filtering>false</filtering>
-        <includes>
-          <include>**/*</include>
-        </includes>
-        <excludes>
-          <exclude>org.pentaho.marketplace.ba.plugin.res/**/*</exclude>
-          <exclude>META-INF/**/*</exclude>
-          <exclude>OSGI-INF/**/*</exclude>
-          <exclude>web/*.html</exclude>
-        </excludes>
-      </resource>
-
-      <resource>
-        <directory>src/main/resources</directory>
-        <filtering>true</filtering>
-        <includes>
-          <include>org.pentaho.marketplace.ba.plugin.res/**/*</include>
-          <include>META-INF/**/*</include>
-          <include>OSGI-INF/**/*</include>
-          <include>web/*.html</include>
-        </includes>
-      </resource>
-    </resources>
-
     <plugins>
       <plugin>
         <groupId>org.apache.felix</groupId>

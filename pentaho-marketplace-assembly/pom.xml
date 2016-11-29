@@ -25,7 +25,10 @@
       <version>${project.version}</version>
       <scope>provided</scope>
     </dependency>
-
+    <dependency>
+      <groupId>pentaho</groupId>
+      <artifactId>pentaho-angular-bundle</artifactId>
+    </dependency>
     <dependency>
       <groupId>net.sf.flexjson</groupId>
       <artifactId>flexjson</artifactId>

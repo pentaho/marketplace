@@ -9,14 +9,14 @@
           <img data-ng-src="{{plugin.image}}" data-ng-show="plugin.image"/>      
         </div>
 
-        <div class="btn-group versionSelectDropdown" data-uib-dropdown data-is-open="status.isopen">
-          <button type="button" class="btn btn-primary dropdown-toggle" data-uib-dropdown-toggle>
+        <div class="btn-group versionSelectDropdown" dropdown is-open="status.isopen">
+          <button type="button" class="btn btn-primary dropdown-toggle">
             <span class="multiselectButtonText">
               {{ 'marketplace.versionSelect.prefix' | translate }}: {{ selectedPluginVersion.version + ' (' + selectedPluginVersion.branch + ')'}}
             </span>
             <span class="caret"></span>
           </button>
-          <ul class="dropdown-menu" data-uib-dropdown-menu role="menu">
+          <ul class="dropdown-menu" role="menu">
 
             <li data-ng-repeat="version in plugin.versions"
                 data-ng-click="selectVersion( version )">

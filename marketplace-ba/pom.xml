@@ -78,6 +78,10 @@
       <groupId>org.webjars.bower</groupId>
       <artifactId>angular-sanitize</artifactId>
     </dependency>
+    <dependency>
+      <groupId>org.webjars.bower</groupId>
+      <artifactId>angular-translate</artifactId>
+    </dependency>
   </dependencies>
   <build>
     <plugins>

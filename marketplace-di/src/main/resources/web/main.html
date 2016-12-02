@@ -36,10 +36,22 @@
                 'use strict';
 
                 // overrides just for this app
+                // manual configuration of angular-translate mapping and shim needed because of BACKLOG-11236
                 // manual configuration of angular-sanitize shim needed because of BACKLOG-11236
                 // (and also because using angular from angular-bundle dependency)
                 require.config({
+                    map: {
+                      "angular-translate_2.12.1": {
+                        "angular-translate": "angular-translate_2.12.1"
+                      }
+                    },
                     shim: {
+                      "angular-translate_2.12.1": {
+                        deps: ["angular"]
+                      },
+                      "angular-translate_2.12.1/angular-translate": {
+                        deps: ["angular"]
+                      },
                       "angular-sanitize_1.5.8": {
                         deps: ["angular"]
                       },

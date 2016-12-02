@@ -35,6 +35,20 @@
             (function(w) {
                 'use strict';
 
+                // overrides just for this app
+                // manual configuration of angular-sanitize shim needed because of BACKLOG-11236
+                // (and also because using angular from angular-bundle dependency)
+                require.config({
+                    shim: {
+                      "angular-sanitize_1.5.8": {
+                        deps: ["angular"]
+                      },
+                      "angular-sanitize_1.5.8/angular-sanitize": {
+                        deps: ["angular"]
+                      }
+                    }
+                });
+
                 require(['marketplace_6.1'], function(app) {
                     app.init(document);
                 });

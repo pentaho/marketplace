@@ -32,8 +32,19 @@
         });
 
         require(['requirejs-manager/js/require-init'], function() {
+          // overrides just for this app
+          // manual configuration of angular-sanitize shim needed because of BACKLOG-11236
+          // (and also because using angular from angular-bundle dependency)
           require.config({
-            baseUrl: w.CONTEXT_PATH + 'osgi/'
+            baseUrl: w.CONTEXT_PATH + 'osgi/',
+            shim: {
+              "angular-sanitize_1.5.8": {
+                deps: ["angular"]
+              },
+              "angular-sanitize_1.5.8/angular-sanitize": {
+                deps: ["angular"]
+              }
+            }
           });
 
           require(['marketplace_6.1'], function(app) {

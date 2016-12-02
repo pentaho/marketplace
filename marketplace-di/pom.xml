@@ -56,8 +56,12 @@
       <artifactId>commons-codec</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.webjars</groupId>
+      <groupId>org.webjars.bower</groupId>
       <artifactId>angular-sanitize</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.webjars.bower</groupId>
+      <artifactId>angular-translate</artifactId>
     </dependency>
     <dependency>
       <groupId>pentaho</groupId>

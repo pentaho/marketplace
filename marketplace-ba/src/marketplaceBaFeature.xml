@@ -32,7 +32,8 @@
     <!-- START client side dependencies -->
     <bundle>mvn:pentaho/pentaho-requirejs-osgi-manager/6.0-SNAPSHOT</bundle>
     <bundle>mvn:pentaho/pentaho-angular-bundle/6.0-SNAPSHOT</bundle>
-    <bundle>pentaho-webjars:mvn:org.webjars/angular-sanitize/1.2.15</bundle>
+    <bundle>pentaho-webjars:mvn:org.webjars.bower/angular-sanitize/1.5.8</bundle>
+    <bundle>pentaho-webjars:mvn:org.webjars.bower/angular-translate/2.12.1</bundle>
     <bundle>pentaho-webjars:mvn:org.webjars/underscorejs/1.7.0</bundle>
     <!-- END -->
 

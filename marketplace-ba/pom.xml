@@ -5,10 +5,10 @@
   <parent>
     <groupId>org.pentaho</groupId>
     <artifactId>pentaho-marketplace-modules</artifactId>
-    <version>6.1-SNAPSHOT</version>
+    <version>6.1.0.8-297</version>
   </parent>
   <artifactId>pentaho-marketplace-ba</artifactId>
-  <version>6.1-SNAPSHOT</version>
+  <version>6.1.0.8-297</version>
   <packaging>bundle</packaging>
   <name>Pentaho Marketplace: ${project.artifactId}</name>
   <description>Pentaho Marketplace project</description>

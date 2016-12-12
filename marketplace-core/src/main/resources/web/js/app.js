@@ -17,8 +17,7 @@ define( [ 'angular',
           'angular-route',
           'ui-bootstrap',
           'angular-translate',
-          'marketplace-lib/Logger',
-          'marketplace-lib/angular-translate-static-loader'
+          'marketplace-lib/Logger'
     ],
 
     function ( angular, angularRoute, uiBootstrap, angularTranslate, logger ) {
@@ -44,7 +43,6 @@ define( [ 'angular',
       }]);
 
       app.config(['$translateProvider', function ($translateProvider) {
-        $translateProvider.useSanitizeValueStrategy('escape');
 
         $translateProvider.useStaticFilesLoader({
           prefix: 'lang/messages_',

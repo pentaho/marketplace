@@ -9,7 +9,6 @@
 
     <!-- START client side dependencies -->
     <bundle>pentaho-webjars:mvn:org.webjars.bower/angular-sanitize/1.5.8</bundle>
-    <bundle>pentaho-webjars:mvn:org.webjars.bower/angular-translate/2.12.1</bundle>
     <bundle>pentaho-webjars:mvn:org.webjars/underscorejs/1.7.0</bundle>
     <bundle dependency="false">pentaho-platform-plugin-mvn:pentaho/common-ui/${project.version}/zip</bundle>
     <!-- END -->

@@ -38,6 +38,16 @@
       "marketplace": "marketplace_6.1",
       "marketplaceApp": "marketplaceApp_6.1",
       "marketplace-lib": "marketplace-lib_6.1"
+    },
+    "marketplace-lib_6.1": {
+      "underscore": "underscorejs_1.7.0",
+      "jquery": "common-ui/jquery",
+      "angular-sanitize": "angular-sanitize_1.5.8",
+      "angular-translate": "marketplace/web/lib/angular-translate/angular-translate",
+      "ui-bootstrap": "marketplace/web/lib/ui-bootstrap-tpls-0.6.0.min",
+      "marketplace": "marketplace_6.1",
+      "marketplaceApp": "marketplaceApp_6.1",
+      "marketplace-lib": "marketplace-lib_6.1"
     }
   },
 

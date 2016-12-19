@@ -16,7 +16,6 @@ define(
         'jquery', // load jquery before angular
         'angular',
         'angular-sanitize',
-        'angular-animate',
         'underscore',
 
         'marketplaceApp',

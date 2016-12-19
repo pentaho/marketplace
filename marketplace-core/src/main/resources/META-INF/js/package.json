@@ -7,9 +7,8 @@
     "underscore": "${underscore.version}",
     "jquery": "${jquery.version}",
     "angular": "${angular.version}",
-    "angular-route": "${angular-route.version}",
+    "angular-route": "${angular-sanitize.version}",
     "angular-sanitize": "${angular-sanitize.version}",
-    "angular-animate": "${angular-animate.version}",
     "angular-translate": "${angular-translate.version}",
     "angular-bootstrap": "${angular-ui-bootstrap.version}"
   }

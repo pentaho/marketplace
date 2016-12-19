@@ -26,7 +26,7 @@ define( [ 'angular',
       logger.log("Required app.js ");
 
       // define application module
-      var app = angular.module( 'marketplace', [ 'ngRoute', 'ui.bootstrap', 'ngSanitize', 'ngAnimate', 'pascalprecht.translate' ] );
+      var app = angular.module( 'marketplace', [ 'ngRoute', 'ui.bootstrap', 'ngSanitize', 'pascalprecht.translate' ] );
 
       app.config(['$routeProvider', function( $routeProvider ) {
 

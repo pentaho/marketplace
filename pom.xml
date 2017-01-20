@@ -8,7 +8,7 @@
     <version>1.2.5</version>
   </parent>
   <artifactId>pentaho-marketplace-modules</artifactId>
-  <version>7.0-SNAPSHOT</version>
+  <version>7.0.0.2-52</version>
   <packaging>pom</packaging>
   <name>Pentaho Marketplace: ${project.artifactId}</name>
   <description>Pentaho Marketplace project</description>
@@ -60,34 +60,31 @@
     <module>pentaho-marketplace-assembly</module>
   </modules>
   <properties>
-    <dependency.pentaho-osgi-bundles.revision>7.0-SNAPSHOT</dependency.pentaho-osgi-bundles.revision>
-    <dependency.pentaho-kettle.version>7.0-SNAPSHOT</dependency.pentaho-kettle.version>
-    <dependency.pentaho-marketplace-core.id>pentaho-marketplace-core</dependency.pentaho-marketplace-core.id>
-    <paxexamversion>4.1.0</paxexamversion>
-    <plugin.org.codehaus.mojo.build-helper-maven-plugin.version>1.5</plugin.org.codehaus.mojo.build-helper-maven-plugin.version>
-    <dependency.pentaho-marketplace-di.id>pentaho-marketplace-di</dependency.pentaho-marketplace-di.id>
-    <karaf.version>3.0.3</karaf.version>
-    <dependency.pentaho.pentaho-xul-core.version>${project.version}</dependency.pentaho.pentaho-xul-core.version>
-    <dependency.org.springframework.version>4.3.2.RELEASE</dependency.org.springframework.version>
-    <dependency.org.springframework.security.version>4.1.3.RELEASE</dependency.org.springframework.security.version>
-
-    <cxf.karaf.version>3.0.7</cxf.karaf.version>
-
-    <net.sf.flexjson.version>2.1</net.sf.flexjson.version>
-    <commons.collections.version>3.2.2</commons.collections.version>
-    <commons.httpclient.version>3.1</commons.httpclient.version>
-    <commons.codec.version>1.5</commons.codec.version>
     <commons.lang.version>2.6</commons.lang.version>
     <commons.logging.version>1.1.3</commons.logging.version>
-    <commons.io.version>2.4</commons.io.version>
-
-    <underscore.version>1.8.3</underscore.version>
-    <jquery.version>2.2.1</jquery.version>
     <angular.version>1.5.6</angular.version>
-    <angular-route.version>${angular.version}</angular-route.version>
+    <dependency.org.springframework.version>4.3.2.RELEASE</dependency.org.springframework.version>
+    <dependency.pentaho.pentaho-xul-core.version>${project.version}</dependency.pentaho.pentaho-xul-core.version>
     <angular-sanitize.version>${angular.version}</angular-sanitize.version>
+    <commons.collections.version>3.2.2</commons.collections.version>
+    <angular-route.version>${angular.version}</angular-route.version>
+    <paxexamversion>4.1.0</paxexamversion>
+    <commons.codec.version>1.5</commons.codec.version>
+    <commons.io.version>2.4</commons.io.version>
     <angular-translate.version>2.12.1</angular-translate.version>
+    <dependency.pentaho-osgi-bundles.revision>7.0.0.2-52</dependency.pentaho-osgi-bundles.revision>
+    <dependency.pentaho-kettle.version>7.0.0.2-52</dependency.pentaho-kettle.version>
+    <commons.httpclient.version>3.1</commons.httpclient.version>
+    <dependency.pentaho-marketplace-core.id>pentaho-marketplace-core</dependency.pentaho-marketplace-core.id>
     <angular-ui-bootstrap.version>1.3.3</angular-ui-bootstrap.version>
+    <dependency.org.springframework.security.version>4.1.3.RELEASE</dependency.org.springframework.security.version>
+    <dependency.pentaho-marketplace-di.id>pentaho-marketplace-di</dependency.pentaho-marketplace-di.id>
+    <cxf.karaf.version>3.0.7</cxf.karaf.version>
+    <jquery.version>2.2.1</jquery.version>
+    <underscore.version>1.8.3</underscore.version>
+    <plugin.org.codehaus.mojo.build-helper-maven-plugin.version>1.5</plugin.org.codehaus.mojo.build-helper-maven-plugin.version>
+    <net.sf.flexjson.version>2.1</net.sf.flexjson.version>
+    <karaf.version>3.0.3</karaf.version>
   </properties>
   <dependencyManagement>
     <dependencies>
@@ -180,7 +177,6 @@
         <version>3.0.3</version>
         <scope>provided</scope>
       </dependency>
-
       <dependency>
         <groupId>org.webjars.npm</groupId>
         <artifactId>underscore</artifactId>
@@ -223,7 +219,6 @@
         <version>${angular-ui-bootstrap.version}</version>
         <scope>runtime</scope>
       </dependency>
-
       <dependency>
         <groupId>junit</groupId>
         <artifactId>junit</artifactId>

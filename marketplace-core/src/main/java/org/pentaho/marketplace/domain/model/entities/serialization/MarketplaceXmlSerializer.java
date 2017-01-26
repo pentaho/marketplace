@@ -12,7 +12,7 @@
  * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU Lesser General Public License for more details.
  *
- * Copyright (c) 2015 Pentaho Corporation. All rights reserved.
+ * Copyright (c) 2016 Pentaho Corporation. All rights reserved.
  */
 
 package org.pentaho.marketplace.domain.model.entities.serialization;
@@ -28,6 +28,7 @@ import org.pentaho.marketplace.domain.model.entities.interfaces.IPluginVersion;
 import org.pentaho.marketplace.domain.model.factories.interfaces.ICategoryFactory;
 import org.pentaho.marketplace.domain.model.factories.interfaces.IPluginFactory;
 import org.pentaho.marketplace.domain.model.factories.interfaces.IPluginVersionFactory;
+import org.pentaho.marketplace.util.XmlParserFactoryProducer;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -35,6 +36,7 @@ import org.xml.sax.InputSource;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
@@ -69,11 +71,6 @@ public class MarketplaceXmlSerializer implements IMarketplaceXmlSerializer {
     return this.documentBuilderFactory;
   }
 
-  protected MarketplaceXmlSerializer setDocumentBuilderFactory( DocumentBuilderFactory factory ) {
-    this.documentBuilderFactory = factory;
-    return this;
-  }
-
   private DocumentBuilderFactory documentBuilderFactory;
 
   private XPath xpath;
@@ -89,7 +86,17 @@ public class MarketplaceXmlSerializer implements IMarketplaceXmlSerializer {
 
     this.xpath = XPathFactory.newInstance().newXPath();
 
-    this.setDocumentBuilderFactory( DocumentBuilderFactory.newInstance() );
+    this.documentBuilderFactory = createDocumentBuilderFactory();
+  }
+
+  private DocumentBuilderFactory createDocumentBuilderFactory() {
+    DocumentBuilderFactory secureDocBuilderFactory = null;
+    try {
+      secureDocBuilderFactory = XmlParserFactoryProducer.createSecureDocBuilderFactory();
+    } catch ( ParserConfigurationException e ) {
+      this.getLogger().error( e );
+    }
+    return secureDocBuilderFactory;
   }
 
   @Override public Map<String, IPlugin> getPlugins( InputStream xmlStream ) {

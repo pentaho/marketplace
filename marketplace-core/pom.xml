@@ -22,8 +22,8 @@
       <artifactId>commons-logging</artifactId>
     </dependency>
     <dependency>
-      <groupId>commons-httpclient</groupId>
-      <artifactId>commons-httpclient</artifactId>
+      <groupId>org.apache.httpcomponents</groupId>
+      <artifactId>httpclient</artifactId>
     </dependency>
     <dependency>
       <groupId>commons-lang</groupId>
@@ -96,6 +96,10 @@
     <dependency>
       <groupId>org.webjars.bower</groupId>
       <artifactId>angular-ui-bootstrap-bower</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>pentaho-kettle</groupId>
+      <artifactId>kettle-core</artifactId>
     </dependency>
   </dependencies>
   <build>

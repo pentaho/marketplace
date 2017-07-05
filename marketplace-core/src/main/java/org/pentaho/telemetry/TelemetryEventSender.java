@@ -12,19 +12,22 @@
  * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU Lesser General Public License for more details.
  *
- * Copyright (c) 2015 Pentaho Corporation. All rights reserved.
+ * Copyright (c) 2015-2017 Pentaho Corporation. All rights reserved.
  */
 
 package org.pentaho.telemetry;
 
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.URI;
-import org.apache.commons.httpclient.methods.PostMethod;
-import org.apache.commons.httpclient.methods.StringRequestEntity;
-import org.apache.commons.httpclient.methods.multipart.Part;
-import org.apache.commons.httpclient.methods.multipart.StringPart;
+import com.google.common.annotations.VisibleForTesting;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.ContentType;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.util.EntityUtils;
+import org.pentaho.di.core.util.HttpClientManager;
 
 import java.io.EOFException;
 import java.io.File;
@@ -52,6 +55,7 @@ public class TelemetryEventSender implements Runnable {
   private static final int DAYS_TO_KEEP_FILES = 5;
   private static final int BLOCK_SIZE = 50;
   private static final int HTTP_CALL_TIMEOUT = 30000;
+  private static final HttpClientManager HTTP_CLIENT_MANAGER = HttpClientManager.getInstance();
 
   // endregion
 
@@ -63,16 +67,21 @@ public class TelemetryEventSender implements Runnable {
 
   private static final Log logger = LogFactory.getLog( TelemetryEventSender.class );
 
-
   protected static HttpClient getHttpClient() {
-    return defaultHttpClient != null ? defaultHttpClient : new HttpClient();
+    return defaultHttpClient != null ? defaultHttpClient
+      : HTTP_CLIENT_MANAGER.createBuilder().setConnectionTimeout( HTTP_CALL_TIMEOUT ).build();
   }
 
-  protected static PostMethod defaultHttpMethod;
+  protected static HttpPost defaultHttpMethod;
 
 
-  protected static PostMethod getHttpMethod() {
-    return defaultHttpMethod != null ? defaultHttpMethod : new PostMethod();
+  protected static HttpPost getHttpMethod() {
+    return defaultHttpMethod != null ? defaultHttpMethod : new HttpPost();
+  }
+
+  @VisibleForTesting
+  void setDefaultHttpMethod( HttpPost defaultHttpMethod ) {
+    TelemetryEventSender.defaultHttpMethod = defaultHttpMethod;
   }
 
   protected static HttpClient defaultHttpClient;
@@ -167,8 +176,6 @@ public class TelemetryEventSender implements Runnable {
    * @param blockToSend Array of files with telemetry events to send to the server
    */
   protected void sendRequest( File[] blockToSend ) {
-
-    String baseUrl = null;
     HashMap<String, StringBuffer> urlsAndPostData = new HashMap<String, StringBuffer>();
     HashMap<String, List<File>> urlsAndFiles = new HashMap<String, List<File>>();
     for ( File f : blockToSend ) {
@@ -189,7 +196,6 @@ public class TelemetryEventSender implements Runnable {
         } else {
           postData.append( ", " );
         }
-
 
         postData.append( event.encodeToJSON() );
 
@@ -212,7 +218,6 @@ public class TelemetryEventSender implements Runnable {
       }
     }
 
-
     Iterator<String> urlIterator = urlsAndPostData.keySet().iterator();
     while ( urlIterator.hasNext() ) {
       String url = urlIterator.next();
@@ -222,29 +227,21 @@ public class TelemetryEventSender implements Runnable {
       boolean success = true;
 
       try {
-
         final HttpClient httpClient = getHttpClient();
-        final PostMethod httpMethod = getHttpMethod();
+        final HttpPost httpMethod = defaultHttpMethod != null ? defaultHttpMethod : new HttpPost( url );
 
-
-        int timeout = HTTP_CALL_TIMEOUT;
-
-        httpClient.getHttpConnectionManager().getParams().setSoTimeout( timeout );
-        httpMethod.setURI( new URI( url, true ) );
-
-        Part[] parts = new Part[] { new StringPart( "body", postData.toString() ) };
-
-        httpMethod.setRequestEntity( new StringRequestEntity( postData.toString(), "application/json", "UTF8" ) );
+        httpMethod.setEntity( new StringEntity( postData.toString(), ContentType.APPLICATION_JSON ) );
         this.getLogger().info( "Calling " + url );
         this.getLogger().info( "Data: " + postData.toString() );
 
         // Execute the request
-        final int resultCode = httpClient.executeMethod( httpMethod );
+        HttpResponse httpResponse = httpClient.execute( httpMethod );
+        final int resultCode = getStatusCode( httpResponse );
         if ( resultCode != HttpURLConnection.HTTP_OK ) {
           this.getLogger().error( "Invalid Result Code Returned: " + resultCode );
           success = false;
         } else {
-          String resultXml = httpMethod.getResponseBodyAsString();
+          String resultXml = getResultXml( httpResponse );
           //TO DO: Improve error detection
           if ( resultXml.indexOf( "<result>OK</result>" ) < 0 ) {
             this.getLogger().warn( "Telemetry request had unexpected result: " + resultXml + "." );
@@ -271,6 +268,17 @@ public class TelemetryEventSender implements Runnable {
         }
       }
     }
+  }
+
+  @VisibleForTesting
+  String getResultXml( HttpResponse httpResponse ) throws IOException {
+    HttpEntity entity = httpResponse.getEntity();
+    return EntityUtils.toString( entity, "UTF-8" );
+  }
+
+  @VisibleForTesting
+  int getStatusCode( HttpResponse httpResponse ) {
+    return httpResponse.getStatusLine().getStatusCode();
   }
 
   // endregion

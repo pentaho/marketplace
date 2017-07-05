@@ -26,6 +26,12 @@
     <dependency>
       <groupId>pentaho-kettle</groupId>
       <artifactId>kettle-ui-swt</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>commons-httpclient</groupId>
+          <artifactId>commons-httpclient</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.osgi</groupId>
@@ -78,6 +84,10 @@
         <exclusion>
           <artifactId>xbean</artifactId>
           <groupId>org.apache.xbean</groupId>
+        </exclusion>
+        <exclusion>
+          <groupId>commons-httpclient</groupId>
+          <artifactId>commons-httpclient</artifactId>
         </exclusion>
       </exclusions>
     </dependency>

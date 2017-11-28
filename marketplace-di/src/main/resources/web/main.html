@@ -23,9 +23,9 @@
         <title>Marketplace</title>
 
         <!-- this is important, it provides theming and the base url -->
-        <!-- <script type="text/javascript" src="webcontext.js?context=marketplace"></script> -->
-
-        <script src="/requirejs-manager/js/require-init.js"></script>
+        <!-- Requesting webcontext.js one level above to workaround the filter on PDI issue (BACKLOG-17885) -->
+        <!-- Remove '../' when not needed -->
+        <script type="text/javascript" src="../webcontext.js?requireJsOnly=true"></script>
 
         <link rel="stylesheet" href="css/marketplace.css">
         <link rel="stylesheet" href="css/globalCrystal.css">

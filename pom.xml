@@ -72,8 +72,8 @@
     <commons.codec.version>1.5</commons.codec.version>
     <commons.io.version>2.4</commons.io.version>
     <angular-translate.version>2.12.1</angular-translate.version>
-    <dependency.pentaho-osgi-bundles.revision>8.1-SNAPSHOT</dependency.pentaho-osgi-bundles.revision>
-    <dependency.pentaho-kettle.version>8.1-SNAPSHOT</dependency.pentaho-kettle.version>
+    <pentaho-osgi-bundles.version>8.1-SNAPSHOT</pentaho-osgi-bundles.version>
+    <pdi.version>8.1-SNAPSHOT</pdi.version>
     <httpclient.version>4.5.3</httpclient.version>
     <angular-animate.version>${angular.version}</angular-animate.version>
     <dependency.pentaho-marketplace-core.id>pentaho-marketplace-core</dependency.pentaho-marketplace-core.id>
@@ -92,13 +92,13 @@
       <dependency>
         <groupId>pentaho-kettle</groupId>
         <artifactId>kettle-core</artifactId>
-        <version>${dependency.pentaho-kettle.version}</version>
+        <version>${pdi.version}</version>
         <scope>provided</scope>
       </dependency>
       <dependency>
         <groupId>pentaho-kettle</groupId>
         <artifactId>kettle-ui-swt</artifactId>
-        <version>${dependency.pentaho-kettle.version}</version>
+        <version>${pdi.version}</version>
         <scope>provided</scope>
       </dependency>
       <dependency>

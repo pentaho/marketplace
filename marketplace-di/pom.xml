@@ -71,12 +71,6 @@
     </dependency>
     <dependency>
       <groupId>pentaho</groupId>
-      <artifactId>pentaho-requirejs-osgi-manager</artifactId>
-      <version>${project.version}</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>pentaho</groupId>
       <artifactId>pentaho-platform-extensions</artifactId>
       <version>${project.version}</version>
       <scope>provided</scope>

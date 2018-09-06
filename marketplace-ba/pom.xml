@@ -74,7 +74,7 @@
     <dependency>
       <groupId>org.springframework.security</groupId>
       <artifactId>spring-security-core</artifactId>
-      <version>${dependency.org.springframework.security.version}</version>
+      <version>${spring-security.version}</version>  <!-- see maven-parent-pom -->
     </dependency>
   </dependencies>
   <build>

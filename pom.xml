@@ -83,7 +83,6 @@
     <jquery.version>2.2.1</jquery.version>
     <underscore.version>1.8.3</underscore.version>
     <net.sf.flexjson.version>2.1</net.sf.flexjson.version>
-    <karaf.version>3.0.3</karaf.version>
   </properties>
   <dependencyManagement>
     <dependencies>
@@ -145,18 +144,6 @@
         <groupId>net.sf.flexjson</groupId>
         <artifactId>flexjson</artifactId>
         <version>${net.sf.flexjson.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.apache.karaf.kar</groupId>
-        <artifactId>org.apache.karaf.kar.core</artifactId>
-        <version>3.0.3</version>
-        <scope>provided</scope>
-      </dependency>
-      <dependency>
-        <groupId>org.apache.karaf.features</groupId>
-        <artifactId>org.apache.karaf.features.core</artifactId>
-        <version>3.0.3</version>
-        <scope>provided</scope>
       </dependency>
       <dependency>
         <groupId>org.webjars.npm</groupId>

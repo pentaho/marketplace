@@ -7,7 +7,7 @@
 
     <feature>pentaho-requirejs-osgi-manager</feature>
 
-    <feature version="${cxf.karaf.version}">cxf-jaxrs</feature>
+    <feature>cxf-jaxrs</feature>
 
     <!-- START client side dependencies -->
     <bundle>pentaho-webjars:mvn:org.webjars.npm/underscore/${underscore.version}</bundle>

@@ -5,7 +5,7 @@
   <treechildren id="adminCatTreeChildren">
 
     <treeitem id="marketplaceOsgi" container="true"
-              command="mantleXulHandler.loadAdminContent('marketplaceOsgi', 'osgi/pentaho-marketplace/${project.version}/main.html')">
+              command="mantleXulHandler.loadAdminContent('marketplaceOsgi', 'osgi/@pentaho/marketplace@${project.version}/main.html')">
       <treerow>
         <treecell label="${title}" />
       </treerow>

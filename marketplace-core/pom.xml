@@ -107,7 +107,7 @@
           <include>**/*</include>
         </includes>
         <excludes>
-          <exclude>META-INF/**/*</exclude>
+          <exclude>web/package.json</exclude>
           <exclude>OSGI-INF/**/*</exclude>
           <exclude>web/*.html</exclude>
         </excludes>
@@ -116,7 +116,7 @@
         <filtering>true</filtering>
         <directory>src/main/resources</directory>
         <includes>
-          <include>META-INF/**/*</include>
+          <include>web/package.json</include>
           <include>OSGI-INF/**/*</include>
           <include>web/*.html</include>
         </includes>

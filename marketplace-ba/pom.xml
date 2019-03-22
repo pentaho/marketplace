@@ -110,6 +110,9 @@
             <Export-Package>org.pentaho.telemetry.*;-split-package:=merge-last</Export-Package>
             <Import-Package>!javax.xml.namespace, org.apache.felix.http.api, *</Import-Package>
             <Private-Package>org.pentaho.marketplace.*;-split-package:=merge-last</Private-Package>
+            <Provide-Capability>
+              org.pentaho.webpackage;root=/web
+            </Provide-Capability>
           </instructions>
         </configuration>
       </plugin>

@@ -13,7 +13,7 @@
   ~ without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
   ~ See the GNU Lesser General Public License for more details.
   ~
-  ~ Copyright (c) 2015 - 2017 Hitachi Vantara. All rights reserved.
+  ~ Copyright (c) 2015 - 2019 Hitachi Vantara. All rights reserved.
   -->
 
 <blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -22,15 +22,6 @@
            xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd
   http://cxf.apache.org/blueprint/jaxrs http://cxf.apache.org/schemas/blueprint/jaxrs.xsd
   http://cxf.apache.org/blueprint/core http://cxf.apache.org/schemas/blueprint/core.xsd">
-
-  <!-- HttpService Whiteboard registration of web assets -->
-  <service id="marketplaceWeb"
-           interface="org.ops4j.pax.web.extender.whiteboard.ResourceMapping">
-    <bean class="org.ops4j.pax.web.extender.whiteboard.runtime.DefaultResourceMapping">
-      <property name="alias" value="/pentaho-marketplace/${project.version}"/>
-      <property name="path" value="/web"/>
-    </bean>
-  </service>
 
   <cxf:bus id="marketplaceImplBus">
   </cxf:bus>

@@ -30,7 +30,7 @@
   <!-- Marketplace Spoon Plugin -->
   <bean id="marketplaceSpoonPlugin" class="org.pentaho.marketplace.di.plugin.SpoonPlugin"
         scope="singleton" destroy-method="removeFromContainer">
-    <property name="url" value="/pentaho-marketplace/${project.version}/main.html"/>
+    <property name="url" value="/@pentaho/marketplace@${project.version}/main.html"/>
   </bean>
 
   <!-- Actual Plugin Class PluginInterface, references the Spoon Plugin above -->

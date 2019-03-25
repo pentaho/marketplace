@@ -13,7 +13,7 @@
   ~ without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
   ~ See the GNU Lesser General Public License for more details.
   ~
-  ~ Copyright (c) 2015 - 2017 Hitachi Vantara. All rights reserved.
+  ~ Copyright (c) 2015 - 2019 Hitachi Vantara. All rights reserved.
   -->
 
 <html>
@@ -28,43 +28,9 @@
     <link rel="stylesheet" href="css/marketplace.css">
 
     <script>
-      (function(w) {
-        'use strict';
-
-        require.config({
-          baseUrl: w.CONTEXT_PATH + 'osgi/'
-        });
-
-        require(['requirejs-manager/js/require-init'], function() {
-          // overrides just for this app
-          // manual configuration of angular-translate mapping and shim needed because of BACKLOG-11236
-          require.config({
-            baseUrl: w.CONTEXT_PATH + 'osgi/',
-            map: {
-              "pentaho-marketplace_${project.version}": {
-                "marketplaceApp": "pentaho-marketplace_${project.version}/js/app",
-                "marketplace-lib": "pentaho-marketplace_${project.version}/lib/marketplace"
-              },
-              "angular-translate_${angular-translate.version}": {
-                "angular-translate": "angular-translate_${angular-translate.version}",
-                "angular": "angular_${angular.version}"
-              }
-            },
-            shim: {
-              "angular-translate_${angular-translate.version}": {
-                deps: ["angular_${angular.version}"]
-              },
-              "angular-translate_${angular-translate.version}/angular-translate": {
-                deps: ["angular_${angular.version}"]
-              }
-            }
-          });
-
-          require(['pentaho-marketplace_${project.version}'], function(app) {
-            app.init(document);
-          });
-        });
-      }(window));
+      require(["pentaho/marketplace"], function(app) {
+        app.init(document);
+      });
     </script>
   </head>
 

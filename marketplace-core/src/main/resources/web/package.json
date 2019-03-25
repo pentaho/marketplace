@@ -1,0 +1,36 @@
+{
+  "name": "@pentaho/marketplace",
+  "version": "${project.version}",
+  "description": "${project.description}",
+  "paths": {
+    "pentaho/marketplace": "/"
+  },
+  "packages": [
+    "pentaho/marketplace"
+  ],
+  "__NOTE__": "manual configuration of angular-translate mapping and shim needed because of BACKLOG-11236",
+  "map": {
+    "pentaho/marketplace": {
+      "marketplaceApp": "pentaho/marketplace/js/app",
+      "marketplace-lib": "pentaho/marketplace/lib/marketplace"
+    },
+    "angular-translate@${angular-translate.version}/angular-translate": {
+      "angular": "angular@${angular.version}/angular"
+    }
+  },
+  "shim": {
+    "angular-translate@${angular-translate.version}/angular-translate/angular-translate": {
+      "deps": ["angular"]
+    }
+  },
+  "dependencies": {
+    "underscore": "${underscore.version}",
+    "jquery": "${jquery.version}",
+    "angular": "${angular.version}",
+    "angular-route": "${angular-route.version}",
+    "angular-sanitize": "${angular-sanitize.version}",
+    "angular-animate": "${angular-animate.version}",
+    "angular-translate": "${angular-translate.version}",
+    "angular-bootstrap": "${angular-ui-bootstrap.version}"
+  }
+}

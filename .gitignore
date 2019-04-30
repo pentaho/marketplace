@@ -22,4 +22,5 @@ target/
 *.orig
 *.iml
 pentaho-marketplace-modules.iml
+**/maven-metadata-local.xml
 .

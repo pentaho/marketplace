@@ -33,6 +33,17 @@
       <groupId>org.apache.httpcomponents</groupId>
       <artifactId>httpclient</artifactId>
     </dependency>
+
+    <dependency>
+      <groupId>org.apache.karaf.features</groupId>
+      <artifactId>org.apache.karaf.features.core</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.karaf.kar</groupId>
+      <artifactId>org.apache.karaf.kar.core</artifactId>
+      <scope>provided</scope>
+    </dependency>
   </dependencies>
 
 </project>

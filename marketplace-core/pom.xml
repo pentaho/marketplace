@@ -70,7 +70,7 @@
       <artifactId>underscore</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.webjars</groupId>
+      <groupId>org.webjars.npm</groupId>
       <artifactId>jquery</artifactId>
     </dependency>
     <dependency>

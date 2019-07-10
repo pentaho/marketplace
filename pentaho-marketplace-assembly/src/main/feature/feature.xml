@@ -11,7 +11,7 @@
 
     <!-- START client side dependencies -->
     <bundle>pentaho-webjars:mvn:org.webjars.npm/underscore/${underscore.version}</bundle>
-    <bundle>pentaho-webjars:mvn:org.webjars/jquery/${jquery.version}</bundle>
+    <bundle>pentaho-webjars:mvn:org.webjars.npm/jquery/${jquery.version}</bundle>
     <bundle>pentaho-webjars:mvn:org.webjars.bower/angular/${angular.version}</bundle>
     <bundle>pentaho-webjars:mvn:org.webjars.bower/angular-route/${angular-route.version}</bundle>
     <bundle>pentaho-webjars:mvn:org.webjars.bower/angular-sanitize/${angular-sanitize.version}</bundle>

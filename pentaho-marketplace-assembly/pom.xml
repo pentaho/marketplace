@@ -5,10 +5,10 @@
   <parent>
     <groupId>org.pentaho</groupId>
     <artifactId>pentaho-marketplace-modules</artifactId>
-    <version>7.1-SNAPSHOT</version>
+    <version>7.1.0.27-218</version>
   </parent>
   <artifactId>pentaho-marketplace</artifactId>
-  <version>7.1-SNAPSHOT</version>
+  <version>7.1.0.27-218</version>
   <packaging>kar</packaging>
   <name>Pentaho Marketplace for BA Server</name>
   <description>Pentaho Marketplace for BA Server</description>

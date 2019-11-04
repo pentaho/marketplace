@@ -94,11 +94,11 @@ public class BaPluginServiceTest {
     KarService karService = mock( KarService.class );
     FeaturesService featuresService = mock( FeaturesService.class );
     Feature[] emtptyFeatures = {};
-    when( featuresService.listInstalledFeatures() ).thenReturn( emtptyFeatures );
     try {
+      when( featuresService.listInstalledFeatures() ).thenReturn( emtptyFeatures );
       when( featuresService.listFeatures() ).thenReturn( emtptyFeatures );
+      when( featuresService.listRepositories() ).thenReturn( new Repository[0] );
     } catch ( Exception e ) {}
-    when( featuresService.listRepositories() ).thenReturn( new Repository[0] );
     Bundle bundle = mock( Bundle.class );
     ConfigurationAdmin configurationAdmin = mock( ConfigurationAdmin.class );
 

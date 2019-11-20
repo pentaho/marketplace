@@ -72,7 +72,6 @@
     <angular-translate.version>2.12.1</angular-translate.version>
     <pentaho-osgi-bundles.version>9.0.0.0-SNAPSHOT</pentaho-osgi-bundles.version>
     <pdi.version>9.0.0.0-SNAPSHOT</pdi.version>
-    <httpclient.version>4.5.3</httpclient.version>
     <angular-animate.version>${angular.version}</angular-animate.version>
     <dependency.pentaho-marketplace-core.id>pentaho-marketplace-core</dependency.pentaho-marketplace-core.id>
     <angular-ui-bootstrap.version>1.3.3</angular-ui-bootstrap.version>
@@ -105,11 +104,6 @@
         <artifactId>javax.servlet-api</artifactId>
         <version>3.0.1</version>
         <scope>provided</scope>
-      </dependency>
-      <dependency>
-        <groupId>org.apache.httpcomponents</groupId>
-        <artifactId>httpclient</artifactId>
-        <version>${httpclient.version}</version>
       </dependency>
       <dependency>
         <groupId>commons-codec</groupId>

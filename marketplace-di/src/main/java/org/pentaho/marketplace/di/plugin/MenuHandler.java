@@ -12,19 +12,17 @@
  * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU Lesser General Public License for more details.
  *
- * Copyright (c) 2016 - 2017 Hitachi Vantara. All rights reserved.
+ * Copyright (c) 2016 - 2020 Hitachi Vantara. All rights reserved.
  */
 
 package org.pentaho.marketplace.di.plugin;
-
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.pentaho.di.ui.spoon.Spoon;
 import org.pentaho.platform.settings.ServerPort;
-import org.pentaho.ui.xul.impl.AbstractXulEventHandler;
-
 import org.pentaho.platform.settings.ServerPortRegistry;
+import org.pentaho.ui.xul.impl.AbstractXulEventHandler;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -33,6 +31,9 @@ public class MenuHandler extends AbstractXulEventHandler {
   public static final String MARKETPLACE_MENU_EVENT_HANDLER = "marketplaceMenuEventHandler";
   public static String WEB_CLIENT_PATH =  "/marketplace/web/main.html";
   private static final String OSGI_SERVICE_PORT = "OSGI_SERVICE_PORT";
+  private static final String THIN_CLIENT_HOST = "THIN_CLIENT_HOST";
+  private static final String THIN_CLIENT_PORT = "THIN_CLIENT_PORT";
+  private static final String LOCALHOST = "127.0.0.1";
 
   private static Class<?> PKG = MenuHandler.class; // for i18n purposes, needed by Translator2!!
 
@@ -49,15 +50,6 @@ public class MenuHandler extends AbstractXulEventHandler {
   }
   private Spoon spoon;
 
-  public Integer getOsgiServicePort() {
-    // if no service port is specified try getting it from
-    ServerPort osgiServicePort = ServerPortRegistry.getPort( OSGI_SERVICE_PORT );
-    if ( osgiServicePort != null ) {
-      return osgiServicePort.getAssignedPort();
-    }
-    return null;
-  }
-
   protected Log getLogger() {
     return this.logger;
   }
@@ -71,7 +63,34 @@ public class MenuHandler extends AbstractXulEventHandler {
   // endregion
 
   public String getMarketplaceURL() {
-    return "http://localhost:" + this.getOsgiServicePort() + WEB_CLIENT_PATH;
+    return getRepoURL( WEB_CLIENT_PATH );
+  }
+
+  private static String getRepoURL( String path ) {
+    String host;
+    Integer port;
+    try {
+      host = getKettleProperty( THIN_CLIENT_HOST );
+      port = Integer.valueOf( getKettleProperty( THIN_CLIENT_PORT ) );
+    } catch ( Exception e ) {
+      host = LOCALHOST;
+      port = getOsgiServicePort();
+    }
+    return "http://" + host + ":" + port + path;
+  }
+
+  private static String getKettleProperty( String propertyName ) {
+    // loaded in system properties at startup
+    return System.getProperty( propertyName );
+  }
+
+  private static Integer getOsgiServicePort() {
+    // if no service port is specified try getting it from
+    ServerPort osgiServicePort = ServerPortRegistry.getPort( OSGI_SERVICE_PORT );
+    if ( osgiServicePort != null ) {
+      return osgiServicePort.getAssignedPort();
+    }
+    return null;
   }
 
   public String getMarketplaceTabLabel() {

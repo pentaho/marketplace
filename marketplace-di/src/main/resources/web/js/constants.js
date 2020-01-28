@@ -21,7 +21,7 @@ define( [ 'marketplaceApp' ],
 
     function ( marketplace ) {
       // TODO: remove global variable CONTEXT_PATH
-      var baseUrl = CONTEXT_PATH + 'cxf/marketplace/services';
+      var baseUrl = CONTEXT_PATH + '/cxf/marketplace/services';
       marketplace.constant( 'BASE_URL', baseUrl );
     }
 

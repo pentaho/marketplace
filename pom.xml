@@ -61,7 +61,7 @@
   </modules>
   <properties>
     <commons.lang.version>2.6</commons.lang.version>
-    <angular.version>1.5.8</angular.version>
+    <angular.version>1.7.8</angular.version>
     <dependency.pentaho.pentaho-xul-core.version>${project.version}</dependency.pentaho.pentaho-xul-core.version>
     <angular-sanitize.version>${angular.version}</angular-sanitize.version>
     <commons.collections.version>3.2.2</commons.collections.version>
@@ -69,7 +69,7 @@
     <paxexamversion>4.1.0</paxexamversion>
     <commons.codec.version>1.5</commons.codec.version>
     <commons.io.version>2.4</commons.io.version>
-    <angular-translate.version>2.12.1</angular-translate.version>
+    <angular-translate.version>2.18.1</angular-translate.version>
     <pentaho-osgi-bundles.version>9.1.0.0-SNAPSHOT</pentaho-osgi-bundles.version>
     <pdi.version>9.1.0.0-SNAPSHOT</pdi.version>
     <angular-animate.version>${angular.version}</angular-animate.version>

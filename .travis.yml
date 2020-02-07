@@ -21,6 +21,7 @@ deploy:
   api_key: $GITHUB_TOKEN
   file_glob: true
   file: marketplace-di/target/pentaho-marketplace-di-*.jar
+  skip_cleanup: true
   on:
     branch: webspoon-9.0
   name: webSpoon/nightly

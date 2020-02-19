@@ -64,24 +64,35 @@ define([
 
     /** @private */
     function translateMainName() {
-      var translationId = this.mainTranslateId = buildTranslationId(this.main);
+      var me = this;
 
-      return $translate(this.mainTranslateId).then(function(translatedName) {
-        if (translatedName !== translationId) {
-          this.mainName = translatedName;
+      me.mainTranslateId = buildTranslationId(me.main);
+
+      return $translate(me.mainTranslateId).then(function(translatedName) {
+        if (translatedName !== me.mainTranslateId) {
+          me.mainName = translatedName;
         }
-      });
+      }).catch(handleTranslationError);
     }
 
     /** @private */
     function translateSubName() {
-      var translationId = this.subTranslateId = buildTranslationId(this.sub);
+      var me = this;
 
-      return $translate(this.subTranslateId).then(function(translatedName) {
-        if (translatedName !== translationId) {
-          this.subName = translatedName;
+      me.subTranslateId = buildTranslationId(me.sub);
+
+      return $translate(me.subTranslateId).then(function(translatedName) {
+        if (translatedName !== me.subTranslateId) {
+          me.subName = translatedName;
         }
-      });
+      }).catch(handleTranslationError);
+    }
+
+    /** @private */
+    function handleTranslationError(error) {
+      if (error != null) {
+        logger.error(error)
+      }
     }
 
     return {

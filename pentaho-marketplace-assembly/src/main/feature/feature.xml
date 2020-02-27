@@ -13,11 +13,11 @@
     <bundle>pentaho-webjars:mvn:org.webjars.npm/underscore/${underscore.version}</bundle>
     <bundle>pentaho-webjars:mvn:org.webjars.npm/jquery/${jquery.version}</bundle>
     <bundle>pentaho-webjars:mvn:org.webjars.bower/angular/${angular.version}</bundle>
-    <bundle>pentaho-webjars:mvn:org.webjars.bower/angular-route/${angular-route.version}</bundle>
-    <bundle>pentaho-webjars:mvn:org.webjars.bower/angular-sanitize/${angular-sanitize.version}</bundle>
-    <bundle>pentaho-webjars:mvn:org.webjars.bower/angular-animate/${angular-animate.version}</bundle>
+    <bundle>pentaho-webjars:mvn:org.webjars.bower/angular-route/${angular.version}</bundle>
+    <bundle>pentaho-webjars:mvn:org.webjars.bower/angular-sanitize/${angular.version}</bundle>
+    <bundle>pentaho-webjars:mvn:org.webjars.bower/angular-animate/${angular.version}</bundle>
     <bundle>pentaho-webjars:mvn:org.webjars.bower/angular-translate/${angular-translate.version}</bundle>
-    <bundle>pentaho-webjars:mvn:org.webjars.bower/angular-ui-bootstrap-bower/${angular-ui-bootstrap.version}</bundle>
+    <bundle>pentaho-webjars:mvn:org.webjars.bower/angular-ui-bootstrap-bower/${angular-ui-bootstrap-bower.version}</bundle>
     <!-- END -->
   </feature>
 

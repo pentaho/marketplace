@@ -64,7 +64,6 @@
     <dependency.pentaho.pentaho-xul-core.version>${project.version}</dependency.pentaho.pentaho-xul-core.version>
     <commons.collections.version>3.2.2</commons.collections.version>
     <paxexamversion>4.1.0</paxexamversion>
-    <commons.codec.version>1.5</commons.codec.version>
     <commons.io.version>2.4</commons.io.version>
     <pentaho-osgi-bundles.version>9.1.0.0-SNAPSHOT</pentaho-osgi-bundles.version>
     <pdi.version>9.1.0.0-SNAPSHOT</pdi.version>
@@ -98,11 +97,6 @@
         <artifactId>javax.servlet-api</artifactId>
         <version>3.0.1</version>
         <scope>provided</scope>
-      </dependency>
-      <dependency>
-        <groupId>commons-codec</groupId>
-        <artifactId>commons-codec</artifactId>
-        <version>${commons.codec.version}</version>
       </dependency>
       <dependency>
         <groupId>commons-collections</groupId>

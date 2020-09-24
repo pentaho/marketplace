@@ -5,10 +5,10 @@
   <parent>
     <groupId>org.pentaho</groupId>
     <artifactId>pentaho-ce-jar-parent-pom</artifactId>
-    <version>9.0.0.0-SNAPSHOT</version>
+    <version>9.0.0.7-758</version>
   </parent>
   <artifactId>pentaho-marketplace-modules</artifactId>
-  <version>9.0.0.0-SNAPSHOT</version>
+  <version>9.0.0.7-758</version>
   <packaging>pom</packaging>
   <name>Pentaho Marketplace: ${project.artifactId}</name>
   <description>Pentaho Marketplace project</description>
@@ -69,8 +69,8 @@
     <paxexamversion>4.1.0</paxexamversion>
     <commons.io.version>2.4</commons.io.version>
     <angular-translate.version>2.12.1</angular-translate.version>
-    <pentaho-osgi-bundles.version>9.0.0.0-SNAPSHOT</pentaho-osgi-bundles.version>
-    <pdi.version>9.0.0.0-SNAPSHOT</pdi.version>
+    <pentaho-osgi-bundles.version>9.0.0.7-758</pentaho-osgi-bundles.version>
+    <pdi.version>9.0.0.7-758</pdi.version>
     <angular-animate.version>${angular.version}</angular-animate.version>
     <dependency.pentaho-marketplace-core.id>pentaho-marketplace-core</dependency.pentaho-marketplace-core.id>
     <angular-ui-bootstrap.version>1.3.3</angular-ui-bootstrap.version>

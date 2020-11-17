@@ -5,10 +5,10 @@
   <parent>
     <groupId>org.pentaho</groupId>
     <artifactId>pentaho-ce-jar-parent-pom</artifactId>
-    <version>9.2.0.0-SNAPSHOT</version>
+    <version>9.2.0.0-124</version>
   </parent>
   <artifactId>pentaho-marketplace-modules</artifactId>
-  <version>9.2.0.0-SNAPSHOT</version>
+  <version>9.2.0.0-124</version>
   <packaging>pom</packaging>
   <name>Pentaho Marketplace: ${project.artifactId}</name>
   <description>Pentaho Marketplace project</description>
@@ -65,8 +65,8 @@
     <commons.collections.version>3.2.2</commons.collections.version>
     <paxexamversion>4.1.0</paxexamversion>
     <commons.io.version>2.4</commons.io.version>
-    <pentaho-osgi-bundles.version>9.2.0.0-SNAPSHOT</pentaho-osgi-bundles.version>
-    <pdi.version>9.2.0.0-SNAPSHOT</pdi.version>
+    <pentaho-osgi-bundles.version>9.2.0.0-124</pentaho-osgi-bundles.version>
+    <pdi.version>9.2.0.0-124</pdi.version>
     <dependency.pentaho-marketplace-core.id>pentaho-marketplace-core</dependency.pentaho-marketplace-core.id>
     <dependency.pentaho-marketplace-di.id>pentaho-marketplace-di</dependency.pentaho-marketplace-di.id>
     <underscore.version>1.8.3</underscore.version>

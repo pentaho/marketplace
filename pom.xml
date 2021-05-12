@@ -5,10 +5,10 @@
   <parent>
     <groupId>org.pentaho</groupId>
     <artifactId>pentaho-ce-jar-parent-pom</artifactId>
-    <version>9.0.0.0-423</version>
+    <version>9.3.0.0-SNAPSHOT</version>
   </parent>
   <artifactId>pentaho-marketplace-modules</artifactId>
-  <version>9.0.0.0-423</version>
+  <version>9.3.0.0-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>Pentaho Marketplace: ${project.artifactId}</name>
   <description>Pentaho Marketplace project</description>
@@ -61,20 +61,13 @@
   </modules>
   <properties>
     <commons.lang.version>2.6</commons.lang.version>
-    <angular.version>1.5.8</angular.version>
     <dependency.pentaho.pentaho-xul-core.version>${project.version}</dependency.pentaho.pentaho-xul-core.version>
-    <angular-sanitize.version>${angular.version}</angular-sanitize.version>
     <commons.collections.version>3.2.2</commons.collections.version>
-    <angular-route.version>${angular.version}</angular-route.version>
     <paxexamversion>4.1.0</paxexamversion>
-    <commons.codec.version>1.5</commons.codec.version>
     <commons.io.version>2.4</commons.io.version>
-    <angular-translate.version>2.12.1</angular-translate.version>
-    <pentaho-osgi-bundles.version>9.0.0.0-423</pentaho-osgi-bundles.version>
-    <pdi.version>9.0.0.0-423</pdi.version>
-    <angular-animate.version>${angular.version}</angular-animate.version>
+    <pentaho-osgi-bundles.version>9.3.0.0-SNAPSHOT</pentaho-osgi-bundles.version>
+    <pdi.version>9.3.0.0-SNAPSHOT</pdi.version>
     <dependency.pentaho-marketplace-core.id>pentaho-marketplace-core</dependency.pentaho-marketplace-core.id>
-    <angular-ui-bootstrap.version>1.3.3</angular-ui-bootstrap.version>
     <dependency.pentaho-marketplace-di.id>pentaho-marketplace-di</dependency.pentaho-marketplace-di.id>
     <underscore.version>1.8.3</underscore.version>
     <net.sf.flexjson.version>2.1</net.sf.flexjson.version>
@@ -106,11 +99,6 @@
         <scope>provided</scope>
       </dependency>
       <dependency>
-        <groupId>commons-codec</groupId>
-        <artifactId>commons-codec</artifactId>
-        <version>${commons.codec.version}</version>
-      </dependency>
-      <dependency>
         <groupId>commons-collections</groupId>
         <artifactId>commons-collections</artifactId>
         <version>${commons.collections.version}</version>
@@ -138,30 +126,6 @@
       </dependency>
       <dependency>
         <groupId>org.webjars.bower</groupId>
-        <artifactId>angular</artifactId>
-        <version>${angular.version}</version>
-        <scope>runtime</scope>
-      </dependency>
-      <dependency>
-        <groupId>org.webjars.bower</groupId>
-        <artifactId>angular-route</artifactId>
-        <version>${angular-route.version}</version>
-        <scope>runtime</scope>
-      </dependency>
-      <dependency>
-        <groupId>org.webjars.bower</groupId>
-        <artifactId>angular-sanitize</artifactId>
-        <version>${angular-sanitize.version}</version>
-        <scope>runtime</scope>
-      </dependency>
-      <dependency>
-        <groupId>org.webjars.bower</groupId>
-        <artifactId>angular-animate</artifactId>
-        <version>${angular-animate.version}</version>
-        <scope>runtime</scope>
-      </dependency>
-      <dependency>
-        <groupId>org.webjars.bower</groupId>
         <artifactId>angular-translate</artifactId>
         <version>${angular-translate.version}</version>
         <scope>runtime</scope>
@@ -169,7 +133,7 @@
       <dependency>
         <groupId>org.webjars.bower</groupId>
         <artifactId>angular-ui-bootstrap-bower</artifactId>
-        <version>${angular-ui-bootstrap.version}</version>
+        <version>${angular-ui-bootstrap-bower.version}</version>
         <scope>runtime</scope>
       </dependency>
       <dependency>

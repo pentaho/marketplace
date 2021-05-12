@@ -27,10 +27,10 @@
     "underscore": "${underscore.version}",
     "jquery": "${jquery.version}",
     "angular": "${angular.version}",
-    "angular-route": "${angular-route.version}",
-    "angular-sanitize": "${angular-sanitize.version}",
-    "angular-animate": "${angular-animate.version}",
+    "angular-route": "${angular.version}",
+    "angular-sanitize": "${angular.version}",
+    "angular-animate": "${angular.version}",
     "angular-translate": "${angular-translate.version}",
-    "angular-bootstrap": "${angular-ui-bootstrap.version}"
+    "angular-bootstrap": "${angular-ui-bootstrap-bower.version}"
   }
 }

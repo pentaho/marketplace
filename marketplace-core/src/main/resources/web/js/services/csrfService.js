@@ -13,11 +13,11 @@
 
 'use strict';
 
-define([ 'marketplaceApp' ], function ( app ) {
+define(['marketplaceApp'], function (app) {
 
-  app.factory('csrfService', function( ) {
+  app.factory('csrfService', function() {
     return {
-      getToken : function(url){
+      getToken: function(url) {
         return null;
       }
     };

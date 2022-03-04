@@ -69,13 +69,14 @@ define(
 
                 installPlugin: function ( plugin, version ) {
                   logger.log("Installing " + plugin.id + " " + version.branch );
-				  var protectedUrl = installPluginBaseUrl + '/' + plugin.id + '/' + version.branch;
+				 var protectedUrl = installPluginBaseUrl + '/' + plugin.id + '/' + version.branch;
                   var csrfToken = csrfService.getToken(protectedUrl);
                   var headers = {};
                   // Add the CSRF token, if needed.
                   if(csrfToken !== null) {
                     headers[csrfToken.header] = csrfToken.token;
                   }
+
                   return $http.post( protectedUrl, null, {headers: headers})
                       .then( function ( response ) {
                         if ( isResponseError( response ) ) {

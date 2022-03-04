@@ -16,11 +16,11 @@
 define([
   'marketplaceApp',
   'pentaho/csrf/service'
-], function ( app, csrfClient ) {
+], function(app, csrfClient) {
 
-  app.factory('csrfService', function( ) {
+  app.factory('csrfService', function() {
     return {
-      getToken: function(url){
+      getToken: function(url) {
         return csrfClient.getToken(url);
       }
     };

@@ -31,6 +31,7 @@ define(
         './js/services/dtoMapperService',
         './js/services/developmentStageService',
         './js/services/categoryService',
+		'./js/services/csrfService',
 
         './directives/installUpdateButton/installUpdateButtonController',
         './directives/installUpdateButton/installUpdateButtonDirective',

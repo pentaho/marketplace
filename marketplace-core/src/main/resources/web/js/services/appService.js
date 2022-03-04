@@ -23,8 +23,8 @@ define(
       logger.log("Required services/appService.js");
 
       app.factory('appService',
-          [ '$http', 'dtoMapperService', '$q', 'BASE_URL',
-            function( $http, dtoMapper, $q, BASE_URL ) {
+          [ '$http', 'dtoMapperService', 'csrfService', '$q', 'BASE_URL',
+            function( $http, dtoMapper, csrfService, $q, BASE_URL ) {
 
               var pluginsUrl =  BASE_URL + '/plugins';
               var installPluginBaseUrl = BASE_URL + '/plugin';
@@ -69,7 +69,15 @@ define(
 
                 installPlugin: function ( plugin, version ) {
                   logger.log("Installing " + plugin.id + " " + version.branch );
-                  return $http.post( installPluginBaseUrl + '/' + plugin.id + '/' + version.branch)
+                  var protectedUrl = installPluginBaseUrl + '/' + plugin.id + '/' + version.branch;
+                  var csrfToken = csrfService.getToken(protectedUrl);
+                  var headers = {};
+                  // Add the CSRF token, if needed.
+                  if(csrfToken !== null) {
+                    headers[csrfToken.header] = csrfToken.token;
+                  }
+
+                  return $http.post( protectedUrl, null, {headers: headers})
                       .then( function ( response ) {
                         if ( isResponseError( response ) ) {
                           logger.log("Install NOT OK. plugin Id: " + plugin.id + " branch: " + version.branch);

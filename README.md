@@ -1,6 +1,6 @@
 # marketplace
 
-http://wiki.pentaho.com/display/EAI/Marketplace 
+https://pentaho-community.atlassian.net/wiki/display/EAI/Marketplace 
 
 #### Pre-requisites for building the project:
 * Maven, version 3+

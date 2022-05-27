@@ -89,7 +89,7 @@ public abstract class MarketplaceXmlSerializerTest<TSerializer extends IMarketpl
     metadataXmlMarketplacePlugin.setImg( "http://pentaho.com/sites/all/themes/pentaho/_media/logo-pentaho.svg" );
     metadataXmlMarketplacePlugin.setSmallImg( "http://www.webdetails.pt/ficheiros/mk_plugin.png" );
     metadataXmlMarketplacePlugin
-      .setDocumentationUrl( "http://wiki.pentaho.com/display/PMOPEN/Pentaho+BI+Server+Marketplace+Plugin" );
+      .setDocumentationUrl( "https://pentaho-community.atlassian.net/wiki/display/PMOPEN/Pentaho+BI+Server+Marketplace+Plugin" );
     metadataXmlMarketplacePlugin.setDescription( "\n"
       + "      Pentaho Marketplace allows users to explore and test the plugins\n"
       + "      that are most relevant to them. This means high quality and useful\n"

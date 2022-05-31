@@ -15,7 +15,7 @@
         <name>Apps</name>
       </parent>
     </category>
-    <documentation_url>http://wiki.pentaho.com/display/PMOPEN/Pentaho+BI+Server+Marketplace+Plugin</documentation_url>
+    <documentation_url>https://pentaho-community.atlassian.net/wiki/display/PMOPEN/Pentaho+BI+Server+Marketplace+Plugin</documentation_url>
     <description>
       Pentaho Marketplace allows users to explore and test the plugins
       that are most relevant to them. This means high quality and useful
@@ -403,7 +403,7 @@ any translation issues or suggestions for improvement
     </category>
     <description>This plugin also contains the GPL MySQL JDBC Driver version 5</description>
     <author>Pentaho</author>
-    <documentation_url>http://wiki.pentaho.com/display/EAI/MySQL</documentation_url>
+    <documentation_url>https://pentaho-community.atlassian.net/wiki/display/EAI/MySQL</documentation_url>
     <versions>
       <version>
         <version>TRUNK-SNAPSHOT</version>
@@ -561,7 +561,7 @@ any translation issues or suggestions for improvement
       </version>
     </versions>
     <author>Stratebi and Amnesty International (Spain)</author>
-    <documentation_url>http://wiki.pentaho.com/display/EAI/CiviCRM+Output</documentation_url>
+    <documentation_url>https://pentaho-community.atlassian.net/wiki/display/EAI/CiviCRM+Output</documentation_url>
     <forum_url>https://civicrm.org/blogs/capo/new-tool-civicrm-data-integration</forum_url>
     <cases_url>https://civicrm.org/blogs/capo/new-tool-civicrm-data-integration</cases_url>
     <license_name>GPL v3</license_name>
@@ -588,7 +588,7 @@ any translation issues or suggestions for improvement
       PDI 5.0.x, and is not compatible with prior versions (4.x, etc.).
     </description>
     <author>Pentaho</author>
-    <documentation_url>http://wiki.pentaho.com/display/EAI/The+PDI+SDK</documentation_url>
+    <documentation_url>https://pentaho-community.atlassian.net/wiki/display/EAI/The+PDI+SDK</documentation_url>
     <versions>
       <version>
         <version>5.0.1</version>

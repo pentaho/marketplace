@@ -13,21 +13,15 @@
 
 package org.pentaho.marketplace.domain.services;
 
-import static org.junit.Assert.assertThat;
-import static org.hamcrest.CoreMatchers.*;
-
 import org.apache.karaf.features.Feature;
 import org.apache.karaf.features.FeaturesService;
 import org.apache.karaf.features.Repository;
 import org.apache.karaf.kar.KarService;
-import org.junit.Test;
 import org.junit.Before;
-
-import static org.mockito.Mockito.*;
+import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
-
 import org.osgi.framework.Bundle;
 import org.osgi.service.cm.ConfigurationAdmin;
 import org.pentaho.marketplace.domain.model.entities.MarketEntryType;
@@ -45,22 +39,32 @@ import org.pentaho.marketplace.domain.model.factories.interfaces.IPluginVersionF
 import org.pentaho.marketplace.domain.model.factories.interfaces.IVersionDataFactory;
 import org.pentaho.marketplace.domain.services.interfaces.IPluginProvider;
 import org.pentaho.marketplace.domain.services.interfaces.IRemotePluginProvider;
-
 import org.pentaho.platform.api.engine.IApplicationContext;
 import org.pentaho.platform.api.engine.IPentahoSession;
 import org.pentaho.platform.api.engine.ISecurityHelper;
-
 import org.pentaho.telemetry.ITelemetryService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 
-import java.util.List;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.anyString;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class BaPluginServiceTest {
 
@@ -342,8 +346,8 @@ public class BaPluginServiceTest {
     Collection<IPluginVersion> actualVersions = actualPlugin.getVersions();
 
     assertThat( actualPlugin, is( equalTo( plugin ) ) );
-    assertThat( actualVersions, hasItem( compatibleVersion ) );
-    assertThat( actualVersions, not( hasItem( notCompatibleVersion ) ) );
+    assertTrue( actualVersions.contains( compatibleVersion ) );
+    assertFalse( actualVersions.contains( notCompatibleVersion ) );
   }
 
   /**

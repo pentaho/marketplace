@@ -20,7 +20,6 @@ package org.pentaho.marketplace.domain.model.entities.serialization.jaxb;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.pentaho.di.core.xml.XMLParserFactoryProducer;
 import org.pentaho.marketplace.domain.model.entities.interfaces.ICategory;
 import org.pentaho.marketplace.domain.model.entities.serialization.jaxb.dto.Market;
 import org.pentaho.marketplace.domain.model.entities.serialization.jaxb.dto.Version;
@@ -35,7 +34,7 @@ import org.pentaho.marketplace.domain.model.entities.serialization.IMarketplaceX
 import org.pentaho.marketplace.domain.model.factories.interfaces.ICategoryFactory;
 import org.pentaho.marketplace.domain.model.factories.interfaces.IPluginFactory;
 import org.pentaho.marketplace.domain.model.factories.interfaces.IPluginVersionFactory;
-
+import org.pentaho.marketplace.util.XmlParserFactoryProducer;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -105,7 +104,7 @@ public final class JAXBMarketplaceXmlSerializer implements IMarketplaceXmlSerial
   // regions Methods
   @Override public Map<String, IPlugin> getPlugins( InputStream xmlInputStream ) {
     try {
-      SAXParserFactory spf = XMLParserFactoryProducer.createSecureSAXParserFactory();
+      SAXParserFactory spf = XmlParserFactoryProducer.createSecureSAXParserFactory();
       Source xmlSource = new SAXSource( spf.newSAXParser().getXMLReader(), new InputSource( xmlInputStream ) );
       Market market = (Market) jaxbUnmarshaller.unmarshal( xmlSource );
       Map<String, IPlugin> plugins = this.toPlugins( market );
@@ -119,7 +118,7 @@ public final class JAXBMarketplaceXmlSerializer implements IMarketplaceXmlSerial
 
   @Override public Map<String, IPlugin> getPlugins( String xml ) {
     try {
-      SAXParserFactory spf = XMLParserFactoryProducer.createSecureSAXParserFactory();
+      SAXParserFactory spf = XmlParserFactoryProducer.createSecureSAXParserFactory();
       Source xmlSource = new SAXSource( spf.newSAXParser().getXMLReader(), new InputSource( new StringReader( xml ) ) );
       Market market = (Market) jaxbUnmarshaller.unmarshal( xmlSource );
       Map<String, IPlugin> plugins = this.toPlugins( market );
@@ -151,7 +150,7 @@ public final class JAXBMarketplaceXmlSerializer implements IMarketplaceXmlSerial
   @Override public IPluginVersion getInstalledVersion( InputSource inputDocument ) {
     IPluginVersion version = null;
     try {
-      DocumentBuilderFactory dbf = XMLParserFactoryProducer.createSecureDocBuilderFactory();
+      DocumentBuilderFactory dbf = XmlParserFactoryProducer.createSecureDocBuilderFactory();
       DocumentBuilder db = dbf.newDocumentBuilder();
       Document document = db.parse( inputDocument );
 

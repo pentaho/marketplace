@@ -102,17 +102,6 @@
       <groupId>org.webjars.bower</groupId>
       <artifactId>angular-ui-bootstrap-bower</artifactId>
     </dependency>
-      <dependency>
-          <groupId>pentaho-kettle</groupId>
-          <artifactId>kettle-core</artifactId>
-          <scope>compile</scope>
-        <exclusions>
-          <exclusion>
-            <groupId>*</groupId>
-            <artifactId>*</artifactId>
-          </exclusion>
-        </exclusions>
-      </dependency>
   </dependencies>
   <build>
     <resources>

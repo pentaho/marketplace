@@ -19,7 +19,6 @@ package org.pentaho.marketplace.domain.model.entities.serialization;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.pentaho.di.core.xml.XMLParserFactoryProducer;
 import org.pentaho.marketplace.domain.model.entities.DevelopmentStage;
 import org.pentaho.marketplace.domain.model.entities.MarketEntryType;
 import org.pentaho.marketplace.domain.model.entities.interfaces.ICategory;
@@ -29,6 +28,7 @@ import org.pentaho.marketplace.domain.model.entities.interfaces.IPluginVersion;
 import org.pentaho.marketplace.domain.model.factories.interfaces.ICategoryFactory;
 import org.pentaho.marketplace.domain.model.factories.interfaces.IPluginFactory;
 import org.pentaho.marketplace.domain.model.factories.interfaces.IPluginVersionFactory;
+import org.pentaho.marketplace.util.XmlParserFactoryProducer;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -92,7 +92,7 @@ public class MarketplaceXmlSerializer implements IMarketplaceXmlSerializer {
   private DocumentBuilderFactory createDocumentBuilderFactory() {
     DocumentBuilderFactory secureDocBuilderFactory = null;
     try {
-      secureDocBuilderFactory = XMLParserFactoryProducer.createSecureDocBuilderFactory();
+      secureDocBuilderFactory = XmlParserFactoryProducer.createSecureDocBuilderFactory();
     } catch ( ParserConfigurationException e ) {
       this.getLogger().error( e );
     }

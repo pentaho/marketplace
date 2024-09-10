@@ -20,7 +20,7 @@ package org.pentaho.telemetry;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.osgi.framework.Bundle;
-import org.pentaho.marketplace.util.XmlParserFactoryProducer;
+import org.pentaho.di.core.xml.XMLParserFactoryProducer;
 import org.pentaho.di.version.BuildVersion;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -86,7 +86,7 @@ public class DiPluginTelemetry extends TelemetryService {
 
   private static String parsePluginVersion( InputStream versionFile ) {
     try {
-      DocumentBuilderFactory dbf = XmlParserFactoryProducer.createSecureDocBuilderFactory();
+      DocumentBuilderFactory dbf = XMLParserFactoryProducer.createSecureDocBuilderFactory();
       DocumentBuilder db = dbf.newDocumentBuilder();
       Document doc = db.parse( versionFile );
       NodeList nodes = doc.getElementsByTagName( "version" );

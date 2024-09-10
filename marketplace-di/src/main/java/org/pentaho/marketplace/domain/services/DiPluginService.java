@@ -58,7 +58,7 @@ import org.pentaho.marketplace.domain.model.factories.interfaces.IDomainStatusMe
 import org.pentaho.marketplace.domain.model.factories.interfaces.IPluginVersionFactory;
 import org.pentaho.marketplace.domain.model.factories.interfaces.IVersionDataFactory;
 import org.pentaho.marketplace.domain.services.interfaces.IRemotePluginProvider;
-import org.pentaho.marketplace.util.XmlParserFactoryProducer;
+import org.pentaho.di.core.xml.XMLParserFactoryProducer;
 import org.pentaho.marketplace.util.web.HttpUtil;
 import org.pentaho.telemetry.ITelemetryService;
 import org.w3c.dom.Document;
@@ -171,7 +171,7 @@ public class DiPluginService extends BasePluginService {
 
     FileReader reader = null;
     try {
-      DocumentBuilderFactory dbf = XmlParserFactoryProducer.createSecureDocBuilderFactory();
+      DocumentBuilderFactory dbf = XMLParserFactoryProducer.createSecureDocBuilderFactory();
       DocumentBuilder db = dbf.newDocumentBuilder();
       reader = new FileReader( versionPath );
       Document dom = db.parse( new InputSource( reader ) );

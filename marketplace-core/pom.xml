@@ -45,16 +45,16 @@
       <artifactId>flexjson</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.apache.karaf.kar</groupId>
-      <artifactId>org.apache.karaf.kar.core</artifactId>
+      <groupId>org.hitachivantara.karaf.kar</groupId>
+      <artifactId>org.hitachivantara.karaf.kar.core</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.apache.karaf.features</groupId>
-      <artifactId>org.apache.karaf.features.core</artifactId>
+      <groupId>org.hitachivantara.karaf.features</groupId>
+      <artifactId>org.hitachivantara.karaf.features.core</artifactId>
     </dependency>
     <dependency>
       <groupId>org.osgi</groupId>
-      <artifactId>org.osgi.compendium</artifactId>
+      <artifactId>osgi.cmpn</artifactId>
     </dependency>
     <dependency>
       <groupId>junit</groupId>

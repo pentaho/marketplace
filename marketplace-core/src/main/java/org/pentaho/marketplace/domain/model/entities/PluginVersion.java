@@ -16,7 +16,7 @@ package org.pentaho.marketplace.domain.model.entities;
 import org.pentaho.marketplace.domain.model.entities.interfaces.IDevelopmentStage;
 import org.pentaho.marketplace.domain.model.entities.interfaces.IPluginVersion;
 
-import javax.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
 public class PluginVersion implements IPluginVersion {

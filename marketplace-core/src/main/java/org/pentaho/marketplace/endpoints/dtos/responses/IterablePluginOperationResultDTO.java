@@ -16,7 +16,7 @@ package org.pentaho.marketplace.endpoints.dtos.responses;
 import org.pentaho.marketplace.endpoints.dtos.entities.PluginDTO;
 import org.pentaho.marketplace.endpoints.dtos.responses.base.OperationResultDTO;
 
-import javax.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlRootElement;
 import java.util.List;
 
 @XmlRootElement

@@ -14,7 +14,7 @@
 
 package org.pentaho.marketplace.domain.model.entities.serialization.jaxb.dto;
 
-import javax.xml.bind.annotation.XmlRegistry;
+import jakarta.xml.bind.annotation.XmlRegistry;
 
 
 /**

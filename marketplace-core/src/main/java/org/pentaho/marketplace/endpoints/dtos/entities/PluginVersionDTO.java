@@ -13,7 +13,7 @@
 
 package org.pentaho.marketplace.endpoints.dtos.entities;
 
-import javax.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
 public class PluginVersionDTO {

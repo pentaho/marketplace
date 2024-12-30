@@ -30,8 +30,8 @@ import org.pentaho.marketplace.domain.model.factories.interfaces.IPluginFactory;
 import org.pentaho.marketplace.domain.model.factories.interfaces.IPluginVersionFactory;
 import org.pentaho.marketplace.domain.model.factories.interfaces.IVersionDataFactory;
 
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -184,7 +184,8 @@ public abstract class MarketplaceXmlSerializerTest<TSerializer extends IMarketpl
   @Test
   public void oldTestGetPlugins() throws IOException {
 
-    String pluginsXml = IOUtils.toString( new FileInputStream( "availableplugins.xml" ) );
+    InputStream inputStream = getClass().getClassLoader().getResourceAsStream( "availableplugins.xml" );
+    String pluginsXml = IOUtils.toString( inputStream );
     IMarketplaceXmlSerializer serializer = this.createSerializer();
 
     Map<String, IPlugin> plugins = serializer.getPlugins( pluginsXml );
@@ -225,7 +226,8 @@ public abstract class MarketplaceXmlSerializerTest<TSerializer extends IMarketpl
   @Test
   public void oldTestGetPluginsAlternativeVersions() throws IOException {
 
-    String pluginsXml = IOUtils.toString( new FileInputStream( "availableplugins_differentversions.xml" ) );
+    InputStream inputStream = getClass().getClassLoader().getResourceAsStream( "availableplugins_differentversions.xml" );
+    String pluginsXml = IOUtils.toString( inputStream );
     IMarketplaceXmlSerializer serializer = this.createSerializer();
 
     Collection<IPlugin> plugins = serializer.getPlugins( pluginsXml ).values();
@@ -267,7 +269,7 @@ public abstract class MarketplaceXmlSerializerTest<TSerializer extends IMarketpl
   @Test
   public void testGetPluginsSameOrderAsXml() throws IOException {
     // arrange
-    FileInputStream inputStream = new FileInputStream( "metadata.xml" );
+    InputStream inputStream = getClass().getClassLoader().getResourceAsStream( "metadata.xml" );
     String pluginsXml = IOUtils.toString( inputStream );
     IMarketplaceXmlSerializer serializer = this.createSerializer();
 
@@ -297,7 +299,7 @@ public abstract class MarketplaceXmlSerializerTest<TSerializer extends IMarketpl
   @Test
   public void testGetPluginsOnlyParsePlatformMarketEntries() throws IOException {
     // arrange
-    FileInputStream inputStream = new FileInputStream( "metadata.xml" );
+    InputStream inputStream = getClass().getClassLoader().getResourceAsStream( "metadata.xml" );
     String pluginsXml = IOUtils.toString( inputStream );
     IMarketplaceXmlSerializer serializer = this.createSerializer();
 
@@ -326,7 +328,7 @@ public abstract class MarketplaceXmlSerializerTest<TSerializer extends IMarketpl
   @Test
   public void testGetPluginsPluginDeserialization() throws IOException {
     // arrange
-    FileInputStream inputStream = new FileInputStream( "metadata.xml" );
+    InputStream inputStream = getClass().getClassLoader().getResourceAsStream( "metadata.xml" );
     String pluginsXml = IOUtils.toString( inputStream );
     IMarketplaceXmlSerializer serializer = this.createSerializer();
 
@@ -349,7 +351,7 @@ public abstract class MarketplaceXmlSerializerTest<TSerializer extends IMarketpl
   @Test
   public void testGetInstalledVersion() throws IOException {
     // arrange
-    FileInputStream inputStream = new FileInputStream( "installedVersion.xml" );
+    InputStream inputStream = getClass().getClassLoader().getResourceAsStream( "installedVersion.xml" );
     String installedVersionXml = IOUtils.toString( inputStream );
     IMarketplaceXmlSerializer serializer = this.createSerializer();
 

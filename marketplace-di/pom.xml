@@ -5,10 +5,10 @@
   <parent>
     <groupId>org.pentaho</groupId>
     <artifactId>pentaho-marketplace-modules</artifactId>
-    <version>10.2.0.0-SNAPSHOT</version>
+    <version>10.2.0.2-289</version>
   </parent>
   <artifactId>pentaho-marketplace-di</artifactId>
-  <version>10.2.0.0-SNAPSHOT</version>
+  <version>10.2.0.2-289</version>
   <packaging>bundle</packaging>
   <name>Pentaho Marketplace: ${project.artifactId}</name>
   <description>Pentaho Marketplace project</description>
@@ -129,10 +129,10 @@
 
               This allows the bundle to correctly function in different JRE versions; e.g. a version higher than 
               the one provided in jre.properties currently triggers the installation of jakarta.xml.bind-api (provided
-              by the cxf-specs feature), causing classloading issues because JAXB (javax.xml.bind) doesn’t handle well
+              by the cxf-specs feature), causing classloading issues because JAXB (javax.xml.bind) doesn???t handle well
               multiple coexistent versions:
                 In javax.xml.bind.ContextFinder::getContextClassLoader() it gets the ClassLoader from the current Thread (Thread.currentThread().getContextClassLoader()), effectively getting the main ClassLoader (or any other) 
-                instead of the bundle’s ClassLoader.
+                instead of the bundle???s ClassLoader.
              -->
             <Import-Package>!javax.xml.namespace, javax.xml.bind;version="[2.0.0,3.0.0)", javax.xml.bind.annotation;version="[2.0.0,3.0.0)", javax.xml.bind.annotation.adapters;version="[2.0.0,3.0.0)", org.apache.commons.codec, *</Import-Package>
 

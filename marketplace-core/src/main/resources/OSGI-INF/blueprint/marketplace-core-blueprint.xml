@@ -24,6 +24,9 @@
   http://cxf.apache.org/blueprint/core http://cxf.apache.org/schemas/blueprint/core.xsd">
 
   <cxf:bus id="marketplaceImplBus">
+    <cxf:properties>
+      <entry key="skip.default.json.provider.registration" value="true"/>
+    </cxf:properties>
   </cxf:bus>
 
   <jaxrs:server address="/marketplace" id="marketplaceService">
@@ -31,12 +34,7 @@
       <ref component-id="marketplaceServiceEndpoint"/>
     </jaxrs:serviceBeans>
     <jaxrs:providers>
-      <bean class="org.apache.cxf.jaxrs.provider.json.JSONProvider">
-        <property name="dropRootElement" value="true"/>
-        <property name="dropCollectionWrapperElement" value="true"/>
-        <property name="serializeAsArray" value="true"/>
-        <property name="supportUnwrapped" value="true"/>
-      </bean>
+      <bean id="jacksonProvider" class="org.pentaho.marketplace.util.MarketplaceJaxbJsonProvider"/>
     </jaxrs:providers>
   </jaxrs:server>
 

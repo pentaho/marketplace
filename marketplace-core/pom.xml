@@ -23,6 +23,7 @@
     <dependency>
       <groupId>com.fasterxml.jackson.jaxrs</groupId>
       <artifactId>jackson-jaxrs-json-provider</artifactId>
+      <version>${fasterxml-jackson.version}</version>
     </dependency>
     <dependency>
       <groupId>commons-logging</groupId>
@@ -55,6 +56,11 @@
     <dependency>
       <groupId>org.hitachivantara.karaf.features</groupId>
       <artifactId>org.hitachivantara.karaf.features.core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>jakarta.xml.bind</groupId>
+      <artifactId>jakarta.xml.bind-api</artifactId>
+      <version>${jakarta.xml.bind-osgi.version}</version>
     </dependency>
     <dependency>
       <groupId>org.osgi</groupId>

@@ -13,6 +13,7 @@
 
 package org.pentaho.telemetry;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -42,16 +43,29 @@ public class TelemetryEventTest extends TelemetryBaseTest {
   }
 
   @Test
-  public void testEventEncode() {
+  public void testEventEncode() throws JsonProcessingException {
     TelemetryEvent te = createTelemetryEvent();
     te.getExtraInfo().put( "info1", "value1" );
-    String json = te.encodeToJSON();
-    String expectedJson = "\"eventType\":\"" + TelemetryEvent.Type.OTHER + "\","
-      + "\"extraInfo\":{\"" + "info1" + "\":\"" + "value1" + "\"},"
-      + "\"platformVersion\":\"" + TEST_PLATFORM_VERSION + "\","
-      + "\"pluginName\":\"" + TEST_PLUGIN_NAME + "\","
-      + "\"pluginVersion\":\"" + TEST_PLUGIN_VERSION + "\","
-      + "\"urlToCall\":\"" + TEST_TELEMETRY_URL + "\"}";
-    Assert.assertEquals( json.substring( 79 ), expectedJson );
+    te.setEventTimestamp( 2222 );
+
+    String expectedJson = "{\"class\":\"org.pentaho.telemetry.TelemetryEvent\",\"eventTimestamp\":2222,"
+      + "\"eventType\":\"OTHER\",\"extraInfo\":{\"info1\":\"value1\"},"
+      + "\"platformVersion\":\"PLATFORM-5.2.0\",\"pluginName\":\"PLUGIN\","
+      + "\"pluginVersion\":\"1.0.0\",\"urlToCall\":\"http://localhost:8080/telemetry-servlet/telemetry\"}";
+    Assert.assertEquals( expectedJson, te.encodeToJSON() );
+  }
+
+  @Test
+  public void testEventEncodePreservesNullProperties() throws JsonProcessingException {
+    TelemetryEvent te = createTelemetryEvent();
+    te.setEventTimestamp( 2222 );
+    te.setExtraInfo( null );
+    te.setPluginName( null );
+
+    String expectedJson = "{\"class\":\"org.pentaho.telemetry.TelemetryEvent\",\"eventTimestamp\":2222,"
+      + "\"eventType\":\"OTHER\",\"extraInfo\":null,\"platformVersion\":\"PLATFORM-5.2.0\","
+      + "\"pluginName\":null,\"pluginVersion\":\"1.0.0\","
+      + "\"urlToCall\":\"http://localhost:8080/telemetry-servlet/telemetry\"}";
+    Assert.assertEquals( expectedJson, te.encodeToJSON() );
   }
 }

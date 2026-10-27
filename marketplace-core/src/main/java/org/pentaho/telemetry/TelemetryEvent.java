@@ -13,7 +13,10 @@
 
 package org.pentaho.telemetry;
 
-import flexjson.JSONSerializer;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -24,6 +27,8 @@ import java.util.Map;
  * Represents a telemetry event. Will be serialized to the file system (before publishing) and to JSON on publish
  * time
  */
+@JsonPropertyOrder( { "class", "eventTimestamp", "eventType", "extraInfo", "platformVersion", "pluginName",
+  "pluginVersion", "urlToCall" } )
 public class TelemetryEvent implements Serializable {
 
   // region Inner Definitions
@@ -36,6 +41,13 @@ public class TelemetryEvent implements Serializable {
   }
 
   // endregion Inner Definitions
+
+  private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+
+  @JsonProperty( value = "class", access = JsonProperty.Access.READ_ONLY )
+  public String getJsonClass() {
+    return getClass().getName();
+  }
 
   // region Constants
 
@@ -158,9 +170,8 @@ public class TelemetryEvent implements Serializable {
 
   // region Methods
 
-  protected String encodeToJSON() {
-    JSONSerializer serializer = new JSONSerializer();
-    return serializer.deepSerialize( this );
+  protected String encodeToJSON() throws JsonProcessingException {
+    return OBJECT_MAPPER.writeValueAsString( this );
   }
 
   // endregion

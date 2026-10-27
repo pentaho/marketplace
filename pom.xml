@@ -69,7 +69,6 @@
     <pdi.version>10.2.0.0-SNAPSHOT</pdi.version>
     <dependency.pentaho-marketplace-core.id>pentaho-marketplace-core</dependency.pentaho-marketplace-core.id>
     <dependency.pentaho-marketplace-di.id>pentaho-marketplace-di</dependency.pentaho-marketplace-di.id>
-    <net.sf.flexjson.version>2.1</net.sf.flexjson.version>
   </properties>
   <dependencyManagement>
     <dependencies>
@@ -111,11 +110,6 @@
         <groupId>commons-io</groupId>
         <artifactId>commons-io</artifactId>
         <version>${commons-io.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>net.sf.flexjson</groupId>
-        <artifactId>flexjson</artifactId>
-        <version>${net.sf.flexjson.version}</version>
       </dependency>
       <dependency>
         <groupId>org.webjars.npm</groupId>
